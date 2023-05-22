@@ -3,7 +3,12 @@
   "scripts": {
     "dev": "solid-start dev",
     "build": "solid-start build",
-    "start": "solid-start start"
+    "start": "solid-start start",
+    "=== LINTERS ===": "",
+    "lint": "eslint src --fix --ext .tsx,.ts",
+    "prettier": "prettier 'src/**/*.(ts|tsx)' --write",
+    "tsc": "tsc --noEmit",
+    "code-check": "pnpm lint --max-warnings=0 && pnpm tsc"
   },
   "type": "module",
   "devDependencies": {
@@ -37,6 +42,7 @@
     "@solidjs/router": "^0.8.2",
     "class-variance-authority": "0.6.0",
     "flowbite": "^1.6.5",
+    "pixi.js": "^7.2.4",
     "solid-icons": "^1.0.4",
     "solid-js": "^1.7.5",
     "solid-start": "^0.2.26",

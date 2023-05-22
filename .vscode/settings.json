@@ -3,6 +3,8 @@
     "daisyui",
     "flowbite",
     "kobalte",
+    "Pixi",
+    "pointerupoutside",
     "solidjs",
     "tailwindcss",
     "undici"
