@@ -11,7 +11,7 @@ export const createSprite = (props: Props) => {
   const sprite = new PIXI.Sprite(PIXI.Texture.WHITE);
 
   sprite.alpha = 0.3;
-  sprite.interactive = true;
+  // sprite.interactive = true;
   sprite.cursor = "pointer";
 
   onMount(() => {

@@ -19,7 +19,7 @@ export const Transformer: Component<Props> = (props) => {
   const anchor = new PIXI.Sprite(PIXI.Texture.WHITE);
 
   anchor.alpha = 0.3;
-  anchor.interactive = true;
+  // anchor.interactive = true;
   anchor.cursor = "pointer";
   anchor.anchor.set(0.5);
   anchor.width = 10;

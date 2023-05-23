@@ -4,15 +4,15 @@ import { ClientOnly } from "~/components/ClientOnly";
 const PixiStage = lazy(() => import("../PixiStage/PixiStage"));
 
 const ClientBoard: Component = () => {
-  const [container, setContainer] = createSignal<HTMLDivElement>();
+  const [canvas, setCanvas] = createSignal<HTMLCanvasElement>();
 
   return (
     <>
-      <div ref={setContainer} class="grow" />
-      <Show when={container()}>
-        {(element) => (
+      <canvas ref={setCanvas} class="h-full w-full" />
+      <Show when={canvas()}>
+        {(canvas) => (
           <Suspense>
-            <PixiStage container={element()} />
+            <PixiStage canvas={canvas()} />
           </Suspense>
         )}
       </Show>
