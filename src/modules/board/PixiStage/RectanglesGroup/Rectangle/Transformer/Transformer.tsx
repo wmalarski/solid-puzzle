@@ -7,14 +7,14 @@ import {
   type Component,
 } from "solid-js";
 import type { Point2D } from "~/utils/geometry";
-import { usePixiContext } from "../../../PixiContext";
+import { usePixiApp } from "../../../PixiApp";
 
 type Props = {
   container: PIXI.Container;
 };
 
 export const Transformer: Component<Props> = (props) => {
-  const pixi = usePixiContext();
+  const app = usePixiApp();
 
   const anchor = new PIXI.Sprite(PIXI.Texture.WHITE);
 
@@ -48,7 +48,7 @@ export const Transformer: Component<Props> = (props) => {
 
     event.stopPropagation();
 
-    pixi.app.stage.on("pointermove", onDragMove);
+    app().stage.on("pointermove", onDragMove);
     setStart({ x: event.x, y: event.y });
   };
 
@@ -66,18 +66,18 @@ export const Transformer: Component<Props> = (props) => {
     }
 
     const onDragEnd = () => {
-      pixi.app.stage.off("pointermove", onDragMove);
+      app().stage.off("pointermove", onDragMove);
       setStart();
     };
 
     onMount(() => {
-      pixi.app.stage.on("pointerup", onDragEnd);
-      pixi.app.stage.on("pointerupoutside", onDragEnd);
+      app().stage.on("pointerup", onDragEnd);
+      app().stage.on("pointerupoutside", onDragEnd);
     });
 
     onCleanup(() => {
-      pixi.app.stage.off("pointerup", onDragEnd);
-      pixi.app.stage.off("pointerupoutside", onDragEnd);
+      app().stage.off("pointerup", onDragEnd);
+      app().stage.off("pointerupoutside", onDragEnd);
     });
   });
 

@@ -1,9 +1,9 @@
 import * as PIXI from "pixi.js";
 import { onCleanup, onMount, type Component } from "solid-js";
-import { usePixiContext } from "../../PixiContext";
+import { usePixiApp } from "../../PixiApp";
 
 export const Rectangle: Component = () => {
-  const pixi = usePixiContext();
+  const app = usePixiApp();
   // const workspace = useWorkspaceContext();
   // const { selectedId, setSelectedId } = useSelectedId();
 
@@ -13,10 +13,10 @@ export const Rectangle: Component = () => {
   // createSprite({ container, sample: props.sample, tool: props.tool });
 
   onMount(() => {
-    pixi.app.stage.addChild(container);
+    app().stage.addChild(container);
   });
   onCleanup(() => {
-    pixi.app.stage.removeChild(container);
+    app().stage.removeChild(container);
   });
 
   // createEffect(() => {

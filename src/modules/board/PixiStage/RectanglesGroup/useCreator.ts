@@ -1,10 +1,10 @@
 import * as PIXI from "pixi.js";
 import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import type { Point2D } from "~/utils/geometry";
-import { usePixiContext } from "../PixiContext";
+import { usePixiApp } from "../PixiApp";
 
 export const useCreator = () => {
-  const pixi = usePixiContext();
+  const pixi = usePixiApp();
   // const workspace = useWorkspaceContext();
   // const { setSelectedId } = useSelectedId();
 
@@ -18,7 +18,7 @@ export const useCreator = () => {
       return;
     }
 
-    const transform = pixi.app.stage.transform.worldTransform;
+    const transform = pixi().stage.transform.worldTransform;
     const inverted = transform.applyInverse(event.global);
 
     const [x1, x2] = [inverted.x, start.x].sort((a, b) => a - b);
@@ -30,7 +30,7 @@ export const useCreator = () => {
   };
 
   const onPointerDown = (event: PIXI.FederatedPointerEvent) => {
-    const transform = pixi.app.stage.transform.worldTransform;
+    const transform = pixi().stage.transform.worldTransform;
     const inverted = transform.applyInverse(event.global);
 
     const sprite = new PIXI.Sprite(PIXI.Texture.WHITE);
@@ -38,19 +38,19 @@ export const useCreator = () => {
     sprite.width = 0;
     sprite.height = 0;
 
-    pixi.app.stage.addChild(sprite);
-    pixi.app.stage.on("pointermove", onDragMove);
+    pixi().stage.addChild(sprite);
+    pixi().stage.on("pointermove", onDragMove);
 
     setDrawTarget(sprite);
     setStartPoint({ x: inverted.x, y: inverted.y });
   };
 
   onMount(() => {
-    pixi.app.stage.on("pointerdown", onPointerDown);
+    pixi().stage.on("pointerdown", onPointerDown);
   });
 
   onCleanup(() => {
-    pixi.app.stage.off("pointerdown", onPointerDown);
+    pixi().stage.off("pointerdown", onPointerDown);
   });
 
   createEffect(() => {
@@ -60,8 +60,8 @@ export const useCreator = () => {
     }
 
     const onDragEnd = () => {
-      pixi.app.stage.off("pointermove", onDragMove);
-      pixi.app.stage.removeChild(target);
+      pixi().stage.off("pointermove", onDragMove);
+      pixi().stage.removeChild(target);
 
       setDrawTarget();
 
@@ -82,13 +82,13 @@ export const useCreator = () => {
     };
 
     onMount(() => {
-      pixi.app.stage.on("pointerup", onDragEnd);
-      pixi.app.stage.on("pointerupoutside", onDragEnd);
+      pixi().stage.on("pointerup", onDragEnd);
+      pixi().stage.on("pointerupoutside", onDragEnd);
     });
 
     onCleanup(() => {
-      pixi.app.stage.off("pointerup", onDragEnd);
-      pixi.app.stage.off("pointerupoutside", onDragEnd);
+      pixi().stage.off("pointerup", onDragEnd);
+      pixi().stage.off("pointerupoutside", onDragEnd);
     });
   });
 };

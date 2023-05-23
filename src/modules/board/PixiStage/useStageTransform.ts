@@ -7,44 +7,23 @@ import {
   onMount,
 } from "solid-js";
 import type { Point2D } from "~/utils/geometry";
+import { useTransformContext } from "../TransformContext";
+import { usePixiApp } from "./PixiApp";
 
-export const useStageTransform = () => {
-  const [scale, setScale] = createSignal(1);
-  const [x, setX] = createSignal(0);
-  const [y, setY] = createSignal(0);
+export const useZoom = () => {
+  const app = usePixiApp();
+  const transform = useTransformContext();
 
-  const reset = () => {
-    setScale(1);
-    setX(0);
-    setY(0);
-  };
-
-  return { reset, scale, setScale, setX, setY, x, y };
-};
-
-export type StageTransform = ReturnType<typeof useStageTransform>;
-
-type UseZoomArgs = {
-  app: PIXI.Application;
-  transform: StageTransform;
-};
-
-export const useZoom = (props: UseZoomArgs) => {
   createEffect(() => {
-    props.app.stage.transform.scale.set(props.transform.scale());
-    props.app.stage.transform.position.set(
-      props.transform.x(),
-      props.transform.y()
-    );
+    app().stage.transform.scale.set(transform.scale());
+    app().stage.transform.position.set(transform.x(), transform.y());
   });
 };
 
-type UsePaneArgs = {
-  app: PIXI.Application;
-  transform: StageTransform;
-};
+export const usePane = () => {
+  const app = usePixiApp();
+  const transform = useTransformContext();
 
-export const usePane = (props: UsePaneArgs) => {
   const [origin, setOrigin] = createSignal<Point2D>();
   const [start, setStart] = createSignal<Point2D>({ x: 0, y: 0 });
 
@@ -54,15 +33,15 @@ export const usePane = (props: UsePaneArgs) => {
     }
 
     setOrigin({ x: event.x, y: event.y });
-    setStart({ x: props.transform.x(), y: props.transform.y() });
+    setStart({ x: transform.x(), y: transform.y() });
   };
 
   onMount(() => {
-    props.app.stage.on("pointerdown", onPointerDown);
+    app().stage.on("pointerdown", onPointerDown);
   });
 
   onCleanup(() => {
-    props.app.stage.off("pointerdown", onPointerDown);
+    app().stage.off("pointerdown", onPointerDown);
   });
 
   createEffect(() => {
@@ -73,25 +52,25 @@ export const usePane = (props: UsePaneArgs) => {
 
     const onPointerMove = (event: PIXI.FederatedPointerEvent) => {
       const startPosition = start();
-      props.transform.setX(startPosition.x - originPosition.x + event.x);
-      props.transform.setY(startPosition.y - originPosition.y + event.y);
+      transform.setX(startPosition.x - originPosition.x + event.x);
+      transform.setY(startPosition.y - originPosition.y + event.y);
     };
 
     const onDragEnd = () => {
-      props.app.stage.off("pointermove", onPointerMove);
+      app().stage.off("pointermove", onPointerMove);
       setOrigin();
     };
 
     onMount(() => {
-      props.app.stage.on("pointermove", onPointerMove);
-      props.app.stage.on("pointerup", onDragEnd);
-      props.app.stage.on("pointerupoutside", onDragEnd);
+      app().stage.on("pointermove", onPointerMove);
+      app().stage.on("pointerup", onDragEnd);
+      app().stage.on("pointerupoutside", onDragEnd);
     });
 
     onCleanup(() => {
-      props.app.stage.off("pointermove", onPointerMove);
-      props.app.stage.off("pointerup", onDragEnd);
-      props.app.stage.off("pointerupoutside", onDragEnd);
+      app().stage.off("pointermove", onPointerMove);
+      app().stage.off("pointerup", onDragEnd);
+      app().stage.off("pointerupoutside", onDragEnd);
     });
   });
 };
@@ -117,24 +96,22 @@ const getNewZoomState = (
   return { ...old, scale: newScale, x: newStageX, y: newStageY };
 };
 
-type Props = {
-  app: PIXI.Application;
-  transform: StageTransform;
-};
+export const useWheel = () => {
+  const app = usePixiApp();
+  const transform = useTransformContext();
 
-export const useWheel = (props: Props) => {
   const transformState = createMemo(() => {
     return {
-      scale: props.transform.scale(),
-      x: props.transform.x(),
-      y: props.transform.y(),
+      scale: transform.scale(),
+      x: transform.x(),
+      y: transform.y(),
     };
   });
 
   const setTransformState = (state: TransformState) => {
-    props.transform.setScale(state.scale);
-    props.transform.setX(props.transform.x());
-    props.transform.setY(props.transform.y());
+    transform.setScale(state.scale);
+    transform.setX(transform.x());
+    transform.setY(transform.y());
   };
 
   const zoomIn = (point: Point2D) => {
@@ -162,11 +139,11 @@ export const useWheel = (props: Props) => {
   };
 
   onMount(() => {
-    props.app.stage.on("wheel", onWheel);
+    app().stage.on("wheel", onWheel);
   });
 
   onCleanup(() => {
-    props.app.stage.off("wheel", onWheel);
+    app().stage.off("wheel", onWheel);
   });
 
   return { setZoom, zoomIn, zoomOut };

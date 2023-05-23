@@ -5,14 +5,14 @@ import {
   onCleanup,
   type Component,
 } from "solid-js";
-import { usePixiContext } from "./PixiContext";
+import { usePixiApp } from "./PixiApp";
 
 type Props = {
   path: string;
 };
 
 export const ImageSprite: Component<Props> = (props) => {
-  const pixi = usePixiContext();
+  const app = usePixiApp();
 
   const [resource] = createResource(async () => {
     const asset = await PIXI.Assets.load(props.path);
@@ -22,14 +22,14 @@ export const ImageSprite: Component<Props> = (props) => {
   createEffect(() => {
     const sprite = resource();
     if (sprite) {
-      pixi.app.stage.addChildAt(sprite, 0);
+      app().stage.addChildAt(sprite, 0);
     }
   });
 
   onCleanup(() => {
     const sprite = resource();
     if (sprite) {
-      pixi.app.stage.removeChild(sprite);
+      app().stage.removeChild(sprite);
     }
   });
 
