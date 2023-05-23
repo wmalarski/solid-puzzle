@@ -24,7 +24,10 @@ type Props = {
 
 export const PixiAppProvider: Component<Props> = (props) => {
   const value = createMemo(() => {
-    const app = new PIXI.Application({ view: props.canvas });
+    const app = new PIXI.Application({
+      background: "white",
+      view: props.canvas,
+    });
     app.stage.eventMode = "dynamic";
     app.stage.hitArea = app.screen;
     app.renderer.resize(window.innerWidth, window.innerHeight);

@@ -13,7 +13,7 @@ export const ZoomBar: Component = () => {
   };
 
   return (
-    <div class="absolute bottom-4 left-4 bg-neutral-200 p-4">
+    <div class="absolute bottom-4 left-4 flex gap-4 bg-neutral-200 p-4">
       <button onClick={onZoomInClick}>+</button>
       <button onClick={onZoomOutClick}>-</button>
     </div>
