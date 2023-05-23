@@ -1,4 +1,6 @@
 import { type Component } from "solid-js";
+import { TransformContextProvider } from "../TransformContext";
+import { ZoomBar } from "../ZoomBar";
 import { ImageSprite } from "./ImageSprite";
 import { PixiAppProvider } from "./PixiApp";
 import { usePreventMenu } from "./usePreventMenu";
@@ -22,7 +24,10 @@ type Props = {
 const PixiStage: Component<Props> = (props) => {
   return (
     <PixiAppProvider canvas={props.canvas}>
-      <Stage />
+      <TransformContextProvider>
+        <Stage />
+        <ZoomBar />
+      </TransformContextProvider>
     </PixiAppProvider>
   );
 };
