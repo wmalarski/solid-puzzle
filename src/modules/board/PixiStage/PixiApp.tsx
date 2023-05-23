@@ -2,6 +2,8 @@ import * as PIXI from "pixi.js";
 import {
   createContext,
   createMemo,
+  onCleanup,
+  onMount,
   useContext,
   type Component,
   type JSX,
@@ -23,9 +25,22 @@ type Props = {
 export const PixiAppProvider: Component<Props> = (props) => {
   const value = createMemo(() => {
     const app = new PIXI.Application({ view: props.canvas });
-    // app.stage.interactive = true;
+    app.stage.eventMode = "dynamic";
     app.stage.hitArea = app.screen;
+    app.renderer.resize(window.innerWidth, window.innerHeight);
     return app;
+  });
+
+  const onResize = () => {
+    value().renderer.resize(window.innerWidth, window.innerHeight);
+  };
+
+  onMount(() => {
+    window.addEventListener("resize", onResize);
+  });
+
+  onCleanup(() => {
+    window.removeEventListener("resize", onResize);
   });
 
   return (

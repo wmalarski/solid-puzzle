@@ -4,12 +4,10 @@ import { ZoomBar } from "../ZoomBar";
 import { ImageSprite } from "./ImageSprite";
 import { PixiAppProvider } from "./PixiApp";
 import { usePreventMenu } from "./usePreventMenu";
-import { usePane, useWheel, useZoom } from "./useStageTransform";
+import { useStageTransform } from "./useStageTransform";
 
 const Stage: Component = () => {
-  useZoom();
-  usePane();
-  useWheel();
+  useStageTransform();
   usePreventMenu();
 
   return (

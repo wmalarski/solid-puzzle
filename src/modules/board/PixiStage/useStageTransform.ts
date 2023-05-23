@@ -1,10 +1,9 @@
 import type * as PIXI from "pixi.js";
 import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
-import type { Point2D } from "~/utils/geometry";
 import { useTransformContext } from "../TransformContext";
 import { usePixiApp } from "./PixiApp";
 
-export const useZoom = () => {
+const useZoom = () => {
   const app = usePixiApp();
   const transform = useTransformContext();
 
@@ -14,20 +13,21 @@ export const useZoom = () => {
   });
 };
 
-export const usePane = () => {
+const usePane = () => {
   const app = usePixiApp();
   const transform = useTransformContext();
 
-  const [origin, setOrigin] = createSignal<Point2D>();
-  const [start, setStart] = createSignal<Point2D>({ x: 0, y: 0 });
+  const [startX, setStartX] = createSignal<number>(0);
+  const [startY, setStartY] = createSignal<number>(0);
+
+  const [originX, setOriginX] = createSignal<number>();
+  const [originY, setOriginY] = createSignal<number>();
 
   const onPointerDown = (event: PIXI.FederatedPointerEvent) => {
-    if (event.button !== 2) {
-      return;
-    }
-
-    setOrigin({ x: event.x, y: event.y });
-    setStart({ x: transform.x(), y: transform.y() });
+    setStartX(transform.x());
+    setStartY(transform.y());
+    setOriginX(event.x);
+    setOriginY(event.y);
   };
 
   onMount(() => {
@@ -39,20 +39,21 @@ export const usePane = () => {
   });
 
   createEffect(() => {
-    const originPosition = origin();
-    if (!originPosition) {
+    const originXPosition = originX();
+    const originYPosition = originY();
+    if (!originXPosition || !originYPosition) {
       return;
     }
 
     const onPointerMove = (event: PIXI.FederatedPointerEvent) => {
-      const startPosition = start();
-      transform.setX(startPosition.x - originPosition.x + event.x);
-      transform.setY(startPosition.y - originPosition.y + event.y);
+      transform.setX(startX() - originXPosition + event.x);
+      transform.setY(startY() - originYPosition + event.y);
     };
 
     const onDragEnd = () => {
       app().stage.off("pointermove", onPointerMove);
-      setOrigin();
+      setOriginX();
+      setOriginY();
     };
 
     onMount(() => {
@@ -69,12 +70,13 @@ export const usePane = () => {
   });
 };
 
-export const useWheel = () => {
+const useWheel = () => {
   const app = usePixiApp();
   const transform = useTransformContext();
 
   const onWheel = (event: PIXI.FederatedWheelEvent) => {
     const point = { x: event.globalX, y: event.globalY };
+
     if (event.deltaY < 0) {
       transform.zoomIn(point);
       return;
@@ -89,4 +91,10 @@ export const useWheel = () => {
   onCleanup(() => {
     app().stage.off("wheel", onWheel);
   });
+};
+
+export const useStageTransform = () => {
+  useZoom();
+  usePane();
+  useWheel();
 };
