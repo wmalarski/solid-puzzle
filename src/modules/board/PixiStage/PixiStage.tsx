@@ -1,8 +1,8 @@
 import { type Component } from "solid-js";
 import { TransformContextProvider } from "../TransformContext";
 import { ZoomBar } from "../ZoomBar";
-import { ImageSprite } from "./ImageSprite";
 import { PixiAppProvider } from "./PixiApp";
+import { PuzzleBoard } from "./PuzzleBoard/PuzzleBoard";
 import { usePreventMenu } from "./usePreventMenu";
 import { useStageTransform } from "./useStageTransform";
 
@@ -25,9 +25,7 @@ const Stage: Component = () => {
   // });
 
   return (
-    <>
-      <ImageSprite path="https://res.cloudinary.com/demo/image/upload/brown_sheep.jpg" />
-    </>
+    <PuzzleBoard path="https://res.cloudinary.com/demo/image/upload/brown_sheep.jpg" />
   );
 };
 

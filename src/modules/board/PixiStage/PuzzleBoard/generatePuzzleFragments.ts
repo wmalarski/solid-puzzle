@@ -1,14 +1,3 @@
-import * as PIXI from "pixi.js";
-import {
-  createEffect,
-  createMemo,
-  createResource,
-  onCleanup,
-  onMount,
-  type Component,
-} from "solid-js";
-import { usePixiApp } from "./PixiApp";
-
 type GenerateRandomInRangeArgs = {
   center: number;
   max: number;
@@ -116,10 +105,10 @@ const generateCurves = ({ points }: GenerateCurvesArgs) => {
           const start = points[rowIndex][columnIndex];
           const end = points[rowIndex][columnIndex + 1];
 
-          const centerX = (start.x + end.x) / 2;
-          const centerY = (start.y + end.y) / 2;
+          const x = (start.x + end.x) / 2;
+          const y = (start.y + end.y) / 2;
 
-          return { center: { centerX, centerY }, end, start };
+          return { center: { x, y }, end, start };
         })
     );
 
@@ -132,29 +121,29 @@ const generateCurves = ({ points }: GenerateCurvesArgs) => {
           const start = points[rowIndex][columnIndex];
           const end = points[rowIndex + 1][columnIndex];
 
-          const centerX = (start.x + end.x) / 2;
-          const centerY = (start.y + end.y) / 2;
+          const x = (start.x + end.x) / 2;
+          const y = (start.y + end.y) / 2;
 
-          return { center: { centerX, centerY }, end, start };
+          return { center: { x, y }, end, start };
         })
     );
 
   return { horizontalLines, verticalLines };
 };
 
-type GenerateShapesArgs = {
+type GeneratePuzzleFragmentsArgs = {
   columns: number;
   height: number;
   rows: number;
   width: number;
 };
 
-const generateShapes = ({
+export const generatePuzzleFragments = ({
   columns,
   height,
   rows,
   width,
-}: GenerateShapesArgs) => {
+}: GeneratePuzzleFragmentsArgs) => {
   const points = generateRandomRowsPoints({
     columns,
     height,
@@ -187,61 +176,4 @@ const generateShapes = ({
     );
 };
 
-type Props = {
-  path: string;
-};
-
-export const ImageSprite: Component<Props> = (props) => {
-  const app = usePixiApp();
-
-  const [resource] = createResource(async () => {
-    const asset = await PIXI.Assets.load(props.path);
-    return new PIXI.Sprite(asset);
-  });
-
-  const shapes = createMemo(() => {
-    const sprite = resource();
-
-    if (!sprite) {
-      return [];
-    }
-
-    return generateShapes({
-      columns: 8,
-      height: sprite.height,
-      rows: 5,
-      width: sprite.width,
-    });
-  });
-
-  createEffect(() => {
-    const sprite = resource();
-
-    if (!sprite) {
-      return;
-    }
-
-    const mask = new PIXI.Graphics();
-    // mask.beginFill(0x00ff00);
-    // mask.drawEllipse(205, 230, 160, 140);
-
-    mask.moveTo(100, 100);
-    mask.quadraticCurveTo(125, 150, 100, 200);
-    mask.quadraticCurveTo(150, 225, 200, 200);
-    mask.quadraticCurveTo(225, 150, 200, 100);
-    mask.quadraticCurveTo(150, 75, 100, 100);
-
-    sprite.mask = mask;
-
-    onMount(() => {
-      app().stage.addChildAt(sprite, 0);
-      app().stage.addChild(mask);
-    });
-    onCleanup(() => {
-      app().stage.removeChild(sprite);
-      app().stage.removeChild(mask);
-    });
-  });
-
-  return null;
-};
+export type PuzzleFragmentShape = ReturnType<typeof generatePuzzleFragments>[0];
