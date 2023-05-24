@@ -1,29 +1,28 @@
-import * as PIXI from "pixi.js";
-import { onCleanup, onMount, type Component } from "solid-js";
+import { type Component } from "solid-js";
 import { TransformContextProvider } from "../TransformContext";
 import { ZoomBar } from "../ZoomBar";
 import { ImageSprite } from "./ImageSprite";
-import { PixiAppProvider, usePixiApp } from "./PixiApp";
+import { PixiAppProvider } from "./PixiApp";
 import { usePreventMenu } from "./usePreventMenu";
 import { useStageTransform } from "./useStageTransform";
 
 const Stage: Component = () => {
-  const app = usePixiApp();
+  // const app = usePixiApp();
 
   useStageTransform();
   usePreventMenu();
 
-  const sprite = new PIXI.Sprite(PIXI.Texture.WHITE);
-  sprite.tint = "#aa44ff";
-  sprite.height = 100;
-  sprite.width = 100;
+  // const sprite = new PIXI.Sprite(PIXI.Texture.WHITE);
+  // sprite.tint = "#aa44ff";
+  // sprite.height = 100;
+  // sprite.width = 100;
 
-  onMount(() => {
-    app().stage.addChild(sprite);
-  });
-  onCleanup(() => {
-    app().stage.removeChild(sprite);
-  });
+  // onMount(() => {
+  //   app().stage.addChild(sprite);
+  // });
+  // onCleanup(() => {
+  //   app().stage.removeChild(sprite);
+  // });
 
   return (
     <>

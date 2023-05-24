@@ -26,7 +26,9 @@ export const PixiAppProvider: Component<Props> = (props) => {
   const value = createMemo(() => {
     const app = new PIXI.Application({
       background: "white",
+      height: window.innerHeight,
       view: props.canvas,
+      width: window.innerWidth,
     });
     app.stage.eventMode = "dynamic";
     app.stage.hitArea = app.screen;
