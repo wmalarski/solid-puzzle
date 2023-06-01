@@ -1,100 +1,100 @@
-type GenerateRandomInRangeArgs = {
+type GetRandomInRangeArgs = {
   center: number;
   max: number;
   radius: number;
 };
 
-const generateRandomInRange = ({
-  center,
-  max,
-  radius,
-}: GenerateRandomInRangeArgs) => {
+const getRandomInRange = ({ center, max, radius }: GetRandomInRangeArgs) => {
   const random = 2 * (Math.random() - 0.5) * radius;
   return Math.max(Math.min(center + random, max), 0);
 };
 
-type GenerateRandomRowPointsArgs = {
+type GetRandomGridPointArgs = {
+  columnIndex: number;
+  rowIndex: number;
+  xCenter?: number;
+  yCenter?: number;
+};
+
+type GetRandomGridPointFactoryArgs = {
   columns: number;
   height: number;
-  rowIndex: number;
   rows: number;
   width: number;
 };
 
-const generateRandomRowPoints = ({
+const getRandomGridPointFactory = ({
   columns,
   height,
-  rowIndex,
   rows,
   width,
-}: GenerateRandomRowPointsArgs) => {
+}: GetRandomGridPointFactoryArgs) => {
   const columnWidth = width / columns;
   const rowHeight = height / rows;
 
-  const xRadius = columnWidth / 3;
-  const yRadius = rowHeight / 3;
+  const xRadius = columnWidth / 4;
+  const yRadius = rowHeight / 4;
 
-  const isBorderRow = rowIndex === 0 || rowIndex === rows;
+  return ({
+    columnIndex,
+    rowIndex,
+    xCenter,
+    yCenter,
+  }: GetRandomGridPointArgs) => {
+    const isBorderRow = rowIndex === 0 || rowIndex === rows;
+    const isBorderColumn = columnIndex === 0 || columnIndex === columns;
+    const xColumnCenter = columnIndex * columnWidth;
+    const yColumnCenter = rowIndex * rowHeight;
 
-  return Array(columns + 1)
-    .fill(0)
-    .map((_value, columnIndex) => {
-      const isBorderColumn = columnIndex === 0 || columnIndex === columns;
-      const xCenter = columnIndex * columnWidth;
-      const yCenter = rowIndex * rowHeight;
+    const x = isBorderColumn
+      ? xColumnCenter
+      : getRandomInRange({
+          center: xCenter ?? xColumnCenter,
+          max: width,
+          radius: xRadius,
+        });
 
-      return {
-        x: isBorderColumn
-          ? xCenter
-          : generateRandomInRange({
-              center: xCenter,
-              max: width,
-              radius: xRadius,
-            }),
-        y: isBorderRow
-          ? yCenter
-          : generateRandomInRange({
-              center: yCenter,
-              max: height,
-              radius: yRadius,
-            }),
-      };
-    });
+    const y = isBorderRow
+      ? yColumnCenter
+      : getRandomInRange({
+          center: yCenter ?? yColumnCenter,
+          max: height,
+          radius: yRadius,
+        });
+
+    return { x, y };
+  };
 };
 
-type GenerateRandomRowsPointsArgs = {
+type GenerateCurvesArgs = {
   columns: number;
   height: number;
   rows: number;
   width: number;
 };
 
-const generateRandomRowsPoints = ({
+const generateCurves = ({
   columns,
   height,
   rows,
   width,
-}: GenerateRandomRowsPointsArgs) => {
-  return Array(rows + 1)
+}: GenerateCurvesArgs) => {
+  const getRandomGridPoint = getRandomGridPointFactory({
+    columns,
+    height,
+    rows,
+    width,
+  });
+
+  const points = Array(rows + 1)
     .fill(0)
     .map((_value, rowIndex) =>
-      generateRandomRowPoints({
-        columns,
-        height,
-        rowIndex,
-        rows,
-        width,
-      })
+      Array(columns + 1)
+        .fill(0)
+        .map((_value, columnIndex) =>
+          getRandomGridPoint({ columnIndex, rowIndex })
+        )
     );
-};
-
-type GenerateCurvesArgs = {
-  points: ReturnType<typeof generateRandomRowsPoints>;
-};
-
-const generateCurves = ({ points }: GenerateCurvesArgs) => {
-  const rows = points.length - 1;
-  const columns = points[0].length - 1;
 
   const horizontalLines = Array(rows + 1)
     .fill(0)
@@ -104,11 +104,13 @@ const generateCurves = ({ points }: GenerateCurvesArgs) => {
         .map((_value, columnIndex) => {
           const start = points[rowIndex][columnIndex];
           const end = points[rowIndex][columnIndex + 1];
-
-          const x = (start.x + end.x) / 2;
-          const y = (start.y + end.y) / 2;
-
-          return { center: { x, y }, end, start };
+          const center = getRandomGridPoint({
+            columnIndex,
+            rowIndex,
+            xCenter: (start.x + end.x) / 2,
+            yCenter: (start.y + end.y) / 2,
+          });
+          return { center, end, start };
         })
     );
 
@@ -120,11 +122,13 @@ const generateCurves = ({ points }: GenerateCurvesArgs) => {
         .map((_value, columnIndex) => {
           const start = points[rowIndex][columnIndex];
           const end = points[rowIndex + 1][columnIndex];
-
-          const x = (start.x + end.x) / 2;
-          const y = (start.y + end.y) / 2;
-
-          return { center: { x, y }, end, start };
+          const center = getRandomGridPoint({
+            columnIndex,
+            rowIndex,
+            xCenter: (start.x + end.x) / 2,
+            yCenter: (start.y + end.y) / 2,
+          });
+          return { center, end, start };
         })
     );
 
@@ -144,15 +148,11 @@ export const generatePuzzleFragments = ({
   rows,
   width,
 }: GeneratePuzzleFragmentsArgs) => {
-  const points = generateRandomRowsPoints({
+  const { horizontalLines, verticalLines } = generateCurves({
     columns,
     height,
     rows,
     width,
-  });
-
-  const { horizontalLines, verticalLines } = generateCurves({
-    points,
   });
 
   return Array(rows)
