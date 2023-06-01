@@ -167,10 +167,13 @@ export const generatePuzzleFragments = ({
           const right = verticalLines[rowIndex][columnIndex + 1];
 
           return {
-            bottom,
-            left,
-            right: { ...right, end: right.start, start: right.end },
-            top: { ...top, end: top.start, start: top.end },
+            curvePoints: [
+              { control: left.center, to: left.end },
+              { control: bottom.center, to: bottom.end },
+              { control: right.center, to: right.start },
+              { control: top.center, to: top.start },
+            ],
+            start: left.start,
           };
         })
     );
