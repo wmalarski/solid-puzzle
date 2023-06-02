@@ -11,7 +11,7 @@ import {
 } from "solid-js";
 import { usePixiApp } from "../PixiApp";
 import { PuzzleFragment } from "./PuzzleFragment";
-import { generatePuzzleFragments } from "./generatePuzzleFragments";
+import { getPuzzleFragments } from "./getPuzzleFragments";
 
 type UseStageDeselectArgs = {
   onDeselect: () => void;
@@ -49,7 +49,7 @@ const Board: Component<BoardProps> = (props) => {
   });
 
   const shapes = createMemo(() => {
-    return generatePuzzleFragments({
+    return getPuzzleFragments({
       columns: 8,
       height: props.texture.height,
       rows: 5,

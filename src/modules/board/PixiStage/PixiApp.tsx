@@ -25,6 +25,7 @@ type Props = {
 export const PixiAppProvider: Component<Props> = (props) => {
   const value = createMemo(() => {
     const app = new PIXI.Application({
+      antialias: true,
       background: "white",
       height: window.innerHeight,
       view: props.canvas,

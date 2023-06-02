@@ -1,3 +1,5 @@
+import type { Point2D } from "~/utils/geometry";
+
 type GetRandomInRangeArgs = {
   center: number;
   max: number;
@@ -135,19 +137,35 @@ const generateCurves = ({
   return { horizontalLines, verticalLines };
 };
 
-type GeneratePuzzleFragmentsArgs = {
+type GetCenterFromPointsArgs = {
+  points: Point2D[];
+};
+
+const getCenterFromPoints = ({ points }: GetCenterFromPointsArgs) => {
+  let sumX = 0;
+  let sumY = 0;
+
+  points.forEach(({ x, y }) => {
+    sumX += x;
+    sumY += y;
+  });
+
+  return { x: sumX / points.length, y: sumY / points.length };
+};
+
+type GetPuzzleFragmentsArgs = {
   columns: number;
   height: number;
   rows: number;
   width: number;
 };
 
-export const generatePuzzleFragments = ({
+export const getPuzzleFragments = ({
   columns,
   height,
   rows,
   width,
-}: GeneratePuzzleFragmentsArgs) => {
+}: GetPuzzleFragmentsArgs) => {
   const { horizontalLines, verticalLines } = generateCurves({
     columns,
     height,
@@ -166,13 +184,20 @@ export const generatePuzzleFragments = ({
           const left = verticalLines[rowIndex][columnIndex];
           const right = verticalLines[rowIndex][columnIndex + 1];
 
+          const curvePoints = [
+            { control: left.center, to: left.end },
+            { control: bottom.center, to: bottom.end },
+            { control: right.center, to: right.start },
+            { control: top.center, to: top.start },
+          ];
+
+          const center = getCenterFromPoints({
+            points: curvePoints.map((curve) => curve.to),
+          });
+
           return {
-            curvePoints: [
-              { control: left.center, to: left.end },
-              { control: bottom.center, to: bottom.end },
-              { control: right.center, to: right.start },
-              { control: top.center, to: top.start },
-            ],
+            center,
+            curvePoints,
             fragmentId: `${rowIndex}-${columnIndex}`,
             start: left.start,
           };
@@ -180,4 +205,4 @@ export const generatePuzzleFragments = ({
     );
 };
 
-export type PuzzleFragmentShape = ReturnType<typeof generatePuzzleFragments>[0];
+export type PuzzleFragmentShape = ReturnType<typeof getPuzzleFragments>[0];

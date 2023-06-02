@@ -1,5 +1,6 @@
 import * as PIXI from "pixi.js";
 import {
+  Show,
   createEffect,
   createMemo,
   onCleanup,
@@ -8,7 +9,8 @@ import {
 } from "solid-js";
 import { randomHexColor } from "~/utils/colors";
 import { usePixiApp } from "../PixiApp";
-import type { PuzzleFragmentShape } from "./generatePuzzleFragments";
+import { RotationAnchor } from "./RotationAchor";
+import type { PuzzleFragmentShape } from "./getPuzzleFragments";
 import { useDragObject } from "./useDragObject";
 
 type PuzzleFragmentGraphicsProps = {
@@ -22,7 +24,6 @@ export const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
   props
 ) => {
   const graphics = new PIXI.Graphics();
-  graphics.zIndex = 0;
 
   onMount(() => {
     graphics.beginTextureFill({
@@ -92,11 +93,16 @@ export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
   });
 
   return (
-    <PuzzleFragmentGraphics
-      container={container}
-      isSelected={isSelected()}
-      shape={props.shape}
-      texture={props.texture}
-    />
+    <>
+      <PuzzleFragmentGraphics
+        container={container}
+        isSelected={isSelected()}
+        shape={props.shape}
+        texture={props.texture}
+      />
+      <Show when={isSelected()}>
+        <RotationAnchor container={container} shape={props.shape} />
+      </Show>
+    </>
   );
 };
