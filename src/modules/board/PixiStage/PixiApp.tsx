@@ -30,7 +30,7 @@ export const PixiAppProvider: Component<Props> = (props) => {
       view: props.canvas,
       width: window.innerWidth,
     });
-    app.stage.eventMode = "dynamic";
+    app.stage.eventMode = "static";
     app.stage.hitArea = app.screen;
     app.renderer.resize(window.innerWidth, window.innerHeight);
     return app;

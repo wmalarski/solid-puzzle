@@ -30,6 +30,7 @@ export const useDragObject = (props: Props) => {
 
   const onPointerDown = (event: PIXI.FederatedMouseEvent) => {
     const parent = props.displayObject.parent;
+
     if (event.button === 2 || !parent) {
       return;
     }
