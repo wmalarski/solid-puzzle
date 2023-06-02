@@ -4,14 +4,17 @@ import {
   Show,
   createMemo,
   createResource,
-  createSignal,
   onCleanup,
   onMount,
   type Component,
 } from "solid-js";
 import { usePixiApp } from "../PixiApp";
 import { PuzzleFragment } from "./PuzzleFragment";
-import { getPuzzleFragments } from "./getPuzzleFragments";
+import { PuzzleStoreProvider, usePuzzleStoreContext } from "./PuzzleStore";
+import {
+  getPuzzleFragments,
+  type PuzzleFragmentShape,
+} from "./getPuzzleFragments";
 
 type UseStageDeselectArgs = {
   onDeselect: () => void;
@@ -36,18 +39,31 @@ const useStageDeselect = (args: UseStageDeselectArgs) => {
 };
 
 type BoardProps = {
+  shapes: PuzzleFragmentShape[];
   texture: PIXI.Texture;
 };
 
 const Board: Component<BoardProps> = (props) => {
-  const [selectedId, setSelectedId] = createSignal<string>();
+  const store = usePuzzleStoreContext();
 
   useStageDeselect({
     onDeselect: () => {
-      setSelectedId();
+      store.setSelectedId();
     },
   });
 
+  return (
+    <For each={props.shapes}>
+      {(shape) => <PuzzleFragment shape={shape} texture={props.texture} />}
+    </For>
+  );
+};
+
+type ProviderProps = {
+  texture: PIXI.Texture;
+};
+
+const Provider: Component<ProviderProps> = (props) => {
   const shapes = createMemo(() => {
     return getPuzzleFragments({
       columns: 8,
@@ -57,21 +73,10 @@ const Board: Component<BoardProps> = (props) => {
     });
   });
 
-  const onSelect = (fragmentId: string) => {
-    setSelectedId(fragmentId);
-  };
-
   return (
-    <For each={shapes()}>
-      {(shape) => (
-        <PuzzleFragment
-          onSelect={onSelect}
-          selectedId={selectedId()}
-          shape={shape}
-          texture={props.texture}
-        />
-      )}
-    </For>
+    <PuzzleStoreProvider shapes={shapes()}>
+      <Board shapes={shapes()} texture={props.texture} />
+    </PuzzleStoreProvider>
   );
 };
 
@@ -86,6 +91,8 @@ export const PuzzleBoard: Component<Props> = (props) => {
   });
 
   return (
-    <Show when={texture()}>{(texture) => <Board texture={texture()} />}</Show>
+    <Show when={texture()}>
+      {(texture) => <Provider texture={texture()} />}
+    </Show>
   );
 };

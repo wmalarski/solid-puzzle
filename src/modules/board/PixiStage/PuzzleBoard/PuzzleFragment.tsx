@@ -9,6 +9,7 @@ import {
 } from "solid-js";
 import { randomHexColor } from "~/utils/colors";
 import { usePixiApp } from "../PixiApp";
+import { usePuzzleStoreContext } from "./PuzzleStore";
 import { RotationAnchor } from "./RotationAchor";
 import type { PuzzleFragmentShape } from "./getPuzzleFragments";
 import { useDragObject } from "./useDragObject";
@@ -57,13 +58,12 @@ export const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
 };
 
 type PuzzleFragmentProps = {
-  onSelect: (fragmentId: string) => void;
-  selectedId?: string;
   shape: PuzzleFragmentShape;
   texture: PIXI.Texture;
 };
 
 export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
+  const store = usePuzzleStoreContext();
   const app = usePixiApp();
 
   const container = new PIXI.Container();
@@ -72,7 +72,7 @@ export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
   useDragObject({
     displayObject: container,
     onDragStart: () => {
-      props.onSelect(props.shape.fragmentId);
+      store.setSelectedId(props.shape.fragmentId);
     },
   });
 
@@ -85,7 +85,7 @@ export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
   });
 
   const isSelected = createMemo(() => {
-    return props.selectedId === props.shape.fragmentId;
+    return store.state.selectedId === props.shape.fragmentId;
   });
 
   createEffect(() => {

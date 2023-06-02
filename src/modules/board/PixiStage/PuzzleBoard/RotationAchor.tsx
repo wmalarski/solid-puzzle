@@ -1,5 +1,6 @@
 import * as PIXI from "pixi.js";
-import { onCleanup, onMount, type Component } from "solid-js";
+import { createMemo, onCleanup, onMount, type Component } from "solid-js";
+import { usePuzzleStoreContext } from "./PuzzleStore";
 import type { PuzzleFragmentShape } from "./getPuzzleFragments";
 
 type RotationAnchorProps = {
@@ -8,10 +9,32 @@ type RotationAnchorProps = {
 };
 
 export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
+  const store = usePuzzleStoreContext();
+
   const graphics = new PIXI.Graphics();
+  graphics.tint = "blue";
+
+  const fragmentState = createMemo(() => {
+    return store.state.fragments[props.shape.fragmentId];
+  });
 
   onMount(() => {
-    graphics.drawCircle(props.shape.center.x, props.shape.center.y, 10);
+    const state = fragmentState();
+
+    if (!state) {
+      return;
+    }
+
+    console.log(state.rotation, state.x, state.y);
+    // const x = state?.rotation || 0;
+
+    graphics.beginFill();
+    graphics.drawCircle(
+      props.shape.center.x + 30,
+      props.shape.center.y + 30,
+      10
+    );
+    graphics.endFill();
   });
 
   onMount(() => {

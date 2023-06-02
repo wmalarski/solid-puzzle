@@ -1,5 +1,6 @@
 import { createContext, useContext, type Component, type JSX } from "solid-js";
 import { createStore } from "solid-js/store";
+import type { PuzzleFragmentShape } from "./getPuzzleFragments";
 
 export type FragmentState = {
   rotation: number;
@@ -12,8 +13,22 @@ export type PuzzleState = {
   selectedId?: string;
 };
 
-const usePuzzleStore = () => {
-  const [state, setState] = createStore<PuzzleState>({ fragments: {} });
+type UsePuzzleStoreArgs = {
+  shapes: PuzzleFragmentShape[];
+};
+
+const usePuzzleStore = (args: UsePuzzleStoreArgs) => {
+  const fragments: PuzzleState["fragments"] = {};
+
+  args.shapes.forEach((shape) => {
+    fragments[shape.fragmentId] = {
+      rotation: 1,
+      x: shape.center.x,
+      y: shape.center.y,
+    };
+  });
+
+  const [state, setState] = createStore<PuzzleState>({ fragments });
 
   const setSelectedId = (selectedId?: string) => {
     setState("selectedId", selectedId);
@@ -29,12 +44,13 @@ const PuzzleStoreContext = createContext<ReturnType<typeof usePuzzleStore>>({
 
 type PuzzleStoreProviderProps = {
   children: JSX.Element;
+  shapes: PuzzleFragmentShape[];
 };
 
 export const PuzzleStoreProvider: Component<PuzzleStoreProviderProps> = (
   props
 ) => {
-  const store = usePuzzleStore();
+  const store = usePuzzleStore(props);
 
   return (
     <PuzzleStoreContext.Provider value={store}>
