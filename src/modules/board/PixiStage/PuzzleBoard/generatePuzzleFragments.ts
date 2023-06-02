@@ -173,6 +173,7 @@ export const generatePuzzleFragments = ({
               { control: right.center, to: right.start },
               { control: top.center, to: top.start },
             ],
+            fragmentId: `${rowIndex}-${columnIndex}`,
             start: left.start,
           };
         })

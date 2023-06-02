@@ -4,16 +4,50 @@ import {
   Show,
   createMemo,
   createResource,
+  createSignal,
+  onCleanup,
+  onMount,
   type Component,
 } from "solid-js";
+import { usePixiApp } from "../PixiApp";
 import { PuzzleFragment } from "./PuzzleFragment";
 import { generatePuzzleFragments } from "./generatePuzzleFragments";
+
+type UseStageDeselectArgs = {
+  onDeselect: () => void;
+};
+
+const useStageDeselect = (args: UseStageDeselectArgs) => {
+  const app = usePixiApp();
+
+  const onPointerDown = (event: PIXI.FederatedPointerEvent) => {
+    if (event.target === app().stage && event.button !== 2) {
+      args.onDeselect();
+    }
+  };
+
+  onMount(() => {
+    app().stage.on("pointerdown", onPointerDown);
+  });
+
+  onCleanup(() => {
+    app().stage.off("pointerdown", onPointerDown);
+  });
+};
 
 type BoardProps = {
   texture: PIXI.Texture;
 };
 
 const Board: Component<BoardProps> = (props) => {
+  const [selectedId, setSelectedId] = createSignal<string>();
+
+  useStageDeselect({
+    onDeselect: () => {
+      setSelectedId();
+    },
+  });
+
   const shapes = createMemo(() => {
     return generatePuzzleFragments({
       columns: 8,
@@ -23,9 +57,20 @@ const Board: Component<BoardProps> = (props) => {
     });
   });
 
+  const onSelect = (fragmentId: string) => {
+    setSelectedId(fragmentId);
+  };
+
   return (
     <For each={shapes()}>
-      {(shape) => <PuzzleFragment shape={shape} texture={props.texture} />}
+      {(shape) => (
+        <PuzzleFragment
+          onSelect={onSelect}
+          selectedId={selectedId()}
+          shape={shape}
+          texture={props.texture}
+        />
+      )}
     </For>
   );
 };
@@ -38,7 +83,6 @@ export const PuzzleBoard: Component<Props> = (props) => {
   const [texture] = createResource(async () => {
     const asset = await PIXI.Assets.load(props.path);
     return asset as PIXI.Texture;
-    // return new PIXI.Sprite(asset);
   });
 
   return (
