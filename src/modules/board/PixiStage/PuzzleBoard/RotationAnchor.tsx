@@ -1,6 +1,11 @@
 import * as PIXI from "pixi.js";
 import { createMemo, onCleanup, onMount, type Component } from "solid-js";
-import { crossPoints, lineFromPoints } from "~/utils/geometry";
+import { randomHexColor } from "~/utils/colors";
+import {
+  lineFromPoints,
+  polynomialFromLineAndCircle,
+  solvePolynomial,
+} from "~/utils/geometry";
 import type { FragmentState } from "./PuzzleStore";
 import type { PuzzleFragmentShape } from "./getPuzzleFragments";
 import { useDragObject } from "./useDragObject";
@@ -18,6 +23,8 @@ export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
   const graphics = new PIXI.Graphics();
   graphics.eventMode = "static";
   graphics.tint = "blue";
+
+  const graphicsLine = new PIXI.Graphics();
 
   const anchorPosition = createMemo(() => {
     const rotation = props.fragmentState.rotation;
@@ -53,11 +60,26 @@ export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
         p2: eventPosition,
       });
 
-      const points = crossPoints({
+      const polynomial = polynomialFromLineAndCircle({
         center: props.shape.center,
         line,
         radius: rotationAnchorDistance,
       });
+
+      const points = solvePolynomial({
+        polynomial,
+      });
+
+      graphicsLine.clear();
+      graphicsLine.lineStyle(4, randomHexColor(), 1);
+
+      graphicsLine.beginFill();
+
+      points.forEach((x) => {
+        graphicsLine.drawCircle(x, line.a * x + line.b, 5);
+      });
+
+      graphicsLine.endFill();
 
       console.log(
         JSON.stringify(
@@ -66,7 +88,7 @@ export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
             centerX: props.shape.center.x,
             centerY: props.shape.center.y,
             line,
-            points,
+            polynomial,
             positionX: eventPosition.x,
             positionY: eventPosition.y,
             result,
@@ -83,11 +105,14 @@ export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
 
   onMount(() => {
     props.container.addChild(graphics);
+    props.container.addChild(graphicsLine);
   });
 
   onCleanup(() => {
     props.container.removeChild(graphics);
+    props.container.removeChild(graphicsLine);
     graphics.destroy();
+    graphicsLine.destroy();
   });
 
   return null;

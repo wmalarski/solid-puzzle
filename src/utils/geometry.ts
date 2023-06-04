@@ -8,6 +8,12 @@ export type Line2D = {
   b: number;
 };
 
+export type Polynomial = {
+  k1: number;
+  k2: number;
+  k3: number;
+};
+
 type TranslatePointArgs = {
   point: Point2D;
   shift: Point2D;
@@ -50,13 +56,17 @@ export const lineFromPoints = ({ p1, p2 }: LineFromPointsArgs) => {
   return { a, b };
 };
 
-type CrossPointsArgs = {
+type PolynomialFromLineAndCircle = {
   center: Point2D;
   radius: number;
   line: Line2D;
 };
 
-export const crossPoints = ({ center, line, radius }: CrossPointsArgs) => {
+export const polynomialFromLineAndCircle = ({
+  center,
+  line,
+  radius,
+}: PolynomialFromLineAndCircle) => {
   const k1 = 1 + line.a * line.a;
   const k2 = 2 * line.a * line.b - 2 * center.x - 2 * line.a * center.y;
   const k3 =
@@ -66,23 +76,40 @@ export const crossPoints = ({ center, line, radius }: CrossPointsArgs) => {
     center.y * center.y -
     radius * radius;
 
-  const delta = k2 * k2 - 4 * k1 * k3;
+  return { k1, k2, k3 };
+};
+
+type GetPolynomialValueArgs = {
+  polynomial: Polynomial;
+  x: number;
+};
+
+export const getPolynomialValue = ({
+  polynomial,
+  x,
+}: GetPolynomialValueArgs) => {
+  return x * x * polynomial.k1 + x * polynomial.k2 + polynomial.k3;
+};
+
+type SolvePolynomialArgs = {
+  polynomial: Polynomial;
+};
+
+export const solvePolynomial = ({ polynomial }: SolvePolynomialArgs) => {
+  const delta =
+    polynomial.k2 * polynomial.k2 - 4 * polynomial.k1 * polynomial.k3;
 
   if (delta < 0) {
     return [];
   }
 
   if (delta === 0) {
-    const x = -line.b / (2 * line.a);
-    return [{ x, y: line.a * x + line.b }];
+    return [-polynomial.k2 / (2 * polynomial.k1)];
   }
 
   const deltaSqrt = Math.sqrt(delta);
-  const x1 = (-line.b - deltaSqrt) / (2 * line.a);
-  const x2 = (-line.b + deltaSqrt) / (2 * line.a);
-
   return [
-    { x: x1, y: line.a * x1 + line.b },
-    { x: x2, y: line.a * x2 + line.b },
+    (-polynomial.k2 - deltaSqrt) / (2 * polynomial.k1),
+    (-polynomial.k2 + deltaSqrt) / (2 * polynomial.k1),
   ];
 };
