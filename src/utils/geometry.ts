@@ -56,6 +56,33 @@ export const lineFromPoints = ({ p1, p2 }: LineFromPointsArgs) => {
   return { a, b };
 };
 
+type GetDistanceArgs = {
+  point1: Point2D;
+  point2: Point2D;
+};
+
+export const getDistance = ({ point1, point2 }: GetDistanceArgs) => {
+  const xDiff = Math.pow(point1.x - point2.x, 2);
+  const yDiff = Math.pow(point1.y - point2.y, 2);
+  return Math.sqrt(xDiff + yDiff);
+};
+
+type GetClosestPointArgs = {
+  from: Point2D;
+  points: Point2D[];
+};
+
+export const getClosestPoint = ({ from, points }: GetClosestPointArgs) => {
+  const withDistance = points.map((point) => ({
+    distance: getDistance({ point1: point, point2: from }),
+    point,
+  }));
+
+  withDistance.sort((a, b) => a.distance - b.distance);
+
+  return withDistance[0].point;
+};
+
 type PolynomialFromLineAndCircle = {
   center: Point2D;
   radius: number;
@@ -112,4 +139,26 @@ export const solvePolynomial = ({ polynomial }: SolvePolynomialArgs) => {
     (-polynomial.k2 - deltaSqrt) / (2 * polynomial.k1),
     (-polynomial.k2 + deltaSqrt) / (2 * polynomial.k1),
   ];
+};
+
+type SolveCircleLineArgs = {
+  center: Point2D;
+  point: Point2D;
+  radius: number;
+};
+
+export const solveCircleLine = ({
+  center,
+  point,
+  radius,
+}: SolveCircleLineArgs) => {
+  const line = lineFromPoints({ p1: center, p2: point });
+
+  const polynomial = polynomialFromLineAndCircle({ center, line, radius });
+
+  const xValues = solvePolynomial({ polynomial });
+
+  return xValues.map((x) => {
+    return { x, y: line.a * x + line.b };
+  });
 };
