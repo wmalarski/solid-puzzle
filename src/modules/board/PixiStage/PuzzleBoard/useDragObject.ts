@@ -2,11 +2,24 @@ import type * as PIXI from "pixi.js";
 import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import type { Point2D } from "~/utils/geometry";
 
+type DragConstraintArgs = {
+  shift: Point2D;
+  eventPosition: Point2D;
+};
+
 type UseDragObjectArgs = {
+  dragConstraint?: (args: DragConstraintArgs) => Point2D;
   onDragEnd?: (event: PIXI.FederatedMouseEvent) => void;
   onDragMove?: (event: PIXI.FederatedMouseEvent) => void;
   onDragStart?: (event: PIXI.FederatedMouseEvent) => void;
   displayObject: PIXI.DisplayObject;
+};
+
+const defaultDragConstraint = (args: DragConstraintArgs) => {
+  return {
+    x: args.eventPosition.x - args.shift.x,
+    y: args.eventPosition.y - args.shift.y,
+  };
 };
 
 export const useDragObject = (args: UseDragObjectArgs) => {
@@ -19,11 +32,14 @@ export const useDragObject = (args: UseDragObjectArgs) => {
       return;
     }
 
-    parent.toLocal(event.global, undefined, args.displayObject.position);
-    args.displayObject.position.set(
-      args.displayObject.x - point.x,
-      args.displayObject.y - point.y
-    );
+    const local = parent.toLocal(event.global);
+    const dragConstraint = args.dragConstraint || defaultDragConstraint;
+    const afterConstraint = dragConstraint({
+      eventPosition: local,
+      shift: point,
+    });
+
+    args.displayObject.position.set(afterConstraint.x, afterConstraint.y);
 
     args.onDragMove?.(event);
   };
