@@ -30,31 +30,15 @@ export const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
   onMount(() => {
     const matrix = new PIXI.Matrix(1, 0, 0, 1);
 
-    // matrix.rotate(props.fragmentState.rotation);
-
     matrix.translate(-props.shape.min.x, -props.shape.min.y);
 
     graphics.beginTextureFill({ matrix, texture: props.texture });
     graphics.lineStyle(4, randomHexColor(), 1);
-    graphics.moveTo(
-      props.shape.start.x - props.shape.min.x,
-      props.shape.start.y - props.shape.min.y
-    );
 
+    graphics.moveTo(props.shape.start.x, props.shape.start.y);
     props.shape.curvePoints.forEach(({ control, to }) => {
-      graphics.quadraticCurveTo(
-        control.x - props.shape.min.x,
-        control.y - props.shape.min.y,
-        to.x - props.shape.min.x,
-        to.y - props.shape.min.y
-      );
+      graphics.quadraticCurveTo(control.x, control.y, to.x, to.y);
     });
-
-    // graphics.moveTo(props.shape.start.x, props.shape.start.y);
-
-    // props.shape.curvePoints.forEach(({ control, to }) => {
-    //   graphics.quadraticCurveTo(control.x, control.y, to.x, to.y);
-    // });
 
     graphics.endFill();
   });
@@ -100,6 +84,10 @@ const Fragment: Component<FragmentProps> = (props) => {
     container.y = props.shape.min.y;
   });
 
+  // createEffect(() => {
+  //   container.rotation = props.fragmentState.rotation;
+  // });
+
   onMount(() => {
     app().stage.addChild(container);
   });
@@ -115,10 +103,6 @@ const Fragment: Component<FragmentProps> = (props) => {
   createEffect(() => {
     container.zIndex = isSelected() ? 1 : 0;
   });
-
-  // createEffect(() => {
-  //   container.rotation = props.fragmentState.rotation;
-  // });
 
   return (
     <>

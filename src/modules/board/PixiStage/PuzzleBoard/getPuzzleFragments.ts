@@ -1,4 +1,8 @@
-import type { Point2D } from "~/utils/geometry";
+import {
+  getCenterFromPoints,
+  getMinFromPoints,
+  translatePoint,
+} from "~/utils/geometry";
 
 type GetRandomInRangeArgs = {
   center: number;
@@ -106,13 +110,14 @@ const generateCurves = ({
         .map((_value, columnIndex) => {
           const start = points[rowIndex][columnIndex];
           const end = points[rowIndex][columnIndex + 1];
-          const center = getRandomGridPoint({
+          const center = getCenterFromPoints({ points: [start, end] });
+          const random = getRandomGridPoint({
             columnIndex,
             rowIndex,
-            xCenter: (start.x + end.x) / 2,
-            yCenter: (start.y + end.y) / 2,
+            xCenter: center.x,
+            yCenter: center.y,
           });
-          return { center, end, start };
+          return { center: random, end, start };
         })
     );
 
@@ -124,42 +129,18 @@ const generateCurves = ({
         .map((_value, columnIndex) => {
           const start = points[rowIndex][columnIndex];
           const end = points[rowIndex + 1][columnIndex];
-          const center = getRandomGridPoint({
+          const center = getCenterFromPoints({ points: [start, end] });
+          const random = getRandomGridPoint({
             columnIndex,
             rowIndex,
-            xCenter: (start.x + end.x) / 2,
-            yCenter: (start.y + end.y) / 2,
+            xCenter: center.x,
+            yCenter: center.y,
           });
-          return { center, end, start };
+          return { center: random, end, start };
         })
     );
 
   return { horizontalLines, verticalLines };
-};
-
-type GetCenterFromPointsArgs = {
-  points: Point2D[];
-};
-
-const getCenterFromPoints = ({ points }: GetCenterFromPointsArgs) => {
-  let sumX = 0;
-  let sumY = 0;
-
-  points.forEach(({ x, y }) => {
-    sumX += x;
-    sumY += y;
-  });
-
-  return { x: sumX / points.length, y: sumY / points.length };
-};
-
-const getMinFromPoints = ({ points }: GetCenterFromPointsArgs) => {
-  const x = points.sort((a, b) => a.x - b.x)[0].x;
-  const y = points.sort((a, b) => a.y - b.y)[0].y;
-
-  console.log({ points, x, y });
-
-  return { x, y };
 };
 
 type GetPuzzleFragmentsArgs = {
@@ -193,34 +174,32 @@ export const getPuzzleFragments = ({
           const left = verticalLines[rowIndex][columnIndex];
           const right = verticalLines[rowIndex][columnIndex + 1];
 
-          const curvePoints = [
+          const absoluteCurvePoints = [
             { control: left.center, to: left.end },
             { control: bottom.center, to: bottom.end },
             { control: right.center, to: right.start },
             { control: top.center, to: top.start },
           ];
 
-          const points = curvePoints.map((curve) => curve.to);
+          const points = absoluteCurvePoints.map((curve) => curve.to);
+          const absoluteCenter = getCenterFromPoints({ points });
           const min = getMinFromPoints({ points });
-          // const shift = { x: -min.x, y: -min.y };
+          const shift = { x: -min.x, y: -min.y };
 
-          // const translated = curvePoints.map((curve) => ({
-          //   control: translatePoint({ point: curve.control, shift }),
-          //   to: translatePoint({ point: curve.control, shift }),
-          // }));
-          // const center = translatePoint({
-          //   point: getCenterFromPoints({ points }),
-          //   shift,
-          // });
-          const center = getCenterFromPoints({ points });
+          const curvePoints = absoluteCurvePoints.map((curve) => ({
+            control: translatePoint({ point: curve.control, shift }),
+            to: translatePoint({ point: curve.to, shift }),
+          }));
+
+          const center = translatePoint({ point: absoluteCenter, shift });
+          const start = translatePoint({ point: left.start, shift });
 
           return {
             center,
             curvePoints,
             fragmentId: `${rowIndex}-${columnIndex}`,
             min,
-            start: left.start,
-            // translated,
+            start,
           };
         })
     );
