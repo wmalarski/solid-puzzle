@@ -27,21 +27,13 @@ export const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
 ) => {
   const wrapper = new PIXI.Container();
   const graphics = new PIXI.Graphics();
-  // wrapper.addChild();
 
   createEffect(() => {
-    // container.rotation = props.fragmentState.rotation;
-    console.log("props.fragmentState.rotation", props.fragmentState.rotation);
     wrapper.rotation = props.fragmentState.rotation;
   });
 
   onMount(() => {
-    graphics.transform.position.set(
-      -props.shape.center.x,
-      -props.shape.center.y
-    );
-    // graphics.x = -props.shape.center.x;
-    // graphics.y = -props.shape.center.y;
+    graphics.position.set(-props.shape.center.x, -props.shape.center.y);
   });
 
   onMount(() => {

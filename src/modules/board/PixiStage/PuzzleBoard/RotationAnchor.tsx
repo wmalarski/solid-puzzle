@@ -30,20 +30,14 @@ export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
   });
 
   createEffect(() => {
-    // container.rotation = props.fragmentState.rotation;
-    // console.log("props.fragmentState.rotation", props.fragmentState.rotation);
     graphics.rotation = props.fragmentState.rotation;
   });
 
   const onDragMove = (event: PIXI.FederatedPointerEvent) => {
     const local = props.container.toLocal(event.global);
-    const atan2 = Math.atan2(-local.x, local.y);
-
-    console.log({ atan2, x: local.x, y: local.y });
-
     store.setRotation({
       fragmentId: props.shape.fragmentId,
-      rotation: atan2,
+      rotation: Math.atan2(-local.x, local.y),
     });
   };
 
@@ -63,35 +57,6 @@ export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
     props.container.once("pointerup", onDragEnd);
     props.container.once("pointerupoutside", onDragEnd);
   };
-
-  // useDragObject({
-  //   displayObject: graphics,
-  //   dragConstraint: ({ eventPosition, shift }) => {
-  //     const points = solveCircleLine({
-  //       center: { x: 0, y: 0 },
-  //       point: eventPosition,
-  //       radius: rotationAnchorDistance,
-  //     });
-
-  //     const closest = getClosestPoint({
-  //       from: eventPosition,
-  //       points,
-  //     });
-
-  //     const position = anchorPosition();
-
-  //     return { x: position.x, y: closest.y - shift.y };
-  //   },
-  //   onDragMove: (event) => {
-  //     const local = props.container.toLocal(event.global);
-
-  //     const tanAngle = local.x / local.y;
-  //     const rotation = Math.tanh(-tanAngle);
-
-  //     console.log({ rotation, tanAngle, x: local.x, y: local.y });
-  //     store.setRotation({ fragmentId: props.shape.fragmentId, rotation });
-  //   },
-  // });
 
   onMount(() => {
     props.container.addChild(graphics);

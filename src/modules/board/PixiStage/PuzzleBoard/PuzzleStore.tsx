@@ -27,7 +27,7 @@ const usePuzzleStore = (args: UsePuzzleStoreArgs) => {
 
   args.shapes.forEach((shape) => {
     fragments[shape.fragmentId] = {
-      rotation: Math.PI / 45, //2 * Math.random() * Math.PI,
+      rotation: 2 * Math.random() * Math.PI,
       x: shape.center.x,
       y: shape.center.y,
     };
