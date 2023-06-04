@@ -9,13 +9,14 @@ import {
 } from "solid-js";
 import { randomHexColor } from "~/utils/colors";
 import { usePixiApp } from "../PixiApp";
-import { usePuzzleStoreContext } from "./PuzzleStore";
-import { RotationAnchor } from "./RotationAchor";
+import { usePuzzleStoreContext, type FragmentState } from "./PuzzleStore";
+import { RotationAnchor } from "./RotationAnchor";
 import type { PuzzleFragmentShape } from "./getPuzzleFragments";
 import { useDragObject } from "./useDragObject";
 
 type PuzzleFragmentGraphicsProps = {
   container: PIXI.Container;
+  fragmentState: FragmentState;
   isSelected: boolean;
   shape: PuzzleFragmentShape;
   texture: PIXI.Texture;
@@ -27,16 +28,33 @@ export const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
   const graphics = new PIXI.Graphics();
 
   onMount(() => {
-    graphics.beginTextureFill({
-      matrix: new PIXI.Matrix(1, 0, 0, 1),
-      texture: props.texture,
-    });
+    const matrix = new PIXI.Matrix(1, 0, 0, 1);
+
+    // matrix.rotate(props.fragmentState.rotation);
+
+    matrix.translate(-props.shape.min.x, -props.shape.min.y);
+
+    graphics.beginTextureFill({ matrix, texture: props.texture });
     graphics.lineStyle(4, randomHexColor(), 1);
-    graphics.moveTo(props.shape.start.x, props.shape.start.y);
+    graphics.moveTo(
+      props.shape.start.x - props.shape.min.x,
+      props.shape.start.y - props.shape.min.y
+    );
 
     props.shape.curvePoints.forEach(({ control, to }) => {
-      graphics.quadraticCurveTo(control.x, control.y, to.x, to.y);
+      graphics.quadraticCurveTo(
+        control.x - props.shape.min.x,
+        control.y - props.shape.min.y,
+        to.x - props.shape.min.x,
+        to.y - props.shape.min.y
+      );
     });
+
+    // graphics.moveTo(props.shape.start.x, props.shape.start.y);
+
+    // props.shape.curvePoints.forEach(({ control, to }) => {
+    //   graphics.quadraticCurveTo(control.x, control.y, to.x, to.y);
+    // });
 
     graphics.endFill();
   });
@@ -57,12 +75,13 @@ export const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
   return null;
 };
 
-type PuzzleFragmentProps = {
+type FragmentProps = {
+  fragmentState: FragmentState;
   shape: PuzzleFragmentShape;
   texture: PIXI.Texture;
 };
 
-export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
+const Fragment: Component<FragmentProps> = (props) => {
   const store = usePuzzleStoreContext();
   const app = usePixiApp();
 
@@ -74,6 +93,11 @@ export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
     onDragStart: () => {
       store.setSelectedId(props.shape.fragmentId);
     },
+  });
+
+  onMount(() => {
+    container.x = props.shape.min.x;
+    container.y = props.shape.min.y;
   });
 
   onMount(() => {
@@ -92,17 +116,51 @@ export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
     container.zIndex = isSelected() ? 1 : 0;
   });
 
+  // createEffect(() => {
+  //   container.rotation = props.fragmentState.rotation;
+  // });
+
   return (
     <>
       <PuzzleFragmentGraphics
         container={container}
+        fragmentState={props.fragmentState}
         isSelected={isSelected()}
         shape={props.shape}
         texture={props.texture}
       />
       <Show when={isSelected()}>
-        <RotationAnchor container={container} shape={props.shape} />
+        <RotationAnchor
+          container={container}
+          fragmentState={props.fragmentState}
+          shape={props.shape}
+        />
       </Show>
     </>
+  );
+};
+
+type PuzzleFragmentProps = {
+  shape: PuzzleFragmentShape;
+  texture: PIXI.Texture;
+};
+
+export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
+  const store = usePuzzleStoreContext();
+
+  const fragmentState = createMemo(() => {
+    return store.state.fragments[props.shape.fragmentId];
+  });
+
+  return (
+    <Show when={fragmentState()}>
+      {(state) => (
+        <Fragment
+          shape={props.shape}
+          fragmentState={state()}
+          texture={props.texture}
+        />
+      )}
+    </Show>
   );
 };

@@ -153,6 +153,15 @@ const getCenterFromPoints = ({ points }: GetCenterFromPointsArgs) => {
   return { x: sumX / points.length, y: sumY / points.length };
 };
 
+const getMinFromPoints = ({ points }: GetCenterFromPointsArgs) => {
+  const x = points.sort((a, b) => a.x - b.x)[0].x;
+  const y = points.sort((a, b) => a.y - b.y)[0].y;
+
+  console.log({ points, x, y });
+
+  return { x, y };
+};
+
 type GetPuzzleFragmentsArgs = {
   columns: number;
   height: number;
@@ -191,15 +200,27 @@ export const getPuzzleFragments = ({
             { control: top.center, to: top.start },
           ];
 
-          const center = getCenterFromPoints({
-            points: curvePoints.map((curve) => curve.to),
-          });
+          const points = curvePoints.map((curve) => curve.to);
+          const min = getMinFromPoints({ points });
+          // const shift = { x: -min.x, y: -min.y };
+
+          // const translated = curvePoints.map((curve) => ({
+          //   control: translatePoint({ point: curve.control, shift }),
+          //   to: translatePoint({ point: curve.control, shift }),
+          // }));
+          // const center = translatePoint({
+          //   point: getCenterFromPoints({ points }),
+          //   shift,
+          // });
+          const center = getCenterFromPoints({ points });
 
           return {
             center,
             curvePoints,
             fragmentId: `${rowIndex}-${columnIndex}`,
+            min,
             start: left.start,
+            // translated,
           };
         })
     );
