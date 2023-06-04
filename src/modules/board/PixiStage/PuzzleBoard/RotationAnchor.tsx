@@ -1,9 +1,7 @@
 import * as PIXI from "pixi.js";
-import { createMemo, onCleanup, onMount, type Component } from "solid-js";
-import { getClosestPoint, solveCircleLine } from "~/utils/geometry";
-import type { FragmentState } from "./PuzzleStore";
+import { createEffect, onCleanup, onMount, type Component } from "solid-js";
+import { usePuzzleStoreContext, type FragmentState } from "./PuzzleStore";
 import type { PuzzleFragmentShape } from "./getPuzzleFragments";
-import { useDragObject } from "./useDragObject";
 
 type RotationAnchorProps = {
   container: PIXI.Container;
@@ -15,52 +13,94 @@ const rotationAnchorDistance = 30;
 const rotationAnchorRadius = 10;
 
 export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
+  const store = usePuzzleStoreContext();
+
   const graphics = new PIXI.Graphics();
   graphics.eventMode = "static";
   graphics.tint = "blue";
 
-  const anchorPosition = createMemo(() => {
-    const rotation = props.fragmentState.rotation;
-    const xShift = rotationAnchorDistance * Math.sin(rotation);
-    const yShift = rotationAnchorDistance * Math.cos(rotation);
-    return {
-      x: props.shape.center.x + xShift,
-      y: props.shape.center.y + yShift,
-    };
-  });
-
   onMount(() => {
-    const position = anchorPosition();
+    const rotation = props.fragmentState.rotation;
+    const x = rotationAnchorDistance * Math.sin(rotation);
+    const y = rotationAnchorDistance * Math.cos(rotation);
 
     graphics.beginFill();
-    graphics.drawCircle(position.x, position.y, rotationAnchorRadius);
+    graphics.drawCircle(x, y, rotationAnchorRadius);
     graphics.endFill();
   });
 
-  useDragObject({
-    displayObject: graphics,
-    dragConstraint: ({ eventPosition, shift }) => {
-      const points = solveCircleLine({
-        center: props.shape.center,
-        point: eventPosition,
-        radius: rotationAnchorDistance,
-      });
-
-      const closest = getClosestPoint({
-        from: eventPosition,
-        points,
-      });
-
-      return { x: closest.x - shift.x, y: closest.y - shift.y };
-    },
+  createEffect(() => {
+    // container.rotation = props.fragmentState.rotation;
+    // console.log("props.fragmentState.rotation", props.fragmentState.rotation);
+    graphics.rotation = props.fragmentState.rotation;
   });
+
+  const onDragMove = (event: PIXI.FederatedPointerEvent) => {
+    const local = props.container.toLocal(event.global);
+    const atan2 = Math.atan2(-local.x, local.y);
+
+    console.log({ atan2, x: local.x, y: local.y });
+
+    store.setRotation({
+      fragmentId: props.shape.fragmentId,
+      rotation: atan2,
+    });
+  };
+
+  const onDragEnd = () => {
+    props.container.off("pointermove", onDragMove);
+    props.container.off("pointerup", onDragEnd);
+    props.container.off("pointerupoutside", onDragEnd);
+  };
+
+  const onPointerDown = (event: PIXI.FederatedMouseEvent) => {
+    if (event.button === 2) {
+      return;
+    }
+
+    event.stopPropagation();
+    props.container.on("pointermove", onDragMove);
+    props.container.once("pointerup", onDragEnd);
+    props.container.once("pointerupoutside", onDragEnd);
+  };
+
+  // useDragObject({
+  //   displayObject: graphics,
+  //   dragConstraint: ({ eventPosition, shift }) => {
+  //     const points = solveCircleLine({
+  //       center: { x: 0, y: 0 },
+  //       point: eventPosition,
+  //       radius: rotationAnchorDistance,
+  //     });
+
+  //     const closest = getClosestPoint({
+  //       from: eventPosition,
+  //       points,
+  //     });
+
+  //     const position = anchorPosition();
+
+  //     return { x: position.x, y: closest.y - shift.y };
+  //   },
+  //   onDragMove: (event) => {
+  //     const local = props.container.toLocal(event.global);
+
+  //     const tanAngle = local.x / local.y;
+  //     const rotation = Math.tanh(-tanAngle);
+
+  //     console.log({ rotation, tanAngle, x: local.x, y: local.y });
+  //     store.setRotation({ fragmentId: props.shape.fragmentId, rotation });
+  //   },
+  // });
 
   onMount(() => {
     props.container.addChild(graphics);
+    graphics.on("pointerdown", onPointerDown);
   });
 
   onCleanup(() => {
     props.container.removeChild(graphics);
+    graphics.off("pointerdown", onPointerDown);
     graphics.destroy();
   });
 

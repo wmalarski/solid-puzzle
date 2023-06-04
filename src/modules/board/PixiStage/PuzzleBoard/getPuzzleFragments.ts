@@ -182,7 +182,6 @@ export const getPuzzleFragments = ({
           ];
 
           const points = absoluteCurvePoints.map((curve) => curve.to);
-          const absoluteCenter = getCenterFromPoints({ points });
           const min = getMinFromPoints({ points });
           const shift = { x: -min.x, y: -min.y };
 
@@ -191,8 +190,18 @@ export const getPuzzleFragments = ({
             to: translatePoint({ point: curve.to, shift }),
           }));
 
+          const absoluteCenter = getCenterFromPoints({ points });
           const center = translatePoint({ point: absoluteCenter, shift });
           const start = translatePoint({ point: left.start, shift });
+          // console.log({
+          //   absoluteCenter,
+          //   center,
+          //   curvePoints,
+          //   min,
+          //   points,
+          //   shift,
+          //   start,
+          // });
 
           return {
             center,

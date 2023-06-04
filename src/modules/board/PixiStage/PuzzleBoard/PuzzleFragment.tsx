@@ -25,11 +25,27 @@ type PuzzleFragmentGraphicsProps = {
 export const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
   props
 ) => {
+  const wrapper = new PIXI.Container();
   const graphics = new PIXI.Graphics();
+  // wrapper.addChild();
+
+  createEffect(() => {
+    // container.rotation = props.fragmentState.rotation;
+    console.log("props.fragmentState.rotation", props.fragmentState.rotation);
+    wrapper.rotation = props.fragmentState.rotation;
+  });
+
+  onMount(() => {
+    graphics.transform.position.set(
+      -props.shape.center.x,
+      -props.shape.center.y
+    );
+    // graphics.x = -props.shape.center.x;
+    // graphics.y = -props.shape.center.y;
+  });
 
   onMount(() => {
     const matrix = new PIXI.Matrix(1, 0, 0, 1);
-
     matrix.translate(-props.shape.min.x, -props.shape.min.y);
 
     graphics.beginTextureFill({ matrix, texture: props.texture });
@@ -44,11 +60,13 @@ export const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
   });
 
   onMount(() => {
-    props.container.addChild(graphics);
+    props.container.addChild(wrapper);
+    wrapper.addChild(graphics);
   });
 
   onCleanup(() => {
-    props.container.removeChild(graphics);
+    wrapper.removeChild(graphics);
+    props.container.removeChild(wrapper);
     graphics.destroy();
   });
 
@@ -83,10 +101,6 @@ const Fragment: Component<FragmentProps> = (props) => {
     container.x = props.shape.min.x;
     container.y = props.shape.min.y;
   });
-
-  // createEffect(() => {
-  //   container.rotation = props.fragmentState.rotation;
-  // });
 
   onMount(() => {
     app().stage.addChild(container);
