@@ -1,7 +1,7 @@
 import {
   getCenterFromPoints,
   getMinFromPoints,
-  translatePoint,
+  subtractPoint,
 } from "~/utils/geometry";
 
 type GetRandomInRangeArgs = {
@@ -69,6 +69,49 @@ const getRandomGridPointFactory = ({
         });
 
     return { x, y };
+  };
+};
+
+type GetFragmentIdArgs = {
+  columnIndex: number;
+  rowIndex: number;
+};
+
+const getFragmentId = ({ columnIndex, rowIndex }: GetFragmentIdArgs) => {
+  return `${rowIndex}-${columnIndex}`;
+};
+
+type GetNeighborsIdsArgs = {
+  columnIndex: number;
+  rowIndex: number;
+};
+
+type GetNeighborsIdsFactoryArgs = {
+  columns: number;
+  rows: number;
+};
+
+const getNeighborsIdsFactory = ({
+  columns,
+  rows,
+}: GetNeighborsIdsFactoryArgs) => {
+  return ({ columnIndex, rowIndex }: GetNeighborsIdsArgs) => {
+    const ids: string[] = [];
+
+    if (rowIndex > 0) {
+      ids.push(getFragmentId({ columnIndex, rowIndex: rowIndex - 1 }));
+    }
+    if (rowIndex < rows - 1) {
+      ids.push(getFragmentId({ columnIndex, rowIndex: rowIndex + 1 }));
+    }
+    if (columnIndex > 0) {
+      ids.push(getFragmentId({ columnIndex: columnIndex - 1, rowIndex }));
+    }
+    if (columnIndex < columns - 1) {
+      ids.push(getFragmentId({ columnIndex: columnIndex + 1, rowIndex }));
+    }
+
+    return ids;
   };
 };
 
@@ -156,6 +199,7 @@ export const getPuzzleFragments = ({
   rows,
   width,
 }: GetPuzzleFragmentsArgs) => {
+  const getNeighborsIds = getNeighborsIdsFactory({ columns, rows });
   const { horizontalLines, verticalLines } = generateCurves({
     columns,
     height,
@@ -163,7 +207,7 @@ export const getPuzzleFragments = ({
     width,
   });
 
-  return Array(rows)
+  const fragments = Array(rows)
     .fill(0)
     .flatMap((_value, rowIndex) =>
       Array(columns)
@@ -183,35 +227,43 @@ export const getPuzzleFragments = ({
 
           const points = absoluteCurvePoints.map((curve) => curve.to);
           const min = getMinFromPoints({ points });
-          const shift = { x: -min.x, y: -min.y };
 
           const curvePoints = absoluteCurvePoints.map((curve) => ({
-            control: translatePoint({ point: curve.control, shift }),
-            to: translatePoint({ point: curve.to, shift }),
+            control: subtractPoint(curve.control, min),
+            to: subtractPoint(curve.to, min),
           }));
 
           const absoluteCenter = getCenterFromPoints({ points });
-          const center = translatePoint({ point: absoluteCenter, shift });
-          const start = translatePoint({ point: left.start, shift });
-          // console.log({
-          //   absoluteCenter,
-          //   center,
-          //   curvePoints,
-          //   min,
-          //   points,
-          //   shift,
-          //   start,
-          // });
+          const center = subtractPoint(absoluteCenter, min);
+          const start = subtractPoint(left.start, min);
+          const neighbors = getNeighborsIds({ columnIndex, rowIndex });
 
           return {
             center,
             curvePoints,
-            fragmentId: `${rowIndex}-${columnIndex}`,
+            fragmentId: getFragmentId({ columnIndex, rowIndex }),
             min,
+            neighbors,
             start,
           };
         })
     );
+
+  const fragmentMap = new Map(
+    fragments.map((fragment) => [fragment.fragmentId, fragment])
+  );
+
+  const withNeighbors = fragments.map((fragment) => {
+    const neighbors = fragment.neighbors.flatMap((id) => {
+      const neighbor = fragmentMap.get(id);
+      return neighbor
+        ? [{ id, to: subtractPoint(fragment.center, neighbor.center) }]
+        : [];
+    });
+    return { ...fragment, neighbors };
+  });
+
+  return withNeighbors;
 };
 
 export type PuzzleFragmentShape = ReturnType<typeof getPuzzleFragments>[0];

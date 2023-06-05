@@ -1,6 +1,6 @@
 import type * as PIXI from "pixi.js";
-import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
-import type { Point2D } from "~/utils/geometry";
+import { createSignal, onCleanup, onMount } from "solid-js";
+import { subtractPoint, type Point2D } from "~/utils/geometry";
 
 type DragConstraintArgs = {
   shift: Point2D;
@@ -16,10 +16,7 @@ type UseDragObjectArgs = {
 };
 
 const defaultDragConstraint = (args: DragConstraintArgs) => {
-  return {
-    x: args.eventPosition.x - args.shift.x,
-    y: args.eventPosition.y - args.shift.y,
-  };
+  return subtractPoint(args.eventPosition, args.shift);
 };
 
 export const useDragObject = (args: UseDragObjectArgs) => {
@@ -44,6 +41,21 @@ export const useDragObject = (args: UseDragObjectArgs) => {
     args.onDragMove?.(event);
   };
 
+  const onDragEnd = (event: PIXI.FederatedMouseEvent) => {
+    const parent = args.displayObject.parent;
+
+    if (!parent) {
+      return;
+    }
+
+    parent.off("pointermove", onDragMove);
+    parent.off("pointerup", onDragEnd);
+    parent.off("pointerupoutside", onDragEnd);
+
+    setShift();
+    args.onDragEnd?.(event);
+  };
+
   const onPointerDown = (event: PIXI.FederatedMouseEvent) => {
     const parent = args.displayObject.parent;
 
@@ -56,12 +68,12 @@ export const useDragObject = (args: UseDragObjectArgs) => {
     const transform = parent.transform.worldTransform;
     const inverted = transform.applyInverse(event.global);
 
-    setShift({
-      x: inverted.x - args.displayObject.x,
-      y: inverted.y - args.displayObject.y,
-    });
+    setShift(subtractPoint(inverted, args.displayObject));
 
     parent.on("pointermove", onDragMove);
+    parent.once("pointerup", onDragEnd);
+    parent.once("pointerupoutside", onDragEnd);
+
     args.onDragStart?.(event);
   };
 
@@ -71,28 +83,5 @@ export const useDragObject = (args: UseDragObjectArgs) => {
 
   onCleanup(() => {
     args.displayObject.off("pointerdown", onPointerDown);
-  });
-
-  createEffect(() => {
-    const parent = args.displayObject.parent;
-    if (!shift() || !parent) {
-      return;
-    }
-
-    const onDragEnd = (event: PIXI.FederatedMouseEvent) => {
-      parent.off("pointermove", onDragMove);
-      setShift();
-      args.onDragEnd?.(event);
-    };
-
-    onMount(() => {
-      parent.on("pointerup", onDragEnd);
-      parent.on("pointerupoutside", onDragEnd);
-    });
-
-    onCleanup(() => {
-      parent.off("pointerup", onDragEnd);
-      parent.off("pointerupoutside", onDragEnd);
-    });
   });
 };

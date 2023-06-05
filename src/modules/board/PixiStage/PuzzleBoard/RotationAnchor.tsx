@@ -21,7 +21,7 @@ export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
 
   onMount(() => {
     const rotation = props.fragmentState.rotation;
-    const x = rotationAnchorDistance * Math.sin(rotation);
+    const x = rotationAnchorDistance * Math.sin(-rotation);
     const y = rotationAnchorDistance * Math.cos(rotation);
 
     graphics.beginFill();
