@@ -236,17 +236,15 @@ export const getPuzzleFragments = ({
 
           const absoluteCenter = getCenterFromPoints({ points });
           const center = subtractPoint(absoluteCenter, min);
-          const start = subtractPoint(left.start, min);
           const neighbors = getNeighborsIds({ columnIndex, rowIndex });
 
           return {
-            absoluteStart: left.start,
             center,
             curvePoints,
             fragmentId: getFragmentId({ columnIndex, rowIndex }),
             min,
             neighbors,
-            start,
+            start: left.start,
           };
         })
     );
@@ -258,19 +256,12 @@ export const getPuzzleFragments = ({
   const withNeighbors = fragments.map((fragment) => {
     const neighbors = fragment.neighbors.flatMap((id) => {
       const neighbor = fragmentMap.get(id);
-      return neighbor
-        ? [
-            {
-              absoluteStart: neighbor.absoluteStart,
-              distance: getDistance(
-                fragment.absoluteStart,
-                neighbor.absoluteStart
-              ),
-              id,
-              to: subtractPoint(fragment.absoluteStart, neighbor.absoluteStart),
-            },
-          ]
-        : [];
+      if (!neighbor) {
+        return [];
+      }
+      const shift = subtractPoint(fragment.start, neighbor.start);
+      const distance = getDistance(fragment.start, neighbor.start);
+      return [{ distance, id, shift, start: neighbor.start }];
     });
     return { ...fragment, neighbors };
   });
@@ -279,3 +270,5 @@ export const getPuzzleFragments = ({
 };
 
 export type PuzzleFragmentShape = ReturnType<typeof getPuzzleFragments>[0];
+
+export type PuzzleFragmentNeighbors = PuzzleFragmentShape["neighbors"];

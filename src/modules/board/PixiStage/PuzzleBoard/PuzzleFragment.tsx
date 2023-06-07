@@ -10,7 +10,7 @@ import {
 import { randomHexColor } from "~/utils/colors";
 import { usePixiApp } from "../PixiApp";
 import {
-  arePuzzleFragmentsClose,
+  findCloseNeighbor,
   usePuzzleStoreContext,
   type FragmentState,
 } from "./PuzzleStore";
@@ -47,7 +47,9 @@ export const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
     graphics.beginTextureFill({ matrix, texture: props.texture });
     graphics.lineStyle(4, randomHexColor(), 1);
 
-    graphics.moveTo(props.shape.start.x, props.shape.start.y);
+    const elements = props.shape.curvePoints;
+    const last = elements[elements.length - 1];
+    graphics.moveTo(last.to.x, last.to.y);
     props.shape.curvePoints.forEach(({ control, to }) => {
       graphics.quadraticCurveTo(control.x, control.y, to.x, to.y);
     });
@@ -95,25 +97,19 @@ const Fragment: Component<FragmentProps> = (props) => {
         y: container.y,
       };
 
-      props.shape.neighbors.forEach((neighbor) => {
-        const neighborState = store.state.fragments[neighbor.id];
-        if (neighborState) {
-          const shouldConnect = arePuzzleFragmentsClose({
-            correctDistance: neighbor.distance,
-            correctShift: neighbor.to,
-            fragment: fragmentPosition,
-            neighbor: neighborState,
-          });
-
-          console.log({ shouldConnect });
-        }
-      });
-
       store.setPosition({
         fragmentId: props.shape.fragmentId,
         x: fragmentPosition.x,
         y: fragmentPosition.y,
       });
+
+      const toConnect = findCloseNeighbor({
+        fragment: fragmentPosition,
+        fragments: store.state.fragments,
+        neighbors: props.shape.neighbors,
+      });
+
+      console.log({ toConnect });
     },
     onDragStart: () => {
       store.setSelectedId(props.shape.fragmentId);

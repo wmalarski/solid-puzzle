@@ -1,7 +1,10 @@
 import { createContext, useContext, type Component, type JSX } from "solid-js";
 import { createStore } from "solid-js/store";
 import { getDistance, subtractPoint, type Point2D } from "~/utils/geometry";
-import type { PuzzleFragmentShape } from "./getPuzzleFragments";
+import type {
+  PuzzleFragmentNeighbors,
+  PuzzleFragmentShape,
+} from "./getPuzzleFragments";
 
 export type FragmentState = {
   rotation: number;
@@ -35,8 +38,8 @@ const usePuzzleStore = (args: UsePuzzleStoreArgs) => {
   args.shapes.forEach((shape) => {
     fragments[shape.fragmentId] = {
       rotation: 2 * Math.random() * Math.PI,
-      x: shape.absoluteStart.x,
-      y: shape.absoluteStart.y,
+      x: shape.start.x,
+      y: shape.start.y,
     };
   });
 
@@ -110,4 +113,28 @@ export const arePuzzleFragmentsClose = ({
     shift.x * correctShift.x >= 0 && shift.y * correctShift.y >= 0;
 
   return isClose && isSameAngle && isCorrectPosition;
+};
+
+type FindCloseNeighborArgs = {
+  fragment: FragmentState;
+  fragments: PuzzleState["fragments"];
+  neighbors: PuzzleFragmentNeighbors;
+};
+
+export const findCloseNeighbor = ({
+  fragment,
+  fragments,
+  neighbors,
+}: FindCloseNeighborArgs) => {
+  return neighbors.find((neighbor) => {
+    const neighborState = fragments[neighbor.id];
+    if (neighborState) {
+      return arePuzzleFragmentsClose({
+        correctDistance: neighbor.distance,
+        correctShift: neighbor.shift,
+        fragment,
+        neighbor: neighborState,
+      });
+    }
+  });
 };
