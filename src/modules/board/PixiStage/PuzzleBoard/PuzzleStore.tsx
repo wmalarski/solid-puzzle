@@ -156,7 +156,7 @@ export const arePuzzleFragmentsClose = ({
 };
 
 type FindCloseNeighborArgs = {
-  fragment: Omit<FragmentState, "islandId">;
+  fragment: FragmentState;
   fragments: PuzzleState["fragments"];
   neighbors: PuzzleFragmentNeighbors;
 };
@@ -168,7 +168,7 @@ export const findCloseNeighbor = ({
 }: FindCloseNeighborArgs) => {
   return neighbors.find((neighbor) => {
     const neighborState = fragments[neighbor.id];
-    if (neighborState) {
+    if (neighborState && neighborState.islandId !== fragment.islandId) {
       return arePuzzleFragmentsClose({
         correctDistance: neighbor.distance,
         correctShift: neighbor.shift,

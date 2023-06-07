@@ -8,7 +8,6 @@ import {
   type Component,
 } from "solid-js";
 import { randomHexColor } from "~/utils/colors";
-import { usePixiApp } from "../PixiApp";
 import {
   findCloseNeighbor,
   usePuzzleStoreContext,
@@ -17,6 +16,31 @@ import {
 import { RotationAnchor } from "./RotationAnchor";
 import type { PuzzleFragmentShape } from "./getPuzzleFragments";
 import { useDragObject } from "./useDragObject";
+
+type PuzzleFragmentLabelProps = {
+  container: PIXI.Container;
+  islandId: string;
+};
+
+export const PuzzleFragmentLabel: Component<PuzzleFragmentLabelProps> = (
+  props
+) => {
+  const text = new PIXI.Text();
+
+  createEffect(() => {
+    text.text = props.islandId;
+  });
+
+  onMount(() => {
+    props.container.addChild(text);
+  });
+
+  onCleanup(() => {
+    props.container.removeChild(text);
+  });
+
+  return null;
+};
 
 type PuzzleFragmentGraphicsProps = {
   container: PIXI.Container;
@@ -77,6 +101,7 @@ export const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
 
 type FragmentProps = {
   fragmentState: FragmentState;
+  island: PIXI.Container;
   islandId: string;
   shape: PuzzleFragmentShape;
   texture: PIXI.Texture;
@@ -84,7 +109,6 @@ type FragmentProps = {
 
 const Fragment: Component<FragmentProps> = (props) => {
   const store = usePuzzleStoreContext();
-  const app = usePixiApp();
 
   const container = new PIXI.Container();
   container.eventMode = "static";
@@ -93,6 +117,7 @@ const Fragment: Component<FragmentProps> = (props) => {
     displayObject: container,
     onDragEnd: () => {
       const fragmentPosition = {
+        islandId: props.islandId,
         rotation: props.fragmentState.rotation,
         x: container.x,
         y: container.y,
@@ -131,11 +156,11 @@ const Fragment: Component<FragmentProps> = (props) => {
   });
 
   onMount(() => {
-    app().stage.addChild(container);
+    props.island.addChild(container);
   });
 
   onCleanup(() => {
-    app().stage.removeChild(container);
+    props.island.removeChild(container);
   });
 
   const isSelected = createMemo(() => {
@@ -159,11 +184,13 @@ const Fragment: Component<FragmentProps> = (props) => {
           shape={props.shape}
         />
       </Show>
+      <PuzzleFragmentLabel container={container} islandId={props.islandId} />
     </>
   );
 };
 
 type PuzzleFragmentProps = {
+  island: PIXI.Container;
   islandId: string;
   shape: PuzzleFragmentShape;
   texture: PIXI.Texture;
@@ -180,9 +207,10 @@ export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
     <Show when={fragmentState()}>
       {(state) => (
         <Fragment
+          fragmentState={state()}
+          island={props.island}
           islandId={props.islandId}
           shape={props.shape}
-          fragmentState={state()}
           texture={props.texture}
         />
       )}

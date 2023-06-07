@@ -55,6 +55,7 @@ export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
 
     const local = props.container.toLocal(event.global);
     const fragmentPosition = {
+      islandId: props.islandId,
       rotation: Math.atan2(-local.x, local.y),
       x: props.container.x,
       y: props.container.y,
