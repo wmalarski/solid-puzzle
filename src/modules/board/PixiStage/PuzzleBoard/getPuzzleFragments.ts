@@ -1,5 +1,6 @@
 import {
   getCenterFromPoints,
+  getDistance,
   getMinFromPoints,
   subtractPoint,
 } from "~/utils/geometry";
@@ -239,6 +240,7 @@ export const getPuzzleFragments = ({
           const neighbors = getNeighborsIds({ columnIndex, rowIndex });
 
           return {
+            absoluteStart: left.start,
             center,
             curvePoints,
             fragmentId: getFragmentId({ columnIndex, rowIndex }),
@@ -257,7 +259,17 @@ export const getPuzzleFragments = ({
     const neighbors = fragment.neighbors.flatMap((id) => {
       const neighbor = fragmentMap.get(id);
       return neighbor
-        ? [{ id, to: subtractPoint(fragment.center, neighbor.center) }]
+        ? [
+            {
+              absoluteStart: neighbor.absoluteStart,
+              distance: getDistance(
+                fragment.absoluteStart,
+                neighbor.absoluteStart
+              ),
+              id,
+              to: subtractPoint(fragment.absoluteStart, neighbor.absoluteStart),
+            },
+          ]
         : [];
     });
     return { ...fragment, neighbors };

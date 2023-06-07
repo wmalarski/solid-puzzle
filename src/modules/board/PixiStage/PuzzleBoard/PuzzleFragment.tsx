@@ -9,7 +9,11 @@ import {
 } from "solid-js";
 import { randomHexColor } from "~/utils/colors";
 import { usePixiApp } from "../PixiApp";
-import { usePuzzleStoreContext, type FragmentState } from "./PuzzleStore";
+import {
+  arePuzzleFragmentsClose,
+  usePuzzleStoreContext,
+  type FragmentState,
+} from "./PuzzleStore";
 import { RotationAnchor } from "./RotationAnchor";
 import type { PuzzleFragmentShape } from "./getPuzzleFragments";
 import { useDragObject } from "./useDragObject";
@@ -84,14 +88,44 @@ const Fragment: Component<FragmentProps> = (props) => {
 
   useDragObject({
     displayObject: container,
+    onDragEnd: () => {
+      const fragmentPosition = {
+        rotation: props.fragmentState.rotation,
+        x: container.x,
+        y: container.y,
+      };
+
+      props.shape.neighbors.forEach((neighbor) => {
+        const neighborState = store.state.fragments[neighbor.id];
+        if (neighborState) {
+          const shouldConnect = arePuzzleFragmentsClose({
+            correctDistance: neighbor.distance,
+            correctShift: neighbor.to,
+            fragment: fragmentPosition,
+            neighbor: neighborState,
+          });
+
+          console.log({ shouldConnect });
+        }
+      });
+
+      store.setPosition({
+        fragmentId: props.shape.fragmentId,
+        x: fragmentPosition.x,
+        y: fragmentPosition.y,
+      });
+    },
     onDragStart: () => {
       store.setSelectedId(props.shape.fragmentId);
     },
   });
 
   onMount(() => {
-    container.x = props.shape.min.x;
-    container.y = props.shape.min.y;
+    container.x = props.fragmentState.x;
+  });
+
+  onMount(() => {
+    container.y = props.fragmentState.y;
   });
 
   onMount(() => {
@@ -104,10 +138,6 @@ const Fragment: Component<FragmentProps> = (props) => {
 
   const isSelected = createMemo(() => {
     return store.state.selectedId === props.shape.fragmentId;
-  });
-
-  createEffect(() => {
-    container.zIndex = isSelected() ? 1 : 0;
   });
 
   return (

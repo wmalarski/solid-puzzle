@@ -3,8 +3,18 @@ export type Point2D = {
   y: number;
 };
 
+export const sumPoint = (point: Point2D, other: Point2D) => {
+  return { x: point.x + other.x, y: point.y + other.y };
+};
+
 export const subtractPoint = (point: Point2D, other: Point2D) => {
   return { x: point.x - other.x, y: point.y - other.y };
+};
+
+export const getDistance = (point: Point2D, other: Point2D) => {
+  return Math.sqrt(
+    Math.pow(point.x - other.x, 2) + Math.pow(point.y - other.y, 2)
+  );
 };
 
 type GetCenterFromPointsArgs = {
