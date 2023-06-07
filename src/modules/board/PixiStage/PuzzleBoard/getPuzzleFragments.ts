@@ -244,7 +244,7 @@ export const getPuzzleFragments = ({
             fragmentId: getFragmentId({ columnIndex, rowIndex }),
             min,
             neighbors,
-            start: left.start,
+            start: absoluteCenter,
           };
         })
     );

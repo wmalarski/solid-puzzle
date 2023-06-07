@@ -77,6 +77,7 @@ export const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
 
 type FragmentProps = {
   fragmentState: FragmentState;
+  islandId: string;
   shape: PuzzleFragmentShape;
   texture: PIXI.Texture;
 };
@@ -109,7 +110,12 @@ const Fragment: Component<FragmentProps> = (props) => {
         neighbors: props.shape.neighbors,
       });
 
-      console.log({ toConnect });
+      if (toConnect) {
+        store.addConnection({
+          fragmentId: toConnect.id,
+          islandId: props.islandId,
+        });
+      }
     },
     onDragStart: () => {
       store.setSelectedId(props.shape.fragmentId);
@@ -148,6 +154,7 @@ const Fragment: Component<FragmentProps> = (props) => {
       <Show when={isSelected()}>
         <RotationAnchor
           container={container}
+          islandId={props.islandId}
           fragmentState={props.fragmentState}
           shape={props.shape}
         />
@@ -157,6 +164,7 @@ const Fragment: Component<FragmentProps> = (props) => {
 };
 
 type PuzzleFragmentProps = {
+  islandId: string;
   shape: PuzzleFragmentShape;
   texture: PIXI.Texture;
 };
@@ -172,6 +180,7 @@ export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
     <Show when={fragmentState()}>
       {(state) => (
         <Fragment
+          islandId={props.islandId}
           shape={props.shape}
           fragmentState={state()}
           texture={props.texture}

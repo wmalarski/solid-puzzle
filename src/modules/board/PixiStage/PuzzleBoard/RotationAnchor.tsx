@@ -1,10 +1,16 @@
 import * as PIXI from "pixi.js";
 import { createEffect, onCleanup, onMount, type Component } from "solid-js";
-import { usePuzzleStoreContext, type FragmentState } from "./PuzzleStore";
+import { usePixiApp } from "../PixiApp";
+import {
+  findCloseNeighbor,
+  usePuzzleStoreContext,
+  type FragmentState,
+} from "./PuzzleStore";
 import type { PuzzleFragmentShape } from "./getPuzzleFragments";
 
 type RotationAnchorProps = {
   container: PIXI.Container;
+  islandId: string;
   fragmentState: FragmentState;
   shape: PuzzleFragmentShape;
 };
@@ -13,6 +19,7 @@ const rotationAnchorDistance = 30;
 const rotationAnchorRadius = 10;
 
 export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
+  const app = usePixiApp();
   const store = usePuzzleStoreContext();
 
   const graphics = new PIXI.Graphics();
@@ -41,10 +48,30 @@ export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
     });
   };
 
-  const onDragEnd = () => {
-    props.container.off("pointermove", onDragMove);
-    props.container.off("pointerup", onDragEnd);
-    props.container.off("pointerupoutside", onDragEnd);
+  const onDragEnd = (event: PIXI.FederatedPointerEvent) => {
+    app().stage.off("pointermove", onDragMove);
+    app().stage.off("pointerup", onDragEnd);
+    app().stage.off("pointerupoutside", onDragEnd);
+
+    const local = props.container.toLocal(event.global);
+    const fragmentPosition = {
+      rotation: Math.atan2(-local.x, local.y),
+      x: props.container.x,
+      y: props.container.y,
+    };
+
+    const toConnect = findCloseNeighbor({
+      fragment: fragmentPosition,
+      fragments: store.state.fragments,
+      neighbors: props.shape.neighbors,
+    });
+
+    if (toConnect) {
+      store.addConnection({
+        fragmentId: toConnect.id,
+        islandId: props.islandId,
+      });
+    }
   };
 
   const onPointerDown = (event: PIXI.FederatedMouseEvent) => {
@@ -53,9 +80,9 @@ export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
     }
 
     event.stopPropagation();
-    props.container.on("pointermove", onDragMove);
-    props.container.once("pointerup", onDragEnd);
-    props.container.once("pointerupoutside", onDragEnd);
+    app().stage.on("pointermove", onDragMove);
+    app().stage.once("pointerup", onDragEnd);
+    app().stage.once("pointerupoutside", onDragEnd);
   };
 
   onMount(() => {

@@ -9,12 +9,9 @@ import {
   type Component,
 } from "solid-js";
 import { usePixiApp } from "../PixiApp";
-import { PuzzleFragment } from "./PuzzleFragment";
+import { PuzzleIsland } from "./PuzzleIsland";
 import { PuzzleStoreProvider, usePuzzleStoreContext } from "./PuzzleStore";
-import {
-  getPuzzleFragments,
-  type PuzzleFragmentShape,
-} from "./getPuzzleFragments";
+import { getPuzzleFragments } from "./getPuzzleFragments";
 
 type UseStageDeselectArgs = {
   onDeselect: () => void;
@@ -39,7 +36,6 @@ const useStageDeselect = (args: UseStageDeselectArgs) => {
 };
 
 type BoardProps = {
-  shapes: PuzzleFragmentShape[];
   texture: PIXI.Texture;
 };
 
@@ -53,8 +49,10 @@ const Board: Component<BoardProps> = (props) => {
   });
 
   return (
-    <For each={props.shapes}>
-      {(shape) => <PuzzleFragment shape={shape} texture={props.texture} />}
+    <For each={Object.keys(store.state.islands)}>
+      {(islandId) => (
+        <PuzzleIsland islandId={islandId} texture={props.texture} />
+      )}
     </For>
   );
 };
@@ -75,7 +73,7 @@ const Provider: Component<ProviderProps> = (props) => {
 
   return (
     <PuzzleStoreProvider shapes={shapes()}>
-      <Board shapes={shapes()} texture={props.texture} />
+      <Board texture={props.texture} />
     </PuzzleStoreProvider>
   );
 };
