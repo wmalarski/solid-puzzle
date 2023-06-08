@@ -125,7 +125,7 @@ export const PuzzleIsland: Component<PuzzleIslandProps> = (props) => {
   });
 
   const rotation = createMemo(() => {
-    return (islandState()?.rotation || 0) - Math.PI / 4;
+    return islandState()?.rotation || 0;
   });
 
   const onRotationEnd = (rotation: number) => {

@@ -20,10 +20,8 @@ export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
 
   onMount(() => {
     const radius = Math.max(props.container.width, props.container.height);
-    const x = radius * Math.cos(props.rotation);
-    const y = radius * Math.sin(props.rotation);
-
-    console.log("MOUNT", props.rotation, x, y);
+    const x = 0;
+    const y = -radius;
 
     graphics.beginFill();
     graphics.drawCircle(x, y, rotationAnchorRadius);
@@ -31,19 +29,16 @@ export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
   });
 
   createEffect(() => {
-    console.log("ANCHOR", props.rotation);
     graphics.rotation = props.rotation;
   });
 
   const toRotation = (event: PIXI.FederatedPointerEvent) => {
     const local = props.container.toLocal(event.global);
-    console.log("TO_ROTATION", local.x, local.y);
-    return -Math.atan2(local.x, local.y);
+    return Math.atan2(local.y, local.x) + Math.PI / 2;
   };
 
   const onDragMove = (event: PIXI.FederatedPointerEvent) => {
     const rotation = toRotation(event);
-    console.log("MOVE", rotation);
     props.onRotate(rotation);
   };
 
@@ -53,7 +48,6 @@ export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
     app().stage.off("pointerupoutside", onDragEnd);
 
     const rotation = toRotation(event);
-    console.log("END", rotation);
     props.onEnd(rotation);
   };
 
