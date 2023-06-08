@@ -8,14 +8,8 @@ import {
   type Component,
 } from "solid-js";
 import { randomHexColor } from "~/utils/colors";
-import {
-  findCloseNeighbor,
-  usePuzzleStoreContext,
-  type FragmentState,
-} from "./PuzzleStore";
-import { RotationAnchor } from "./RotationAnchor";
+import { usePuzzleStoreContext, type FragmentState } from "./PuzzleStore";
 import type { PuzzleFragmentShape } from "./getPuzzleFragments";
-import { useDragObject } from "./useDragObject";
 
 type PuzzleFragmentLabelProps = {
   container: PIXI.Container;
@@ -53,16 +47,7 @@ type PuzzleFragmentGraphicsProps = {
 export const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
   props
 ) => {
-  const wrapper = new PIXI.Container();
   const graphics = new PIXI.Graphics();
-
-  createEffect(() => {
-    wrapper.rotation = props.fragmentState.rotation;
-  });
-
-  onMount(() => {
-    graphics.position.set(-props.shape.center.x, -props.shape.center.y);
-  });
 
   onMount(() => {
     const matrix = new PIXI.Matrix(1, 0, 0, 1);
@@ -79,16 +64,15 @@ export const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
     });
 
     graphics.endFill();
+    graphics.pivot.set(graphics.width / 2, graphics.height / 2);
   });
 
   onMount(() => {
-    props.container.addChild(wrapper);
-    wrapper.addChild(graphics);
+    props.container.addChild(graphics);
   });
 
   onCleanup(() => {
-    wrapper.removeChild(graphics);
-    props.container.removeChild(wrapper);
+    props.container.removeChild(graphics);
     graphics.destroy();
   });
 
@@ -113,47 +97,47 @@ const Fragment: Component<FragmentProps> = (props) => {
   const container = new PIXI.Container();
   container.eventMode = "static";
 
-  useDragObject({
-    displayObject: container,
-    onDragEnd: () => {
-      const fragmentPosition = {
-        islandId: props.islandId,
-        rotation: props.fragmentState.rotation,
-        x: container.x,
-        y: container.y,
-      };
+  // useDragObject({
+  //   displayObject: container,
+  //   onDragEnd: () => {
+  //     const fragmentPosition = {
+  //       islandId: props.islandId,
+  //       rotation: props.fragmentState.rotation,
+  //       x: container.x,
+  //       y: container.y,
+  //     };
 
-      store.setPosition({
-        fragmentId: props.shape.fragmentId,
-        x: fragmentPosition.x,
-        y: fragmentPosition.y,
-      });
+  //     store.setPosition({
+  //       fragmentId: props.shape.fragmentId,
+  //       x: fragmentPosition.x,
+  //       y: fragmentPosition.y,
+  //     });
 
-      const toConnect = findCloseNeighbor({
-        fragment: fragmentPosition,
-        fragments: store.state.fragments,
-        neighbors: props.shape.neighbors,
-      });
+  //     const toConnect = findCloseNeighbor({
+  //       fragment: fragmentPosition,
+  //       fragments: store.state.fragments,
+  //       neighbors: props.shape.neighbors,
+  //     });
 
-      if (toConnect) {
-        store.addConnection({
-          fragmentId: toConnect.id,
-          islandId: props.islandId,
-        });
-      }
-    },
-    onDragStart: () => {
-      store.setSelectedId(props.shape.fragmentId);
-    },
-  });
+  //     if (toConnect) {
+  //       store.addConnection({
+  //         fragmentId: toConnect.id,
+  //         islandId: props.islandId,
+  //       });
+  //     }
+  //   },
+  //   onDragStart: () => {
+  //     store.setSelectedId(props.shape.fragmentId);
+  //   },
+  // });
 
-  onMount(() => {
-    container.x = props.fragmentState.x;
-  });
+  // onMount(() => {
+  //   container.x = props.fragmentState.x;
+  // });
 
-  onMount(() => {
-    container.y = props.fragmentState.y;
-  });
+  // onMount(() => {
+  //   container.y = props.fragmentState.y;
+  // });
 
   onMount(() => {
     props.island.addChild(container);
@@ -176,14 +160,14 @@ const Fragment: Component<FragmentProps> = (props) => {
         shape={props.shape}
         texture={props.texture}
       />
-      <Show when={isSelected()}>
+      {/* <Show when={isSelected()}>
         <RotationAnchor
           container={container}
           islandId={props.islandId}
           fragmentState={props.fragmentState}
           shape={props.shape}
         />
-      </Show>
+      </Show> */}
       <PuzzleFragmentLabel container={container} islandId={props.islandId} />
     </>
   );

@@ -13,9 +13,17 @@ export type FragmentState = {
   y: number;
 };
 
+export type IslandState = {
+  fragments: string[];
+  islandId: string;
+  rotation: number;
+  x: number;
+  y: number;
+};
+
 export type PuzzleState = {
   fragments: Record<string, FragmentState | undefined>;
-  islands: Record<string, string[] | undefined>;
+  islands: Record<string, IslandState | undefined>;
   selectedId?: string;
 };
 
@@ -24,7 +32,7 @@ type UsePuzzleStoreArgs = {
 };
 
 type SetRotationArgs = {
-  fragmentId: string;
+  islandId: string;
   rotation: number;
 };
 
@@ -45,12 +53,19 @@ const usePuzzleStore = (args: UsePuzzleStoreArgs) => {
   const shapes = new Map<string, PuzzleFragmentShape>();
 
   args.shapes.forEach((shape, index) => {
+    const rotation = 2 * Math.random() * Math.PI;
     const islandId = String(index);
-    islands[islandId] = [shape.fragmentId];
+    islands[islandId] = {
+      fragments: [shape.fragmentId],
+      islandId,
+      rotation,
+      x: shape.start.x,
+      y: shape.start.y,
+    };
     shapes.set(shape.fragmentId, shape);
     fragments[shape.fragmentId] = {
       islandId,
-      rotation: 2 * Math.random() * Math.PI,
+      rotation,
       x: shape.start.x,
       y: shape.start.y,
     };
@@ -62,8 +77,8 @@ const usePuzzleStore = (args: UsePuzzleStoreArgs) => {
     setState("selectedId", selectedId);
   };
 
-  const setRotation = ({ fragmentId, rotation }: SetRotationArgs) => {
-    setState("fragments", fragmentId, "rotation", rotation);
+  const setRotation = ({ islandId, rotation }: SetRotationArgs) => {
+    setState("islands", islandId, "rotation", rotation);
   };
 
   const setPosition = ({ fragmentId, x, y }: SetPositionArgs) => {
@@ -77,13 +92,13 @@ const usePuzzleStore = (args: UsePuzzleStoreArgs) => {
       return;
     }
 
-    const allFragments = state.islands[originalIslandId] || [];
+    const allFragments = state.islands[originalIslandId]?.fragments || [];
     allFragments.forEach((fragmentId) => {
       setState("fragments", fragmentId, "islandId", islandId);
     });
 
     setState("islands", originalIslandId, undefined);
-    setState("islands", islandId, (current) => [
+    setState("islands", islandId, "fragments", (current) => [
       ...(current || []),
       ...allFragments,
     ]);
