@@ -1,12 +1,10 @@
 import { createContext, useContext, type Component, type JSX } from "solid-js";
 import { createStore } from "solid-js/store";
 import { getDistance, subtractPoint, type Point2D } from "~/utils/geometry";
-import type {
-  PuzzleFragmentNeighbors,
-  PuzzleFragmentShape,
-} from "./getPuzzleFragments";
+import type { PuzzleFragmentShape } from "./getPuzzleFragments";
 
 export type FragmentState = {
+  fragmentId: string;
   islandId: string;
   rotation: number;
   x: number;
@@ -14,7 +12,7 @@ export type FragmentState = {
 };
 
 export type IslandState = {
-  fragments: string[];
+  fragments: Record<string, FragmentState | undefined>;
   islandId: string;
   rotation: number;
   x: number;
@@ -22,7 +20,6 @@ export type IslandState = {
 };
 
 export type PuzzleState = {
-  fragments: Record<string, FragmentState | undefined>;
   islands: Record<string, IslandState | undefined>;
   selectedId?: string;
 };
@@ -48,22 +45,29 @@ type AddConnectionArgs = {
 };
 
 const usePuzzleStore = (args: UsePuzzleStoreArgs) => {
-  const fragments: PuzzleState["fragments"] = {};
   const islands: PuzzleState["islands"] = {};
   const shapes = new Map<string, PuzzleFragmentShape>();
 
   args.shapes.forEach((shape, index) => {
     const rotation = 2 * Math.random() * Math.PI;
-    const islandId = String(index);
-    islands[islandId] = {
-      fragments: [shape.fragmentId],
+    const islandId = String(Math.floor(index / 2));
+    shapes.set(shape.fragmentId, shape);
+
+    const fragment = {
+      fragmentId: shape.fragmentId,
       islandId,
       rotation,
       x: shape.start.x,
       y: shape.start.y,
     };
-    shapes.set(shape.fragmentId, shape);
-    fragments[shape.fragmentId] = {
+
+    const current = islands[islandId];
+    if (current) {
+      current.fragments[fragment.fragmentId] = fragment;
+      return;
+    }
+    islands[islandId] = {
+      fragments: { [fragment.fragmentId]: fragment },
       islandId,
       rotation,
       x: shape.start.x,
@@ -71,7 +75,7 @@ const usePuzzleStore = (args: UsePuzzleStoreArgs) => {
     };
   });
 
-  const [state, setState] = createStore<PuzzleState>({ fragments, islands });
+  const [state, setState] = createStore<PuzzleState>({ islands });
 
   const setSelectedId = (selectedId?: string) => {
     setState("selectedId", selectedId);
@@ -82,26 +86,24 @@ const usePuzzleStore = (args: UsePuzzleStoreArgs) => {
   };
 
   const setPosition = ({ fragmentId, x, y }: SetPositionArgs) => {
-    setState("fragments", fragmentId, "x", x);
-    setState("fragments", fragmentId, "y", y);
+    // setState("fragments", fragmentId, "x", x);
+    // setState("fragments", fragmentId, "y", y);
   };
 
   const addConnection = ({ fragmentId, islandId }: AddConnectionArgs) => {
-    const originalIslandId = state.fragments[fragmentId]?.islandId;
-    if (!originalIslandId) {
-      return;
-    }
-
-    const allFragments = state.islands[originalIslandId]?.fragments || [];
-    allFragments.forEach((fragmentId) => {
-      setState("fragments", fragmentId, "islandId", islandId);
-    });
-
-    setState("islands", originalIslandId, undefined);
-    setState("islands", islandId, "fragments", (current) => [
-      ...(current || []),
-      ...allFragments,
-    ]);
+    // const originalIslandId = state.fragments[fragmentId]?.islandId;
+    // if (!originalIslandId) {
+    //   return;
+    // }
+    // const allFragments = state.islands[originalIslandId]?.fragments || [];
+    // allFragments.forEach((fragmentId) => {
+    //   setState("fragments", fragmentId, "islandId", islandId);
+    // });
+    // setState("islands", originalIslandId, undefined);
+    // setState("islands", islandId, "fragments", (current) => [
+    //   ...(current || []),
+    //   ...allFragments,
+    // ]);
   };
 
   return {
@@ -120,7 +122,7 @@ const PuzzleStoreContext = createContext<ReturnType<typeof usePuzzleStore>>({
   setRotation: () => void 0,
   setSelectedId: () => void 0,
   shapes: new Map(),
-  state: { fragments: {}, islands: {} },
+  state: { islands: {} },
 });
 
 type PuzzleStoreProviderProps = {
@@ -170,26 +172,26 @@ export const arePuzzleFragmentsClose = ({
   return isClose && isSameAngle && isCorrectPosition;
 };
 
-type FindCloseNeighborArgs = {
-  fragment: FragmentState;
-  fragments: PuzzleState["fragments"];
-  neighbors: PuzzleFragmentNeighbors;
-};
+// type FindCloseNeighborArgs = {
+//   fragment: FragmentState;
+//   fragments: PuzzleState["fragments"];
+//   neighbors: PuzzleFragmentNeighbors;
+// };
 
-export const findCloseNeighbor = ({
-  fragment,
-  fragments,
-  neighbors,
-}: FindCloseNeighborArgs) => {
-  return neighbors.find((neighbor) => {
-    const neighborState = fragments[neighbor.id];
-    if (neighborState && neighborState.islandId !== fragment.islandId) {
-      return arePuzzleFragmentsClose({
-        correctDistance: neighbor.distance,
-        correctShift: neighbor.shift,
-        fragment,
-        neighbor: neighborState,
-      });
-    }
-  });
-};
+// export const findCloseNeighbor = ({
+//   fragment,
+//   fragments,
+//   neighbors,
+// }: FindCloseNeighborArgs) => {
+//   return neighbors.find((neighbor) => {
+//     const neighborState = fragments[neighbor.id];
+//     if (neighborState && neighborState.islandId !== fragment.islandId) {
+//       return arePuzzleFragmentsClose({
+//         correctDistance: neighbor.distance,
+//         correctShift: neighbor.shift,
+//         fragment,
+//         neighbor: neighborState,
+//       });
+//     }
+//   });
+// };

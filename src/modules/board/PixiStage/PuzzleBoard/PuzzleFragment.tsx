@@ -1,14 +1,7 @@
 import * as PIXI from "pixi.js";
-import {
-  Show,
-  createEffect,
-  createMemo,
-  onCleanup,
-  onMount,
-  type Component,
-} from "solid-js";
+import { createEffect, onCleanup, onMount, type Component } from "solid-js";
 import { randomHexColor } from "~/utils/colors";
-import { usePuzzleStoreContext, type FragmentState } from "./PuzzleStore";
+import { type FragmentState } from "./PuzzleStore";
 import type { PuzzleFragmentShape } from "./getPuzzleFragments";
 
 type PuzzleFragmentLabelProps = {
@@ -39,7 +32,6 @@ export const PuzzleFragmentLabel: Component<PuzzleFragmentLabelProps> = (
 type PuzzleFragmentGraphicsProps = {
   container: PIXI.Container;
   fragmentState: FragmentState;
-  isSelected: boolean;
   shape: PuzzleFragmentShape;
   texture: PIXI.Texture;
 };
@@ -76,14 +68,10 @@ export const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
     graphics.destroy();
   });
 
-  createEffect(() => {
-    graphics.tint = props.isSelected ? "red" : "white";
-  });
-
   return null;
 };
 
-type FragmentProps = {
+type PuzzleFragmentProps = {
   fragmentState: FragmentState;
   island: PIXI.Container;
   islandId: string;
@@ -91,53 +79,14 @@ type FragmentProps = {
   texture: PIXI.Texture;
 };
 
-const Fragment: Component<FragmentProps> = (props) => {
-  const store = usePuzzleStoreContext();
-
+export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
   const container = new PIXI.Container();
   container.eventMode = "static";
 
-  // useDragObject({
-  //   displayObject: container,
-  //   onDragEnd: () => {
-  //     const fragmentPosition = {
-  //       islandId: props.islandId,
-  //       rotation: props.fragmentState.rotation,
-  //       x: container.x,
-  //       y: container.y,
-  //     };
-
-  //     store.setPosition({
-  //       fragmentId: props.shape.fragmentId,
-  //       x: fragmentPosition.x,
-  //       y: fragmentPosition.y,
-  //     });
-
-  //     const toConnect = findCloseNeighbor({
-  //       fragment: fragmentPosition,
-  //       fragments: store.state.fragments,
-  //       neighbors: props.shape.neighbors,
-  //     });
-
-  //     if (toConnect) {
-  //       store.addConnection({
-  //         fragmentId: toConnect.id,
-  //         islandId: props.islandId,
-  //       });
-  //     }
-  //   },
-  //   onDragStart: () => {
-  //     store.setSelectedId(props.shape.fragmentId);
-  //   },
-  // });
-
-  // onMount(() => {
-  //   container.x = props.fragmentState.x;
-  // });
-
-  // onMount(() => {
-  //   container.y = props.fragmentState.y;
-  // });
+  onMount(() => {
+    container.x = props.shape.min.x;
+    container.y = props.shape.min.y;
+  });
 
   onMount(() => {
     props.island.addChild(container);
@@ -147,57 +96,15 @@ const Fragment: Component<FragmentProps> = (props) => {
     props.island.removeChild(container);
   });
 
-  const isSelected = createMemo(() => {
-    return store.state.selectedId === props.shape.fragmentId;
-  });
-
   return (
     <>
       <PuzzleFragmentGraphics
         container={container}
         fragmentState={props.fragmentState}
-        isSelected={isSelected()}
         shape={props.shape}
         texture={props.texture}
       />
-      {/* <Show when={isSelected()}>
-        <RotationAnchor
-          container={container}
-          islandId={props.islandId}
-          fragmentState={props.fragmentState}
-          shape={props.shape}
-        />
-      </Show> */}
       <PuzzleFragmentLabel container={container} islandId={props.islandId} />
     </>
-  );
-};
-
-type PuzzleFragmentProps = {
-  island: PIXI.Container;
-  islandId: string;
-  shape: PuzzleFragmentShape;
-  texture: PIXI.Texture;
-};
-
-export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
-  const store = usePuzzleStoreContext();
-
-  const fragmentState = createMemo(() => {
-    return store.state.fragments[props.shape.fragmentId];
-  });
-
-  return (
-    <Show when={fragmentState()}>
-      {(state) => (
-        <Fragment
-          fragmentState={state()}
-          island={props.island}
-          islandId={props.islandId}
-          shape={props.shape}
-          texture={props.texture}
-        />
-      )}
-    </Show>
   );
 };

@@ -10,14 +10,18 @@ import {
 } from "solid-js";
 import { usePixiApp } from "../PixiApp";
 import { PuzzleFragment } from "./PuzzleFragment";
-import { usePuzzleStoreContext } from "./PuzzleStore";
+import {
+  usePuzzleStoreContext,
+  type FragmentState,
+  type IslandState,
+} from "./PuzzleStore";
 import { RotationAnchor } from "./RotationAnchor";
-import type { PuzzleFragmentShape } from "./getPuzzleFragments";
 import { useDragObject } from "./useDragObject";
 
 type FragmentsProps = {
+  fragments: FragmentState[];
   islandId: string;
-  wrapper: PIXI.Container;
+  island: PIXI.Container;
   texture: PIXI.Texture;
   rotation: number;
 };
@@ -28,23 +32,12 @@ export const Fragments: Component<FragmentsProps> = (props) => {
   const container = new PIXI.Container();
   container.eventMode = "static";
 
-  const fragments = createMemo(() => {
-    const shapes: PuzzleFragmentShape[] = [];
-    store.state.islands[props.islandId]?.fragments?.forEach((fragmentId) => {
-      const shape = store.shapes.get(fragmentId);
-      if (shape) {
-        shapes.push(shape);
-      }
-    });
-    return shapes;
-  });
-
   onMount(() => {
-    props.wrapper.addChild(container);
+    props.island.addChild(container);
   });
 
   onCleanup(() => {
-    props.wrapper.removeChild(container);
+    props.island.removeChild(container);
   });
 
   createEffect(() => {
@@ -52,42 +45,69 @@ export const Fragments: Component<FragmentsProps> = (props) => {
   });
 
   return (
-    <For each={fragments()}>
-      {(shape) => (
-        <PuzzleFragment
-          island={container}
-          islandId={props.islandId}
-          shape={shape}
-          texture={props.texture}
-        />
+    <For each={props.fragments}>
+      {(fragment) => (
+        <Show when={store.shapes.get(fragment.fragmentId)}>
+          {(shape) => (
+            <PuzzleFragment
+              island={container}
+              islandId={props.islandId}
+              shape={shape()}
+              texture={props.texture}
+              fragmentState={fragment}
+            />
+          )}
+        </Show>
       )}
     </For>
   );
 };
 
-type PuzzleIslandProps = {
+type IslandProps = {
   islandId: string;
+  islandState: IslandState;
   texture: PIXI.Texture;
 };
 
-export const PuzzleIsland: Component<PuzzleIslandProps> = (props) => {
+const Island: Component<IslandProps> = (props) => {
   const app = usePixiApp();
   const store = usePuzzleStoreContext();
 
-  const wrapper = new PIXI.Container();
-  wrapper.eventMode = "static";
+  const island = new PIXI.Container();
+  island.eventMode = "static";
 
   onMount(() => {
-    app().stage.addChild(wrapper);
+    // island.pivot.
+    app().stage.addChild(island);
   });
 
   onCleanup(() => {
-    app().stage.removeChild(wrapper);
+    app().stage.removeChild(island);
+  });
+
+  const fragments = createMemo(() => {
+    const fragmentStates: FragmentState[] = [];
+    const fragments = store.state.islands[props.islandId]?.fragments || {};
+    Object.values(fragments).forEach((fragment) => {
+      if (fragment) {
+        fragmentStates.push(fragment);
+      }
+    });
+    return fragmentStates;
+  });
+
+  const isSelected = createMemo(() => {
+    return store.state.selectedId === props.islandId;
+  });
+
+  const rotation = createMemo(() => {
+    return props.islandState.rotation;
   });
 
   useDragObject({
-    displayObject: wrapper,
+    displayObject: island,
     onDragEnd: () => {
+      console.log({ island });
       // const fragmentPosition = {
       //   islandId: props.islandId,
       //   rotation: props.fragmentState.rotation,
@@ -116,20 +136,9 @@ export const PuzzleIsland: Component<PuzzleIslandProps> = (props) => {
     },
   });
 
-  const isSelected = createMemo(() => {
-    return store.state.selectedId === props.islandId;
-  });
-
-  const islandState = createMemo(() => {
-    return store.state.islands[props.islandId];
-  });
-
-  const rotation = createMemo(() => {
-    return islandState()?.rotation || 0;
-  });
-
   const onRotationEnd = (rotation: number) => {
     store.setRotation({ islandId: props.islandId, rotation });
+    console.log({ island });
     // const fragmentPosition = {
     //   islandId: props.islandId,
     //   rotation: Math.atan2(-local.x, local.y),
@@ -153,28 +162,50 @@ export const PuzzleIsland: Component<PuzzleIslandProps> = (props) => {
 
   const onRotationMove = (rotation: number) => {
     store.setRotation({ islandId: props.islandId, rotation });
-    // store.setRotation({
-    //   islandId: props.islandId,
-    //   rotation: Math.atan2(local.x, local.y),
-    // });
   };
 
   return (
     <>
       <Show when={isSelected()}>
         <RotationAnchor
-          container={wrapper}
+          container={island}
           rotation={rotation()}
           onEnd={onRotationEnd}
           onRotate={onRotationMove}
         />
       </Show>
       <Fragments
+        fragments={fragments()}
+        island={island}
         islandId={props.islandId}
         rotation={rotation()}
         texture={props.texture}
-        wrapper={wrapper}
       />
     </>
+  );
+};
+
+type PuzzleIslandProps = {
+  islandId: string;
+  texture: PIXI.Texture;
+};
+
+export const PuzzleIsland: Component<PuzzleIslandProps> = (props) => {
+  const store = usePuzzleStoreContext();
+
+  const islandState = createMemo(() => {
+    return store.state.islands[props.islandId];
+  });
+
+  return (
+    <Show when={islandState()}>
+      {(state) => (
+        <Island
+          islandId={props.islandId}
+          islandState={state()}
+          texture={props.texture}
+        />
+      )}
+    </Show>
   );
 };
