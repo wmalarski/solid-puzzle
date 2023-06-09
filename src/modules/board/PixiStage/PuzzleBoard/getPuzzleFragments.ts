@@ -208,6 +208,8 @@ export const getPuzzleFragments = ({
     width,
   });
 
+  const lines = [...horizontalLines, ...verticalLines].flat();
+
   const fragments = Array(rows)
     .fill(0)
     .flatMap((_value, rowIndex) =>
@@ -266,9 +268,13 @@ export const getPuzzleFragments = ({
     return { ...fragment, neighbors };
   });
 
-  return withNeighbors;
+  return { fragments: withNeighbors, lines };
 };
 
-export type PuzzleFragmentShape = ReturnType<typeof getPuzzleFragments>[0];
+export type PuzzleFragmentShape = ReturnType<
+  typeof getPuzzleFragments
+>["fragments"][0];
+
+export type PuzzleShapeLine = ReturnType<typeof getPuzzleFragments>["lines"][0];
 
 export type PuzzleFragmentNeighbors = PuzzleFragmentShape["neighbors"];

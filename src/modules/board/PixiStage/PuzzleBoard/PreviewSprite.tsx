@@ -1,6 +1,40 @@
 import * as PIXI from "pixi.js";
-import { onCleanup, onMount, type Component } from "solid-js";
+import { createEffect, onCleanup, onMount, type Component } from "solid-js";
 import { usePixiApp } from "../PixiApp";
+import type { PuzzleShapeLine } from "./getPuzzleFragments";
+
+type PreviewGridProps = {
+  lines: PuzzleShapeLine[];
+};
+
+export const PreviewGrid: Component<PreviewGridProps> = (props) => {
+  const app = usePixiApp();
+
+  const graphics = new PIXI.Graphics();
+
+  createEffect(() => {
+    graphics.lineStyle(2, 0xffffff, 1);
+    props.lines.forEach((line) => {
+      graphics.moveTo(line.start.x, line.start.y);
+      graphics.quadraticCurveTo(
+        line.center.x,
+        line.center.y,
+        line.end.x,
+        line.end.y
+      );
+    });
+  });
+
+  onMount(() => {
+    app().stage.addChild(graphics);
+  });
+
+  onCleanup(() => {
+    app().stage.removeChild(graphics);
+  });
+
+  return null;
+};
 
 type PreviewSpriteProps = {
   texture: PIXI.Texture;
@@ -12,8 +46,11 @@ export const PreviewSprite: Component<PreviewSpriteProps> = (props) => {
   const sprite = new PIXI.Sprite();
   sprite.alpha = 0.5;
 
-  onMount(() => {
+  createEffect(() => {
     sprite.texture = props.texture;
+  });
+
+  onMount(() => {
     app().stage.addChild(sprite);
   });
 
