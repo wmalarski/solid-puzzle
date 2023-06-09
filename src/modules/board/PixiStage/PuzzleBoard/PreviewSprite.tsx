@@ -13,7 +13,7 @@ export const PreviewGrid: Component<PreviewGridProps> = (props) => {
   const graphics = new PIXI.Graphics();
 
   createEffect(() => {
-    graphics.lineStyle(2, 0xffffff, 1);
+    graphics.lineStyle(1, 0xffffff, 1);
     props.lines.forEach((line) => {
       graphics.moveTo(line.start.x, line.start.y);
       graphics.quadraticCurveTo(

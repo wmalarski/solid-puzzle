@@ -29,7 +29,7 @@ type UsePuzzleStoreArgs = {
 };
 
 type SetRotationArgs = {
-  islandId: string;
+  fragmentId: string;
   rotation: number;
 };
 
@@ -81,7 +81,7 @@ const usePuzzleStore = (args: UsePuzzleStoreArgs) => {
     setState("selectedId", selectedId);
   };
 
-  const setRotation = ({ islandId, rotation }: SetRotationArgs) => {
+  const setRotation = ({ fragmentId: islandId, rotation }: SetRotationArgs) => {
     setState("islands", islandId, "rotation", rotation);
   };
 
