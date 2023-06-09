@@ -77,7 +77,6 @@ const Island: Component<IslandProps> = (props) => {
   island.eventMode = "static";
 
   onMount(() => {
-    // island.pivot.
     app().stage.addChild(island);
   });
 

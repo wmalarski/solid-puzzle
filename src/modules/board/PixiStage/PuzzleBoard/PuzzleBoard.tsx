@@ -9,6 +9,7 @@ import {
   type Component,
 } from "solid-js";
 import { usePixiApp } from "../PixiApp";
+import { PreviewSprite } from "./PreviewSprite";
 import { PuzzleIsland } from "./PuzzleIsland";
 import { PuzzleStoreProvider, usePuzzleStoreContext } from "./PuzzleStore";
 import { getPuzzleFragments } from "./getPuzzleFragments";
@@ -73,6 +74,7 @@ const Provider: Component<ProviderProps> = (props) => {
 
   return (
     <PuzzleStoreProvider shapes={shapes()}>
+      <PreviewSprite texture={props.texture} />
       <Board texture={props.texture} />
     </PuzzleStoreProvider>
   );
