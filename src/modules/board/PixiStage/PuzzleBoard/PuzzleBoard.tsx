@@ -10,7 +10,7 @@ import {
 } from "solid-js";
 import { usePixiApp } from "../PixiApp";
 import { PreviewGrid, PreviewSprite } from "./PreviewSprite";
-import { PuzzleIsland } from "./PuzzleIsland";
+import { PuzzleFragment } from "./PuzzleFragment";
 import { PuzzleStoreProvider, usePuzzleStoreContext } from "./PuzzleStore";
 import { getPuzzleFragments } from "./getPuzzleFragments";
 
@@ -50,9 +50,16 @@ const Board: Component<BoardProps> = (props) => {
   });
 
   return (
-    <For each={Object.keys(store.state.islands)}>
-      {(islandId) => (
-        <PuzzleIsland islandId={islandId} texture={props.texture} />
+    <For each={Object.values(store.state.fragments)}>
+      {(fragment) => (
+        <Show when={fragment}>
+          {(fragment) => (
+            <PuzzleFragment
+              texture={props.texture}
+              fragmentState={fragment()}
+            />
+          )}
+        </Show>
       )}
     </For>
   );

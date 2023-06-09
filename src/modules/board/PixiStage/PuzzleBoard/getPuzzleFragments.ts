@@ -244,6 +244,7 @@ export const getPuzzleFragments = ({
             center,
             curvePoints,
             fragmentId: getFragmentId({ columnIndex, rowIndex }),
+            initialRotation: 2 * Math.random() * Math.PI,
             min,
             neighbors,
             start: absoluteCenter,

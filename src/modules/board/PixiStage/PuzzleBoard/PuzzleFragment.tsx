@@ -77,12 +77,15 @@ export const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
     graphics.destroy();
   });
 
+  createEffect(() => {
+    graphics.rotation = props.fragmentState.rotation;
+  });
+
   return null;
 };
 
 type PuzzleFragmentProps = {
   fragmentState: FragmentState;
-  shape: PuzzleFragmentShape;
   texture: PIXI.Texture;
 };
 
@@ -102,8 +105,8 @@ export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
   });
 
   onMount(() => {
-    fragmentContainer.x = props.shape.min.x;
-    fragmentContainer.y = props.shape.min.y;
+    fragmentContainer.x = props.fragmentState.shape.min.x;
+    fragmentContainer.y = props.fragmentState.shape.min.y;
   });
 
   useDragObject({
@@ -134,12 +137,15 @@ export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
       // }
     },
     onDragStart: () => {
-      store.setSelectedId(props.shape.fragmentId);
+      store.setSelectedId(props.fragmentState.shape.fragmentId);
     },
   });
 
   const onRotationEnd = (rotation: number) => {
-    store.setRotation({ fragmentId: props.shape.fragmentId, rotation });
+    store.setRotation({
+      fragmentId: props.fragmentState.shape.fragmentId,
+      rotation,
+    });
     // console.log({ island });
     // const fragmentPosition = {
     //   islandId: props.islandId,
@@ -163,7 +169,10 @@ export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
   };
 
   const onRotationMove = (rotation: number) => {
-    store.setRotation({ fragmentId: props.shape.fragmentId, rotation });
+    store.setRotation({
+      fragmentId: props.fragmentState.shape.fragmentId,
+      rotation,
+    });
   };
 
   return (
@@ -171,14 +180,16 @@ export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
       <PuzzleFragmentGraphics
         container={fragmentContainer}
         fragmentState={props.fragmentState}
-        shape={props.shape}
+        shape={props.fragmentState.shape}
         texture={props.texture}
       />
       <PuzzleFragmentLabel
         container={fragmentContainer}
-        label={props.shape.fragmentId}
+        label={props.fragmentState.shape.fragmentId}
       />
-      <Show when={store.state.selectedId === props.shape.fragmentId}>
+      <Show
+        when={store.state.selectedId === props.fragmentState.shape.fragmentId}
+      >
         <RotationAnchor
           container={fragmentContainer}
           rotation={props.fragmentState.rotation}
