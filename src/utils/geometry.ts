@@ -17,11 +17,16 @@ export const getDistance = (point: Point2D, other: Point2D) => {
   );
 };
 
-type GetCenterFromPointsArgs = {
-  points: Point2D[];
+export const getMinMaxFromPoints = (points: Point2D[]) => {
+  const xSorted = points.sort((a, b) => a.x - b.x);
+  const ySorted = points.sort((a, b) => a.y - b.y);
+  return {
+    max: { x: xSorted[xSorted.length - 1].x, y: ySorted[ySorted.length - 1].y },
+    min: { x: xSorted[0].x, y: ySorted[0].y },
+  };
 };
 
-export const getCenterFromPoints = ({ points }: GetCenterFromPointsArgs) => {
+export const getCenterFromPoints = (points: Point2D[]) => {
   let sumX = 0;
   let sumY = 0;
 
@@ -31,10 +36,4 @@ export const getCenterFromPoints = ({ points }: GetCenterFromPointsArgs) => {
   });
 
   return { x: sumX / points.length, y: sumY / points.length };
-};
-
-export const getMinFromPoints = ({ points }: GetCenterFromPointsArgs) => {
-  const x = points.sort((a, b) => a.x - b.x)[0].x;
-  const y = points.sort((a, b) => a.y - b.y)[0].y;
-  return { x, y };
 };

@@ -19,13 +19,14 @@ export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
   graphics.tint = "blue";
 
   onMount(() => {
-    const radius = Math.max(props.container.width, props.container.height);
+    const radius = Math.max(props.container.width, props.container.height) / 2;
     const x = 0;
     const y = -radius;
 
     graphics.beginFill();
     graphics.drawCircle(x, y, rotationAnchorRadius);
     graphics.endFill();
+    // graphics.pivot.set(props.container.width / 2, props.container.height / 2);
   });
 
   createEffect(() => {

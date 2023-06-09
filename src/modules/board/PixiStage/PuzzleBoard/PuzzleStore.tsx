@@ -1,13 +1,15 @@
 import { createContext, useContext, type Component, type JSX } from "solid-js";
 import { createStore } from "solid-js/store";
+import { getDistance } from "~/utils/geometry";
 import type { PuzzleFragmentShape } from "./getPuzzleFragments";
 
 export type FragmentState = {
   fragmentId: string;
+  isLocked: boolean;
   rotation: number;
+  shape: PuzzleFragmentShape;
   x: number;
   y: number;
-  shape: PuzzleFragmentShape;
 };
 
 export type PuzzleState = {
@@ -37,10 +39,11 @@ const usePuzzleStore = (args: UsePuzzleStoreArgs) => {
   args.shapes.forEach((shape) => {
     fragments[shape.fragmentId] = {
       fragmentId: shape.fragmentId,
+      isLocked: false,
       rotation: shape.initialRotation,
       shape,
-      x: shape.start.x,
-      y: shape.start.y,
+      x: shape.center.x,
+      y: shape.center.y,
     };
   });
 
@@ -50,13 +53,25 @@ const usePuzzleStore = (args: UsePuzzleStoreArgs) => {
     setState("selectedId", selectedId);
   };
 
+  const checkOnPlace = (fragmentId: string) => {
+    const fragment = state.fragments[fragmentId];
+    if (fragment) {
+      const distance = getDistance(fragment, fragment.shape.center);
+      const isRightAngle = Math.abs(fragment.rotation) < Math.PI / 32;
+      const isLocked = distance < 20 && isRightAngle;
+      setState("fragments", fragmentId, "isLocked", isLocked);
+    }
+  };
+
   const setRotation = ({ fragmentId, rotation }: SetRotationArgs) => {
     setState("fragments", fragmentId, "rotation", rotation);
+    checkOnPlace(fragmentId);
   };
 
   const setPosition = ({ fragmentId, x, y }: SetPositionArgs) => {
     setState("fragments", fragmentId, "x", x);
     setState("fragments", fragmentId, "y", y);
+    checkOnPlace(fragmentId);
   };
 
   return {

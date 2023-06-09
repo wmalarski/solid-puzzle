@@ -2,6 +2,7 @@ import * as PIXI from "pixi.js";
 import {
   Show,
   createEffect,
+  createMemo,
   onCleanup,
   onMount,
   type Component,
@@ -65,7 +66,7 @@ export const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
     });
 
     graphics.endFill();
-    graphics.pivot.set(graphics.width / 2, graphics.height / 2);
+    // graphics.pivot.set(graphics.width / 2, graphics.height / 2);
   });
 
   onMount(() => {
@@ -78,7 +79,9 @@ export const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
   });
 
   createEffect(() => {
-    graphics.rotation = props.fragmentState.rotation;
+    graphics.rotation = props.fragmentState.isLocked
+      ? 0
+      : props.fragmentState.rotation;
   });
 
   return null;
@@ -93,105 +96,76 @@ export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
   const app = usePixiApp();
   const store = usePuzzleStoreContext();
 
-  const fragmentContainer = new PIXI.Container();
-  fragmentContainer.eventMode = "static";
+  const fragment = new PIXI.Container();
 
   onMount(() => {
-    app().stage.addChild(fragmentContainer);
+    app().stage.addChild(fragment);
   });
 
   onCleanup(() => {
-    app().stage.removeChild(fragmentContainer);
+    app().stage.removeChild(fragment);
   });
 
   onMount(() => {
-    fragmentContainer.x = props.fragmentState.shape.min.x;
-    fragmentContainer.y = props.fragmentState.shape.min.y;
+    // fragment.pivot.set(
+    //   fragment.width / 2,
+    //   fragment.height / 2
+    //   // props.fragmentState.shape.max.x - props.fragmentState.shape.min.x,
+    //   // props.fragmentState.shape.max.y - props.fragmentState.shape.min.y
+    // );
+    fragment.pivot.set(fragment.width / 2, fragment.height / 2);
+    fragment.x = props.fragmentState.shape.min.x;
+    fragment.y = props.fragmentState.shape.min.y;
+  });
+
+  createEffect(() => {
+    if (!props.fragmentState.isLocked) {
+      fragment.eventMode = "static";
+      return;
+    }
+    fragment.eventMode = "none";
+    fragment.x = props.fragmentState.shape.min.x;
+    fragment.y = props.fragmentState.shape.min.y;
+  });
+
+  const fragmentId = createMemo(() => {
+    return props.fragmentState.shape.fragmentId;
   });
 
   useDragObject({
-    displayObject: fragmentContainer,
+    displayObject: fragment,
     onDragEnd: () => {
-      // console.log({ island });
-      // const fragmentPosition = {
-      //   islandId: props.islandId,
-      //   rotation: props.fragmentState.rotation,
-      //   x: container.x,
-      //   y: container.y,
-      // };
-      // store.setPosition({
-      //   fragmentId: props.shape.fragmentId,
-      //   x: fragmentPosition.x,
-      //   y: fragmentPosition.y,
-      // });
-      // const toConnect = findCloseNeighbor({
-      //   fragment: fragmentPosition,
-      //   fragments: store.state.fragments,
-      //   neighbors: props.shape.neighbors,
-      // });
-      // if (toConnect) {
-      //   store.addConnection({
-      //     fragmentId: toConnect.id,
-      //     islandId: props.islandId,
-      //   });
-      // }
+      store.setPosition({
+        fragmentId: fragmentId(),
+        x: fragment.x,
+        y: fragment.y,
+      });
     },
     onDragStart: () => {
-      store.setSelectedId(props.fragmentState.shape.fragmentId);
+      store.setSelectedId(fragmentId());
     },
   });
 
   const onRotationEnd = (rotation: number) => {
-    store.setRotation({
-      fragmentId: props.fragmentState.shape.fragmentId,
-      rotation,
-    });
-    // console.log({ island });
-    // const fragmentPosition = {
-    //   islandId: props.islandId,
-    //   rotation: Math.atan2(-local.x, local.y),
-    //   x: props.container.x,
-    //   y: props.container.y,
-    // };
-
-    // const toConnect = findCloseNeighbor({
-    //   fragment: fragmentPosition,
-    //   fragments: store.state.fragments,
-    //   neighbors: props.shape.neighbors,
-    // });
-
-    // if (toConnect) {
-    //   store.addConnection({
-    //     fragmentId: toConnect.id,
-    //     islandId: props.islandId,
-    //   });
-    // }
+    store.setRotation({ fragmentId: fragmentId(), rotation });
   };
 
   const onRotationMove = (rotation: number) => {
-    store.setRotation({
-      fragmentId: props.fragmentState.shape.fragmentId,
-      rotation,
-    });
+    store.setRotation({ fragmentId: fragmentId(), rotation });
   };
 
   return (
     <>
       <PuzzleFragmentGraphics
-        container={fragmentContainer}
+        container={fragment}
         fragmentState={props.fragmentState}
         shape={props.fragmentState.shape}
         texture={props.texture}
       />
-      <PuzzleFragmentLabel
-        container={fragmentContainer}
-        label={props.fragmentState.shape.fragmentId}
-      />
-      <Show
-        when={store.state.selectedId === props.fragmentState.shape.fragmentId}
-      >
+      <PuzzleFragmentLabel container={fragment} label={fragmentId()} />
+      <Show when={store.state.selectedId === fragmentId()}>
         <RotationAnchor
-          container={fragmentContainer}
+          container={fragment}
           rotation={props.fragmentState.rotation}
           onEnd={onRotationEnd}
           onRotate={onRotationMove}

@@ -1,7 +1,6 @@
 import {
   getCenterFromPoints,
-  getDistance,
-  getMinFromPoints,
+  getMinMaxFromPoints,
   subtractPoint,
 } from "~/utils/geometry";
 
@@ -82,40 +81,6 @@ const getFragmentId = ({ columnIndex, rowIndex }: GetFragmentIdArgs) => {
   return `${rowIndex}-${columnIndex}`;
 };
 
-type GetNeighborsIdsArgs = {
-  columnIndex: number;
-  rowIndex: number;
-};
-
-type GetNeighborsIdsFactoryArgs = {
-  columns: number;
-  rows: number;
-};
-
-const getNeighborsIdsFactory = ({
-  columns,
-  rows,
-}: GetNeighborsIdsFactoryArgs) => {
-  return ({ columnIndex, rowIndex }: GetNeighborsIdsArgs) => {
-    const ids: string[] = [];
-
-    if (rowIndex > 0) {
-      ids.push(getFragmentId({ columnIndex, rowIndex: rowIndex - 1 }));
-    }
-    if (rowIndex < rows - 1) {
-      ids.push(getFragmentId({ columnIndex, rowIndex: rowIndex + 1 }));
-    }
-    if (columnIndex > 0) {
-      ids.push(getFragmentId({ columnIndex: columnIndex - 1, rowIndex }));
-    }
-    if (columnIndex < columns - 1) {
-      ids.push(getFragmentId({ columnIndex: columnIndex + 1, rowIndex }));
-    }
-
-    return ids;
-  };
-};
-
 type GenerateCurvesArgs = {
   columns: number;
   height: number;
@@ -154,7 +119,7 @@ const generateCurves = ({
         .map((_value, columnIndex) => {
           const start = points[rowIndex][columnIndex];
           const end = points[rowIndex][columnIndex + 1];
-          const center = getCenterFromPoints({ points: [start, end] });
+          const center = getCenterFromPoints([start, end]);
           const random = getRandomGridPoint({
             columnIndex,
             rowIndex,
@@ -173,7 +138,7 @@ const generateCurves = ({
         .map((_value, columnIndex) => {
           const start = points[rowIndex][columnIndex];
           const end = points[rowIndex + 1][columnIndex];
-          const center = getCenterFromPoints({ points: [start, end] });
+          const center = getCenterFromPoints([start, end]);
           const random = getRandomGridPoint({
             columnIndex,
             rowIndex,
@@ -200,7 +165,6 @@ export const getPuzzleFragments = ({
   rows,
   width,
 }: GetPuzzleFragmentsArgs) => {
-  const getNeighborsIds = getNeighborsIdsFactory({ columns, rows });
   const { horizontalLines, verticalLines } = generateCurves({
     columns,
     height,
@@ -228,48 +192,30 @@ export const getPuzzleFragments = ({
             { control: top.center, to: top.start },
           ];
 
-          const points = absoluteCurvePoints.map((curve) => curve.to);
-          const min = getMinFromPoints({ points });
+          const points = absoluteCurvePoints.flatMap((curve) => [
+            curve.control,
+            curve.to,
+          ]);
+          const { max, min } = getMinMaxFromPoints(points);
+          const center = getCenterFromPoints([max, min]);
 
           const curvePoints = absoluteCurvePoints.map((curve) => ({
             control: subtractPoint(curve.control, min),
             to: subtractPoint(curve.to, min),
           }));
 
-          const absoluteCenter = getCenterFromPoints({ points });
-          const center = subtractPoint(absoluteCenter, min);
-          const neighbors = getNeighborsIds({ columnIndex, rowIndex });
-
           return {
             center,
             curvePoints,
             fragmentId: getFragmentId({ columnIndex, rowIndex }),
             initialRotation: 2 * Math.random() * Math.PI,
+            max,
             min,
-            neighbors,
-            start: absoluteCenter,
           };
         })
     );
 
-  const fragmentMap = new Map(
-    fragments.map((fragment) => [fragment.fragmentId, fragment])
-  );
-
-  const withNeighbors = fragments.map((fragment) => {
-    const neighbors = fragment.neighbors.flatMap((id) => {
-      const neighbor = fragmentMap.get(id);
-      if (!neighbor) {
-        return [];
-      }
-      const shift = subtractPoint(fragment.start, neighbor.start);
-      const distance = getDistance(fragment.start, neighbor.start);
-      return [{ distance, id, shift, start: neighbor.start }];
-    });
-    return { ...fragment, neighbors };
-  });
-
-  return { fragments: withNeighbors, lines };
+  return { fragments, lines };
 };
 
 export type PuzzleFragmentShape = ReturnType<
@@ -277,5 +223,3 @@ export type PuzzleFragmentShape = ReturnType<
 >["fragments"][0];
 
 export type PuzzleShapeLine = ReturnType<typeof getPuzzleFragments>["lines"][0];
-
-export type PuzzleFragmentNeighbors = PuzzleFragmentShape["neighbors"];
