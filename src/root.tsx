@@ -1,6 +1,5 @@
 // @refresh reload
 import { I18nContext } from "@solid-primitives/i18n";
-import "flowbite";
 import { Suspense } from "solid-js";
 import {
   Body,
@@ -17,7 +16,7 @@ import { i18n } from "./utils/i18n";
 export default function Root() {
   return (
     <I18nContext.Provider value={i18n}>
-      <Html lang="en">
+      <Html lang="en" data-theme="acid">
         <Head />
         <Body>
           <Suspense>

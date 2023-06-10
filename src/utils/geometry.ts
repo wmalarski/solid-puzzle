@@ -3,10 +3,6 @@ export type Point2D = {
   y: number;
 };
 
-export const sumPoint = (point: Point2D, other: Point2D) => {
-  return { x: point.x + other.x, y: point.y + other.y };
-};
-
 export const subtractPoint = (point: Point2D, other: Point2D) => {
   return { x: point.x - other.x, y: point.y - other.y };
 };
