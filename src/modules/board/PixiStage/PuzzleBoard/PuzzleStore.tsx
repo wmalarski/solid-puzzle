@@ -4,10 +4,8 @@ import { getDistance } from "~/utils/geometry";
 import type { PuzzleFragmentShape } from "./getPuzzleFragments";
 
 export type FragmentState = {
-  fragmentId: string;
   isLocked: boolean;
   rotation: number;
-  shape: PuzzleFragmentShape;
   x: number;
   y: number;
 };
@@ -38,10 +36,8 @@ const usePuzzleStore = (args: UsePuzzleStoreArgs) => {
 
   args.shapes.forEach((shape) => {
     fragments[shape.fragmentId] = {
-      fragmentId: shape.fragmentId,
       isLocked: false,
       rotation: shape.initialRotation,
-      shape,
       x: shape.center.x,
       y: shape.center.y,
     };
@@ -55,8 +51,9 @@ const usePuzzleStore = (args: UsePuzzleStoreArgs) => {
 
   const checkOnPlace = (fragmentId: string) => {
     const fragment = state.fragments[fragmentId];
-    if (fragment) {
-      const distance = getDistance(fragment, fragment.shape.center);
+    const shape = shapes.get(fragmentId);
+    if (fragment && shape) {
+      const distance = getDistance(fragment, shape.center);
       const isRightAngle = Math.abs(fragment.rotation) < Math.PI / 32;
       const isLocked = distance < 20 && isRightAngle;
       setState("fragments", fragmentId, "isLocked", isLocked);

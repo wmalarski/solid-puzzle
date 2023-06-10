@@ -41,7 +41,7 @@ export const PuzzleFragmentLabel: Component<PuzzleFragmentLabelProps> = (
 
 type PuzzleFragmentGraphicsProps = {
   container: PIXI.Container;
-  fragmentState: FragmentState;
+  state: FragmentState;
   shape: PuzzleFragmentShape;
   texture: PIXI.Texture;
 };
@@ -79,17 +79,16 @@ export const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
   });
 
   createEffect(() => {
-    graphics.rotation = props.fragmentState.isLocked
-      ? 0
-      : props.fragmentState.rotation;
+    graphics.rotation = props.state.isLocked ? 0 : props.state.rotation;
   });
 
   return null;
 };
 
 type PuzzleFragmentProps = {
-  fragmentState: FragmentState;
+  state: FragmentState;
   texture: PIXI.Texture;
+  shape: PuzzleFragmentShape;
 };
 
 export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
@@ -110,26 +109,26 @@ export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
     // fragment.pivot.set(
     //   fragment.width / 2,
     //   fragment.height / 2
-    //   // props.fragmentState.shape.max.x - props.fragmentState.shape.min.x,
-    //   // props.fragmentState.shape.max.y - props.fragmentState.shape.min.y
+    //   // props.shape.max.x - props.shape.min.x,
+    //   // props.shape.max.y - props.shape.min.y
     // );
     fragment.pivot.set(fragment.width / 2, fragment.height / 2);
-    fragment.x = props.fragmentState.shape.min.x;
-    fragment.y = props.fragmentState.shape.min.y;
+    fragment.x = props.shape.min.x;
+    fragment.y = props.shape.min.y;
   });
 
   createEffect(() => {
-    if (!props.fragmentState.isLocked) {
+    if (!props.state.isLocked) {
       fragment.eventMode = "static";
       return;
     }
     fragment.eventMode = "none";
-    fragment.x = props.fragmentState.shape.min.x;
-    fragment.y = props.fragmentState.shape.min.y;
+    fragment.x = props.shape.min.x;
+    fragment.y = props.shape.min.y;
   });
 
   const fragmentId = createMemo(() => {
-    return props.fragmentState.shape.fragmentId;
+    return props.shape.fragmentId;
   });
 
   useDragObject({
@@ -158,15 +157,15 @@ export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
     <>
       <PuzzleFragmentGraphics
         container={fragment}
-        fragmentState={props.fragmentState}
-        shape={props.fragmentState.shape}
+        state={props.state}
+        shape={props.shape}
         texture={props.texture}
       />
       <PuzzleFragmentLabel container={fragment} label={fragmentId()} />
       <Show when={store.state.selectedId === fragmentId()}>
         <RotationAnchor
           container={fragment}
-          rotation={props.fragmentState.rotation}
+          rotation={props.state.rotation}
           onEnd={onRotationEnd}
           onRotate={onRotationMove}
         />
