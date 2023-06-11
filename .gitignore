@@ -5,6 +5,8 @@ dist
 .vercel
 .netlify
 netlify
+wrangler.toml
+wrangler2.toml
 
 # dependencies
 /node_modules
