@@ -2,7 +2,6 @@ import { useI18n } from "@solid-primitives/i18n";
 import { FiInfo } from "solid-icons/fi";
 import { IoCloseSharp } from "solid-icons/io";
 import type { Component } from "solid-js";
-import { Navbar, NavbarStart } from "~/components/Navbar";
 import {
   PopoverArrow,
   PopoverCloseButton,
@@ -20,7 +19,7 @@ const InfoPopover: Component = () => {
 
   return (
     <PopoverRoot>
-      <PopoverTrigger size="sm">
+      <PopoverTrigger variant="ghost" size="sm">
         <FiInfo />
       </PopoverTrigger>
       <PopoverPortal>
@@ -41,10 +40,8 @@ const InfoPopover: Component = () => {
 
 export const InfoBar: Component = () => {
   return (
-    <Navbar class="absolute bottom-4 right-4 bg-neutral-200 p-4">
-      <NavbarStart>
-        <InfoPopover />
-      </NavbarStart>
-    </Navbar>
+    <div class="absolute bottom-4 right-4 rounded-3xl bg-neutral-100 p-1 shadow">
+      <InfoPopover />
+    </div>
   );
 };

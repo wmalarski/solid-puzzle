@@ -42,7 +42,7 @@ export const PopoverContent: Component<KobaltePopover.PopoverContentProps> = (
     <KobaltePopover.Content
       {...props}
       class={twCx(
-        "z-50 bg-base-100 border-[1px] border-base-300 p-3",
+        "z-50 bg-base-100 p-3 rounded-2xl shadow",
         styles.content,
         props.class
       )}

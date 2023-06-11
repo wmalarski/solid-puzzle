@@ -1,4 +1,6 @@
+import { FiMinus, FiPlus } from "solid-icons/fi";
 import type { Component } from "solid-js";
+import { Button } from "~/components/Button";
 import { useTransformContext } from "../TransformContext";
 
 export const ZoomBar: Component = () => {
@@ -13,9 +15,13 @@ export const ZoomBar: Component = () => {
   };
 
   return (
-    <div class="absolute bottom-4 left-4 flex gap-4 bg-neutral-200 p-4">
-      <button onClick={onZoomInClick}>+</button>
-      <button onClick={onZoomOutClick}>-</button>
+    <div class="absolute bottom-4 left-4 flex gap-1 rounded-3xl bg-neutral-100 p-1 shadow">
+      <Button variant="ghost" size="sm" onClick={onZoomInClick}>
+        <FiPlus />
+      </Button>
+      <Button variant="ghost" size="sm" onClick={onZoomOutClick}>
+        <FiMinus />
+      </Button>
     </div>
   );
 };

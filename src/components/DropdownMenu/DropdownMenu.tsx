@@ -60,7 +60,7 @@ export const DropdownMenuIcon: Component<DropdownMenuIconProps> = (props) => {
 export const DropdownMenuPortal = KobalteDropdownMenu.Portal;
 
 export const dropdownMenuContentClass = twCva([
-  "min-w-[220px] p-2 bg-base-100 border-[1px] border-base-300 outline-none",
+  "min-w-[220px] p-1 bg-base-100 rounded-2xl shadow outline-none",
   styles.content,
 ]);
 
@@ -119,7 +119,7 @@ export const DropdownMenuGroupLabel: Component<
 export const DropdownMenuSub = KobalteDropdownMenu.Sub;
 
 export const dropdownMenuItemClass = twCva([
-  "relative flex h-8 select-none items-center pl-2 pr-6 text-base leading-none outline-none",
+  "relative flex h-4 select-none items-center pl-2 pr-6 text-base leading-none rounded-2xl outline-none",
   "ui-disabled:opacity-50 ui-disabled:pointer-events-none",
   "ui-highlighted:outline-none ui-highlighted:bg-base-200",
 ]);

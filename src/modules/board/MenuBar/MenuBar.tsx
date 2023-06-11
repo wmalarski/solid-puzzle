@@ -11,7 +11,6 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
 } from "~/components/DropdownMenu";
-import { Navbar, NavbarStart } from "~/components/Navbar";
 
 const Menu: Component = () => {
   const [t] = useI18n();
@@ -20,20 +19,19 @@ const Menu: Component = () => {
     <DropdownMenuRoot>
       <DropdownMenuTrigger
         aria-label={t("board.menu")}
-        shape="square"
         size="sm"
         variant="ghost"
       >
-        <DropdownMenuIcon rotation={90}>
+        <DropdownMenuIcon>
           <FiMenu />
         </DropdownMenuIcon>
       </DropdownMenuTrigger>
       <DropdownMenuPortal>
-        <DropdownMenuContent class="max-h-96 overflow-y-scroll">
+        <DropdownMenuContent>
+          <DropdownMenuArrow />
           <DropdownMenuItem class="flex h-12 flex-col items-start justify-center">
             <DropdownMenuItemLabel>{t("board.newGame")}</DropdownMenuItemLabel>
           </DropdownMenuItem>
-          <DropdownMenuArrow />
         </DropdownMenuContent>
       </DropdownMenuPortal>
     </DropdownMenuRoot>
@@ -42,10 +40,8 @@ const Menu: Component = () => {
 
 export const MenuBar: Component = () => {
   return (
-    <Navbar class="absolute left-4 top-4 bg-neutral-200 p-4">
-      <NavbarStart>
-        <Menu />
-      </NavbarStart>
-    </Navbar>
+    <div class="absolute left-4 top-4 rounded-3xl bg-neutral-100 p-1 shadow">
+      <Menu />
+    </div>
   );
 };
