@@ -1,4 +1,6 @@
 import { type Component } from "solid-js";
+import type { BoardDetails, RoomDetails } from "~/services/types";
+import { TopNavbar } from "../TopNavbar/TopNavbar";
 import { TransformContextProvider } from "../TransformContext";
 import { ZoomBar } from "../ZoomBar";
 import { PixiAppProvider } from "./PixiApp";
@@ -17,6 +19,8 @@ const Stage: Component = () => {
 
 type Props = {
   canvas: HTMLCanvasElement;
+  board: BoardDetails;
+  room: RoomDetails;
 };
 
 const PixiStage: Component<Props> = (props) => {
@@ -24,6 +28,7 @@ const PixiStage: Component<Props> = (props) => {
     <PixiAppProvider canvas={props.canvas}>
       <TransformContextProvider>
         <Stage />
+        <TopNavbar board={props.board} room={props.room} />
         <ZoomBar />
       </TransformContextProvider>
     </PixiAppProvider>
