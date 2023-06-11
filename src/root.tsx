@@ -1,6 +1,6 @@
 // @refresh reload
 import { I18nContext } from "@solid-primitives/i18n";
-import { Suspense } from "solid-js";
+import { Suspense, lazy } from "solid-js";
 import {
   Body,
   ErrorBoundary,
@@ -13,6 +13,12 @@ import { Head } from "./modules/common/Head";
 import "./root.css";
 import { i18n } from "./utils/i18n";
 
+const ToastProvider = lazy(() =>
+  import("~/components/Toast").then((module) => ({
+    default: module.ToastProvider,
+  }))
+);
+
 export default function Root() {
   return (
     <I18nContext.Provider value={i18n}>
@@ -24,6 +30,9 @@ export default function Root() {
               <Routes>
                 <FileRoutes />
               </Routes>
+              <Suspense>
+                <ToastProvider />
+              </Suspense>
             </ErrorBoundary>
           </Suspense>
           <Scripts />

@@ -1,5 +1,5 @@
 import { useI18n } from "@solid-primitives/i18n";
-import { IoAddSharp } from "solid-icons/io";
+import { FiMenu } from "solid-icons/fi";
 import type { Component } from "solid-js";
 import {
   DropdownMenuArrow,
@@ -19,19 +19,19 @@ const Menu: Component = () => {
   return (
     <DropdownMenuRoot>
       <DropdownMenuTrigger
-        aria-label={t("dashboard.create")}
+        aria-label={t("board.menu")}
         shape="square"
         size="sm"
         variant="ghost"
       >
         <DropdownMenuIcon rotation={90}>
-          <IoAddSharp />
+          <FiMenu />
         </DropdownMenuIcon>
       </DropdownMenuTrigger>
       <DropdownMenuPortal>
         <DropdownMenuContent class="max-h-96 overflow-y-scroll">
           <DropdownMenuItem class="flex h-12 flex-col items-start justify-center">
-            <DropdownMenuItemLabel>Item</DropdownMenuItemLabel>
+            <DropdownMenuItemLabel>{t("board.newGame")}</DropdownMenuItemLabel>
           </DropdownMenuItem>
           <DropdownMenuArrow />
         </DropdownMenuContent>
