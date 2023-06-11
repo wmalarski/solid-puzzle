@@ -1,9 +1,9 @@
 import type { VariantProps } from "class-variance-authority";
 import {
-  FiAlertCircle,
   FiAlertOctagon,
   FiAlertTriangle,
   FiCheckCircle,
+  FiInfo,
 } from "solid-icons/fi";
 import { splitProps, type Component, type JSX } from "solid-js";
 import { Dynamic } from "solid-js/web";
@@ -37,7 +37,7 @@ const alertIconMap: Record<
   typeof FiAlertOctagon
 > = {
   error: FiAlertOctagon,
-  info: FiAlertCircle,
+  info: FiInfo,
   success: FiCheckCircle,
   warning: FiAlertTriangle,
 };

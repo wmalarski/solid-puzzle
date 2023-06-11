@@ -11,7 +11,7 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
 } from "~/components/DropdownMenu";
-import { Navbar } from "~/components/Navbar";
+import { Navbar, NavbarStart } from "~/components/Navbar";
 
 const Menu: Component = () => {
   const [t] = useI18n();
@@ -40,10 +40,12 @@ const Menu: Component = () => {
   );
 };
 
-export const TopNavbar: Component = () => {
+export const MenuBar: Component = () => {
   return (
     <Navbar class="absolute left-4 top-4 bg-neutral-200 p-4">
-      <Menu />
+      <NavbarStart>
+        <Menu />
+      </NavbarStart>
     </Navbar>
   );
 };

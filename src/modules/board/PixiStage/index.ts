@@ -1,1 +1,3 @@
-export * from "./PixiStage";
+import { PixiStage } from "./PixiStage";
+export default PixiStage;
+export { PixiStage };

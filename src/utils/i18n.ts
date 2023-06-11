@@ -6,11 +6,12 @@ const dict = {
       menu: "Menu",
       newGame: "New game",
     },
-    footer: {
-      madeBy: "Made by wmalarski",
-    },
     home: {
       title: "Puzzle",
+    },
+    info: {
+      madeBy: "Made by wmalarski",
+      title: "Solid Puzzle",
     },
   },
 };
