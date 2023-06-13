@@ -1,13 +1,16 @@
 import { useRouteData } from "solid-start";
 import { createServerData$ } from "solid-start/server";
 import { getDrizzle } from "~/db/db";
+import { user } from "~/db/schema";
 import { Board } from "~/modules/board/Board/Board";
 
 export const routeData = () => {
-  return createServerData$((_source, event) => {
+  return createServerData$(async (_source, event) => {
     const { drizzle } = getDrizzle();
 
-    console.log(drizzle);
+    const result = await drizzle.select().from(user).run();
+
+    console.log({ drizzle, result });
 
     return { a: 4 };
   });

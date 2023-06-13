@@ -7,6 +7,7 @@ dist
 netlify
 wrangler.toml
 wrangler2.toml
+.env
 
 # dependencies
 /node_modules
