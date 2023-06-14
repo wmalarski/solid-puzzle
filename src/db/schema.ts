@@ -25,3 +25,13 @@ export const key = sqliteTable("auth_key", {
     .notNull()
     .references(() => user.id),
 });
+
+export const room = sqliteTable("game_room", {
+  config: text("config"),
+  id: text("id").primaryKey(),
+  media: text("media"),
+  name: text("name"),
+  ownerId: text("owner_id")
+    .notNull()
+    .references(() => user.id),
+});

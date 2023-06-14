@@ -10,7 +10,7 @@ export const getLuciaAuth = ({ database }: DrizzleDB) => {
     env: process.env.NODE_ENV === "production" ? "PROD" : "DEV",
     middleware: web(),
     transformDatabaseUser: (user) => ({
-      last_names: user.last_names,
+      lastNames: user.last_names,
       names: user.names,
       userId: user.id,
       username: user.username,

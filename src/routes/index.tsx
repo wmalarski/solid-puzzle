@@ -5,10 +5,10 @@ import { user } from "~/db/schema";
 import { Board } from "~/modules/board/Board/Board";
 
 export const routeData = () => {
-  return createServerData$(async (_source, event) => {
+  return createServerData$((_source, event) => {
     const { drizzle } = getDrizzle();
 
-    const result = await drizzle.select().from(user).run();
+    const result = drizzle.select().from(user).run();
 
     console.log({ drizzle, result });
 

@@ -13,6 +13,20 @@ const dict = {
       madeBy: "Made by wmalarski",
       title: "Solid Puzzle",
     },
+    signUp: {
+      button: "Sign Up",
+      password: {
+        description: "Password",
+        label: "Password",
+        placeholder: "Password",
+      },
+      title: "Sign Up",
+      username: {
+        description: "Username",
+        label: "Username",
+        placeholder: "Username",
+      },
+    },
   },
 };
 
