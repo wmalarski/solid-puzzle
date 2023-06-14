@@ -50,7 +50,7 @@ const Title: Component = () => {
   );
 };
 
-export default function SignUpPage() {
+export default function SignInPage() {
   useRouteData<typeof routeData>();
 
   return (
