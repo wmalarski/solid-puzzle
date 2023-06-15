@@ -19,7 +19,7 @@ export const createSignUpServerAction = () => {
     const database = getDrizzle();
     const auth = getLuciaAuth(database);
 
-    console.log({ auth, database });
+    console.log({ auth, database, parsed });
 
     try {
       const user = await auth.createUser({
@@ -47,6 +47,8 @@ export const createSignUpServerAction = () => {
       console.log({ authRequest });
 
       authRequest.setSession(session);
+
+      console.log({ authRequest });
     } catch (error) {
       // username already used
       console.error({ error });
@@ -59,34 +61,73 @@ export const createSignUpServerAction = () => {
 
 const signInArgsSchema = () => {
   return z.object({
-    token: z.string(),
+    password: z.string().min(3),
+    username: z.string().min(3),
   });
 };
 
 export const createSignInServerAction = () => {
-  return createServerAction$(
-    async (form: FormData, { env, fetch, request }) => {
-      const parsed = await zodFormParse({ form, schema: signInArgsSchema() });
+  return createServerAction$(async (form: FormData, event) => {
+    const parsed = await zodFormParse({ form, schema: signInArgsSchema() });
 
-      const cookie = await setSessionCookie({
-        env,
-        fetch,
-        request,
-        token: parsed.token,
-      });
+    const database = getDrizzle();
+    const auth = getLuciaAuth(database);
 
-      return redirect(paths.timeSheets, { headers: { "Set-Cookie": cookie } });
+    console.log({ auth, database, parsed });
+
+    try {
+      const authRequest = auth.handleRequest(
+        event.request,
+        event.request.headers
+      );
+
+      console.log({ authRequest });
+
+      const key = await auth.useKey(
+        "username",
+        parsed.username,
+        parsed.password
+      );
+
+      console.log({ key });
+
+      const session = await auth.createSession(key.userId);
+
+      console.log({ session });
+
+      authRequest.setSession(session);
+
+      console.log({ authRequest });
+    } catch (error) {
+      // invalid username/password
+      console.error({ error });
+      return new ServerError("invalid username/password");
     }
-  );
+
+    throw redirect("/", 302);
+  });
 };
 
 export const createSignOutServerAction = () => {
-  return createServerAction$(async (_form: FormData, { env, request }) => {
-    const cookie = await destroySessionCookie({
-      env,
-      request,
-    });
+  return createServerAction$(async (_form: FormData, event) => {
+    const database = getDrizzle();
+    const auth = getLuciaAuth(database);
 
-    return redirect(paths.home, { headers: { "Set-Cookie": cookie } });
+    const authRequest = auth.handleRequest(
+      event.request,
+      event.request.headers
+    );
+
+    const { session } = await authRequest.validateUser();
+
+    if (!session) {
+      throw redirect(paths.signIn, 302);
+    }
+
+    await auth.invalidateSession(session.sessionId);
+
+    authRequest.setSession(null);
+
+    throw redirect("/login", 302);
   });
 };

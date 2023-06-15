@@ -3,6 +3,7 @@ import { Show, type Component } from "solid-js";
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
 import { Card, CardBody, cardTitleClass } from "~/components/Card";
+import { Link } from "~/components/Link";
 import {
   TextFieldDescription,
   TextFieldInput,
@@ -11,6 +12,7 @@ import {
   TextFieldRoot,
 } from "~/components/TextField";
 import { createSignUpServerAction } from "~/server/auth";
+import { paths } from "~/utils/paths";
 
 export const SignUp: Component = () => {
   const [t] = useI18n();
@@ -35,23 +37,23 @@ export const SignUp: Component = () => {
           <TextFieldRoot>
             <TextFieldLabel for="username">
               <TextFieldLabelText>
-                {t("signUp.username.label")}
+                {t("auth.username.label")}
               </TextFieldLabelText>
             </TextFieldLabel>
             <TextFieldInput
               id="username"
               name="username"
               variant="bordered"
-              placeholder={t("signUp.username.placeholder")}
+              placeholder={t("auth.username.placeholder")}
             />
             <TextFieldDescription>
-              {t("signUp.username.description")}
+              {t("auth.username.description")}
             </TextFieldDescription>
           </TextFieldRoot>
           <TextFieldRoot>
             <TextFieldLabel for="password">
               <TextFieldLabelText>
-                {t("signUp.password.label")}
+                {t("auth.password.label")}
               </TextFieldLabelText>
             </TextFieldLabel>
             <TextFieldInput
@@ -59,10 +61,10 @@ export const SignUp: Component = () => {
               name="password"
               type="password"
               variant="bordered"
-              placeholder={t("signUp.password.placeholder")}
+              placeholder={t("auth.password.placeholder")}
             />
             <TextFieldDescription>
-              {t("signUp.password.description")}
+              {t("auth.password.description")}
             </TextFieldDescription>
           </TextFieldRoot>
           <Button
@@ -72,6 +74,7 @@ export const SignUp: Component = () => {
           >
             {t("signUp.button")}
           </Button>
+          <Link href={paths.signIn}>{t("signUp.signIn")}</Link>
         </Form>
       </CardBody>
     </Card>
