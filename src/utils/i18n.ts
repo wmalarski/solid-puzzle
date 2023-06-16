@@ -17,6 +17,22 @@ const dict = {
       menu: "Menu",
       newGame: "New game",
     },
+    createBoard: {
+      button: "Save",
+      columns: {
+        label: "Columns",
+        placeholder: "Enter number of columns",
+      },
+      name: {
+        label: "Name",
+        placeholder: "Enter board name",
+      },
+      rows: {
+        label: "Rows",
+        placeholder: "Enter number of rows",
+      },
+      title: "Create board",
+    },
     footer: {
       madeBy: "Made by wmalarski",
     },

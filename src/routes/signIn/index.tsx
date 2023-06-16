@@ -1,7 +1,7 @@
 import { useRouteData } from "solid-start";
 import { createServerData$, redirect } from "solid-start/server";
-import { AuthFooter, AuthTitle } from "~/modules/auth/AuthPrimitives";
 import { SignIn } from "~/modules/auth/SignIn";
+import { FormLayout, PageFooter, PageTitle } from "~/modules/common/Layout";
 import { getLuciaAuth } from "~/server/lucia";
 import { paths } from "~/utils/paths";
 
@@ -25,10 +25,10 @@ export default function SignInPage() {
   useRouteData<typeof routeData>();
 
   return (
-    <main class="mx-auto flex flex-col items-center p-4">
-      <AuthTitle />
+    <FormLayout>
+      <PageTitle />
       <SignIn />
-      <AuthFooter />
-    </main>
+      <PageFooter />
+    </FormLayout>
   );
 }

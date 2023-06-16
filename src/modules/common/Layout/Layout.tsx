@@ -1,10 +1,10 @@
 import { useI18n } from "@solid-primitives/i18n";
 import { HiOutlinePuzzlePiece } from "solid-icons/hi";
-import type { Component } from "solid-js";
+import type { Component, JSX } from "solid-js";
 import { Link } from "~/components/Link";
 import { paths } from "~/utils/paths";
 
-export const AuthFooter: Component = () => {
+export const PageFooter: Component = () => {
   const [t] = useI18n();
 
   return (
@@ -16,7 +16,7 @@ export const AuthFooter: Component = () => {
   );
 };
 
-export const AuthTitle: Component = () => {
+export const PageTitle: Component = () => {
   const [t] = useI18n();
 
   return (
@@ -26,5 +26,15 @@ export const AuthTitle: Component = () => {
         {t("home.title")}
       </Link>
     </h1>
+  );
+};
+
+type FormLayoutProps = {
+  children: JSX.Element;
+};
+
+export const FormLayout: Component<FormLayoutProps> = (props) => {
+  return (
+    <main class="mx-auto flex flex-col items-center p-4">{props.children}</main>
   );
 };
