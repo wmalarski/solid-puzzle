@@ -5,7 +5,6 @@ import { Button } from "~/components/Button";
 import { Card, CardBody, cardTitleClass } from "~/components/Card";
 import { Link } from "~/components/Link";
 import {
-  TextFieldDescription,
   TextFieldInput,
   TextFieldLabel,
   TextFieldLabelText,
@@ -46,9 +45,6 @@ export const SignUp: Component = () => {
               variant="bordered"
               placeholder={t("auth.username.placeholder")}
             />
-            <TextFieldDescription>
-              {t("auth.username.description")}
-            </TextFieldDescription>
           </TextFieldRoot>
           <TextFieldRoot>
             <TextFieldLabel for="password">
@@ -63,9 +59,6 @@ export const SignUp: Component = () => {
               variant="bordered"
               placeholder={t("auth.password.placeholder")}
             />
-            <TextFieldDescription>
-              {t("auth.password.description")}
-            </TextFieldDescription>
           </TextFieldRoot>
           <Button
             disabled={signOut.pending}
@@ -74,7 +67,11 @@ export const SignUp: Component = () => {
           >
             {t("signUp.button")}
           </Button>
-          <Link href={paths.signIn}>{t("signUp.signIn")}</Link>
+          <div class="flex justify-center">
+            <Link class="text-xs" href={paths.signIn}>
+              {t("signUp.signIn")}
+            </Link>
+          </div>
         </Form>
       </CardBody>
     </Card>

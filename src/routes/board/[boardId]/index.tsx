@@ -6,6 +6,7 @@ import { Board } from "~/modules/board/Board/Board";
 
 export const routeData = () => {
   return createServerData$((_source, event) => {
+    console.log("board");
     const { drizzle } = getDrizzle(event);
 
     const result = drizzle.select().from(user).run();

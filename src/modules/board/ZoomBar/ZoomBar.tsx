@@ -1,4 +1,4 @@
-import { FiMinus, FiPlus } from "solid-icons/fi";
+import { HiOutlineMinus, HiSolidPlus } from "solid-icons/hi";
 import type { Component } from "solid-js";
 import { Button } from "~/components/Button";
 import { useTransformContext } from "../TransformContext";
@@ -17,10 +17,10 @@ export const ZoomBar: Component = () => {
   return (
     <div class="absolute bottom-4 left-4 flex gap-1 rounded-3xl bg-neutral-100 p-1 shadow">
       <Button variant="ghost" size="sm" onClick={onZoomInClick}>
-        <FiPlus />
+        <HiSolidPlus />
       </Button>
       <Button variant="ghost" size="sm" onClick={onZoomOutClick}>
-        <FiMinus />
+        <HiOutlineMinus />
       </Button>
     </div>
   );

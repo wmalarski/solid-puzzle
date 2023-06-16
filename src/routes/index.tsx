@@ -9,7 +9,7 @@ export default function Home() {
     <main class="relative h-screen w-screen">
       <Link href={paths.signIn}>{t("home.signIn")}</Link>
       <Link href={paths.signUp}>{t("home.signUp")}</Link>
-      <Link href={paths.signUp}>{t("home.addBoard")}</Link>
+      <Link href={paths.addBoard}>{t("home.addBoard")}</Link>
     </main>
   );
 }

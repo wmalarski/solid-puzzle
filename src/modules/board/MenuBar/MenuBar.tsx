@@ -1,5 +1,5 @@
 import { useI18n } from "@solid-primitives/i18n";
-import { FiMenu } from "solid-icons/fi";
+import { HiOutlineBars3 } from "solid-icons/hi";
 import type { Component } from "solid-js";
 import {
   DropdownMenuArrow,
@@ -40,7 +40,7 @@ const Menu: Component = () => {
         variant="ghost"
       >
         <DropdownMenuIcon>
-          <FiMenu />
+          <HiOutlineBars3 />
         </DropdownMenuIcon>
       </DropdownMenuTrigger>
       <DropdownMenuPortal>

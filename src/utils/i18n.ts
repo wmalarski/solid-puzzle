@@ -4,13 +4,11 @@ const dict = {
   en: {
     auth: {
       password: {
-        description: "Password",
         label: "Password",
         placeholder: "Password",
       },
       signOut: "Sign Out",
       username: {
-        description: "Username",
         label: "Username",
         placeholder: "Username",
       },
@@ -18,6 +16,9 @@ const dict = {
     board: {
       menu: "Menu",
       newGame: "New game",
+    },
+    footer: {
+      madeBy: "Made by wmalarski",
     },
     home: {
       addBoard: "Add board",

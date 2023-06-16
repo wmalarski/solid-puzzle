@@ -1,6 +1,5 @@
 import { useI18n } from "@solid-primitives/i18n";
-import { FiInfo } from "solid-icons/fi";
-import { IoCloseSharp } from "solid-icons/io";
+import { HiOutlineInformationCircle, HiSolidXMark } from "solid-icons/hi";
 import type { Component } from "solid-js";
 import {
   PopoverArrow,
@@ -20,7 +19,7 @@ const InfoPopover: Component = () => {
   return (
     <PopoverRoot>
       <PopoverTrigger variant="ghost" size="sm">
-        <FiInfo />
+        <HiOutlineInformationCircle />
       </PopoverTrigger>
       <PopoverPortal>
         <PopoverContent>
@@ -28,7 +27,7 @@ const InfoPopover: Component = () => {
           <PopoverHeader>
             <PopoverTitle>{t("info.title")}</PopoverTitle>
             <PopoverCloseButton>
-              <IoCloseSharp />
+              <HiSolidXMark />
             </PopoverCloseButton>
           </PopoverHeader>
           <PopoverDescription>{t("info.madeBy")}</PopoverDescription>

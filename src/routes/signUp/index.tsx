@@ -1,18 +1,27 @@
 import { useRouteData } from "solid-start";
 import { createServerData$, redirect } from "solid-start/server";
-import { AuthTitle } from "~/modules/auth/AuthPrimitives";
+import { AuthFooter, AuthTitle } from "~/modules/auth/AuthPrimitives";
 import { SignUp } from "~/modules/auth/SignUp";
 import { getLuciaAuth } from "~/server/lucia";
 
 export const routeData = () => {
   return createServerData$(async (_source, event) => {
+    console.log("signUp");
+
     const auth = getLuciaAuth(event);
+
+    console.log({ auth });
+
     const authRequest = auth.handleRequest(
       event.request,
       event.request.headers
     );
 
-    const session = await authRequest.validateUser();
+    console.log({ authRequest });
+
+    const { session } = await authRequest.validateUser();
+
+    console.log({ session });
 
     if (session) {
       throw redirect("/", 302);
@@ -29,7 +38,7 @@ export default function SignUpPage() {
     <main class="mx-auto flex flex-col items-center p-4">
       <AuthTitle />
       <SignUp />
-      <AuthTitle />
+      <AuthFooter />
     </main>
   );
 }

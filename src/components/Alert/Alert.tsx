@@ -1,10 +1,10 @@
 import type { VariantProps } from "class-variance-authority";
 import {
-  FiAlertOctagon,
-  FiAlertTriangle,
-  FiCheckCircle,
-  FiInfo,
-} from "solid-icons/fi";
+  HiOutlineCheckCircle,
+  HiOutlineExclamationCircle,
+  HiOutlineExclamationTriangle,
+  HiOutlineInformationCircle,
+} from "solid-icons/hi";
 import { splitProps, type Component, type JSX } from "solid-js";
 import { Dynamic } from "solid-js/web";
 import { twCva } from "../utils/twCva";
@@ -34,12 +34,12 @@ export const Alert: Component<AlertProps> = (props) => {
 
 const alertIconMap: Record<
   "error" | "info" | "success" | "warning",
-  typeof FiAlertOctagon
+  typeof HiOutlineCheckCircle
 > = {
-  error: FiAlertOctagon,
-  info: FiInfo,
-  success: FiCheckCircle,
-  warning: FiAlertTriangle,
+  error: HiOutlineExclamationCircle,
+  info: HiOutlineInformationCircle,
+  success: HiOutlineCheckCircle,
+  warning: HiOutlineExclamationTriangle,
 };
 
 export type AlertIconProps = {
