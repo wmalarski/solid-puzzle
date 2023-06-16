@@ -32,7 +32,7 @@ const dict = {
     },
     signIn: {
       button: "Sign In",
-      signIn: "Sign Up",
+      signUp: "Sign Up",
       title: "Sign In",
     },
     signUp: {

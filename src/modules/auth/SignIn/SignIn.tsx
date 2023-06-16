@@ -69,7 +69,7 @@ export const SignIn: Component = () => {
           </Button>
           <div class="flex justify-center">
             <Link class="text-xs" href={paths.signIn}>
-              {t("signI.signUp")}
+              {t("signIn.signUp")}
             </Link>
           </div>
         </Form>

@@ -5,29 +5,17 @@ import { paths } from "~/utils/paths";
 
 export const routeData = () => {
   return createServerData$(async (_source, event) => {
-    console.log("add");
     const auth = getLuciaAuth(event);
-
-    console.log({ auth });
-
-    const authRequest = auth.handleRequest(
-      event.request,
-      event.request.headers
-    );
-
-    console.log({ authRequest });
+    const headers = new Headers();
+    const authRequest = auth.handleRequest(event.request, headers);
 
     const { user } = await authRequest.validateUser();
 
-    console.log({ user });
-
     if (!user) {
-      throw redirect(paths.signIn, 302);
+      throw redirect(paths.signIn, { headers, status: 302 });
     }
 
-    return {
-      user,
-    };
+    return { user };
   });
 };
 

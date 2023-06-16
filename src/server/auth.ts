@@ -16,8 +16,7 @@ export const createSignUpServerAction = () => {
     const parsed = await zodFormParse({ form, schema: signUpArgsSchema() });
 
     const auth = getLuciaAuth(event);
-
-    console.log({ auth, parsed });
+    const headers = new Headers();
 
     try {
       const user = await auth.createUser({
@@ -31,29 +30,18 @@ export const createSignUpServerAction = () => {
         },
       });
 
-      console.log({ user });
-
       const session = await auth.createSession(user.userId);
-
-      console.log({ session });
-
-      const authRequest = auth.handleRequest(
-        event.request,
-        event.request.headers
-      );
-
-      console.log({ authRequest });
+      const authRequest = auth.handleRequest(event.request, headers);
 
       authRequest.setSession(session);
-
-      console.log({ authRequest });
     } catch (error) {
       // username already used
+      // eslint-disable-next-line no-console
       console.error({ error });
       throw new ServerError("username already used");
     }
 
-    throw redirect("/", 302);
+    throw redirect("/", { headers, status: 302 });
   });
 };
 
@@ -69,16 +57,10 @@ export const createSignInServerAction = () => {
     const parsed = await zodFormParse({ form, schema: signInArgsSchema() });
 
     const auth = getLuciaAuth(event);
-
-    console.log({ auth, parsed });
+    const headers = new Headers();
 
     try {
-      const authRequest = auth.handleRequest(
-        event.request,
-        event.request.headers
-      );
-
-      console.log({ authRequest });
+      const authRequest = auth.handleRequest(event.request, headers);
 
       const key = await auth.useKey(
         "username",
@@ -86,22 +68,17 @@ export const createSignInServerAction = () => {
         parsed.password
       );
 
-      console.log({ key });
-
       const session = await auth.createSession(key.userId);
 
-      console.log({ session });
-
       authRequest.setSession(session);
-
-      console.log({ authRequest });
     } catch (error) {
       // invalid username/password
+      // eslint-disable-next-line no-console
       console.error({ error });
       return new ServerError("invalid username/password");
     }
 
-    throw redirect("/", 302);
+    throw redirect("/", { headers, status: 302 });
   });
 };
 
@@ -109,29 +86,19 @@ export const createSignOutServerAction = () => {
   return createServerAction$(async (_form: FormData, event) => {
     const auth = getLuciaAuth(event);
 
-    console.log({ auth });
-
-    const authRequest = auth.handleRequest(
-      event.request,
-      event.request.headers
-    );
-
-    console.log({ authRequest });
+    const headers = new Headers();
+    const authRequest = auth.handleRequest(event.request, headers);
 
     const { session } = await authRequest.validateUser();
 
-    console.log({ session });
-
     if (!session) {
-      throw redirect(paths.signIn, 302);
+      throw redirect(paths.signIn, { headers, status: 302 });
     }
 
     await auth.invalidateSession(session.sessionId);
 
     authRequest.setSession(null);
 
-    console.log({ auth, authRequest });
-
-    throw redirect("/login", 302);
+    throw redirect(paths.home, { headers, status: 302 });
   });
 };
