@@ -1,9 +1,10 @@
 import { useI18n } from "@solid-primitives/i18n";
 import { HiOutlinePuzzlePiece } from "solid-icons/hi";
-import type { Component } from "solid-js";
-import { Button } from "~/components/Button";
+import { Show, type Component } from "solid-js";
+import { Button, LinkButton } from "~/components/Button";
 import { Link } from "~/components/Link";
 import { Navbar, NavbarEnd, NavbarStart } from "~/components/Navbar";
+import { useSessionContext } from "~/contexts/SessionContext";
 import { createSignOutServerAction } from "~/server/auth";
 import { paths } from "~/utils/paths";
 
@@ -14,13 +15,17 @@ const SignOutButton: Component = () => {
 
   return (
     <Form>
-      <Button disabled={signOut.pending}>{t("auth.signOut")}</Button>
+      <Button size="sm" disabled={signOut.pending}>
+        {t("auth.signOut")}
+      </Button>
     </Form>
   );
 };
 
 export const TopNavbar: Component = () => {
   const [t] = useI18n();
+
+  const session = useSessionContext();
 
   return (
     <Navbar>
@@ -31,7 +36,21 @@ export const TopNavbar: Component = () => {
         </Link>
       </NavbarStart>
       <NavbarEnd>
-        <SignOutButton />
+        <Show
+          when={session()?.session}
+          fallback={
+            <>
+              <LinkButton size="sm" variant="ghost" href={paths.signUp}>
+                {t("home.signUp")}
+              </LinkButton>
+              <LinkButton size="sm" href={paths.signIn}>
+                {t("home.signIn")}
+              </LinkButton>
+            </>
+          }
+        >
+          <SignOutButton />
+        </Show>
       </NavbarEnd>
     </Navbar>
   );

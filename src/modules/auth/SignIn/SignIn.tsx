@@ -68,7 +68,7 @@ export const SignIn: Component = () => {
             {t("signIn.button")}
           </Button>
           <div class="flex justify-center">
-            <Link class="text-xs" href={paths.signIn}>
+            <Link class="text-xs" href={paths.signUp}>
               {t("signIn.signUp")}
             </Link>
           </div>

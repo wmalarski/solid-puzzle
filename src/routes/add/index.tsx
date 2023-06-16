@@ -1,35 +1,24 @@
 import { useRouteData } from "solid-start";
-import { createServerData$, redirect } from "solid-start/server";
+import { SessionProvider } from "~/contexts/SessionContext";
 import { PageFooter, PageLayout } from "~/modules/common/Layout";
 import { TopNavbar } from "~/modules/common/TopNavbar";
 import { CreateBoard } from "~/modules/createBoard/CreateBoard/CreateBoard";
-import { getLuciaAuth } from "~/server/lucia";
-import { paths } from "~/utils/paths";
+import { createServerGuardSession } from "~/server/auth";
 
 export const routeData = () => {
-  return createServerData$(async (_source, event) => {
-    const auth = getLuciaAuth(event);
-    const headers = new Headers();
-    const authRequest = auth.handleRequest(event.request, headers);
-
-    const { user } = await authRequest.validateUser();
-
-    if (!user) {
-      throw redirect(paths.signIn, { headers, status: 302 });
-    }
-
-    return user;
-  });
+  return createServerGuardSession();
 };
 
 export default function AddBoardPage() {
-  useRouteData<typeof routeData>();
+  const session = useRouteData<typeof routeData>();
 
   return (
-    <PageLayout>
-      <TopNavbar />
-      <CreateBoard />
-      <PageFooter />
-    </PageLayout>
+    <SessionProvider value={() => session()}>
+      <PageLayout>
+        <TopNavbar />
+        <CreateBoard />
+        <PageFooter />
+      </PageLayout>
+    </SessionProvider>
   );
 }

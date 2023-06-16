@@ -1,4 +1,9 @@
-import { ServerError, createServerAction$, redirect } from "solid-start/server";
+import {
+  ServerError,
+  createServerAction$,
+  createServerData$,
+  redirect,
+} from "solid-start/server";
 import { z } from "zod";
 import { paths } from "~/utils/paths";
 import { getLuciaAuth } from "./lucia";
@@ -100,5 +105,47 @@ export const createSignOutServerAction = () => {
     authRequest.setSession(null);
 
     throw redirect(paths.home, { headers, status: 302 });
+  });
+};
+
+export const createServerGuardSession = () => {
+  return createServerData$(async (_source, event) => {
+    const auth = getLuciaAuth(event);
+    const headers = new Headers();
+    const authRequest = auth.handleRequest(event.request, headers);
+
+    const { session, user } = await authRequest.validateUser();
+
+    if (!user || !session) {
+      throw redirect(paths.signIn, { headers, status: 302 });
+    }
+
+    return { session, user };
+  });
+};
+
+export const createServerAnonGuard = () => {
+  return createServerData$(async (_source, event) => {
+    const auth = getLuciaAuth(event);
+    const headers = new Headers();
+    const authRequest = auth.handleRequest(event.request, headers);
+
+    const { session } = await authRequest.validateUser();
+
+    if (session) {
+      throw redirect(paths.home, { headers, status: 302 });
+    }
+
+    return {};
+  });
+};
+
+export const createServerSession = () => {
+  return createServerData$((_source, event) => {
+    const auth = getLuciaAuth(event);
+    const headers = new Headers();
+    const authRequest = auth.handleRequest(event.request, headers);
+
+    return authRequest.validateUser();
   });
 };

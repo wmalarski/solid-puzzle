@@ -22,5 +22,5 @@ export const NavbarCenter = (props: NavbarCenterProps) => {
 export type NavbarEndProps = JSX.IntrinsicElements["div"];
 
 export const NavbarEnd = (props: NavbarEndProps) => {
-  return <div {...props} class={twCx("navbar-end", props.class)} />;
+  return <div {...props} class={twCx("navbar-end gap-2", props.class)} />;
 };
