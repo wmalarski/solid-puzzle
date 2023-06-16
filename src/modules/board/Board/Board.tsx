@@ -4,7 +4,7 @@ import { InfoBar } from "~/modules/common/InfoBar";
 import type { BoardDetails, RoomDetails } from "~/services/types";
 
 const MenuBar = lazy(() => import("../MenuBar"));
-const TopNavbar = lazy(() => import("../TopNavbar"));
+const TopNavbar = lazy(() => import("../TopBar"));
 const PixiStage = lazy(() => import("../PixiStage"));
 
 type BoardProps = {

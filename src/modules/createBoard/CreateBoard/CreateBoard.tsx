@@ -17,7 +17,7 @@ export const CreateBoard: Component = () => {
   const [signOut, { Form }] = createSignInServerAction();
 
   return (
-    <Card variant="bordered" class="w-full max-w-md">
+    <Card variant="bordered" class="mt-4 w-full max-w-xl sm:mt-12">
       <CardBody>
         <header class="flex items-center justify-between gap-2">
           <h2 class={cardTitleClass()}>{t("createBoard.title")}</h2>

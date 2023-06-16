@@ -29,12 +29,12 @@ const Avatars: Component = () => {
   );
 };
 
-type TopNavbarProps = {
+type TopBarProps = {
   board: BoardDetails;
   room: RoomDetails;
 };
 
-export const TopNavbar: Component<TopNavbarProps> = (props) => {
+export const TopBar: Component<TopBarProps> = (props) => {
   return (
     <div class="absolute inset-x-auto right-4 top-4 flex w-min items-center gap-4 rounded-3xl bg-neutral-100 p-1 shadow">
       <div class="flex flex-col pl-4">

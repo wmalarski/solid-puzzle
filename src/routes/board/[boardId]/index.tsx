@@ -2,7 +2,7 @@ import { useRouteData } from "solid-start";
 import { createServerData$ } from "solid-start/server";
 import { getDrizzle } from "~/db/db";
 import { user } from "~/db/schema";
-import { Board } from "~/modules/board/Board/Board";
+import { Board } from "~/modules/board/Board";
 
 export const routeData = () => {
   return createServerData$((_source, event) => {

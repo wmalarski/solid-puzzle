@@ -1,7 +1,7 @@
 import { useRouteData } from "solid-start";
 import { createServerData$, redirect } from "solid-start/server";
-import { SignOutButton } from "~/modules/auth/SignOutButton";
-import { FormLayout } from "~/modules/common/Layout";
+import { PageFooter, PageLayout } from "~/modules/common/Layout";
+import { TopNavbar } from "~/modules/common/TopNavbar";
 import { CreateBoard } from "~/modules/createBoard/CreateBoard/CreateBoard";
 import { getLuciaAuth } from "~/server/lucia";
 import { paths } from "~/utils/paths";
@@ -23,13 +23,13 @@ export const routeData = () => {
 };
 
 export default function AddBoardPage() {
-  const userData = useRouteData<typeof routeData>();
+  useRouteData<typeof routeData>();
 
   return (
-    <FormLayout>
+    <PageLayout>
+      <TopNavbar />
       <CreateBoard />
-      <SignOutButton />
-      <pre>{JSON.stringify(userData(), null, 2)}</pre>
-    </FormLayout>
+      <PageFooter />
+    </PageLayout>
   );
 }

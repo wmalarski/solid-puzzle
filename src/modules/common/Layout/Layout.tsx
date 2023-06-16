@@ -4,18 +4,6 @@ import type { Component, JSX } from "solid-js";
 import { Link } from "~/components/Link";
 import { paths } from "~/utils/paths";
 
-export const PageFooter: Component = () => {
-  const [t] = useI18n();
-
-  return (
-    <div class="p-4">
-      <a class="link text-xs" href={paths.repository}>
-        {t("footer.madeBy")}
-      </a>
-    </div>
-  );
-};
-
 export const PageTitle: Component = () => {
   const [t] = useI18n();
 
@@ -29,6 +17,18 @@ export const PageTitle: Component = () => {
   );
 };
 
+export const PageFooter: Component = () => {
+  const [t] = useI18n();
+
+  return (
+    <div class="p-4">
+      <a class="link text-xs" href={paths.repository}>
+        {t("footer.madeBy")}
+      </a>
+    </div>
+  );
+};
+
 type FormLayoutProps = {
   children: JSX.Element;
 };
@@ -36,5 +36,15 @@ type FormLayoutProps = {
 export const FormLayout: Component<FormLayoutProps> = (props) => {
   return (
     <main class="mx-auto flex flex-col items-center p-4">{props.children}</main>
+  );
+};
+
+type PageLayoutProps = {
+  children: JSX.Element;
+};
+
+export const PageLayout: Component<PageLayoutProps> = (props) => {
+  return (
+    <main class="mx-auto flex flex-col items-center">{props.children}</main>
   );
 };
