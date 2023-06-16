@@ -11,6 +11,23 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
 } from "~/components/DropdownMenu";
+import { createSignOutServerAction } from "~/server/auth";
+
+const SignOutMenuItem: Component = () => {
+  const [t] = useI18n();
+
+  const [signOut, action] = createSignOutServerAction();
+
+  const onSelect = async () => {
+    await action(new FormData());
+  };
+
+  return (
+    <DropdownMenuItem disabled={signOut.pending} onSelect={onSelect}>
+      <DropdownMenuItemLabel>{t("auth.signOut")}</DropdownMenuItemLabel>
+    </DropdownMenuItem>
+  );
+};
 
 const Menu: Component = () => {
   const [t] = useI18n();
@@ -29,9 +46,10 @@ const Menu: Component = () => {
       <DropdownMenuPortal>
         <DropdownMenuContent>
           <DropdownMenuArrow />
-          <DropdownMenuItem class="flex h-12 flex-col items-start justify-center">
+          <DropdownMenuItem>
             <DropdownMenuItemLabel>{t("board.newGame")}</DropdownMenuItemLabel>
           </DropdownMenuItem>
+          <SignOutMenuItem />
         </DropdownMenuContent>
       </DropdownMenuPortal>
     </DropdownMenuRoot>

@@ -8,6 +8,7 @@ const dict = {
         label: "Password",
         placeholder: "Password",
       },
+      signOut: "Sign Out",
       username: {
         description: "Username",
         label: "Username",
@@ -19,6 +20,7 @@ const dict = {
       newGame: "New game",
     },
     home: {
+      addBoard: "Add board",
       signIn: "Sign In",
       signUp: "Sign Up",
       title: "Puzzle",

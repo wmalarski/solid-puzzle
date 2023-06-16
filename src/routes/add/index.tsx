@@ -1,11 +1,11 @@
-import { createServerData$ } from "solid-start/server";
-import { getDrizzle } from "~/db/db";
+import { createServerData$, redirect } from "solid-start/server";
+import { SignOutButton } from "~/modules/auth/SignOutButton";
 import { getLuciaAuth } from "~/server/lucia";
+import { paths } from "~/utils/paths";
 
 export const routeData = () => {
   return createServerData$(async (_source, event) => {
-    const database = getDrizzle();
-    const auth = getLuciaAuth(database);
+    const auth = getLuciaAuth(event);
     const authRequest = auth.handleRequest(
       event.request,
       event.request.headers
@@ -13,7 +13,9 @@ export const routeData = () => {
 
     const { user } = await authRequest.validateUser();
 
-    if (!user) throw event.redirect(302, "/login");
+    if (!user) {
+      throw redirect(paths.signIn, 302);
+    }
 
     return {
       user,
@@ -21,13 +23,10 @@ export const routeData = () => {
   });
 };
 
-export default function Home() {
-  const [t] = useI18n();
-
+export default function AddBoardPage() {
   return (
     <main class="relative h-screen w-screen">
-      <Link href={paths.signIn}>{t("home.signIn")}</Link>
-      <Link href={paths.signUp}>{t("home.signUp")}</Link>
+      <SignOutButton />
     </main>
   );
 }

@@ -1,6 +1,5 @@
 import { ServerError, createServerAction$, redirect } from "solid-start/server";
 import { z } from "zod";
-import { getDrizzle } from "~/db/db";
 import { paths } from "~/utils/paths";
 import { getLuciaAuth } from "./lucia";
 import { zodFormParse } from "./utils";
@@ -16,10 +15,9 @@ export const createSignUpServerAction = () => {
   return createServerAction$(async (form: FormData, event) => {
     const parsed = await zodFormParse({ form, schema: signUpArgsSchema() });
 
-    const database = getDrizzle();
-    const auth = getLuciaAuth(database);
+    const auth = getLuciaAuth(event);
 
-    console.log({ auth, database, parsed });
+    console.log({ auth, parsed });
 
     try {
       const user = await auth.createUser({
@@ -70,10 +68,9 @@ export const createSignInServerAction = () => {
   return createServerAction$(async (form: FormData, event) => {
     const parsed = await zodFormParse({ form, schema: signInArgsSchema() });
 
-    const database = getDrizzle();
-    const auth = getLuciaAuth(database);
+    const auth = getLuciaAuth(event);
 
-    console.log({ auth, database, parsed });
+    console.log({ auth, parsed });
 
     try {
       const authRequest = auth.handleRequest(
@@ -110,15 +107,20 @@ export const createSignInServerAction = () => {
 
 export const createSignOutServerAction = () => {
   return createServerAction$(async (_form: FormData, event) => {
-    const database = getDrizzle();
-    const auth = getLuciaAuth(database);
+    const auth = getLuciaAuth(event);
+
+    console.log({ auth });
 
     const authRequest = auth.handleRequest(
       event.request,
       event.request.headers
     );
 
+    console.log({ authRequest });
+
     const { session } = await authRequest.validateUser();
+
+    console.log({ session });
 
     if (!session) {
       throw redirect(paths.signIn, 302);
@@ -127,6 +129,8 @@ export const createSignOutServerAction = () => {
     await auth.invalidateSession(session.sessionId);
 
     authRequest.setSession(null);
+
+    console.log({ auth, authRequest });
 
     throw redirect("/login", 302);
   });

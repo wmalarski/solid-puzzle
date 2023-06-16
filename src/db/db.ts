@@ -1,5 +1,6 @@
 import Database from "better-sqlite3";
 import { drizzle } from "drizzle-orm/better-sqlite3";
+import type { FetchEvent } from "solid-start";
 
 const createDrizzle = () => {
   const database = Database("sqlite.db");
@@ -13,7 +14,11 @@ declare global {
   var db: DrizzleDB;
 }
 
-export const getDrizzle = () => {
+export const getDrizzle = (event: FetchEvent) => {
+  if (event.locals.drizzle) {
+    return event.locals.drizzle as DrizzleDB;
+  }
+
   // HOT reload cache
   if (process.env.NODE_ENV !== "production" && typeof global !== "undefined") {
     if (!global.db) {
@@ -21,5 +26,9 @@ export const getDrizzle = () => {
     }
     return global.db;
   }
-  return createDrizzle();
+  const drizzle = createDrizzle();
+
+  event.locals.drizzle = drizzle;
+
+  return drizzle;
 };

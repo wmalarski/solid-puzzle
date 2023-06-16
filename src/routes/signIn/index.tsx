@@ -1,14 +1,13 @@
 import { useRouteData } from "solid-start";
 import { createServerData$, redirect } from "solid-start/server";
-import { getDrizzle } from "~/db/db";
 import { AuthFooter, AuthTitle } from "~/modules/auth/AuthPrimitives";
 import { SignUp } from "~/modules/auth/SignUp";
 import { getLuciaAuth } from "~/server/lucia";
 
 export const routeData = () => {
   return createServerData$(async (_source, event) => {
-    const database = getDrizzle();
-    const auth = getLuciaAuth(database);
+    const auth = getLuciaAuth(event);
+
     const authRequest = auth.handleRequest(
       event.request,
       event.request.headers
