@@ -5,6 +5,7 @@ dist
 .vercel
 .netlify
 netlify
+.wrangler
 wrangler.toml
 wrangler2.toml
 .env
