@@ -10,6 +10,7 @@ import {
   TextFieldRoot,
 } from "~/components/TextField";
 import { createSignInServerAction } from "~/server/auth";
+import { ImageGrid } from "../ImageGrid";
 
 export const CreateBoard: Component = () => {
   const [t] = useI18n();
@@ -80,6 +81,7 @@ export const CreateBoard: Component = () => {
               variant="bordered"
             />
           </TextFieldRoot>
+          <ImageGrid name="image" />
           <Button
             disabled={signOut.pending}
             isLoading={signOut.pending}
