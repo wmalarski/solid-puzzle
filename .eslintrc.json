@@ -95,6 +95,7 @@
       }
     ],
     "prettier/prettier": "error",
-    "tailwindcss/no-custom-classname": "off"
+    "tailwindcss/no-custom-classname": "off",
+    "jsx-a11y/label-has-associated-control": "off"
   }
 }
