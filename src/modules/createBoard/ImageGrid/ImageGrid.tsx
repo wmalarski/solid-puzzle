@@ -2,7 +2,7 @@ import { HiSolidArrowLeft, HiSolidArrowRight } from "solid-icons/hi";
 import { For, createSignal, type Component } from "solid-js";
 import { Button } from "~/components/Button";
 import { Carousel, CarouselItem } from "~/components/Carousel";
-import { images } from "./ImageGrid.utils";
+import { getImages } from "~/utils/images";
 
 type ImageGridProps = {
   name: string;
@@ -20,6 +20,8 @@ export const ImageGrid: Component<ImageGridProps> = (props) => {
   const onRightClick = () => {
     root()?.scrollBy({ behavior: "smooth", left: scrollWidth });
   };
+
+  const images = getImages();
 
   return (
     <div class="relative">

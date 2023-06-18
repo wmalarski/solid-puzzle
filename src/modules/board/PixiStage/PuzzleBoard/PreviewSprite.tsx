@@ -1,7 +1,7 @@
 import * as PIXI from "pixi.js";
 import { createEffect, onCleanup, onMount, type Component } from "solid-js";
+import type { PuzzleShapeLine } from "~/utils/getPuzzleFragments";
 import { usePixiApp } from "../PixiApp";
-import type { PuzzleShapeLine } from "./getPuzzleFragments";
 
 type PreviewGridProps = {
   lines: PuzzleShapeLine[];

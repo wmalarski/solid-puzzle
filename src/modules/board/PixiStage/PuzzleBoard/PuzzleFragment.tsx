@@ -8,10 +8,10 @@ import {
   type Component,
 } from "solid-js";
 import { randomHexColor } from "~/utils/colors";
+import type { PuzzleFragmentShape } from "~/utils/getPuzzleFragments";
 import { usePixiApp } from "../PixiApp";
 import { usePuzzleStoreContext, type FragmentState } from "./PuzzleStore";
 import { RotationAnchor } from "./RotationAnchor";
-import type { PuzzleFragmentShape } from "./getPuzzleFragments";
 import { useDragObject } from "./useDragObject";
 
 type PuzzleFragmentLabelProps = {

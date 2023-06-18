@@ -88,7 +88,7 @@ type GenerateCurvesArgs = {
   width: number;
 };
 
-const generateCurves = ({
+export const generateCurves = ({
   columns,
   height,
   rows,
@@ -149,35 +149,21 @@ const generateCurves = ({
         })
     );
 
-  return { horizontalLines, verticalLines };
+  return { horizontalLines, version: "1", verticalLines };
 };
 
-type GetPuzzleFragmentsArgs = {
-  columns: number;
-  height: number;
-  rows: number;
-  width: number;
-};
+export type PuzzleCurveConfig = ReturnType<typeof generateCurves>;
 
 export const getPuzzleFragments = ({
-  columns,
-  height,
-  rows,
-  width,
-}: GetPuzzleFragmentsArgs) => {
-  const { horizontalLines, verticalLines } = generateCurves({
-    columns,
-    height,
-    rows,
-    width,
-  });
-
+  horizontalLines,
+  verticalLines,
+}: PuzzleCurveConfig) => {
   const lines = [...horizontalLines, ...verticalLines].flat();
 
-  const fragments = Array(rows)
+  const fragments = Array(horizontalLines.length - 1)
     .fill(0)
     .flatMap((_value, rowIndex) =>
-      Array(columns)
+      Array(verticalLines.length - 1)
         .fill(0)
         .map((_value, columnIndex) => {
           const top = horizontalLines[rowIndex][columnIndex];

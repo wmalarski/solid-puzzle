@@ -8,11 +8,11 @@ import {
   onMount,
   type Component,
 } from "solid-js";
+import { generateCurves, getPuzzleFragments } from "~/utils/getPuzzleFragments";
 import { usePixiApp } from "../PixiApp";
 import { PreviewGrid, PreviewSprite } from "./PreviewSprite";
 import { PuzzleFragment } from "./PuzzleFragment";
 import { PuzzleStoreProvider, usePuzzleStoreContext } from "./PuzzleStore";
-import { getPuzzleFragments } from "./getPuzzleFragments";
 
 type UseStageDeselectArgs = {
   onDeselect: () => void;
@@ -76,12 +76,13 @@ type ProviderProps = {
 
 const Provider: Component<ProviderProps> = (props) => {
   const shapes = createMemo(() => {
-    return getPuzzleFragments({
+    const config = generateCurves({
       columns: 8,
       height: props.texture.height,
       rows: 5,
       width: props.texture.width,
     });
+    return getPuzzleFragments(config);
   });
 
   return (

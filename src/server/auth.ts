@@ -3,6 +3,7 @@ import {
   createServerAction$,
   createServerData$,
   redirect,
+  type FetchEvent,
 } from "solid-start/server";
 import { z } from "zod";
 import { paths } from "~/utils/paths";
@@ -108,13 +109,33 @@ export const createSignOutServerAction = () => {
   });
 };
 
+export const getSession = async (event: FetchEvent) => {
+  const auth = getLuciaAuth(event);
+  const headers = new Headers();
+  const authRequest = auth.handleRequest(event.request, headers);
+
+  const { session, user } = await authRequest.validateUser();
+
+  return { headers, session, user };
+};
+
+export const getSessionOrThrow = async (event: FetchEvent) => {
+  const auth = getLuciaAuth(event);
+  const headers = new Headers();
+  const authRequest = auth.handleRequest(event.request, headers);
+
+  const { session, user } = await authRequest.validateUser();
+
+  if (!session || !user) {
+    throw new ServerError("Unauthorized", { status: 404 });
+  }
+
+  return { headers, session, user };
+};
+
 export const createServerGuardSession = () => {
   return createServerData$(async (_source, event) => {
-    const auth = getLuciaAuth(event);
-    const headers = new Headers();
-    const authRequest = auth.handleRequest(event.request, headers);
-
-    const { session, user } = await authRequest.validateUser();
+    const { headers, session, user } = await getSession(event);
 
     if (!user || !session) {
       throw redirect(paths.signIn, { headers, status: 302 });
@@ -126,11 +147,7 @@ export const createServerGuardSession = () => {
 
 export const createServerAnonGuard = () => {
   return createServerData$(async (_source, event) => {
-    const auth = getLuciaAuth(event);
-    const headers = new Headers();
-    const authRequest = auth.handleRequest(event.request, headers);
-
-    const { session } = await authRequest.validateUser();
+    const { headers, session } = await getSession(event);
 
     if (session) {
       throw redirect(paths.home, { headers, status: 302 });
@@ -141,11 +158,9 @@ export const createServerAnonGuard = () => {
 };
 
 export const createServerSession = () => {
-  return createServerData$((_source, event) => {
-    const auth = getLuciaAuth(event);
-    const headers = new Headers();
-    const authRequest = auth.handleRequest(event.request, headers);
+  return createServerData$(async (_source, event) => {
+    const { session, user } = await getSession(event);
 
-    return authRequest.validateUser();
+    return { session, user };
   });
 };

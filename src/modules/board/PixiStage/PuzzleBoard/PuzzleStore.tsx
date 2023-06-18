@@ -1,7 +1,7 @@
 import { createContext, useContext, type Component, type JSX } from "solid-js";
 import { createStore } from "solid-js/store";
 import { getDistance } from "~/utils/geometry";
-import type { PuzzleFragmentShape } from "./getPuzzleFragments";
+import type { PuzzleFragmentShape } from "~/utils/getPuzzleFragments";
 
 export type FragmentState = {
   isLocked: boolean;

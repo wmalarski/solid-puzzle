@@ -57,6 +57,7 @@
     "dotenv": "^16.1.4",
     "drizzle-orm": "^0.26.5",
     "lucia-auth": "^1.8.0",
+    "nanoid": "^4.0.2",
     "pixi.js": "^7.2.4",
     "solid-icons": "^1.0.7",
     "solid-js": "^1.7.6",
