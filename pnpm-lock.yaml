@@ -19,6 +19,9 @@ dependencies:
   '@solidjs/router':
     specifier: ^0.8.2
     version: 0.8.2(solid-js@1.7.6)
+  '@tanstack/solid-query':
+    specifier: 5.0.0-alpha.68
+    version: 5.0.0-alpha.68(solid-js@1.7.6)
   better-sqlite3:
     specifier: ^8.4.0
     version: 8.4.0
@@ -2673,6 +2676,19 @@ packages:
     resolution: {integrity: sha512-4C7nX/dvpzB7za4Ql9K81xK3HPxCpHMgwTZVyf+9JQ6VUbn9jjZVN7/Nkdz/Ugzs2CSjqnL/UPXroiVBVHUWUw==}
     dependencies:
       tslib: 2.5.2
+    dev: false
+
+  /@tanstack/query-core@5.0.0-alpha.66:
+    resolution: {integrity: sha512-pdE3ePkXUKj2mrTxWvgjADoMapSV8n2dZ7v3HfXwlE5Q/nVnWkz7D3edzJMtAtPtiX/CIMK+I3brXhSqvnMbdA==}
+    dev: false
+
+  /@tanstack/solid-query@5.0.0-alpha.68(solid-js@1.7.6):
+    resolution: {integrity: sha512-TDdELryx/8Hc9rbYP9zgYrm15cwDTn9BR9+YnsCrkza+D4IKessts5XXETUiLqtgcVguGk9lsOS8sD7FmJ5YIw==}
+    peerDependencies:
+      solid-js: ^1.6.13
+    dependencies:
+      '@tanstack/query-core': 5.0.0-alpha.66
+      solid-js: 1.7.6
     dev: false
 
   /@types/babel__core@7.20.0:

@@ -6,6 +6,7 @@
     "pointerupoutside",
     "solidjs",
     "tailwindcss",
+    "tanstack",
     "undici"
   ]
 }
