@@ -133,7 +133,7 @@ export const getSessionOrThrow = async (event: FetchEvent) => {
   return { headers, session, user };
 };
 
-export const createServerGuardSession = () => {
+export const createGuardSessionServerData = () => {
   return createServerData$(async (_source, event) => {
     const { headers, session, user } = await getSession(event);
 
@@ -145,7 +145,7 @@ export const createServerGuardSession = () => {
   });
 };
 
-export const createServerAnonGuard = () => {
+export const createAnonGuardServerData = () => {
   return createServerData$(async (_source, event) => {
     const { headers, session } = await getSession(event);
 
@@ -157,7 +157,7 @@ export const createServerAnonGuard = () => {
   });
 };
 
-export const createServerSession = () => {
+export const createSessionServerData = () => {
   return createServerData$(async (_source, event) => {
     const { session, user } = await getSession(event);
 

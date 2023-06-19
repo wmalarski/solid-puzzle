@@ -1,10 +1,14 @@
 import { useRouteData } from "solid-start";
+import { createServerData$ } from "solid-start/server";
 import { SessionProvider } from "~/contexts/SessionContext";
 import { Board } from "~/modules/board/Board";
-import { createServerSession } from "~/server/auth";
+import { getSession } from "~/server/auth";
 
 export const routeData = () => {
-  return createServerSession();
+  return createServerData$(async (_source, event) => {
+    const { session, user } = await getSession(event);
+    return { session, user };
+  });
 };
 
 export default function BoardSection() {

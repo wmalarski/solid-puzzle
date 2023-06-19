@@ -1,8 +1,9 @@
+import { eq } from "drizzle-orm";
 import { nanoid } from "nanoid";
-import { createServerAction$ } from "solid-start/server";
+import { createServerAction$, type FetchEvent } from "solid-start/server";
 import { z } from "zod";
 import { getDrizzle } from "~/db/db";
-import { board } from "~/db/schema";
+import { boardTable } from "~/db/schema";
 import { generateCurves } from "~/utils/getPuzzleFragments";
 import { getImageShape } from "~/utils/images";
 import { getSessionOrThrow } from "./auth";
@@ -37,7 +38,7 @@ export const insertBoardAction = () => {
     });
 
     drizzle
-      .insert(board)
+      .insert(boardTable)
       .values({
         config: JSON.stringify(config),
         id: nanoid(),
@@ -47,4 +48,20 @@ export const insertBoardAction = () => {
       })
       .returning();
   });
+};
+
+type SelectBoardByIdArgs = {
+  event: FetchEvent;
+  boardId: string;
+};
+
+export const selectBoardById = ({ boardId, event }: SelectBoardByIdArgs) => {
+  const { drizzle } = getDrizzle(event);
+
+  return drizzle
+    .select()
+    .from(boardTable)
+    .where(eq(boardTable.id, boardId))
+    .limit(1)
+    .get();
 };

@@ -1,10 +1,10 @@
 import { useRouteData } from "solid-start";
 import { SignIn } from "~/modules/auth/SignIn";
 import { FormLayout, PageFooter, PageTitle } from "~/modules/common/Layout";
-import { createServerAnonGuard } from "~/server/auth";
+import { createAnonGuardServerData } from "~/server/auth";
 
 export const routeData = () => {
-  return createServerAnonGuard();
+  return createAnonGuardServerData();
 };
 
 export default function SignInPage() {

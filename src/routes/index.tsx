@@ -4,11 +4,11 @@ import { Link } from "~/components/Link";
 import { SessionProvider } from "~/contexts/SessionContext";
 import { PageLayout } from "~/modules/common/Layout";
 import { TopNavbar } from "~/modules/common/TopNavbar";
-import { createServerSession } from "~/server/auth";
+import { createSessionServerData } from "~/server/auth";
 import { paths } from "~/utils/paths";
 
 export const routeData = () => {
-  return createServerSession();
+  return createSessionServerData();
 };
 
 export default function Home() {
