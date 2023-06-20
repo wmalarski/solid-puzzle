@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { nanoid } from "nanoid";
-import { createServerAction$, type FetchEvent } from "solid-start/server";
+import server$, { createServerAction$, useRequest } from "solid-start/server";
 import { z } from "zod";
 import { getDrizzle } from "~/db/db";
 import { boardTable } from "~/db/schema";
@@ -50,18 +50,33 @@ export const insertBoardAction = () => {
   });
 };
 
-type SelectBoardByIdArgs = {
-  event: FetchEvent;
-  boardId: string;
+const getBoardArgsSchema = () => {
+  return z.object({ id: z.string() });
 };
 
-export const selectBoardById = ({ boardId, event }: SelectBoardByIdArgs) => {
-  const { drizzle } = getDrizzle(event);
+type GetBoardArgs = z.infer<ReturnType<typeof getBoardArgsSchema>>;
 
-  return drizzle
-    .select()
-    .from(boardTable)
-    .where(eq(boardTable.id, boardId))
-    .limit(1)
-    .get();
+export const getBoardKey = (args: GetBoardArgs) => {
+  return ["getBoardKey", args] as const;
 };
+
+export const getAllBoardsKey = () => {
+  return ["getBoardKey"] as const;
+};
+
+export const getBoardServerQuery = server$(
+  ([, args]: ReturnType<typeof getBoardKey>) => {
+    const parsed = getBoardArgsSchema().parse(args);
+
+    const event = useRequest();
+
+    const { drizzle } = getDrizzle(event);
+
+    return drizzle
+      .select()
+      .from(boardTable)
+      .where(eq(boardTable.id, parsed.id))
+      .limit(1)
+      .get();
+  }
+);

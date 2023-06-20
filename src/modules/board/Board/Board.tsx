@@ -1,14 +1,15 @@
 import { Show, Suspense, createSignal, lazy, type Component } from "solid-js";
 import { ClientOnly } from "~/components/ClientOnly";
+import type { BoardModel } from "~/db/types";
 import { InfoBar } from "~/modules/common/InfoBar";
-import type { BoardDetails, RoomDetails } from "~/services/types";
+import type { RoomDetails } from "~/services/types";
 
 const MenuBar = lazy(() => import("../MenuBar"));
 const TopNavbar = lazy(() => import("../TopBar"));
 const PixiStage = lazy(() => import("../PixiStage"));
 
 type BoardProps = {
-  board: BoardDetails;
+  board: BoardModel;
   room: RoomDetails;
 };
 

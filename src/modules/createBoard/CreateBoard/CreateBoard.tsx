@@ -9,13 +9,13 @@ import {
   TextFieldLabelText,
   TextFieldRoot,
 } from "~/components/TextField";
-import { createSignInServerAction } from "~/server/auth";
+import { insertBoardAction } from "~/server/board";
 import { ImageGrid } from "../ImageGrid";
 
 export const CreateBoard: Component = () => {
   const [t] = useI18n();
 
-  const [signOut, { Form }] = createSignInServerAction();
+  const [signOut, { Form }] = insertBoardAction();
 
   return (
     <Card variant="bordered" class="mt-4 w-full max-w-xl sm:mt-12">
