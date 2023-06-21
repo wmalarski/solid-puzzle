@@ -1,6 +1,6 @@
 import type { Component } from "solid-js";
 import { Avatar, AvatarContent, AvatarGroup } from "~/components/Avatar";
-import type { BoardDetails, RoomDetails } from "~/services/types";
+import type { BoardModel } from "~/db/types";
 
 const Avatars: Component = () => {
   return (
@@ -30,16 +30,15 @@ const Avatars: Component = () => {
 };
 
 type TopBarProps = {
-  board: BoardDetails;
-  room: RoomDetails;
+  board: BoardModel;
 };
 
 export const TopBar: Component<TopBarProps> = (props) => {
   return (
     <div class="absolute inset-x-auto right-4 top-4 flex w-min items-center gap-4 rounded-3xl bg-neutral-100 p-1 shadow">
       <div class="flex flex-col pl-4">
-        <h1 class="font-bold">{props.room.name}</h1>
-        <h2 class="text-sm">{props.board.title}</h2>
+        <h1 class="font-bold">{props.board.name}</h1>
+        <h2 class="text-sm">{props.board.media}</h2>
       </div>
       <div>
         <Avatars />

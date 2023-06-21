@@ -2,7 +2,6 @@ import { Show, Suspense, createSignal, lazy, type Component } from "solid-js";
 import { ClientOnly } from "~/components/ClientOnly";
 import type { BoardModel } from "~/db/types";
 import { InfoBar } from "~/modules/common/InfoBar";
-import type { RoomDetails } from "~/services/types";
 
 const MenuBar = lazy(() => import("../MenuBar"));
 const TopNavbar = lazy(() => import("../TopBar"));
@@ -10,7 +9,6 @@ const PixiStage = lazy(() => import("../PixiStage"));
 
 type BoardProps = {
   board: BoardModel;
-  room: RoomDetails;
 };
 
 const ClientBoard: Component<BoardProps> = (props) => {
@@ -23,7 +21,7 @@ const ClientBoard: Component<BoardProps> = (props) => {
         {(canvas) => (
           <Suspense>
             <PixiStage canvas={canvas()} />
-            <TopNavbar board={props.board} room={props.room} />
+            <TopNavbar board={props.board} />
             <InfoBar />
             <MenuBar />
           </Suspense>
@@ -35,7 +33,7 @@ const ClientBoard: Component<BoardProps> = (props) => {
 export const Board: Component<BoardProps> = (props) => {
   return (
     <ClientOnly>
-      <ClientBoard board={props.board} room={props.room} />
+      <ClientBoard board={props.board} />
     </ClientOnly>
   );
 };
