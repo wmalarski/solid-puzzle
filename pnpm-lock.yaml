@@ -20,8 +20,8 @@ dependencies:
     specifier: ^0.8.2
     version: 0.8.2(solid-js@1.7.6)
   '@tanstack/solid-query':
-    specifier: 5.0.0-alpha.68
-    version: 5.0.0-alpha.68(solid-js@1.7.6)
+    specifier: 5.0.0-alpha.28
+    version: 5.0.0-alpha.28(solid-js@1.7.6)
   better-sqlite3:
     specifier: ^8.4.0
     version: 8.4.0
@@ -51,7 +51,7 @@ dependencies:
     version: 1.7.6
   solid-start:
     specifier: ^0.2.26
-    version: 0.2.26(@solidjs/meta@0.28.5)(@solidjs/router@0.8.2)(solid-js@1.7.6)(solid-start-cloudflare-pages@0.2.26)(solid-start-node@0.2.26)(vite@4.3.9)
+    version: 0.2.26(@solidjs/meta@0.28.5)(@solidjs/router@0.8.2)(solid-js@1.7.6)(solid-start-cloudflare-pages@0.2.26)(solid-start-node@0.2.26)(vite@4.3.5)
   tailwind-merge:
     specifier: 1.13.0
     version: 1.13.0
@@ -125,10 +125,10 @@ devDependencies:
     version: 2.8.8
   solid-start-cloudflare-pages:
     specifier: ^0.2.26
-    version: 0.2.26(solid-start@0.2.26)(vite@4.3.9)
+    version: 0.2.26(solid-start@0.2.26)(vite@4.3.5)
   solid-start-node:
     specifier: ^0.2.26
-    version: 0.2.26(solid-start@0.2.26)(undici@5.22.1)(vite@4.3.9)
+    version: 0.2.26(solid-start@0.2.26)(undici@5.22.1)(vite@4.3.5)
   tailwindcss:
     specifier: ^3.3.2
     version: 3.3.2
@@ -139,8 +139,8 @@ devDependencies:
     specifier: ^5.1.3
     version: 5.1.3
   vite:
-    specifier: ^4.3.9
-    version: 4.3.9(@types/node@20.2.5)
+    specifier: 4.3.5
+    version: 4.3.5(@types/node@20.2.5)
   wrangler:
     specifier: 3.1.0
     version: 3.1.0
@@ -2678,16 +2678,16 @@ packages:
       tslib: 2.5.2
     dev: false
 
-  /@tanstack/query-core@5.0.0-alpha.66:
-    resolution: {integrity: sha512-pdE3ePkXUKj2mrTxWvgjADoMapSV8n2dZ7v3HfXwlE5Q/nVnWkz7D3edzJMtAtPtiX/CIMK+I3brXhSqvnMbdA==}
+  /@tanstack/query-core@5.0.0-alpha.26:
+    resolution: {integrity: sha512-vppYnb31rY8e6fBUuZ/VjuIpiaS3mkjFoD1u8gvdynmG0eHZOysJ1IbcKNEAT5QC9eJRsTHVqfitO9pKkZch4w==}
     dev: false
 
-  /@tanstack/solid-query@5.0.0-alpha.68(solid-js@1.7.6):
-    resolution: {integrity: sha512-TDdELryx/8Hc9rbYP9zgYrm15cwDTn9BR9+YnsCrkza+D4IKessts5XXETUiLqtgcVguGk9lsOS8sD7FmJ5YIw==}
+  /@tanstack/solid-query@5.0.0-alpha.28(solid-js@1.7.6):
+    resolution: {integrity: sha512-zIottkQush8kM39fvW7V/qZjkMP6PnrDokKw7Rw425BuJgYqtL6U86i4KfwIOt5x9zlbgjavzsZ5C1mV0Gw0Mw==}
     peerDependencies:
       solid-js: ^1.6.13
     dependencies:
-      '@tanstack/query-core': 5.0.0-alpha.66
+      '@tanstack/query-core': 5.0.0-alpha.26
       solid-js: 1.7.6
     dev: false
 
@@ -6382,7 +6382,7 @@ packages:
       '@babel/types': 7.21.5
       solid-js: 1.7.6
 
-  /solid-start-cloudflare-pages@0.2.26(solid-start@0.2.26)(vite@4.3.9):
+  /solid-start-cloudflare-pages@0.2.26(solid-start@0.2.26)(vite@4.3.5):
     resolution: {integrity: sha512-l+Zg0zazQaHdTsY9N9yqOyX/C/YFBceF3wN7Z4luimS3bc3G9LqHbekypDTl/SHzl2izRGtw8XbRN8SiIVICmQ==}
     peerDependencies:
       solid-start: '*'
@@ -6400,9 +6400,9 @@ packages:
       '@types/ws': 8.5.5
       miniflare: 2.14.0
       rollup: 3.23.0
-      solid-start: 0.2.26(@solidjs/meta@0.28.5)(@solidjs/router@0.8.2)(solid-js@1.7.6)(solid-start-cloudflare-pages@0.2.26)(solid-start-node@0.2.26)(vite@4.3.9)
+      solid-start: 0.2.26(@solidjs/meta@0.28.5)(@solidjs/router@0.8.2)(solid-js@1.7.6)(solid-start-cloudflare-pages@0.2.26)(solid-start-node@0.2.26)(vite@4.3.5)
       terser: 5.17.5
-      vite: 4.3.9(@types/node@20.2.5)
+      vite: 4.3.5(@types/node@20.2.5)
       ws: 8.13.0
     transitivePeerDependencies:
       - '@miniflare/storage-redis'
@@ -6411,7 +6411,7 @@ packages:
       - ioredis
       - utf-8-validate
 
-  /solid-start-node@0.2.26(solid-start@0.2.26)(undici@5.22.1)(vite@4.3.9):
+  /solid-start-node@0.2.26(solid-start@0.2.26)(undici@5.22.1)(vite@4.3.5):
     resolution: {integrity: sha512-8vciTGoQV+lIlCUSVHJPazlaoKDRfBowDkPeBr/EZdmtbcMOKoJYf/APPQWFspylF+nhzunMf0+zJP90VtMEYg==}
     peerDependencies:
       solid-start: '*'
@@ -6425,14 +6425,14 @@ packages:
       polka: 1.0.0-next.22
       rollup: 3.23.0
       sirv: 2.0.3
-      solid-start: 0.2.26(@solidjs/meta@0.28.5)(@solidjs/router@0.8.2)(solid-js@1.7.6)(solid-start-cloudflare-pages@0.2.26)(solid-start-node@0.2.26)(vite@4.3.9)
+      solid-start: 0.2.26(@solidjs/meta@0.28.5)(@solidjs/router@0.8.2)(solid-js@1.7.6)(solid-start-cloudflare-pages@0.2.26)(solid-start-node@0.2.26)(vite@4.3.5)
       terser: 5.17.5
       undici: 5.22.1
-      vite: 4.3.9(@types/node@20.2.5)
+      vite: 4.3.5(@types/node@20.2.5)
     transitivePeerDependencies:
       - supports-color
 
-  /solid-start@0.2.26(@solidjs/meta@0.28.5)(@solidjs/router@0.8.2)(solid-js@1.7.6)(solid-start-cloudflare-pages@0.2.26)(solid-start-node@0.2.26)(vite@4.3.9):
+  /solid-start@0.2.26(@solidjs/meta@0.28.5)(@solidjs/router@0.8.2)(solid-js@1.7.6)(solid-start-cloudflare-pages@0.2.26)(solid-start-node@0.2.26)(vite@4.3.5):
     resolution: {integrity: sha512-kne2HZlnSMzsirdnvNs1CsDqBl0L0uvKKt1t4de1CH7JIngyqoMcER97jTE0Ejr84KknANaKAdvJAzZcL7Ueng==}
     hasBin: true
     peerDependencies:
@@ -6495,13 +6495,13 @@ packages:
       set-cookie-parser: 2.6.0
       sirv: 2.0.3
       solid-js: 1.7.6
-      solid-start-cloudflare-pages: 0.2.26(solid-start@0.2.26)(vite@4.3.9)
-      solid-start-node: 0.2.26(solid-start@0.2.26)(undici@5.22.1)(vite@4.3.9)
+      solid-start-cloudflare-pages: 0.2.26(solid-start@0.2.26)(vite@4.3.5)
+      solid-start-node: 0.2.26(solid-start@0.2.26)(undici@5.22.1)(vite@4.3.5)
       terser: 5.17.5
       undici: 5.22.1
-      vite: 4.3.9(@types/node@20.2.5)
-      vite-plugin-inspect: 0.7.26(rollup@3.23.0)(vite@4.3.9)
-      vite-plugin-solid: 2.7.0(solid-js@1.7.6)(vite@4.3.9)
+      vite: 4.3.5(@types/node@20.2.5)
+      vite-plugin-inspect: 0.7.26(rollup@3.23.0)(vite@4.3.5)
+      vite-plugin-solid: 2.7.0(solid-js@1.7.6)(vite@4.3.5)
       wait-on: 6.0.1(debug@4.3.4)
     transitivePeerDependencies:
       - supports-color
@@ -6962,7 +6962,7 @@ packages:
     resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}
     engines: {node: '>= 0.8'}
 
-  /vite-plugin-inspect@0.7.26(rollup@3.23.0)(vite@4.3.9):
+  /vite-plugin-inspect@0.7.26(rollup@3.23.0)(vite@4.3.5):
     resolution: {integrity: sha512-gRjBay+OxLr/Dr+HXlfJVXZH0cqhE5hkkBvo2du2cA1LGUBnV8Aym89AdPrURkSpTk3Rvw9dNWM2VLIuw6RKJg==}
     engines: {node: '>=14'}
     peerDependencies:
@@ -6974,12 +6974,12 @@ packages:
       fs-extra: 11.1.1
       picocolors: 1.0.0
       sirv: 2.0.3
-      vite: 4.3.9(@types/node@20.2.5)
+      vite: 4.3.5(@types/node@20.2.5)
     transitivePeerDependencies:
       - rollup
       - supports-color
 
-  /vite-plugin-solid@2.7.0(solid-js@1.7.6)(vite@4.3.9):
+  /vite-plugin-solid@2.7.0(solid-js@1.7.6)(vite@4.3.5):
     resolution: {integrity: sha512-avp/Jl5zOp/Itfo67xtDB2O61U7idviaIp4mLsjhCa13PjKNasz+IID0jYTyqUp9SFx6/PmBr6v4KgDppqompg==}
     peerDependencies:
       solid-js: ^1.7.2
@@ -6992,13 +6992,13 @@ packages:
       merge-anything: 5.1.6
       solid-js: 1.7.6
       solid-refresh: 0.5.2(solid-js@1.7.6)
-      vite: 4.3.9(@types/node@20.2.5)
-      vitefu: 0.2.4(vite@4.3.9)
+      vite: 4.3.5(@types/node@20.2.5)
+      vitefu: 0.2.4(vite@4.3.5)
     transitivePeerDependencies:
       - supports-color
 
-  /vite@4.3.9(@types/node@20.2.5):
-    resolution: {integrity: sha512-qsTNZjO9NoJNW7KnOrgYwczm0WctJ8m/yqYAMAK9Lxt4SoySUfS5S8ia9K7JHpa3KEeMfyF8LoJ3c5NeBJy6pg==}
+  /vite@4.3.5(@types/node@20.2.5):
+    resolution: {integrity: sha512-0gEnL9wiRFxgz40o/i/eTBwm+NEbpUeTWhzKrZDSdKm6nplj+z4lKz8ANDgildxHm47Vg8EUia0aicKbawUVVA==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
     peerDependencies:
@@ -7029,7 +7029,7 @@ packages:
     optionalDependencies:
       fsevents: 2.3.2
 
-  /vitefu@0.2.4(vite@4.3.9):
+  /vitefu@0.2.4(vite@4.3.5):
     resolution: {integrity: sha512-fanAXjSaf9xXtOOeno8wZXIhgia+CZury481LsDaV++lSvcU2R9Ch2bPh3PYFyoHW+w9LqAeYRISVQjUIew14g==}
     peerDependencies:
       vite: ^3.0.0 || ^4.0.0
@@ -7037,7 +7037,7 @@ packages:
       vite:
         optional: true
     dependencies:
-      vite: 4.3.9(@types/node@20.2.5)
+      vite: 4.3.5(@types/node@20.2.5)
 
   /wait-on@6.0.1(debug@4.3.4):
     resolution: {integrity: sha512-zht+KASY3usTY5u2LgaNqn/Cd8MukxLGjdcZxT2ns5QzDmTFc4XoWBgC+C/na+sMRZTuVygQoMYwdcVjHnYIVw==}

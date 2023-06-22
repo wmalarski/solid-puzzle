@@ -1,12 +1,17 @@
 import { eq } from "drizzle-orm";
 import { nanoid } from "nanoid";
-import server$, { createServerAction$, useRequest } from "solid-start/server";
+import server$, {
+  createServerAction$,
+  redirect,
+  useRequest,
+} from "solid-start/server";
 import { z } from "zod";
 import { getDrizzle } from "~/db/db";
 import { boardTable } from "~/db/schema";
 import { generateCurves } from "~/utils/getPuzzleFragments";
 import { getImageShape } from "~/utils/images";
-import { getSessionOrThrow } from "./auth";
+import { paths } from "~/utils/paths";
+import { getSessionOrThrow } from "./lucia";
 import { zodFormParse } from "./utils";
 
 const insertBoardArgsSchema = () => {
@@ -37,16 +42,20 @@ export const insertBoardAction = () => {
       width,
     });
 
+    const boardId = nanoid();
+
     drizzle
       .insert(boardTable)
       .values({
         config: JSON.stringify(config),
-        id: nanoid(),
+        id: boardId,
         media: parsed.image,
         name: parsed.name,
         ownerId: session.userId,
       })
       .returning();
+
+    throw redirect(paths.board(boardId));
   });
 };
 
@@ -57,11 +66,11 @@ const getBoardArgsSchema = () => {
 type GetBoardArgs = z.infer<ReturnType<typeof getBoardArgsSchema>>;
 
 export const getBoardKey = (args: GetBoardArgs) => {
-  return ["getBoardKey", args] as const;
+  return ["getBoard", args] as const;
 };
 
 export const getAllBoardsKey = () => {
-  return ["getBoardKey"] as const;
+  return ["getBoard"] as const;
 };
 
 export const getBoardServerQuery = server$(
@@ -72,11 +81,15 @@ export const getBoardServerQuery = server$(
 
     const { drizzle } = getDrizzle(event);
 
-    return drizzle
+    const result = drizzle
       .select()
       .from(boardTable)
       .where(eq(boardTable.id, parsed.id))
       .limit(1)
-      .get();
+      .all();
+
+    console.log({ result });
+
+    return result[0] || null;
   }
 );

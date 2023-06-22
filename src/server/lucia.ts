@@ -1,7 +1,7 @@
 import { betterSqlite3 } from "@lucia-auth/adapter-sqlite";
 import lucia from "lucia-auth";
 import { web } from "lucia-auth/middleware";
-import type { FetchEvent } from "solid-start";
+import { ServerError, type FetchEvent } from "solid-start";
 import { getDrizzle, type DrizzleDB } from "~/db/db";
 
 const getLucia = (database: DrizzleDB["database"]) => {
@@ -33,4 +33,28 @@ export const getLuciaAuth = (event: FetchEvent) => {
   event.locals.auth = auth;
 
   return auth;
+};
+
+export const getSession = async (event: FetchEvent) => {
+  const auth = getLuciaAuth(event);
+  const headers = new Headers();
+  const authRequest = auth.handleRequest(event.request, headers);
+
+  const { session, user } = await authRequest.validateUser();
+
+  return { headers, session, user };
+};
+
+export const getSessionOrThrow = async (event: FetchEvent) => {
+  const auth = getLuciaAuth(event);
+  const headers = new Headers();
+  const authRequest = auth.handleRequest(event.request, headers);
+
+  const { session, user } = await authRequest.validateUser();
+
+  if (!session || !user) {
+    throw new ServerError("Unauthorized", { status: 404 });
+  }
+
+  return { headers, session, user };
 };

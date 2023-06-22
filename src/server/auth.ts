@@ -3,11 +3,10 @@ import {
   createServerAction$,
   createServerData$,
   redirect,
-  type FetchEvent,
 } from "solid-start/server";
 import { z } from "zod";
 import { paths } from "~/utils/paths";
-import { getLuciaAuth } from "./lucia";
+import { getLuciaAuth, getSession } from "./lucia";
 import { zodFormParse } from "./utils";
 
 const signUpArgsSchema = () => {
@@ -107,30 +106,6 @@ export const createSignOutServerAction = () => {
 
     throw redirect(paths.home, { headers, status: 302 });
   });
-};
-
-export const getSession = async (event: FetchEvent) => {
-  const auth = getLuciaAuth(event);
-  const headers = new Headers();
-  const authRequest = auth.handleRequest(event.request, headers);
-
-  const { session, user } = await authRequest.validateUser();
-
-  return { headers, session, user };
-};
-
-export const getSessionOrThrow = async (event: FetchEvent) => {
-  const auth = getLuciaAuth(event);
-  const headers = new Headers();
-  const authRequest = auth.handleRequest(event.request, headers);
-
-  const { session, user } = await authRequest.validateUser();
-
-  if (!session || !user) {
-    throw new ServerError("Unauthorized", { status: 404 });
-  }
-
-  return { headers, session, user };
 };
 
 export const createGuardSessionServerData = () => {

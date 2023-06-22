@@ -1,18 +1,18 @@
 import { createQuery } from "@tanstack/solid-query";
 import { Show, Suspense } from "solid-js";
-import { useRouteData, useSearchParams } from "solid-start";
+import { useParams, useRouteData } from "solid-start";
 import { createServerData$ } from "solid-start/server";
 import { SessionProvider } from "~/contexts/SessionContext";
 import { Board } from "~/modules/board/Board";
-import { getSession } from "~/server/auth";
 import { getBoardKey, getBoardServerQuery } from "~/server/board";
+import { getSession } from "~/server/lucia";
 
 const BoardQuery = () => {
-  const [searchParams] = useSearchParams();
+  const params = useParams();
 
   const boardQuery = createQuery(() => ({
     queryFn: (context) => getBoardServerQuery(context.queryKey),
-    queryKey: getBoardKey({ id: searchParams.boardId }),
+    queryKey: getBoardKey({ id: params.boardId }),
     suspense: true,
   }));
 
@@ -21,10 +21,7 @@ const BoardQuery = () => {
       {(board) => (
         <>
           <pre>{JSON.stringify(boardQuery.data, null, 2)}</pre>
-          <Board
-            board={{ id: "1", title: "Title" }}
-            room={{ id: "2", name: "Room" }}
-          />
+          <Board board={board()} />
         </>
       )}
     </Show>
