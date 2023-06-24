@@ -22,7 +22,9 @@ export const getDrizzle = (event: FetchEvent) => {
   // HOT reload cache
   if (process.env.NODE_ENV !== "production" && typeof global !== "undefined") {
     if (!global.db) {
-      global.db = createDrizzle();
+      const drizzle = createDrizzle();
+      global.db = drizzle;
+      event.locals.drizzle = drizzle;
     }
     return global.db;
   }
