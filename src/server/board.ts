@@ -55,10 +55,63 @@ export const insertBoardAction = () => {
   });
 };
 
-const deleteBoardArgsSchema = () => {
+const updateBoardArgsSchema = () => {
   return z.object({
+    config: z
+      .object({
+        columns: z.coerce.number().int().min(3),
+        image: z.string(),
+        rows: z.coerce.number().int().min(3),
+      })
+      .optional(),
     id: z.string(),
+    name: z.string().min(3).optional(),
   });
+};
+
+export const updateBoardAction = () => {
+  return createServerAction$(async (form: FormData, event) => {
+    const parsed = await zodFormParse({
+      form,
+      schema: updateBoardArgsSchema(),
+    });
+
+    const ctx = await getProtectedRequestContext(event);
+
+    const board = ctx.db
+      .select()
+      .from(ctx.schema.board)
+      .where(eq(ctx.schema.board.id, parsed.id))
+      .limit(1)
+      .get();
+
+    if (ctx.session.userId !== board.ownerId) {
+      throw new ServerError("Unauthorized", { status: 404 });
+    }
+
+    let config;
+    if (parsed.config) {
+      const { height, width } = getImageShape(parsed.config.image);
+      config = generateCurves({
+        columns: parsed.config.columns,
+        height,
+        rows: parsed.config.rows,
+        width,
+      });
+    }
+
+    const result = ctx.db
+      .update(ctx.schema.board)
+      .set({ config: JSON.stringify(config), name: parsed.name })
+      .where(eq(ctx.schema.board.id, parsed.id))
+      .run();
+
+    return result.changes;
+  });
+};
+
+const deleteBoardArgsSchema = () => {
+  return z.object({ id: z.string() });
 };
 
 export const deleteBoardAction = () => {
