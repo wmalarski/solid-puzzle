@@ -1,6 +1,7 @@
 import { eq } from "drizzle-orm";
 import { nanoid } from "nanoid";
 import server$, {
+  ServerError,
   createServerAction$,
   redirect,
   useRequest,
@@ -51,6 +52,41 @@ export const insertBoardAction = () => {
       .run();
 
     throw redirect(paths.board(boardId));
+  });
+};
+
+const deleteBoardArgsSchema = () => {
+  return z.object({
+    id: z.string(),
+  });
+};
+
+export const deleteBoardAction = () => {
+  return createServerAction$(async (form: FormData, event) => {
+    const parsed = await zodFormParse({
+      form,
+      schema: deleteBoardArgsSchema(),
+    });
+
+    const ctx = await getProtectedRequestContext(event);
+
+    const board = ctx.db
+      .select()
+      .from(ctx.schema.board)
+      .where(eq(ctx.schema.board.id, parsed.id))
+      .limit(1)
+      .get();
+
+    if (ctx.session.userId !== board.ownerId) {
+      throw new ServerError("Unauthorized", { status: 404 });
+    }
+
+    ctx.db
+      .delete(ctx.schema.board)
+      .where(eq(ctx.schema.board.id, parsed.id))
+      .run();
+
+    return board;
   });
 };
 
