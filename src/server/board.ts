@@ -51,7 +51,7 @@ export const insertBoardAction = () => {
         name: parsed.name,
         ownerId: session.userId,
       })
-      .returning();
+      .run();
 
     throw redirect(paths.board(boardId));
   });
@@ -113,6 +113,8 @@ export const getBoardsServerQuery = server$(
       const { drizzle } = getDrizzle(event);
       const { session } = await getSessionOrThrow(event);
 
+      console.log({ drizzle });
+
       const result = drizzle
         .select()
         .from(boardTable)
@@ -123,6 +125,7 @@ export const getBoardsServerQuery = server$(
 
       return result;
     } catch (error) {
+      console.log({ error });
       return null;
     }
   }

@@ -1,3 +1,3 @@
 import { TopBar } from "./TopBar";
 export default TopBar;
-export { TopBar as TopNavbar };
+export { TopBar as TopBar };

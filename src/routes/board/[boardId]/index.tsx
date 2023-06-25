@@ -3,7 +3,6 @@ import { Show, Suspense } from "solid-js";
 import { useParams, useRouteData } from "solid-start";
 import { createServerData$ } from "solid-start/server";
 import { SessionProvider } from "~/contexts/SessionContext";
-import { Board } from "~/modules/board/Board";
 import { getBoardKey, getBoardServerQuery } from "~/server/board";
 import { getSession } from "~/server/lucia";
 
@@ -20,8 +19,8 @@ const BoardQuery = () => {
     <Show when={boardQuery.data}>
       {(board) => (
         <>
-          <pre>{JSON.stringify(boardQuery.data, null, 2)}</pre>
-          <Board board={board()} />
+          <pre>{JSON.stringify(board(), null, 2)}</pre>
+          {/* <Board board={board()} /> */}
         </>
       )}
     </Show>

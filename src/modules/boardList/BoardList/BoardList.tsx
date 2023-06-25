@@ -7,15 +7,38 @@ export const BoardsListRoot: Component<JSX.IntrinsicElements["div"]> = (
   return <div {...props} />;
 };
 
+const RemoveButton: Component = () => {
+  return null;
+};
+
+const UpdateButton: Component = () => {
+  return null;
+};
+
+type BoardItemProps = {
+  board: BoardModel;
+};
+
+const BoardItem: Component<BoardItemProps> = (props) => {
+  return (
+    <div>
+      <span>Name</span>
+      <span>{props.board.name}</span>
+      <span>Media</span>
+      <span>{props.board.media}</span>
+      <RemoveButton />
+      <UpdateButton />
+    </div>
+  );
+};
+
 type BoardsListProps = {
   boards: BoardModel[];
 };
 
 export const BoardsList: Component<BoardsListProps> = (props) => {
   return (
-    <For each={props.boards}>
-      {(board) => <pre>{JSON.stringify(board, null, 2)}</pre>}
-    </For>
+    <For each={props.boards}>{(board) => <BoardItem board={board} />}</For>
   );
 };
 
