@@ -6,12 +6,10 @@ import server$, {
   useRequest,
 } from "solid-start/server";
 import { z } from "zod";
-import { getDrizzle } from "~/db/db";
-import { boardTable } from "~/db/schema";
 import { generateCurves } from "~/utils/getPuzzleFragments";
 import { getImageShape } from "~/utils/images";
 import { paths } from "~/utils/paths";
-import { getSessionOrThrow } from "./lucia";
+import { getProtectedRequestContext, getRequestContext } from "./context";
 import { zodFormParse } from "./utils";
 
 const insertBoardArgsSchema = () => {
@@ -30,8 +28,7 @@ export const insertBoardAction = () => {
       schema: insertBoardArgsSchema(),
     });
 
-    const { drizzle } = getDrizzle(event);
-    const { session } = await getSessionOrThrow(event);
+    const ctx = await getProtectedRequestContext(event);
 
     const boardId = nanoid();
     const { height, width } = getImageShape(parsed.image);
@@ -42,14 +39,14 @@ export const insertBoardAction = () => {
       width,
     });
 
-    drizzle
-      .insert(boardTable)
+    ctx.db
+      .insert(ctx.schema.board)
       .values({
         config: JSON.stringify(config),
         id: boardId,
         media: parsed.image,
         name: parsed.name,
-        ownerId: session.userId,
+        ownerId: ctx.session.userId,
       })
       .run();
 
@@ -68,18 +65,21 @@ export const getBoardKey = (args: GetBoardArgs) => {
 };
 
 export const getBoardServerQuery = server$(
-  ([, args]: ReturnType<typeof getBoardKey>) => {
+  async ([, args]: ReturnType<typeof getBoardKey>) => {
     const parsed = getBoardArgsSchema().parse(args);
 
     const event = useRequest();
+    const ctx = await getRequestContext({
+      env: event.env || server$.env,
+      locals: event.locals || server$.locals,
+      request: event.request || server$.request,
+    });
 
     try {
-      const { drizzle } = getDrizzle(event);
-
-      const result = drizzle
+      const result = ctx.db
         .select()
-        .from(boardTable)
-        .where(eq(boardTable.id, parsed.id))
+        .from(ctx.schema.board)
+        .where(eq(ctx.schema.board.id, parsed.id))
         .limit(1)
         .all();
 
@@ -108,24 +108,23 @@ export const getBoardsServerQuery = server$(
     const parsed = getBoardsArgsSchema().parse(args);
 
     const event = useRequest();
+    const ctx = await getProtectedRequestContext({
+      env: event.env || server$.env,
+      locals: event.locals || server$.locals,
+      request: event.request || server$.request,
+    });
 
     try {
-      const { drizzle } = getDrizzle(event);
-      const { session } = await getSessionOrThrow(event);
-
-      console.log({ drizzle });
-
-      const result = drizzle
+      const result = ctx.db
         .select()
-        .from(boardTable)
-        .where(eq(boardTable.ownerId, session.userId))
+        .from(ctx.schema.board)
+        .where(eq(ctx.schema.board.ownerId, ctx.session.userId))
         .limit(parsed.limit)
         .offset(parsed.offset)
         .all();
 
       return result;
     } catch (error) {
-      console.log({ error });
       return null;
     }
   }

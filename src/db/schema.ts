@@ -26,7 +26,7 @@ export const key = sqliteTable("auth_key", {
     .references(() => user.id),
 });
 
-export const boardTable = sqliteTable("game_room", {
+export const board = sqliteTable("game_room", {
   config: text("config"),
   id: text("id").primaryKey(),
   media: text("media"),

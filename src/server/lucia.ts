@@ -4,7 +4,7 @@ import { web } from "lucia-auth/middleware";
 import { ServerError, type FetchEvent } from "solid-start";
 import { getDrizzle, type DrizzleDB } from "~/db/db";
 
-const getLucia = (database: DrizzleDB["database"]) => {
+const getLucia = (database: DrizzleDB["instance"]) => {
   return lucia({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     adapter: betterSqlite3(database as any),
@@ -19,23 +19,27 @@ const getLucia = (database: DrizzleDB["database"]) => {
   });
 };
 
+type GetLuciaAuthArgs = Pick<FetchEvent, "env" | "locals">;
+
 export type Auth = ReturnType<typeof getLucia>;
 
-export const getLuciaAuth = (event: FetchEvent) => {
-  const db = getDrizzle(event);
+export const getLuciaAuth = (args: GetLuciaAuthArgs) => {
+  const { instance } = getDrizzle(args);
 
-  if (event.locals.auth) {
-    return event.locals.auth as Auth;
+  if (args.locals.auth) {
+    return args.locals.auth as Auth;
   }
 
-  const auth = getLucia(db.database);
+  const auth = getLucia(instance);
 
-  event.locals.auth = auth;
+  args.locals.auth = auth;
 
   return auth;
 };
 
-export const getSession = async (event: FetchEvent) => {
+type GetSessionArgs = Pick<FetchEvent, "env" | "locals" | "request">;
+
+export const getSession = async (event: GetSessionArgs) => {
   const auth = getLuciaAuth(event);
   const headers = new Headers();
   const authRequest = auth.handleRequest(event.request, headers);
@@ -45,7 +49,7 @@ export const getSession = async (event: FetchEvent) => {
   return { headers, session, user };
 };
 
-export const getSessionOrThrow = async (event: FetchEvent) => {
+export const getSessionOrThrow = async (event: GetSessionArgs) => {
   const auth = getLuciaAuth(event);
   const headers = new Headers();
   const authRequest = auth.handleRequest(event.request, headers);

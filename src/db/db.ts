@@ -1,10 +1,15 @@
 import Database from "better-sqlite3";
 import { drizzle } from "drizzle-orm/better-sqlite3";
 import type { FetchEvent } from "solid-start";
+import { serverEnv } from "~/env/serverEnv";
+import { board, user } from "./schema";
 
-const createDrizzle = () => {
-  const database = Database("sqlite.db");
-  return { database, drizzle: drizzle(database) };
+type CreateDrizzleArgs = Pick<FetchEvent, "env" | "locals">;
+
+const createDrizzle = (args: CreateDrizzleArgs) => {
+  const env = serverEnv(args);
+  const instance = Database(env.DATABASE_URL);
+  return { db: drizzle(instance), instance, schema: { board, user } };
 };
 
 export type DrizzleDB = ReturnType<typeof createDrizzle>;
@@ -14,31 +19,23 @@ declare global {
   var db: DrizzleDB;
 }
 
-export const getDrizzle = (event: FetchEvent) => {
-  if (event.locals.drizzle) {
-    return event.locals.drizzle as DrizzleDB;
+export const getDrizzle = (args: CreateDrizzleArgs) => {
+  if (args.locals.drizzle) {
+    return args.locals.drizzle as DrizzleDB;
   }
 
   // HOT reload cache
-  const env = event.env.__dev;
-  console.log({ env });
-  if (process.env.NODE_ENV !== "production" && typeof global !== "undefined") {
+  const env = serverEnv(args);
+  if (env.NODE_ENV !== "production" && typeof global !== "undefined") {
     if (!global.db) {
-      const drizzle = createDrizzle();
-
-      console.log("global", { drizzle });
-
+      const drizzle = createDrizzle(args);
       global.db = drizzle;
-      event.locals.drizzle = drizzle;
+      args.locals.drizzle = drizzle;
     }
     return global.db;
   }
 
-  const drizzle = createDrizzle();
-
-  console.log("out", { drizzle });
-
-  event.locals.drizzle = drizzle;
-
+  const drizzle = createDrizzle(args);
+  args.locals.drizzle = drizzle;
   return drizzle;
 };
