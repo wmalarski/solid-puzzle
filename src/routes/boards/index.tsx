@@ -1,30 +1,38 @@
 import { createQuery } from "@tanstack/solid-query";
-import { Show, Suspense } from "solid-js";
-import { useParams, useRouteData } from "solid-start";
+import { Match, Suspense, Switch, type Component } from "solid-js";
+import { useRouteData } from "solid-start";
 import { createServerData$ } from "solid-start/server";
 import { SessionProvider } from "~/contexts/SessionContext";
-import { Board } from "~/modules/board/Board";
-import { getBoardKey, getBoardServerQuery } from "~/server/board";
+import {
+  BoardsList,
+  BoardsListError,
+  BoardsListLoading,
+  BoardsListRoot,
+} from "~/modules/boardList/BoardList";
+import { getBoardsKey, getBoardsServerQuery } from "~/server/board";
 import { getSession } from "~/server/lucia";
 
-const BoardsQuery = () => {
-  const params = useParams();
-
+const BoardsQuery: Component = () => {
   const boardQuery = createQuery(() => ({
-    queryFn: (context) => getBoardServerQuery(context.queryKey),
-    queryKey: getBoardKey({ id: params.boardId }),
+    queryFn: (context) => getBoardsServerQuery(context.queryKey),
+    queryKey: getBoardsKey({ limit: 10, offset: 0 }),
     suspense: true,
   }));
 
   return (
-    <Show when={boardQuery.data}>
-      {(board) => (
-        <>
-          <pre>{JSON.stringify(boardQuery.data, null, 2)}</pre>
-          <Board board={board()} />
-        </>
-      )}
-    </Show>
+    <BoardsListRoot>
+      <Switch>
+        <Match when={boardQuery.status === "error"}>
+          <BoardsListError />
+        </Match>
+        <Match when={boardQuery.status === "pending"}>
+          <BoardsListLoading />
+        </Match>
+        <Match when={boardQuery.status === "success"}>
+          <BoardsList boards={boardQuery.data ?? []} />;
+        </Match>
+      </Switch>
+    </BoardsListRoot>
   );
 };
 
