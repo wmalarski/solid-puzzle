@@ -15,7 +15,7 @@ import { ImageGrid } from "../ImageGrid";
 export const CreateBoard: Component = () => {
   const [t] = useI18n();
 
-  const [signOut, { Form }] = insertBoardAction();
+  const [insertBoard, { Form }] = insertBoardAction();
 
   return (
     <Card variant="bordered" class="mt-4 w-full max-w-xl sm:mt-12">
@@ -24,7 +24,7 @@ export const CreateBoard: Component = () => {
           <h2 class={cardTitleClass()}>{t("createBoard.title")}</h2>
         </header>
         <Form class="flex flex-col gap-4">
-          <Show when={signOut.error}>
+          <Show when={insertBoard.error}>
             {(error) => (
               <Alert variant="error">
                 <AlertIcon variant="error" />
@@ -83,8 +83,8 @@ export const CreateBoard: Component = () => {
           </TextFieldRoot>
           <ImageGrid name="image" />
           <Button
-            disabled={signOut.pending}
-            isLoading={signOut.pending}
+            disabled={insertBoard.pending}
+            isLoading={insertBoard.pending}
             type="submit"
           >
             {t("createBoard.button")}
