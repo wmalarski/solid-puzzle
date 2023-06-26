@@ -6,6 +6,7 @@ import { SessionProvider } from "~/contexts/SessionContext";
 import { PageLayout } from "~/modules/common/Layout";
 import { TopNavbar } from "~/modules/common/TopNavbar";
 import BoardsList from "~/modules/home/BoardList/BoardList";
+import { InsertBoard } from "~/modules/home/InsertBoard";
 import { createSessionServerData } from "~/server/auth";
 import { paths } from "~/utils/paths";
 
@@ -24,6 +25,7 @@ export default function Home() {
         <TopNavbar />
         <Link href={paths.addBoard}>{t("home.addBoard")}</Link>
         <Show when={session()?.session}>
+          <InsertBoard />
           <BoardsList />
         </Show>
       </PageLayout>

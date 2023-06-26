@@ -1,25 +1,7 @@
 import { createQuery } from "@tanstack/solid-query";
-import {
-  ErrorBoundary,
-  For,
-  Suspense,
-  type Component,
-  type JSX,
-} from "solid-js";
+import { ErrorBoundary, For, Suspense, type Component } from "solid-js";
 import type { BoardModel } from "~/db/types";
 import { getBoardsKey, getBoardsServerQuery } from "~/server/board";
-
-const BoardsListRoot: Component<JSX.IntrinsicElements["div"]> = (props) => {
-  return <div {...props} />;
-};
-
-const RemoveButton: Component = () => {
-  return null;
-};
-
-const UpdateButton: Component = () => {
-  return null;
-};
 
 type BoardItemProps = {
   board: BoardModel;
@@ -32,8 +14,6 @@ const BoardItem: Component<BoardItemProps> = (props) => {
       <span>{props.board.name}</span>
       <span>Media</span>
       <span>{props.board.media}</span>
-      <RemoveButton />
-      <UpdateButton />
     </div>
   );
 };
@@ -60,12 +40,12 @@ const BoardsQuery: Component = () => {
 
 export default function BoardsList() {
   return (
-    <BoardsListRoot>
+    <section>
       <ErrorBoundary fallback={<BoardsListError />}>
         <Suspense fallback={<BoardsListLoading />}>
           <BoardsQuery />
         </Suspense>
       </ErrorBoundary>
-    </BoardsListRoot>
+    </section>
   );
 }
