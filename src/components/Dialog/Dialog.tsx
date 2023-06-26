@@ -69,7 +69,7 @@ export const DialogContent: Component<DialogContentProps> = (props) => {
     <Dialog.Content
       {...props}
       class={twCx(
-        "z-50 max-w-lg bg-base-100 shadow p-8 rounded-xl",
+        "z-50 max-w-lg bg-base-100 shadow-xl p-8 rounded-2xl",
         styles.content,
         props.class
       )}

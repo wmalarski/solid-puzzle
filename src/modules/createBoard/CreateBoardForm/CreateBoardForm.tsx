@@ -75,7 +75,7 @@ export const CreateBoardForm: Component<CreateBoardFormProps> = (props) => {
           variant="bordered"
         />
       </TextFieldRoot>
-      <Show when={props.image} fallback={<ImageGrid name="image" />}>
+      <Show when={props.image} fallback={<ImageGrid hasDefault name="image" />}>
         {(image) => <input type="hidden" name="image" value={image()} />}
       </Show>
       <Button

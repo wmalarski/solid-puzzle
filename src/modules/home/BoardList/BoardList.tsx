@@ -1,7 +1,10 @@
 import { createQuery } from "@tanstack/solid-query";
-import { ErrorBoundary, For, Suspense, type Component } from "solid-js";
+import { ErrorBoundary, For, Show, Suspense, type Component } from "solid-js";
+import { LinkButton } from "~/components/Button";
+import { Card, CardActions, CardBody, CardTitle } from "~/components/Card";
 import type { BoardModel } from "~/db/types";
 import { getBoardsKey, getBoardsServerQuery } from "~/server/board";
+import { paths } from "~/utils/paths";
 
 type BoardItemProps = {
   board: BoardModel;
@@ -9,12 +12,23 @@ type BoardItemProps = {
 
 const BoardItem: Component<BoardItemProps> = (props) => {
   return (
-    <div>
-      <span>Name</span>
-      <span>{props.board.name}</span>
-      <span>Media</span>
-      <span>{props.board.media}</span>
-    </div>
+    <Card variant="bordered" size="compact">
+      <Show when={props.board.media}>
+        {(src) => (
+          <figure>
+            <img src={src()} alt="board" />
+          </figure>
+        )}
+      </Show>
+      <CardBody>
+        <CardTitle component="h3">{props.board.name}</CardTitle>
+        <CardActions justify="end">
+          <LinkButton size="sm" href={paths.board(props.board.id)}>
+            {props.board.name}
+          </LinkButton>
+        </CardActions>
+      </CardBody>
+    </Card>
   );
 };
 
@@ -40,7 +54,7 @@ const BoardsQuery: Component = () => {
 
 export default function BoardsList() {
   return (
-    <section>
+    <section class="flex gap-1">
       <ErrorBoundary fallback={<BoardsListError />}>
         <Suspense fallback={<BoardsListLoading />}>
           <BoardsQuery />

@@ -38,8 +38,10 @@ const dict = {
     },
     home: {
       addBoard: "Add board",
+      error: "Error",
       signIn: "Sign In",
       signUp: "Sign Up",
+      solve: "Solve",
       title: "Puzzle",
     },
     info: {

@@ -5,6 +5,7 @@ import { Carousel, CarouselItem } from "~/components/Carousel";
 import { getImages } from "~/utils/images";
 
 type ImageGridProps = {
+  hasDefault?: boolean;
   name: string;
 };
 
@@ -35,7 +36,7 @@ export const ImageGrid: Component<ImageGridProps> = (props) => {
                 type="radio"
                 value={image}
                 class="peer sr-only"
-                checked={index() === 0}
+                checked={props.hasDefault && index() === 0}
               />
               <label
                 class="flex rounded p-2 peer-checked:bg-base-200"

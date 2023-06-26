@@ -71,8 +71,24 @@ export function CardBody(props: CardBodyProps) {
   return <div {...props} class={twCx("card-body", props.class)} />;
 }
 
-export type CardActionsProps = JSX.IntrinsicElements["div"];
+export const cardActionsClass = twCva("card-actions", {
+  defaultVariants: {
+    justify: null,
+  },
+  variants: {
+    justify: {
+      end: "justify-end",
+    },
+  },
+});
+
+export type CardActionsProps = JSX.IntrinsicElements["div"] &
+  VariantProps<typeof cardActionsClass>;
 
 export const CardActions: Component<CardActionsProps> = (props) => {
-  return <div {...props} class={twCx("card-actions", props.class)} />;
+  const [split, rest] = splitProps(props, ["justify"]);
+
+  return (
+    <div {...rest} class={cardActionsClass({ class: props.class, ...split })} />
+  );
 };
