@@ -16,6 +16,7 @@ const dict = {
     board: {
       menu: "Menu",
       newGame: "New game",
+      share: "Share link",
     },
     createBoard: {
       button: "Save",
