@@ -3,7 +3,10 @@ import { ErrorBoundary, For, Show, Suspense, type Component } from "solid-js";
 import { LinkButton } from "~/components/Button";
 import { Card, CardActions, CardBody, CardTitle } from "~/components/Card";
 import type { BoardModel } from "~/db/types";
-import { getBoardsKey, getBoardsServerQuery } from "~/server/board";
+import {
+  selectBoardsKey,
+  selectBoardsServerQuery,
+} from "~/server/board/actions";
 import { paths } from "~/utils/paths";
 
 type BoardItemProps = {
@@ -42,8 +45,8 @@ const BoardsListLoading: Component = () => {
 
 const BoardsQuery: Component = () => {
   const boardQuery = createQuery(() => ({
-    queryFn: (context) => getBoardsServerQuery(context.queryKey),
-    queryKey: getBoardsKey({ limit: 10, offset: 0 }),
+    queryFn: (context) => selectBoardsServerQuery(context.queryKey),
+    queryKey: selectBoardsKey({ limit: 10, offset: 0 }),
     suspense: true,
   }));
 

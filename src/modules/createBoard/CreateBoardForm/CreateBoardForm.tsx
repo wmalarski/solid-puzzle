@@ -8,7 +8,7 @@ import {
   TextFieldLabelText,
   TextFieldRoot,
 } from "~/components/TextField";
-import { insertBoardAction } from "~/server/board";
+import { insertBoardAction } from "~/server/board/actions";
 import { ImageGrid } from "../ImageGrid";
 
 type CreateBoardFormProps = {

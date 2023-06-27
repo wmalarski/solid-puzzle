@@ -1,18 +1,21 @@
 import { createQuery } from "@tanstack/solid-query";
 import { Show, Suspense } from "solid-js";
-import { useParams, useRouteData } from "solid-start";
+import { useParams, useRouteData, type RouteDataArgs } from "solid-start";
 import { createServerData$ } from "solid-start/server";
 import { SessionProvider } from "~/contexts/SessionContext";
 import { Board } from "~/modules/board/Board";
-import { getBoardKey, getBoardServerQuery } from "~/server/board";
+import {
+  selectBoardQueryKey,
+  selectBoardServerQuery,
+} from "~/server/board/actions";
 import { getSession } from "~/server/lucia";
 
 const BoardQuery = () => {
   const params = useParams();
 
   const boardQuery = createQuery(() => ({
-    queryFn: (context) => getBoardServerQuery(context.queryKey),
-    queryKey: getBoardKey({ id: params.boardId }),
+    queryFn: (context) => selectBoardServerQuery(context.queryKey),
+    queryKey: selectBoardQueryKey({ id: params.boardId }),
     suspense: true,
   }));
 
@@ -21,11 +24,19 @@ const BoardQuery = () => {
   );
 };
 
-export const routeData = () => {
-  return createServerData$(async (_source, event) => {
-    const { session, user } = await getSession(event);
-    return { session, user };
-  });
+export const routeData = (args: RouteDataArgs) => {
+  return createServerData$(
+    async (source, event) => {
+      const { session, user } = await getSession(event);
+
+      const [, boardId, token] = source;
+
+      console.log("createServerData$", { boardId, token });
+
+      return { session, user };
+    },
+    { key: ["board", args.params.boardId, args.location.query.token] }
+  );
 };
 
 export default function BoardSection() {
