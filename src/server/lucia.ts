@@ -24,12 +24,12 @@ type GetLuciaAuthArgs = Pick<FetchEvent, "env" | "locals">;
 export type Auth = ReturnType<typeof getLucia>;
 
 export const getLuciaAuth = (args: GetLuciaAuthArgs) => {
-  const { instance } = getDrizzle(args);
-
-  if (args.locals.auth) {
-    return args.locals.auth as Auth;
+  const cached = args.locals.auth;
+  if (cached) {
+    return cached as Auth;
   }
 
+  const { instance } = getDrizzle(args);
   const auth = getLucia(instance);
 
   args.locals.auth = auth;
@@ -50,11 +50,7 @@ export const getSession = async (event: GetSessionArgs) => {
 };
 
 export const getSessionOrThrow = async (event: GetSessionArgs) => {
-  const auth = getLuciaAuth(event);
-  const headers = new Headers();
-  const authRequest = auth.handleRequest(event.request, headers);
-
-  const { session, user } = await authRequest.validateUser();
+  const { session, user, headers } = await getSession(event);
 
   if (!session || !user) {
     throw new ServerError("Unauthorized", { status: 404 });

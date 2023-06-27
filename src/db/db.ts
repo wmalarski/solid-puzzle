@@ -20,8 +20,9 @@ declare global {
 }
 
 export const getDrizzle = (args: CreateDrizzleArgs) => {
-  if (args.locals.drizzle) {
-    return args.locals.drizzle as DrizzleDB;
+  const cached = args.locals.drizzle;
+  if (cached) {
+    return cached as DrizzleDB;
   }
 
   // HOT reload cache

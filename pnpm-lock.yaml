@@ -10,6 +10,9 @@ dependencies:
   '@lucia-auth/adapter-sqlite':
     specifier: ^1.1.1
     version: 1.1.1(better-sqlite3@8.4.0)(lucia-auth@1.8.0)
+  '@lucia-auth/tokens':
+    specifier: ^1.0.2
+    version: 1.0.2(lucia-auth@1.8.0)
   '@solid-primitives/i18n':
     specifier: ^1.4.0
     version: 1.4.0(solid-js@1.7.6)
@@ -1956,6 +1959,14 @@ packages:
         optional: true
     dependencies:
       better-sqlite3: 8.4.0
+      lucia-auth: 1.8.0
+    dev: false
+
+  /@lucia-auth/tokens@1.0.2(lucia-auth@1.8.0):
+    resolution: {integrity: sha512-gdhzw7CK+6V39+u/iGYauLblNoA+fhQzOUEkGJCrzA8Nth2VxOJQixTJxV6YATcy2PPYihJgIeU8GFhpkhYXig==}
+    peerDependencies:
+      lucia-auth: 1.x
+    dependencies:
       lucia-auth: 1.8.0
     dev: false
 

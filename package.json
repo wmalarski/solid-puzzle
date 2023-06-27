@@ -49,6 +49,7 @@
     "@kobalte/core": "^0.9.6",
     "@kobalte/tailwindcss": "^0.6.5",
     "@lucia-auth/adapter-sqlite": "^1.1.1",
+    "@lucia-auth/tokens": "^1.0.2",
     "@solid-primitives/i18n": "^1.4.0",
     "@solidjs/meta": "^0.28.5",
     "@solidjs/router": "^0.8.2",
