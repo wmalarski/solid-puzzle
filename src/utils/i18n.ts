@@ -49,6 +49,14 @@ const dict = {
       madeBy: "Made by wmalarski",
       title: "Solid Puzzle",
     },
+    invite: {
+      button: "Accept",
+      title: "Invitation to {{name}}",
+      username: {
+        label: "Name",
+        placeholder: "Your name",
+      },
+    },
     signIn: {
       button: "Sign In",
       signUp: "Sign Up",

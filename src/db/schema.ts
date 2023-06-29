@@ -27,10 +27,10 @@ export const key = sqliteTable("auth_key", {
 });
 
 export const board = sqliteTable("game_room", {
-  config: text("config"),
+  config: text("config").notNull(),
   id: text("id").primaryKey(),
-  media: text("media"),
-  name: text("name"),
+  media: text("media").notNull(),
+  name: text("name").notNull(),
   ownerId: text("owner_id")
     .notNull()
     .references(() => user.id),

@@ -1,21 +1,31 @@
 import { createQuery } from "@tanstack/solid-query";
-import { Show, Suspense } from "solid-js";
+import { Show, Suspense, type Component } from "solid-js";
 import { useParams, useRouteData, type RouteDataArgs } from "solid-start";
-import { createServerData$ } from "solid-start/server";
+import { createServerData$, redirect } from "solid-start/server";
 import { SessionProvider } from "~/contexts/SessionContext";
+import type { BoardModel } from "~/db/types";
 import { Board } from "~/modules/board/Board";
 import {
   selectBoardQueryKey,
   selectBoardServerQuery,
 } from "~/server/board/actions";
-import { getSession } from "~/server/lucia";
+import { selectBoard } from "~/server/board/db";
+import { getRequestContext } from "~/server/context";
+import { paths } from "~/utils/paths";
 
-const BoardQuery = () => {
+type BoardQueryProps = {
+  initialBoard?: BoardModel;
+};
+
+const BoardQuery: Component<BoardQueryProps> = (props) => {
   const params = useParams();
 
   const boardQuery = createQuery(() => ({
+    initialData: props.initialBoard,
     queryFn: (context) => selectBoardServerQuery(context.queryKey),
     queryKey: selectBoardQueryKey({ id: params.boardId }),
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
     suspense: true,
   }));
 
@@ -26,27 +36,29 @@ const BoardQuery = () => {
 
 export const routeData = (args: RouteDataArgs) => {
   return createServerData$(
-    async (source, event) => {
-      const { session, user } = await getSession(event);
+    async ([, boardId], event) => {
+      const ctx = await getRequestContext(event);
 
-      const [, boardId, token] = source;
+      const board = selectBoard({ ctx, id: boardId });
 
-      console.log("createServerData$", { boardId, token });
+      if (!board) {
+        throw redirect(paths.notFound, { status: 404 });
+      }
 
-      return { session, user };
+      return { board, session: ctx.session, user: ctx.user };
     },
-    { key: ["board", args.params.boardId, args.location.query.token] }
+    { key: ["board", args.params.boardId] }
   );
 };
 
 export default function BoardSection() {
-  const session = useRouteData<typeof routeData>();
+  const data = useRouteData<typeof routeData>();
 
   return (
-    <SessionProvider value={() => session()}>
+    <SessionProvider value={() => data()}>
       <main class="relative h-screen w-screen">
         <Suspense>
-          <BoardQuery />
+          <BoardQuery initialBoard={data()?.board} />
         </Suspense>
       </main>
     </SessionProvider>
