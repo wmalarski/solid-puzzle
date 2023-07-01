@@ -1,7 +1,8 @@
-import { ServerError, createServerAction$ } from "solid-start/server";
+import { createServerAction$, redirect } from "solid-start/server";
 import { z } from "zod";
+import { paths } from "~/utils/paths";
 import { zodFormParse } from "../utils";
-import { validateShareToken } from "./db";
+import { setBoardsAccessCookie, validateShareToken } from "./db";
 
 const acceptBoardInviteArgsSchema = () => {
   return z.object({
@@ -17,13 +18,20 @@ export const acceptBoardInviteAction = () => {
       schema: acceptBoardInviteArgsSchema(),
     });
 
-    const result = await validateShareToken({
-      event,
+    const result = validateShareToken({
+      env: event.env,
       token: parsed.token,
     });
 
-    if (!result) {
-      throw new ServerError("Invalid token", { status: 400 });
-    }
+    const cookie = await setBoardsAccessCookie({
+      boardId: result.boardId,
+      env: event.env,
+      name: parsed.name,
+      request: event.request,
+    });
+
+    return redirect(paths.board(result.boardId), {
+      headers: { "Set-Cookie": cookie },
+    });
   });
 };

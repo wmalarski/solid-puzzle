@@ -1,11 +1,6 @@
-import { LuciaTokenError, idToken } from "@lucia-auth/tokens";
-import {
-  ServerError,
-  createCookieSessionStorage,
-  type FetchEvent,
-} from "solid-start";
+import jwt from "jsonwebtoken";
+import { createCookieSessionStorage, type FetchEvent } from "solid-start";
 import { z } from "zod";
-import { getLuciaAuth, getSessionOrThrow } from "../lucia";
 
 const createStorage = (env: Env) => {
   return createCookieSessionStorage({
@@ -21,8 +16,6 @@ const createStorage = (env: Env) => {
   });
 };
 
-const boardsKey = "boards";
-
 const boardsAccessSchema = () => {
   return z.object({
     boards: z.array(
@@ -35,6 +28,8 @@ const boardsAccessSchema = () => {
 };
 
 export type BoardAccess = z.infer<ReturnType<typeof boardsAccessSchema>>;
+
+const boardsKey = "boards";
 
 const getBoardsAccessFromCookie = async (
   event: FetchEvent
@@ -99,7 +94,7 @@ type DestroyBoardsAccessCookieArgs = {
   request: Request;
 };
 
-export const destroySessionCookie = async ({
+export const destroyBoardsAccessCookie = async ({
   request,
   env,
 }: DestroyBoardsAccessCookieArgs) => {
@@ -110,54 +105,28 @@ export const destroySessionCookie = async ({
   return storage.destroySession(session);
 };
 
-export const getShareTokenHandler = (event: FetchEvent) => {
-  const cached = event.locals.shareHandler;
-  if (cached) {
-    return cached as ReturnType<typeof idToken>;
-  }
-
-  const auth = getLuciaAuth(event);
-
-  const handler = idToken(auth, "shareHandler", {
-    expiresIn: 60 * 60, // expiration in 1 hour,
+const shareTokenSchema = () => {
+  return z.object({
+    boardId: z.string(),
   });
-
-  event.locals.shareHandler = handler;
-
-  return handler;
 };
 
-export const issueShareToken = async (event: FetchEvent) => {
-  const { session } = await getSessionOrThrow(event);
-  const handler = getShareTokenHandler(event);
+type IssueShareTokenArgs = {
+  boardId: string;
+  env: Env;
+};
 
-  try {
-    const token = await handler.issue(session.userId);
-    const tokenValue = token.toString();
-    return tokenValue;
-  } catch (error) {
-    if (error instanceof LuciaTokenError) {
-      throw new ServerError(error.message, { status: 400 });
-    }
-    throw new ServerError("Invalid request", { status: 400 });
-  }
+export const issueShareToken = ({ boardId, env }: IssueShareTokenArgs) => {
+  return jwt.sign({ boardId }, env.SESSION_SECRET, { expiresIn: "1d" });
 };
 
 type ValidateShareTokenArgs = {
-  event: FetchEvent;
+  env: Env;
   token: string;
 };
 
-export const validateShareToken = async ({
-  event,
-  token,
-}: ValidateShareTokenArgs) => {
-  const handler = getShareTokenHandler(event);
-
-  try {
-    const validated = await handler.validate(token);
-    return validated;
-  } catch (error) {
-    return null;
-  }
+export const validateShareToken = ({ env, token }: ValidateShareTokenArgs) => {
+  const value = jwt.verify(token, env.SESSION_SECRET);
+  const parsed = shareTokenSchema().parse(value);
+  return parsed;
 };
