@@ -1,4 +1,4 @@
-import { createServerAction$, redirect } from "solid-start/server";
+import server$, { createServerAction$, redirect } from "solid-start/server";
 import { z } from "zod";
 import { paths } from "~/utils/paths";
 import { zodFormParse } from "../utils";
@@ -35,3 +35,39 @@ export const acceptBoardInviteAction = () => {
     });
   });
 };
+
+const generateBoardInviteArgsSchema = () => {
+  return z.object({
+    boardId: z.string(),
+  });
+};
+
+export const generateBoardInviteQueryKey = (
+  args: z.infer<ReturnType<typeof generateBoardInviteArgsSchema>>
+) => {
+  return ["generateBoardInvite", args] as const;
+};
+
+export const generateBoardInviteServerQuery = server$(
+  async ([, args]: ReturnType<typeof generateBoardInviteQueryKey>) => {
+    return await Promise.resolve({ token: args.boardId });
+    // try {
+    //   console.log({ args });
+
+    //   const parsed = generateBoardInviteArgsSchema().parse(args);
+
+    //   console.log({ parsed });
+
+    //   const token = issueShareToken({
+    //     boardId: parsed.boardId,
+    //     env: server$.env,
+    //   });
+
+    //   console.log({ token });
+    //   return await Promise.resolve({ token });
+    // } catch (error) {
+    //   console.log({ error });
+    //   return { token: null };
+    // }
+  }
+);

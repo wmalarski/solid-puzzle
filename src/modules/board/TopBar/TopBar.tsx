@@ -1,9 +1,7 @@
-import { useI18n } from "@solid-primitives/i18n";
-import { HiOutlineLink } from "solid-icons/hi";
 import type { Component } from "solid-js";
 import { Avatar, AvatarContent, AvatarGroup } from "~/components/Avatar";
-import { Button } from "~/components/Button";
 import type { BoardModel } from "~/db/types";
+import { SharePopover } from "./SharePopover";
 
 const Avatars: Component = () => {
   return (
@@ -32,20 +30,6 @@ const Avatars: Component = () => {
   );
 };
 
-type ShareButtonProps = {
-  board: BoardModel;
-};
-
-const ShareButton: Component<ShareButtonProps> = (props) => {
-  const [t] = useI18n();
-
-  return (
-    <Button size="sm" aria-label={t("board.share")}>
-      <HiOutlineLink />
-    </Button>
-  );
-};
-
 type TopBarProps = {
   board: BoardModel;
 };
@@ -56,7 +40,7 @@ export const TopBar: Component<TopBarProps> = (props) => {
       <div class="flex flex-col pl-4">
         <div class="flex items-center gap-2">
           <h1 class="font-bold">{props.board.name}</h1>
-          <ShareButton board={props.board} />
+          <SharePopover board={props.board} />
         </div>
         <h2 class="text-sm">{props.board.media}</h2>
       </div>
