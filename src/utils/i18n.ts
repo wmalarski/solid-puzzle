@@ -18,6 +18,7 @@ const dict = {
       newGame: "New game",
       share: {
         button: "Share link",
+        copy: "Copy to clipboard",
         link: "Link",
         loading: "Loading",
         regenerate: "Regenerate",

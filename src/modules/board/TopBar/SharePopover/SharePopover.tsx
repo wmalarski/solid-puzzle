@@ -1,9 +1,7 @@
 import { useI18n } from "@solid-primitives/i18n";
 import { createQuery } from "@tanstack/solid-query";
 import { HiOutlineLink, HiSolidXMark } from "solid-icons/hi";
-import { Show, createEffect, createMemo, type Component } from "solid-js";
-import { useLocation } from "solid-start";
-import server$ from "solid-start/server";
+import { Show, Suspense, createMemo, type Component } from "solid-js";
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
 import {
@@ -23,7 +21,10 @@ import {
   TextFieldRoot,
 } from "~/components/TextField";
 import type { BoardModel } from "~/db/types";
-import { generateBoardInviteQueryKey } from "~/server/share/actions";
+import {
+  generateBoardInviteQueryKey,
+  generateBoardInviteServerQuery,
+} from "~/server/share/actions";
 import { paths } from "~/utils/paths";
 import { buildSearchParams } from "~/utils/searchParams";
 
@@ -31,20 +32,14 @@ type ShareFormProps = {
   board: BoardModel;
 };
 
-export const generate = server$(async ([, args]: any[]) => {
-  console.log("AAA", args);
-  return await Promise.resolve({ token: "BBB" });
-});
-
 const ShareForm: Component<ShareFormProps> = (props) => {
   const [t] = useI18n();
 
   const inviteQuery = createQuery(() => ({
-    queryFn: (context) => generate(context.queryKey),
+    queryFn: (context) => generateBoardInviteServerQuery(context.queryKey),
     queryKey: generateBoardInviteQueryKey({ boardId: props.board.id }),
+    suspense: false,
   }));
-
-  const location = useLocation();
 
   const value = createMemo(() => {
     if (inviteQuery.status !== "success") {
@@ -56,16 +51,9 @@ const ShareForm: Component<ShareFormProps> = (props) => {
     )}?${buildSearchParams({ token: inviteQuery.data.token })}`;
   });
 
-  createEffect(() => {
-    console.log({
-      data: inviteQuery.data,
-      error: inviteQuery.error,
-      l: window.location,
-      link: value(),
-      location,
-      status: inviteQuery.status,
-    });
-  });
+  const onCopyToClipboard = () => {
+    navigator.clipboard.writeText(value() || "");
+  };
 
   return (
     <form class="flex flex-col gap-4">
@@ -90,6 +78,14 @@ const ShareForm: Component<ShareFormProps> = (props) => {
           value={value()}
         />
       </TextFieldRoot>
+      <Button
+        disabled={inviteQuery.isPending}
+        isLoading={inviteQuery.isPending}
+        onClick={onCopyToClipboard}
+        type="button"
+      >
+        {t("board.share.copy")}
+      </Button>
       <Button
         disabled={inviteQuery.isPending}
         isLoading={inviteQuery.isPending}
@@ -122,7 +118,9 @@ export const SharePopover: Component<SharePopoverProps> = (props) => {
               <HiSolidXMark />
             </PopoverCloseButton>
           </PopoverHeader>
-          <ShareForm board={props.board} />
+          <Suspense>
+            <ShareForm board={props.board} />
+          </Suspense>
         </PopoverContent>
       </PopoverPortal>
     </PopoverRoot>

@@ -2,7 +2,11 @@ import server$, { createServerAction$, redirect } from "solid-start/server";
 import { z } from "zod";
 import { paths } from "~/utils/paths";
 import { zodFormParse } from "../utils";
-import { setBoardsAccessCookie, validateShareToken } from "./db";
+import {
+  issueShareToken,
+  setBoardsAccessCookie,
+  validateShareToken,
+} from "./db";
 
 const acceptBoardInviteArgsSchema = () => {
   return z.object({
@@ -49,25 +53,14 @@ export const generateBoardInviteQueryKey = (
 };
 
 export const generateBoardInviteServerQuery = server$(
-  async ([, args]: ReturnType<typeof generateBoardInviteQueryKey>) => {
-    return await Promise.resolve({ token: args.boardId });
-    // try {
-    //   console.log({ args });
+  ([, args]: ReturnType<typeof generateBoardInviteQueryKey>) => {
+    const parsed = generateBoardInviteArgsSchema().parse(args);
 
-    //   const parsed = generateBoardInviteArgsSchema().parse(args);
+    const token = issueShareToken({
+      boardId: parsed.boardId,
+      env: server$.env,
+    });
 
-    //   console.log({ parsed });
-
-    //   const token = issueShareToken({
-    //     boardId: parsed.boardId,
-    //     env: server$.env,
-    //   });
-
-    //   console.log({ token });
-    //   return await Promise.resolve({ token });
-    // } catch (error) {
-    //   console.log({ error });
-    //   return { token: null };
-    // }
+    return { token };
   }
 );
