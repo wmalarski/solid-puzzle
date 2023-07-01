@@ -1,5 +1,6 @@
 import { useI18n } from "@solid-primitives/i18n";
 import { Show, type Component } from "solid-js";
+import { useSearchParams } from "solid-start";
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
 import { Card, CardBody, cardTitleClass } from "~/components/Card";
@@ -10,7 +11,7 @@ import {
   TextFieldRoot,
 } from "~/components/TextField";
 import type { BoardModel } from "~/db/types";
-import { createSignInServerAction } from "~/server/auth";
+import { acceptBoardInviteAction } from "~/server/share/actions";
 
 type AcceptInviteFormProps = {
   board: BoardModel;
@@ -19,7 +20,9 @@ type AcceptInviteFormProps = {
 export const AcceptInviteForm: Component<AcceptInviteFormProps> = (props) => {
   const [t] = useI18n();
 
-  const [signOut, { Form }] = createSignInServerAction();
+  const [searchParams] = useSearchParams();
+
+  const [acceptBoardInvite, { Form }] = acceptBoardInviteAction();
 
   return (
     <Card variant="bordered" class="w-full max-w-md">
@@ -30,7 +33,8 @@ export const AcceptInviteForm: Component<AcceptInviteFormProps> = (props) => {
           </h2>
         </header>
         <Form class="flex flex-col gap-4">
-          <Show when={signOut.error}>
+          <input type="hidden" name="token" value={searchParams.token} />
+          <Show when={acceptBoardInvite.error}>
             {(error) => (
               <Alert variant="error">
                 <AlertIcon variant="error" />
@@ -39,21 +43,21 @@ export const AcceptInviteForm: Component<AcceptInviteFormProps> = (props) => {
             )}
           </Show>
           <TextFieldRoot>
-            <TextFieldLabel for="username">
+            <TextFieldLabel for="name">
               <TextFieldLabelText>
                 {t("invite.username.label")}
               </TextFieldLabelText>
             </TextFieldLabel>
             <TextFieldInput
-              id="username"
-              name="username"
+              id="name"
+              name="name"
               variant="bordered"
               placeholder={t("invite.username.placeholder")}
             />
           </TextFieldRoot>
           <Button
-            disabled={signOut.pending}
-            isLoading={signOut.pending}
+            disabled={acceptBoardInvite.pending}
+            isLoading={acceptBoardInvite.pending}
             type="submit"
           >
             {t("invite.button")}

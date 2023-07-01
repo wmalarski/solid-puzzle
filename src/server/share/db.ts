@@ -66,27 +66,24 @@ export const getBoardsAccess = (
 };
 
 type SetSessionCookieArgs = {
-  env: Env;
-  request: Request;
   boardId: string;
+  event: FetchEvent;
   name: string;
 };
 
 export const setBoardsAccessCookie = async ({
   boardId,
-  env,
+  event,
   name,
-  request,
 }: SetSessionCookieArgs) => {
-  const storage = createStorage(env);
+  const boardsAccess = await getBoardsAccessFromCookie(event);
+  const next = [...(boardsAccess?.boards || []), { boardId, name }];
 
-  const boardsSession = await storage.getSession(request.headers.get("Cookie"));
+  const storage = createStorage(event.env);
+  const session = await storage.getSession(event.request.headers.get("Cookie"));
+  session.set(boardsKey, next);
 
-  const current = boardsSession.get(boardsKey);
-  const next = [...current, { boardId, name }];
-  boardsSession.set(boardsKey, next);
-
-  return storage.commitSession(boardsSession);
+  return storage.commitSession(session);
 };
 
 type DestroyBoardsAccessCookieArgs = {

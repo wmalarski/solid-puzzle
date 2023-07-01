@@ -29,9 +29,8 @@ export const acceptBoardInviteAction = () => {
 
     const cookie = await setBoardsAccessCookie({
       boardId: result.boardId,
-      env: event.env,
+      event,
       name: parsed.name,
-      request: event.request,
     });
 
     return redirect(paths.board(result.boardId), {
