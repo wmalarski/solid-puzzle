@@ -20,10 +20,7 @@ const ClientBoard: Component<BoardProps> = (props) => {
       <Show when={canvas()}>
         {(canvas) => (
           <Suspense>
-            <PixiStage canvas={canvas()} />
-            <TopNavbar board={props.board} />
-            <InfoBar />
-            <MenuBar />
+            <PixiStage board={props.board} canvas={canvas()} />
           </Suspense>
         )}
       </Show>
@@ -32,8 +29,13 @@ const ClientBoard: Component<BoardProps> = (props) => {
 };
 export const Board: Component<BoardProps> = (props) => {
   return (
-    <ClientOnly>
-      <ClientBoard board={props.board} />
-    </ClientOnly>
+    <Suspense>
+      <ClientOnly>
+        <ClientBoard board={props.board} />
+      </ClientOnly>
+      <TopNavbar board={props.board} />
+      <InfoBar />
+      <MenuBar />
+    </Suspense>
   );
 };

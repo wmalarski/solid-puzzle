@@ -8,6 +8,7 @@ import {
   onMount,
   type Component,
 } from "solid-js";
+import type { BoardModel } from "~/db/types";
 import { generateCurves, getPuzzleFragments } from "~/utils/getPuzzleFragments";
 import { usePixiApp } from "../PixiApp";
 import { PreviewGrid, PreviewSprite } from "./PreviewSprite";
@@ -71,6 +72,7 @@ const Board: Component<BoardProps> = (props) => {
 };
 
 type ProviderProps = {
+  board: BoardModel;
   texture: PIXI.Texture;
 };
 
@@ -95,6 +97,7 @@ const Provider: Component<ProviderProps> = (props) => {
 };
 
 type Props = {
+  board: BoardModel;
   path: string;
 };
 
@@ -106,7 +109,7 @@ export const PuzzleBoard: Component<Props> = (props) => {
 
   return (
     <Show when={texture()}>
-      {(texture) => <Provider texture={texture()} />}
+      {(texture) => <Provider board={props.board} texture={texture()} />}
     </Show>
   );
 };
