@@ -11,9 +11,11 @@ import {
 } from "~/server/board/actions";
 import { selectBoard } from "~/server/board/db";
 import { getRequestContext } from "~/server/context";
+import { hasBoardAccess, type BoardAccess } from "~/server/share/db";
 import { paths } from "~/utils/paths";
 
 type BoardQueryProps = {
+  boardAccess?: BoardAccess;
   initialBoard?: BoardModel;
 };
 
@@ -30,7 +32,9 @@ const BoardQuery: Component<BoardQueryProps> = (props) => {
   }));
 
   return (
-    <Show when={boardQuery.data}>{(board) => <Board board={board()} />}</Show>
+    <Show when={boardQuery.data}>
+      {(board) => <Board board={board()} boardAccess={props.boardAccess} />}
+    </Show>
   );
 };
 
@@ -40,12 +44,13 @@ export const routeData = (args: RouteDataArgs) => {
       const ctx = await getRequestContext(event);
 
       const board = selectBoard({ ctx, id: boardId });
+      const access = await hasBoardAccess({ boardId, event });
 
-      if (!board) {
-        throw redirect(paths.notFound, { status: 404 });
+      if (!board || (!access && board.ownerId !== ctx.session?.userId)) {
+        throw redirect(paths.notFound);
       }
 
-      return { board, session: ctx.session, user: ctx.user };
+      return { access, board, session: ctx.session, user: ctx.user };
     },
     { key: ["board", args.params.boardId] }
   );
@@ -58,7 +63,10 @@ export default function BoardSection() {
     <SessionProvider value={() => data()}>
       <main class="relative h-screen w-screen">
         <Suspense>
-          <BoardQuery initialBoard={data()?.board} />
+          <BoardQuery
+            boardAccess={data()?.access}
+            initialBoard={data()?.board}
+          />
         </Suspense>
       </main>
     </SessionProvider>

@@ -1,6 +1,7 @@
 import type { Component } from "solid-js";
 import { Avatar, AvatarContent, AvatarGroup } from "~/components/Avatar";
 import type { BoardModel } from "~/db/types";
+import type { BoardAccess } from "~/server/share/db";
 import { SharePopover } from "./SharePopover";
 
 const Avatars: Component = () => {
@@ -32,6 +33,7 @@ const Avatars: Component = () => {
 
 type TopBarProps = {
   board: BoardModel;
+  boardAccess?: BoardAccess;
 };
 
 export const TopBar: Component<TopBarProps> = (props) => {

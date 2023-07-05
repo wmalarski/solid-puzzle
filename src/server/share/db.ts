@@ -27,13 +27,14 @@ const boardsAccessSchema = () => {
   });
 };
 
-export type BoardAccess = z.infer<ReturnType<typeof boardsAccessSchema>>;
+export type BoardsAccess = z.infer<ReturnType<typeof boardsAccessSchema>>;
+export type BoardAccess = BoardsAccess["boards"][0];
 
 const boardsKey = "boards";
 
 const getBoardsAccessFromCookie = async (
   event: FetchEvent
-): Promise<BoardAccess | null> => {
+): Promise<BoardsAccess | null> => {
   const storage = createStorage(event.env);
 
   const session = await storage.getSession(event.request.headers.get("Cookie"));
@@ -51,7 +52,7 @@ const getBoardsAccessFromCookie = async (
 
 export const getBoardsAccess = (
   event: FetchEvent
-): Promise<BoardAccess | null> => {
+): Promise<BoardsAccess | null> => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const cachedBoards = event.locals.boards;
 
@@ -63,6 +64,20 @@ export const getBoardsAccess = (
   event.locals.boards = boards;
 
   return boards;
+};
+
+type HasBoardAccessArgs = {
+  event: FetchEvent;
+  boardId: string;
+};
+
+export const hasBoardAccess = async ({
+  event,
+  boardId,
+}: HasBoardAccessArgs): Promise<BoardAccess | undefined> => {
+  const boardAccesses = await getBoardsAccess(event);
+
+  return boardAccesses?.boards.find((board) => board.boardId === boardId);
 };
 
 type SetSessionCookieArgs = {
