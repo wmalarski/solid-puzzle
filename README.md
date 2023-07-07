@@ -2,6 +2,12 @@
 
 Everything you need to build a Solid project, powered by [`solid-start`](https://start.solidjs.com);
 
+## Setup
+
+```bash
+npx replicache get-license
+```
+
 ## Creating a project
 
 ```bash
