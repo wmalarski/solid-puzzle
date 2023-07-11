@@ -3,6 +3,7 @@ import { ClientOnly } from "~/components/ClientOnly";
 import type { BoardModel } from "~/db/types";
 import { InfoBar } from "~/modules/common/InfoBar";
 import type { BoardAccess } from "~/server/share/db";
+import { ReplicacheProvider } from "../ReplicacheClient";
 
 const MenuBar = lazy(() => import("../MenuBar"));
 const TopNavbar = lazy(() => import("../TopBar"));
@@ -33,7 +34,9 @@ export const Board: Component<BoardProps> = (props) => {
   return (
     <Suspense>
       <ClientOnly>
-        <ClientBoard board={props.board} />
+        <ReplicacheProvider>
+          <ClientBoard board={props.board} />
+        </ReplicacheProvider>
       </ClientOnly>
       <TopNavbar board={props.board} boardAccess={props.boardAccess} />
       <InfoBar />
