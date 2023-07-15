@@ -13,6 +13,7 @@ import {
   DialogTrigger,
 } from "~/components/Dialog";
 import { DeleteBoard } from "../DeleteDialog";
+import { UpdateForm } from "../UpdateForm";
 
 type SettingsDialogProps = {
   boardId: string;
@@ -36,6 +37,7 @@ export const SettingsDialog: Component<SettingsDialogProps> = (props) => {
                 <HiSolidXMark />
               </DialogCloseButton>
             </DialogHeader>
+            <UpdateForm boardId={props.boardId} />
             <DeleteBoard boardId={props.boardId} />
           </DialogContent>
         </DialogPositioner>

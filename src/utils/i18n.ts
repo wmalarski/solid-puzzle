@@ -25,6 +25,9 @@ const dict = {
         },
         label: "Settings",
         title: "Board settings",
+        update: {
+          button: "Save",
+        },
       },
       share: {
         button: "Share link",

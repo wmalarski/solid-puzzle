@@ -41,15 +41,11 @@ export const insertBoard = (args: InsertBoardArgs) => {
 
 export const updateBoardArgsSchema = () => {
   return z.object({
-    config: z
-      .object({
-        columns: z.coerce.number().int().min(3),
-        image: z.string(),
-        rows: z.coerce.number().int().min(3),
-      })
-      .optional(),
+    columns: z.coerce.number().int().min(3),
     id: z.string(),
-    name: z.string().min(3).optional(),
+    image: z.string(),
+    name: z.string().min(3),
+    rows: z.coerce.number().int().min(3),
   });
 };
 
@@ -69,17 +65,14 @@ export const updateBoard = (args: UpdateBoardArgs) => {
     throw new ServerError("Unauthorized", { status: 404 });
   }
 
-  let config;
-  if (args.config) {
-    config = generateCurves({
-      columns: args.config.columns,
-      rows: args.config.rows,
-    });
-  }
+  const config = generateCurves({
+    columns: args.columns,
+    rows: args.rows,
+  });
 
   const result = args.ctx.db
     .update(args.ctx.schema.board)
-    .set({ config: JSON.stringify(config), name: args.name })
+    .set({ config: JSON.stringify(config), media: args.image, name: args.name })
     .where(eq(args.ctx.schema.board.id, args.id))
     .run();
 
