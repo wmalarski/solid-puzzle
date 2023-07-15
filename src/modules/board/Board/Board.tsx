@@ -3,7 +3,6 @@ import { ClientOnly } from "~/components/ClientOnly";
 import type { BoardModel } from "~/db/types";
 import { InfoBar } from "~/modules/common/InfoBar";
 import type { BoardAccess } from "~/server/share/db";
-import { ReplicacheProvider } from "../ReplicacheClient";
 
 const MenuBar = lazy(() => import("../MenuBar"));
 const TopNavbar = lazy(() => import("../TopBar"));
@@ -17,8 +16,28 @@ type BoardProps = {
 const ClientBoard: Component<BoardProps> = (props) => {
   const [canvas, setCanvas] = createSignal<HTMLCanvasElement>();
 
+  // const replicache = useReplicache();
+
+  // const messages = createSubscription(
+  //   replicache(),
+  //   async (tx) => {
+  //     const list = await tx.scan({ prefix: "message/" }).entries().toArray();
+  //     list.sort(
+  //       ([, leftValue], [, rightValue]) =>
+  //         (leftValue as any).order - (rightValue as any).order
+  //     );
+  //     return list;
+  //   },
+  //   []
+  // );
+
+  // createEffect(() => {
+  //   console.log("messages()", messages());
+  // });
+
   return (
     <>
+      {/* <pre>{JSON.stringify(messages(), null, 2)}</pre> */}
       <canvas ref={setCanvas} class="h-full w-full" />
       <Show when={canvas()}>
         {(canvas) => (
@@ -34,9 +53,9 @@ export const Board: Component<BoardProps> = (props) => {
   return (
     <Suspense>
       <ClientOnly>
-        <ReplicacheProvider>
-          <ClientBoard board={props.board} />
-        </ReplicacheProvider>
+        {/* <ReplicacheProvider> */}
+        <ClientBoard board={props.board} />
+        {/* </ReplicacheProvider> */}
       </ClientOnly>
       <TopNavbar board={props.board} boardAccess={props.boardAccess} />
       <InfoBar />

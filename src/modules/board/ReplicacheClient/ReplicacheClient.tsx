@@ -2,6 +2,7 @@ import { Replicache } from "replicache";
 import {
   createContext,
   createSignal,
+  useContext,
   type Component,
   type JSX,
 } from "solid-js";
@@ -14,7 +15,7 @@ const createReplicache = () => {
     pushURL: "/api/replicache-push",
   });
 
-  return { replicache };
+  return replicache;
 };
 
 type ReplicacheContextValue = typeof createReplicache;
@@ -32,4 +33,8 @@ export const ReplicacheProvider: Component<ReplicacheProviderProps> = (
   const [value] = createSignal(createReplicache());
 
   return <ReplicacheContext.Provider value={value} {...props} />;
+};
+
+export const useReplicache = () => {
+  return useContext(ReplicacheContext);
 };

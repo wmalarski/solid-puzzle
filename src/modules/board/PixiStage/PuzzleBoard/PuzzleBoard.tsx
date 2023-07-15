@@ -9,7 +9,7 @@ import {
   type Component,
 } from "solid-js";
 import type { BoardModel } from "~/db/types";
-import { generateCurves, getPuzzleFragments } from "~/utils/getPuzzleFragments";
+import { getPuzzleFragments } from "~/utils/getPuzzleFragments";
 import { usePixiApp } from "../PixiApp";
 import { PreviewGrid, PreviewSprite } from "./PreviewSprite";
 import { PuzzleFragment } from "./PuzzleFragment";
@@ -78,13 +78,12 @@ type ProviderProps = {
 
 const Provider: Component<ProviderProps> = (props) => {
   const shapes = createMemo(() => {
-    const config = generateCurves({
-      columns: 8,
+    const config = JSON.parse(props.board.config);
+    return getPuzzleFragments({
+      config,
       height: props.texture.height,
-      rows: 5,
       width: props.texture.width,
     });
-    return getPuzzleFragments(config);
   });
 
   return (

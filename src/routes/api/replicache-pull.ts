@@ -1,6 +1,6 @@
 import { json } from "solid-start";
 
-export const GET = () => {
+const resolver = () => {
   return json({
     cookie: null,
     // We will discuss these two fields in later steps.
@@ -28,3 +28,6 @@ export const GET = () => {
     ],
   });
 };
+
+export const POST = resolver;
+export const GET = resolver;

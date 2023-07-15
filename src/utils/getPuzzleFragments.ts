@@ -1,6 +1,7 @@
 import {
   getCenterFromPoints,
   getMinMaxFromPoints,
+  scaleBy,
   subtractPoint,
 } from "~/utils/geometry";
 
@@ -24,19 +25,15 @@ type GetRandomGridPointArgs = {
 
 type GetRandomGridPointFactoryArgs = {
   columns: number;
-  height: number;
   rows: number;
-  width: number;
 };
 
 const getRandomGridPointFactory = ({
   columns,
-  height,
   rows,
-  width,
 }: GetRandomGridPointFactoryArgs) => {
-  const columnWidth = width / columns;
-  const rowHeight = height / rows;
+  const columnWidth = 1 / columns;
+  const rowHeight = 1 / rows;
 
   const xRadius = columnWidth / 4;
   const yRadius = rowHeight / 4;
@@ -56,7 +53,7 @@ const getRandomGridPointFactory = ({
       ? xColumnCenter
       : getRandomInRange({
           center: xCenter ?? xColumnCenter,
-          max: width,
+          max: 1,
           radius: xRadius,
         });
 
@@ -64,7 +61,7 @@ const getRandomGridPointFactory = ({
       ? yColumnCenter
       : getRandomInRange({
           center: yCenter ?? yColumnCenter,
-          max: height,
+          max: 1,
           radius: yRadius,
         });
 
@@ -83,23 +80,11 @@ const getFragmentId = ({ columnIndex, rowIndex }: GetFragmentIdArgs) => {
 
 type GenerateCurvesArgs = {
   columns: number;
-  height: number;
   rows: number;
-  width: number;
 };
 
-export const generateCurves = ({
-  columns,
-  height,
-  rows,
-  width,
-}: GenerateCurvesArgs) => {
-  const getRandomGridPoint = getRandomGridPointFactory({
-    columns,
-    height,
-    rows,
-    width,
-  });
+export const generateCurves = ({ columns, rows }: GenerateCurvesArgs) => {
+  const getRandomGridPoint = getRandomGridPointFactory({ columns, rows });
 
   const points = Array(rows + 1)
     .fill(0)
@@ -154,11 +139,19 @@ export const generateCurves = ({
 
 export type PuzzleCurveConfig = ReturnType<typeof generateCurves>;
 
+type GetPuzzleFragmentsArgs = {
+  config: PuzzleCurveConfig;
+  height: number;
+  width: number;
+};
+
 export const getPuzzleFragments = ({
-  horizontalLines,
-  verticalLines,
-}: PuzzleCurveConfig) => {
+  config: { horizontalLines, verticalLines },
+  height,
+  width,
+}: GetPuzzleFragmentsArgs) => {
   const lines = [...horizontalLines, ...verticalLines].flat();
+  const scale = { x: width, y: height };
 
   const fragments = Array(horizontalLines.length - 1)
     .fill(0)
@@ -172,10 +165,22 @@ export const getPuzzleFragments = ({
           const right = verticalLines[rowIndex][columnIndex + 1];
 
           const absoluteCurvePoints = [
-            { control: left.center, to: left.end },
-            { control: bottom.center, to: bottom.end },
-            { control: right.center, to: right.start },
-            { control: top.center, to: top.start },
+            {
+              control: scaleBy(left.center, scale),
+              to: scaleBy(left.end, scale),
+            },
+            {
+              control: scaleBy(bottom.center, scale),
+              to: scaleBy(bottom.end, scale),
+            },
+            {
+              control: scaleBy(right.center, scale),
+              to: scaleBy(right.start, scale),
+            },
+            {
+              control: scaleBy(top.center, scale),
+              to: scaleBy(top.start, scale),
+            },
           ];
 
           const points = absoluteCurvePoints.flatMap((curve) => [

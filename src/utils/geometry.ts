@@ -13,6 +13,10 @@ export const getDistance = (point: Point2D, other: Point2D) => {
   );
 };
 
+export const scaleBy = (point: Point2D, other: Point2D) => {
+  return { x: point.x * other.x, y: point.y * other.y };
+};
+
 export const getMinMaxFromPoints = (points: Point2D[]) => {
   const xSorted = points.sort((a, b) => a.x - b.x);
   const ySorted = points.sort((a, b) => a.y - b.y);
