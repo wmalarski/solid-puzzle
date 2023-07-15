@@ -3,6 +3,7 @@ import {
   getMinMaxFromPoints,
   scaleBy,
   subtractPoint,
+  type Point2D,
 } from "~/utils/geometry";
 
 type GetRandomInRangeArgs = {
@@ -138,6 +139,40 @@ export const generateCurves = ({ columns, rows }: GenerateCurvesArgs) => {
 };
 
 export type PuzzleCurveConfig = ReturnType<typeof generateCurves>;
+export type PuzzleCurve = PuzzleCurveConfig["horizontalLines"][0][0];
+
+type ScaleCurveUpArgs = {
+  curve: PuzzleCurve;
+  scale: Point2D;
+};
+
+const scaleCurveUp = ({ curve, scale }: ScaleCurveUpArgs): PuzzleCurve => {
+  return {
+    center: scaleBy(curve.center, scale),
+    end: scaleBy(curve.end, scale),
+    start: scaleBy(curve.start, scale),
+  };
+};
+
+type ScaleConfigUpArgs = {
+  config: PuzzleCurveConfig;
+  scale: Point2D;
+};
+
+const scaleConfigUp = ({
+  config,
+  scale,
+}: ScaleConfigUpArgs): PuzzleCurveConfig => {
+  return {
+    ...config,
+    horizontalLines: config.horizontalLines.map((lines) =>
+      lines.map((curve) => scaleCurveUp({ curve, scale }))
+    ),
+    verticalLines: config.verticalLines.map((lines) =>
+      lines.map((curve) => scaleCurveUp({ curve, scale }))
+    ),
+  };
+};
 
 type GetPuzzleFragmentsArgs = {
   config: PuzzleCurveConfig;
@@ -146,12 +181,13 @@ type GetPuzzleFragmentsArgs = {
 };
 
 export const getPuzzleFragments = ({
-  config: { horizontalLines, verticalLines },
+  config,
   height,
   width,
 }: GetPuzzleFragmentsArgs) => {
-  const lines = [...horizontalLines, ...verticalLines].flat();
   const scale = { x: width, y: height };
+  const { verticalLines, horizontalLines } = scaleConfigUp({ config, scale });
+  const lines = [...horizontalLines, ...verticalLines].flat();
 
   const fragments = Array(horizontalLines.length - 1)
     .fill(0)

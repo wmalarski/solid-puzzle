@@ -57,7 +57,9 @@ export const deleteBoardAction = () => {
 
     const ctx = await getProtectedRequestContext(event);
 
-    return deleteBoard({ ...parsed, ctx });
+    deleteBoard({ ...parsed, ctx });
+
+    throw redirect(paths.home);
   });
 };
 
