@@ -16,7 +16,7 @@ import { PuzzleFragment } from "./PuzzleFragment";
 import { PuzzleStoreProvider, usePuzzleStoreContext } from "./PuzzleStore";
 
 type UseStageDeselectArgs = {
-  onDeselect: () => void;
+  onDeselect: VoidFunction;
 };
 
 const useStageDeselect = (args: UseStageDeselectArgs) => {

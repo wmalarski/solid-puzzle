@@ -1,6 +1,7 @@
 import { useI18n } from "@solid-primitives/i18n";
 import { HiOutlineBars3 } from "solid-icons/hi";
 import type { Component } from "solid-js";
+import { useNavigate } from "solid-start";
 import {
   DropdownMenuArrow,
   DropdownMenuContent,
@@ -12,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "~/components/DropdownMenu";
 import { createSignOutServerAction } from "~/server/auth";
+import { paths } from "~/utils/paths";
 
 const SignOutMenuItem: Component = () => {
   const [t] = useI18n();
@@ -32,6 +34,12 @@ const SignOutMenuItem: Component = () => {
 const Menu: Component = () => {
   const [t] = useI18n();
 
+  const navigate = useNavigate();
+
+  const onHomePageClick = () => {
+    navigate(paths.home);
+  };
+
   return (
     <DropdownMenuRoot>
       <DropdownMenuTrigger
@@ -46,6 +54,9 @@ const Menu: Component = () => {
       <DropdownMenuPortal>
         <DropdownMenuContent>
           <DropdownMenuArrow />
+          <DropdownMenuItem onSelect={onHomePageClick}>
+            <DropdownMenuItemLabel>{t("board.home")}</DropdownMenuItemLabel>
+          </DropdownMenuItem>
           <DropdownMenuItem>
             <DropdownMenuItemLabel>{t("board.newGame")}</DropdownMenuItemLabel>
           </DropdownMenuItem>

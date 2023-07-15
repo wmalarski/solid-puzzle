@@ -29,7 +29,7 @@ const getNewZoomState = (
 };
 
 export type TransformContextValue = {
-  reset: () => void;
+  reset: VoidFunction;
   scale: () => number;
   setScale: (scale: number) => void;
   setX: (x: number) => void;

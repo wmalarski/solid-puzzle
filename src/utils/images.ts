@@ -10,9 +10,3 @@ export const getImages = () => {
     .fill(0)
     .map(() => getImage());
 };
-
-export const getImageShape = (path: string) => {
-  const paths = path.split("/");
-  const [width, height] = paths.slice(paths.length - 2);
-  return { height: +height, width: +width };
-};

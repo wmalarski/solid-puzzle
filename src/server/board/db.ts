@@ -3,7 +3,6 @@ import { nanoid } from "nanoid";
 import { ServerError } from "solid-start/server";
 import { z } from "zod";
 import { generateCurves } from "~/utils/getPuzzleFragments";
-import { getImageShape } from "~/utils/images";
 import { type ProtectedRequestContext, type RequestContext } from "../context";
 
 export const insertBoardArgsSchema = () => {
@@ -21,12 +20,9 @@ type InsertBoardArgs = z.infer<ReturnType<typeof insertBoardArgsSchema>> & {
 
 export const insertBoard = (args: InsertBoardArgs) => {
   const boardId = nanoid();
-  const { height, width } = getImageShape(args.image);
   const config = generateCurves({
     columns: args.columns,
-    height,
     rows: args.rows,
-    width,
   });
 
   args.ctx.db
@@ -75,12 +71,9 @@ export const updateBoard = (args: UpdateBoardArgs) => {
 
   let config;
   if (args.config) {
-    const { height, width } = getImageShape(args.config.image);
     config = generateCurves({
       columns: args.config.columns,
-      height,
       rows: args.config.rows,
-      width,
     });
   }
 

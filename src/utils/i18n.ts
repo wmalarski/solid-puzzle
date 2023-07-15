@@ -14,8 +14,18 @@ const dict = {
       },
     },
     board: {
+      home: "Home",
       menu: "Menu",
       newGame: "New game",
+      settings: {
+        delete: {
+          button: "Delete",
+          cancel: "Cancel",
+          title: "Delete board",
+        },
+        label: "Settings",
+        title: "Board settings",
+      },
       share: {
         button: "Share link",
         copy: "Copy to clipboard",
