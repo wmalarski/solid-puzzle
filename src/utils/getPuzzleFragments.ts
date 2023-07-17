@@ -135,7 +135,15 @@ export const generateCurves = ({ columns, rows }: GenerateCurvesArgs) => {
         })
     );
 
-  return { horizontalLines, version: "1", verticalLines };
+  const rotation = Array(horizontalLines.length - 1)
+    .fill(0)
+    .flatMap(() =>
+      Array(verticalLines.length - 1)
+        .fill(0)
+        .map(() => 2 * Math.random() * Math.PI)
+    );
+
+  return { horizontalLines, rotation, version: "1", verticalLines };
 };
 
 export type PuzzleCurveConfig = ReturnType<typeof generateCurves>;
@@ -188,6 +196,7 @@ export const getPuzzleFragments = ({
   const scale = { x: width, y: height };
   const { verticalLines, horizontalLines } = scaleConfigUp({ config, scale });
   const lines = [...horizontalLines, ...verticalLines].flat();
+  const rotation = [...config.rotation];
 
   const fragments = Array(horizontalLines.length - 1)
     .fill(0)
@@ -219,11 +228,13 @@ export const getPuzzleFragments = ({
             to: subtractPoint(curve.to, min),
           }));
 
+          const initialRotation = rotation.pop() || 0;
+
           return {
             center,
             curvePoints,
             fragmentId: getFragmentId({ columnIndex, rowIndex }),
-            initialRotation: 2 * Math.random() * Math.PI,
+            initialRotation,
             max,
             min,
           };

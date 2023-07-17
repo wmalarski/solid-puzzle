@@ -79,6 +79,7 @@ type ProviderProps = {
 const Provider: Component<ProviderProps> = (props) => {
   const shapes = createMemo(() => {
     const config = JSON.parse(props.board.config);
+
     return getPuzzleFragments({
       config,
       height: props.texture.height,
