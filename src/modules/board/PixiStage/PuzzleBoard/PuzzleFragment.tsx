@@ -98,6 +98,10 @@ export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
   const fragment = new PIXI.Container();
 
   onMount(() => {
+    // console.log(
+    //   "PuzzleFragment",
+    //   JSON.stringify({ shape: props.shape, state: props.state }, null, 2)
+    // );
     app().stage.addChild(fragment);
   });
 

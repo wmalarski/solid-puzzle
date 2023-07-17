@@ -201,22 +201,10 @@ export const getPuzzleFragments = ({
           const right = verticalLines[rowIndex][columnIndex + 1];
 
           const absoluteCurvePoints = [
-            {
-              control: scaleBy(left.center, scale),
-              to: scaleBy(left.end, scale),
-            },
-            {
-              control: scaleBy(bottom.center, scale),
-              to: scaleBy(bottom.end, scale),
-            },
-            {
-              control: scaleBy(right.center, scale),
-              to: scaleBy(right.start, scale),
-            },
-            {
-              control: scaleBy(top.center, scale),
-              to: scaleBy(top.start, scale),
-            },
+            { control: left.center, to: left.end },
+            { control: bottom.center, to: bottom.end },
+            { control: right.center, to: right.start },
+            { control: top.center, to: top.start },
           ];
 
           const points = absoluteCurvePoints.flatMap((curve) => [

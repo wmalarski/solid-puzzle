@@ -35,6 +35,7 @@ const usePuzzleStore = (args: UsePuzzleStoreArgs) => {
   const shapes = new Map<string, PuzzleFragmentShape>();
 
   args.shapes.forEach((shape) => {
+    shapes.set(shape.fragmentId, shape);
     fragments[shape.fragmentId] = {
       isLocked: false,
       rotation: shape.initialRotation,
