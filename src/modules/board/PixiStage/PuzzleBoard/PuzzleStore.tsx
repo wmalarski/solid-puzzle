@@ -2,6 +2,7 @@ import { createContext, useContext, type Component, type JSX } from "solid-js";
 import { createStore } from "solid-js/store";
 import { getDistance } from "~/utils/geometry";
 import type { PuzzleFragmentShape } from "~/utils/getPuzzleFragments";
+import { useReplicache } from "../../ReplicacheClient";
 
 export type FragmentState = {
   isLocked: boolean;
@@ -16,6 +17,7 @@ export type PuzzleState = {
 };
 
 type UsePuzzleStoreArgs = {
+  boardId: string;
   shapes: PuzzleFragmentShape[];
 };
 
@@ -44,6 +46,8 @@ const usePuzzleStore = (args: UsePuzzleStoreArgs) => {
     };
   });
 
+  const replicache = useReplicache();
+
   const [state, setState] = createStore<PuzzleState>({ fragments });
 
   const setSelectedId = (selectedId?: string) => {
@@ -63,12 +67,23 @@ const usePuzzleStore = (args: UsePuzzleStoreArgs) => {
 
   const setRotation = ({ fragmentId, rotation }: SetRotationArgs) => {
     setState("fragments", fragmentId, "rotation", rotation);
+    replicache().mutate.setFragmentRotation({
+      boardId: args.boardId,
+      fragmentId,
+      rotation,
+    });
     checkOnPlace(fragmentId);
   };
 
   const setPosition = ({ fragmentId, x, y }: SetPositionArgs) => {
     setState("fragments", fragmentId, "x", x);
     setState("fragments", fragmentId, "y", y);
+    replicache().mutate.setFragmentPosition({
+      boardId: args.boardId,
+      fragmentId,
+      x,
+      y,
+    });
     checkOnPlace(fragmentId);
   };
 
@@ -90,6 +105,7 @@ const PuzzleStoreContext = createContext<ReturnType<typeof usePuzzleStore>>({
 });
 
 type PuzzleStoreProviderProps = {
+  boardId: string;
   children: JSX.Element;
   shapes: PuzzleFragmentShape[];
 };

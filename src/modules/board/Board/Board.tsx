@@ -1,8 +1,17 @@
-import { Show, Suspense, createSignal, lazy, type Component } from "solid-js";
+import {
+  Show,
+  Suspense,
+  createEffect,
+  createSignal,
+  lazy,
+  type Component,
+} from "solid-js";
 import { ClientOnly } from "~/components/ClientOnly";
 import type { BoardModel } from "~/db/types";
+import { createSubscription } from "~/lib/solid-replicache";
 import { InfoBar } from "~/modules/common/InfoBar";
 import type { BoardAccess } from "~/server/share/db";
+import { ReplicacheProvider, useReplicache } from "../ReplicacheClient";
 
 const MenuBar = lazy(() => import("../MenuBar"));
 const TopNavbar = lazy(() => import("../TopBar"));
@@ -16,24 +25,20 @@ type BoardProps = {
 const ClientBoard: Component<BoardProps> = (props) => {
   const [canvas, setCanvas] = createSignal<HTMLCanvasElement>();
 
-  // const replicache = useReplicache();
+  const replicache = useReplicache();
 
-  // const messages = createSubscription(
-  //   replicache(),
-  //   async (tx) => {
-  //     const list = await tx.scan({ prefix: "message/" }).entries().toArray();
-  //     list.sort(
-  //       ([, leftValue], [, rightValue]) =>
-  //         (leftValue as any).order - (rightValue as any).order
-  //     );
-  //     return list;
-  //   },
-  //   []
-  // );
+  const messages = createSubscription(
+    replicache(),
+    async (tx) => {
+      const list = await tx.scan({ prefix: "message/" }).entries().toArray();
+      return list;
+    },
+    []
+  );
 
-  // createEffect(() => {
-  //   console.log("messages()", messages());
-  // });
+  createEffect(() => {
+    console.log("messages()", messages());
+  });
 
   return (
     <>
@@ -53,9 +58,9 @@ export const Board: Component<BoardProps> = (props) => {
   return (
     <Suspense>
       <ClientOnly>
-        {/* <ReplicacheProvider> */}
-        <ClientBoard board={props.board} />
-        {/* </ReplicacheProvider> */}
+        <ReplicacheProvider>
+          <ClientBoard board={props.board} />
+        </ReplicacheProvider>
       </ClientOnly>
       <TopNavbar board={props.board} boardAccess={props.boardAccess} />
       <InfoBar />

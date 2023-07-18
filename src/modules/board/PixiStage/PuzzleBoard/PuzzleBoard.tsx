@@ -88,7 +88,7 @@ const Provider: Component<ProviderProps> = (props) => {
   });
 
   return (
-    <PuzzleStoreProvider shapes={shapes().fragments}>
+    <PuzzleStoreProvider boardId={props.board.id} shapes={shapes().fragments}>
       <PreviewSprite texture={props.texture} />
       <PreviewGrid lines={shapes().lines} />
       <Board texture={props.texture} />
