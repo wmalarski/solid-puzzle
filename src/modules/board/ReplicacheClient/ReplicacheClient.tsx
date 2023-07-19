@@ -16,37 +16,40 @@ type MutatorDef<T> = (
   args: T
 ) => ReturnType<MutatorDefs[0]>;
 
-type SetFragmentRotationArgs = {
+export type FragmentState = {
   fragmentId: string;
+  isLocked: boolean;
   rotation: number;
-  boardId: string;
-};
-
-const setFragmentRotation: MutatorDef<SetFragmentRotationArgs> = async (
-  tx,
-  { boardId, fragmentId, rotation }
-) => {
-  await tx.put(`board/${boardId}/fragment/${fragmentId}/rotation`, rotation);
-};
-
-type SetFragmentPositionArgs = {
-  boardId: string;
-  fragmentId: string;
   x: number;
   y: number;
 };
 
-const setFragmentPosition: MutatorDef<SetFragmentPositionArgs> = async (
+type GetFragmentKeyArgs = {
+  fragmentId: string;
+  boardId: string;
+};
+
+export const getFragmentKey = ({ fragmentId, boardId }: GetFragmentKeyArgs) => {
+  return `board/${boardId}/fragment/${fragmentId}`;
+};
+
+type SetFragmentStateArgs = {
+  state: FragmentState;
+  boardId: string;
+};
+
+const setFragmentState: MutatorDef<SetFragmentStateArgs> = async (
   tx,
-  { boardId, fragmentId, x, y }
+  { boardId, state }
 ) => {
-  await tx.put(`board/${boardId}/fragment/${fragmentId}/position`, { x, y });
+  const key = getFragmentKey({ boardId, fragmentId: state.fragmentId });
+  await tx.put(key, state);
 };
 
 const createReplicache = () => {
   const replicache = new Replicache({
     licenseKey: import.meta.env.VITE_REPLICACHE_LICENSE_KEY,
-    mutators: { setFragmentPosition, setFragmentRotation },
+    mutators: { setFragmentState },
     name: "chat-user-id",
     pullURL: "/api/replicache-pull",
     pushURL: "/api/replicache-push",

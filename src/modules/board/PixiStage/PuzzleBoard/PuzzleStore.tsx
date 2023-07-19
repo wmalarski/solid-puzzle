@@ -1,18 +1,15 @@
 import { createContext, useContext, type Component, type JSX } from "solid-js";
 import { createStore } from "solid-js/store";
+import { createSubscription } from "~/lib/solid-replicache";
 import { getDistance } from "~/utils/geometry";
 import type { PuzzleFragmentShape } from "~/utils/getPuzzleFragments";
-import { useReplicache } from "../../ReplicacheClient";
-
-export type FragmentState = {
-  isLocked: boolean;
-  rotation: number;
-  x: number;
-  y: number;
-};
+import {
+  getFragmentKey,
+  useReplicache,
+  type FragmentState,
+} from "../../ReplicacheClient";
 
 export type PuzzleState = {
-  fragments: Record<string, FragmentState | undefined>;
   selectedId?: string;
 };
 
@@ -21,87 +18,70 @@ type UsePuzzleStoreArgs = {
   shapes: PuzzleFragmentShape[];
 };
 
-type SetRotationArgs = {
-  fragmentId: string;
-  rotation: number;
-};
-
-type SetPositionArgs = {
-  fragmentId: string;
-  x: number;
-  y: number;
-};
-
 const usePuzzleStore = (args: UsePuzzleStoreArgs) => {
-  const fragments: PuzzleState["fragments"] = {};
   const shapes = new Map<string, PuzzleFragmentShape>();
 
   args.shapes.forEach((shape) => {
     shapes.set(shape.fragmentId, shape);
-    fragments[shape.fragmentId] = {
-      isLocked: false,
-      rotation: shape.initialRotation,
-      x: shape.center.x,
-      y: shape.center.y,
-    };
   });
 
   const replicache = useReplicache();
 
-  const [state, setState] = createStore<PuzzleState>({ fragments });
+  const [state, setState] = createStore<PuzzleState>({});
 
   const setSelectedId = (selectedId?: string) => {
     setState("selectedId", selectedId);
   };
 
-  const checkOnPlace = (fragmentId: string) => {
-    const fragment = state.fragments[fragmentId];
-    const shape = shapes.get(fragmentId);
-    if (fragment && shape) {
-      const distance = getDistance(fragment, shape.center);
-      const isRightAngle = Math.abs(fragment.rotation) < Math.PI / 32;
-      const isLocked = distance < 20 && isRightAngle;
-      setState("fragments", fragmentId, "isLocked", isLocked);
+  const isLockedInPlace = (fragment: FragmentState) => {
+    const shape = shapes.get(fragment.fragmentId);
+    if (!fragment || !shape) {
+      return false;
     }
+    const distance = getDistance(fragment, shape.center);
+    const isRightAngle = Math.abs(fragment.rotation) < Math.PI / 32;
+    const isLocked = distance < 20 && isRightAngle;
+    return isLocked;
   };
 
-  const setRotation = ({ fragmentId, rotation }: SetRotationArgs) => {
-    setState("fragments", fragmentId, "rotation", rotation);
-    replicache().mutate.setFragmentRotation({
+  const setFragmentState = (fragment: FragmentState) => {
+    const isLocked = isLockedInPlace(fragment);
+    replicache().mutate.setFragmentState({
       boardId: args.boardId,
-      fragmentId,
-      rotation,
+      state: { ...fragment, isLocked },
     });
-    checkOnPlace(fragmentId);
   };
 
-  const setPosition = ({ fragmentId, x, y }: SetPositionArgs) => {
-    setState("fragments", fragmentId, "x", x);
-    setState("fragments", fragmentId, "y", y);
-    replicache().mutate.setFragmentPosition({
-      boardId: args.boardId,
-      fragmentId,
-      x,
-      y,
-    });
-    checkOnPlace(fragmentId);
+  const createFragmentSubscription = (fragmentId: () => string) => {
+    return createSubscription(
+      replicache(),
+      async (tx) => {
+        const key = getFragmentKey({
+          boardId: args.boardId,
+          fragmentId: fragmentId(),
+        });
+        const fragment = await tx.get(key);
+        return fragment as FragmentState | null;
+      },
+      null
+    );
   };
 
   return {
-    setPosition,
-    setRotation,
+    createFragmentSubscription,
+    setFragmentState,
     setSelectedId,
-    shapes: shapes as ReadonlyMap<string, PuzzleFragmentShape>,
+    shapes: args.shapes,
     state,
   };
 };
 
 const PuzzleStoreContext = createContext<ReturnType<typeof usePuzzleStore>>({
-  setPosition: () => void 0,
-  setRotation: () => void 0,
+  createFragmentSubscription: () => () => null,
+  setFragmentState: () => void 0,
   setSelectedId: () => void 0,
-  shapes: new Map(),
-  state: { fragments: {} },
+  shapes: [],
+  state: {},
 });
 
 type PuzzleStoreProviderProps = {

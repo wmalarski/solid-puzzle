@@ -51,21 +51,13 @@ const Board: Component<BoardProps> = (props) => {
   });
 
   return (
-    <For each={Object.keys(store.state.fragments)}>
-      {(fragmentId) => (
-        <Show when={store.state.fragments[fragmentId]}>
-          {(fragment) => (
-            <Show when={store.shapes.get(fragmentId)}>
-              {(shape) => (
-                <PuzzleFragment
-                  texture={props.texture}
-                  state={fragment()}
-                  shape={shape()}
-                />
-              )}
-            </Show>
-          )}
-        </Show>
+    <For each={store.shapes}>
+      {(shape) => (
+        <PuzzleFragment
+          texture={props.texture}
+          state={fragment()}
+          shape={shape}
+        />
       )}
     </For>
   );

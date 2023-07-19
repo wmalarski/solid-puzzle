@@ -9,8 +9,9 @@ import {
 } from "solid-js";
 import { randomHexColor } from "~/utils/colors";
 import type { PuzzleFragmentShape } from "~/utils/getPuzzleFragments";
+import { useReplicache, type FragmentState } from "../../ReplicacheClient";
 import { usePixiApp } from "../PixiApp";
-import { usePuzzleStoreContext, type FragmentState } from "./PuzzleStore";
+import { usePuzzleStoreContext } from "./PuzzleStore";
 import { RotationAnchor } from "./RotationAnchor";
 import { useDragObject } from "./useDragObject";
 
@@ -86,14 +87,18 @@ export const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
 };
 
 type PuzzleFragmentProps = {
-  state: FragmentState;
   texture: PIXI.Texture;
   shape: PuzzleFragmentShape;
 };
 
 export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
   const app = usePixiApp();
+  const replicache = useReplicache();
   const store = usePuzzleStoreContext();
+
+  const messages = store.createFragmentSubscription(
+    () => props.shape.fragmentId
+  );
 
   const fragment = new PIXI.Container();
 
