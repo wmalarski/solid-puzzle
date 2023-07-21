@@ -52,13 +52,7 @@ const Board: Component<BoardProps> = (props) => {
 
   return (
     <For each={store.shapes}>
-      {(shape) => (
-        <PuzzleFragment
-          texture={props.texture}
-          state={fragment()}
-          shape={shape}
-        />
-      )}
+      {(shape) => <PuzzleFragment texture={props.texture} shape={shape} />}
     </For>
   );
 };

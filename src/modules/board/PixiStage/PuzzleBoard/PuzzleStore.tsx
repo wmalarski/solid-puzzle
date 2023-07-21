@@ -61,9 +61,15 @@ const usePuzzleStore = (args: UsePuzzleStoreArgs) => {
           fragmentId: fragmentId(),
         });
         const fragment = await tx.get(key);
-        return fragment as FragmentState | null;
+        return fragment as FragmentState;
       },
-      null
+      {
+        fragmentId: fragmentId(),
+        isLocked: false,
+        rotation: 0,
+        x: 0,
+        y: 0,
+      }
     );
   };
 
@@ -77,7 +83,9 @@ const usePuzzleStore = (args: UsePuzzleStoreArgs) => {
 };
 
 const PuzzleStoreContext = createContext<ReturnType<typeof usePuzzleStore>>({
-  createFragmentSubscription: () => () => null,
+  createFragmentSubscription: () => () => {
+    throw new Error("Not initialized");
+  },
   setFragmentState: () => void 0,
   setSelectedId: () => void 0,
   shapes: [],
