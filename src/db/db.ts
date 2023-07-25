@@ -2,14 +2,18 @@ import Database from "better-sqlite3";
 import { drizzle } from "drizzle-orm/better-sqlite3";
 import type { FetchEvent } from "solid-start";
 import { serverEnv } from "~/env/serverEnv";
-import { board, user } from "./schema";
+import { board, message, space, user } from "./schema";
 
 type CreateDrizzleArgs = Pick<FetchEvent, "env" | "locals">;
 
 const createDrizzle = (args: CreateDrizzleArgs) => {
   const env = serverEnv(args);
   const instance = Database(env.DATABASE_URL);
-  return { db: drizzle(instance), instance, schema: { board, user } };
+  return {
+    db: drizzle(instance),
+    instance,
+    schema: { board, message, replicacheClient, space, user },
+  };
 };
 
 export type DrizzleDB = ReturnType<typeof createDrizzle>;

@@ -13,7 +13,7 @@ import {
 
 type MutatorDef<T> = (
   tx: WriteTransaction,
-  args: T
+  args: T,
 ) => ReturnType<MutatorDefs[0]>;
 
 export type FragmentState = {
@@ -40,7 +40,7 @@ type SetFragmentStateArgs = {
 
 const setFragmentState: MutatorDef<SetFragmentStateArgs> = async (
   tx,
-  { boardId, state }
+  { boardId, state },
 ) => {
   const key = getFragmentKey({ boardId, fragmentId: state.fragmentId });
   await tx.put(key, state);
@@ -51,8 +51,8 @@ const createReplicache = () => {
     licenseKey: import.meta.env.VITE_REPLICACHE_LICENSE_KEY,
     mutators: { setFragmentState },
     name: "chat-user-id",
-    pullURL: "/api/replicache-pull",
-    pushURL: "/api/replicache-push",
+    pullURL: "/api/replicache/pull",
+    pushURL: "/api/replicache/push",
   });
 
   return replicache;
@@ -68,7 +68,7 @@ type ReplicacheProviderProps = {
 };
 
 export const ReplicacheProvider: Component<ReplicacheProviderProps> = (
-  props
+  props,
 ) => {
   const [value] = createSignal(createReplicache());
 

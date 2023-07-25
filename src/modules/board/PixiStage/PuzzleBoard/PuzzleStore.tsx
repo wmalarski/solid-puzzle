@@ -69,7 +69,7 @@ const usePuzzleStore = (args: UsePuzzleStoreArgs) => {
         rotation: 0,
         x: 0,
         y: 0,
-      }
+      },
     );
   };
 
@@ -99,7 +99,7 @@ type PuzzleStoreProviderProps = {
 };
 
 export const PuzzleStoreProvider: Component<PuzzleStoreProviderProps> = (
-  props
+  props,
 ) => {
   const store = usePuzzleStore(props);
 
