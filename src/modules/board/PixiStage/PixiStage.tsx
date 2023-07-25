@@ -1,5 +1,5 @@
 import type { Component } from "solid-js";
-import type { BoardModel } from "~/db/types";
+import type { BoardModel } from "~/server/board/types";
 import { TransformContextProvider } from "../TransformContext";
 import { ZoomBar } from "../ZoomBar";
 import { PixiAppProvider } from "./PixiApp";

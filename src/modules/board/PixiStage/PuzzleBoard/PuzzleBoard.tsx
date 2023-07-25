@@ -8,7 +8,7 @@ import {
   onMount,
   type Component,
 } from "solid-js";
-import type { BoardModel } from "~/db/types";
+import type { BoardModel } from "~/server/board/types";
 import { getPuzzleFragments } from "~/utils/getPuzzleFragments";
 import { usePixiApp } from "../PixiApp";
 import { PreviewGrid, PreviewSprite } from "./PreviewSprite";

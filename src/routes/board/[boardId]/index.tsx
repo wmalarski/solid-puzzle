@@ -3,13 +3,13 @@ import { Show, Suspense, type Component } from "solid-js";
 import { useParams, useRouteData, type RouteDataArgs } from "solid-start";
 import { createServerData$, redirect } from "solid-start/server";
 import { SessionProvider } from "~/contexts/SessionContext";
-import type { BoardModel } from "~/db/types";
 import { Board } from "~/modules/board/Board";
 import {
   selectBoardQueryKey,
   selectBoardServerQuery,
 } from "~/server/board/actions";
 import { selectBoard } from "~/server/board/db";
+import type { BoardModel } from "~/server/board/types";
 import { getRequestContext } from "~/server/context";
 import { hasBoardAccess, type BoardAccess } from "~/server/share/db";
 import { paths } from "~/utils/paths";
@@ -52,7 +52,7 @@ export const routeData = (args: RouteDataArgs) => {
 
       return { access, board, session: ctx.session, user: ctx.user };
     },
-    { key: ["board", args.params.boardId] }
+    { key: ["board", args.params.boardId] },
   );
 };
 

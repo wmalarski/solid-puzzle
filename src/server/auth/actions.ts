@@ -6,8 +6,8 @@ import {
 } from "solid-start/server";
 import { z } from "zod";
 import { paths } from "~/utils/paths";
+import { zodFormParse } from "../utils";
 import { getLuciaAuth, getSession } from "./lucia";
-import { zodFormParse } from "./utils";
 
 const signUpArgsSchema = () => {
   return z.object({
@@ -70,7 +70,7 @@ export const createSignInServerAction = () => {
       const key = await auth.useKey(
         "username",
         parsed.username,
-        parsed.password
+        parsed.password,
       );
 
       const session = await auth.createSession(key.userId);

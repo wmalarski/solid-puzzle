@@ -7,9 +7,9 @@ import {
   type Component,
 } from "solid-js";
 import { ClientOnly } from "~/components/ClientOnly";
-import type { BoardModel } from "~/db/types";
 import { createSubscription } from "~/lib/solid-replicache";
 import { InfoBar } from "~/modules/common/InfoBar";
+import type { BoardModel } from "~/server/board/types";
 import type { BoardAccess } from "~/server/share/db";
 import { ReplicacheProvider, useReplicache } from "../ReplicacheClient";
 
@@ -33,7 +33,7 @@ const ClientBoard: Component<BoardProps> = (props) => {
       const list = await tx.scan({ prefix: "message/" }).entries().toArray();
       return list;
     },
-    []
+    [],
   );
 
   createEffect(() => {

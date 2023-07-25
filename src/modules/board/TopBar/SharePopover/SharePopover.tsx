@@ -20,7 +20,7 @@ import {
   TextFieldLabelText,
   TextFieldRoot,
 } from "~/components/TextField";
-import type { BoardModel } from "~/db/types";
+import type { BoardModel } from "~/server/board/types";
 import {
   generateBoardInviteQueryKey,
   generateBoardInviteServerQuery,
@@ -47,7 +47,7 @@ const ShareForm: Component<ShareFormProps> = (props) => {
     }
 
     return `${window.location.origin}${paths.invite(
-      props.board.id
+      props.board.id,
     )}?${buildSearchParams({ token: inviteQuery.data.token })}`;
   });
 

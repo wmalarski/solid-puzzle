@@ -1,7 +1,7 @@
 import type { Session, User } from "lucia-auth";
 import type { FetchEvent } from "solid-start";
-import { getDrizzle, type DrizzleDB } from "~/db/db";
-import { getSession, getSessionOrThrow } from "./lucia";
+import { getSession, getSessionOrThrow } from "./auth/lucia";
+import { getDrizzle, type DrizzleDB } from "./db";
 
 export type RequestContext = DrizzleDB & {
   session: Session | null;
@@ -16,7 +16,7 @@ export type ProtectedRequestContext = DrizzleDB & {
 type GetRequestContext = Pick<FetchEvent, "env" | "locals" | "request">;
 
 export const getRequestContext = async (
-  args: GetRequestContext
+  args: GetRequestContext,
 ): Promise<RequestContext> => {
   const drizzle = getDrizzle(args);
   const session = await getSession(args);
@@ -24,7 +24,7 @@ export const getRequestContext = async (
 };
 
 export const getProtectedRequestContext = async (
-  args: GetRequestContext
+  args: GetRequestContext,
 ): Promise<ProtectedRequestContext> => {
   const drizzle = getDrizzle(args);
   const session = await getSessionOrThrow(args);

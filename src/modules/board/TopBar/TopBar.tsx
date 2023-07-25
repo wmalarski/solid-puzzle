@@ -1,7 +1,7 @@
 import { Show, type Component } from "solid-js";
 import { Avatar, AvatarContent, AvatarGroup } from "~/components/Avatar";
 import { useSessionContext } from "~/contexts/SessionContext";
-import type { BoardModel } from "~/db/types";
+import type { BoardModel } from "~/server/board/types";
 import type { BoardAccess } from "~/server/share/db";
 import { SettingsDialog } from "./SettingsDialog";
 import { SharePopover } from "./SharePopover";

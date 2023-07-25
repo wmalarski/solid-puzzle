@@ -2,7 +2,9 @@ import Database from "better-sqlite3";
 import { drizzle } from "drizzle-orm/better-sqlite3";
 import type { FetchEvent } from "solid-start";
 import { serverEnv } from "~/env/serverEnv";
-import { board, message, space, user } from "./schema";
+import { user } from "~/server/auth/schema";
+import { board } from "~/server/board/schema";
+import { message, replicacheClient, space } from "~/server/messages/schema";
 
 type CreateDrizzleArgs = Pick<FetchEvent, "env" | "locals">;
 

@@ -76,7 +76,7 @@ export const selectLastMutationId = (args: SelectLastMutationIdArgs) => {
     }
     return 0;
   }
-  return parseInt(clientRow.last_mutation_id);
+  return clientRow.last_mutation_id;
 };
 
 type UpsertLastMutationIdArgs = {

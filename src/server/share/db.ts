@@ -22,7 +22,7 @@ const boardsAccessSchema = () => {
       z.object({
         boardId: z.string(),
         username: z.string(),
-      })
+      }),
     ),
   });
 };
@@ -33,7 +33,7 @@ export type BoardAccess = BoardsAccess["boards"][0];
 const boardsKey = "boards";
 
 const getBoardsAccessFromCookie = async (
-  event: FetchEvent
+  event: FetchEvent,
 ): Promise<BoardsAccess | null> => {
   const storage = createStorage(event.env);
 
@@ -51,7 +51,7 @@ const getBoardsAccessFromCookie = async (
 };
 
 export const getBoardsAccess = (
-  event: FetchEvent
+  event: FetchEvent,
 ): Promise<BoardsAccess | null> => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const cachedBoards = event.locals.boards;

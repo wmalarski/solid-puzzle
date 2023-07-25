@@ -10,7 +10,7 @@ import {
   TextFieldLabelText,
   TextFieldRoot,
 } from "~/components/TextField";
-import type { BoardModel } from "~/db/types";
+import type { BoardModel } from "~/server/board/types";
 import { acceptBoardInviteAction } from "~/server/share/actions";
 
 type AcceptInviteFormProps = {

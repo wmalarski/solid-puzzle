@@ -2,11 +2,11 @@ import { createQuery } from "@tanstack/solid-query";
 import { ErrorBoundary, For, Show, Suspense, type Component } from "solid-js";
 import { LinkButton } from "~/components/Button";
 import { Card, CardActions, CardBody, CardTitle } from "~/components/Card";
-import type { BoardModel } from "~/db/types";
 import {
   selectBoardsKey,
   selectBoardsServerQuery,
 } from "~/server/board/actions";
+import type { BoardModel } from "~/server/board/types";
 import { paths } from "~/utils/paths";
 
 type BoardItemProps = {
