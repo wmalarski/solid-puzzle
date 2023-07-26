@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-await-in-loop */
+import { ServerError, json, type APIEvent } from "solid-start";
+import { getRequestContext, type RequestContext } from "~/server/context";
 import {
   insertMessage,
   selectLastMutationId,
@@ -7,21 +10,41 @@ import {
   upsertLastMutationId,
 } from "~/server/messages/db";
 
+const defaultSpaceId = "0";
+
 async function sendPoke() {
   // TODO
 }
 
-const processMutation = async (t, clientID, spaceID, mutation, error) => {
+type ProcessMutationArgs = {
+  clientId: string;
+  ctx: RequestContext;
+  error?: any;
+  mutation: any;
+  spaceId: string;
+};
+
+const processMutation = ({
+  clientId,
+  ctx,
+  error,
+  mutation,
+  spaceId,
+}: ProcessMutationArgs) => {
   // Get the previous version for the affected space and calculate the next
   // one.
   const preVersion = selectSpaceVersion({
     ctx,
-    spaceId: spaceID,
+    spaceId: spaceId,
   });
 
   const nextVersion = (preVersion?.version || 1) + 1;
 
-  const lastMutationID = await selectLastMutationId(t, clientID, false);
+  const lastMutationID = selectLastMutationId({
+    clientId,
+    ctx,
+    required: false,
+  });
   const nextMutationID = lastMutationID + 1;
 
   console.log("nextVersion", nextVersion, "nextMutationID", nextMutationID);
@@ -55,7 +78,7 @@ const processMutation = async (t, clientID, spaceID, mutation, error) => {
           from: mutation.args.from,
           id: mutation.args.id,
           order: mutation.args.order,
-          spaceId: spaceID,
+          spaceId: spaceId,
           version: nextVersion,
         });
         break;
@@ -72,10 +95,10 @@ const processMutation = async (t, clientID, spaceID, mutation, error) => {
     );
   }
 
-  console.log("setting", clientID, "last_mutation_id to", nextMutationID);
+  console.log("setting", clientId, "last_mutation_id to", nextMutationID);
   // Update lastMutationID for requesting client.
   upsertLastMutationId({
-    clientId: clientID,
+    clientId: clientId,
     ctx,
     mutationId: nextMutationID,
   });
@@ -83,13 +106,15 @@ const processMutation = async (t, clientID, spaceID, mutation, error) => {
   // Update version for space.
   updateSpaceVersion({
     ctx,
-    spaceId: spaceID,
+    spaceId: spaceId,
     version: nextVersion,
   });
 };
 
-const resolver = async (req, res) => {
-  const push = req.body;
+const resolver = async (event: APIEvent) => {
+  const ctx = await getRequestContext(event);
+
+  const push = await event.request.json();
   console.log("Processing push", JSON.stringify(push));
 
   const t0 = Date.now();
@@ -99,9 +124,14 @@ const resolver = async (req, res) => {
       const t1 = Date.now();
 
       try {
-        await processMutation(t, push.clientID, defaultSpaceID, mutation);
-      } catch (e) {
-        console.error("Caught error from mutation", mutation, e);
+        processMutation({
+          clientId: push.clientID,
+          ctx,
+          mutation,
+          spaceId: defaultSpaceId,
+        });
+      } catch (error) {
+        console.error("Caught error from mutation", mutation, error);
 
         // Handle errors inside mutations by skipping and moving on. This is
         // convenient in development but you may want to reconsider as your app
@@ -128,20 +158,29 @@ const resolver = async (req, res) => {
         // deterministic!:
         //
         // https://doc.replicache.dev/concepts/how-it-works#speculative-execution-and-confirmation
-        processMutation(t, push.clientID, defaultSpaceID, mutation, e);
+        processMutation({
+          clientId: push.clientID,
+          ctx,
+          error,
+          mutation,
+          spaceId: defaultSpaceId,
+        });
       }
 
       console.log("Processed mutation in", Date.now() - t1);
     }
 
-    res.send("{}");
+    // res.send("{}");
 
     // We need to await here otherwise, Next.js will frequently kill the request
     // and the poke won't get sent.
     await sendPoke();
-  } catch (e) {
-    console.error(e);
-    res.status(500).send(e.toString());
+
+    return json({});
+  } catch (error) {
+    console.error(error);
+    throw new ServerError(String(error), { status: 500 });
+    // res.status(500).send(String(error));
   } finally {
     console.log("Processed push in", Date.now() - t0);
   }
