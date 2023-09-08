@@ -1,16 +1,18 @@
 import { createContext, useContext, type Component, type JSX } from "solid-js";
 import { createStore } from "solid-js/store";
-import { createSubscription } from "~/lib/solid-replicache";
 import { getDistance } from "~/utils/geometry";
 import type { PuzzleFragmentShape } from "~/utils/getPuzzleFragments";
-import {
-  getFragmentKey,
-  useReplicache,
-  type FragmentState,
-} from "../../ReplicacheClient";
 
 export type PuzzleState = {
   selectedId?: string;
+};
+
+export type FragmentState = {
+  fragmentId: string;
+  isLocked: boolean;
+  rotation: number;
+  x: number;
+  y: number;
 };
 
 type UsePuzzleStoreArgs = {
@@ -25,7 +27,7 @@ const usePuzzleStore = (args: UsePuzzleStoreArgs) => {
     shapes.set(shape.fragmentId, shape);
   });
 
-  const replicache = useReplicache();
+  // const replicache = useReplicache();
 
   const [state, setState] = createStore<PuzzleState>({});
 
@@ -45,32 +47,41 @@ const usePuzzleStore = (args: UsePuzzleStoreArgs) => {
   };
 
   const setFragmentState = (fragment: FragmentState) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const isLocked = isLockedInPlace(fragment);
-    replicache().mutate.setFragmentState({
-      boardId: args.boardId,
-      state: { ...fragment, isLocked },
-    });
+    // replicache().mutate.setFragmentState({
+    //   boardId: args.boardId,
+    //   state: { ...fragment, isLocked },
+    // });
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const createFragmentSubscription = (fragmentId: () => string) => {
-    return createSubscription(
-      replicache(),
-      async (tx) => {
-        const key = getFragmentKey({
-          boardId: args.boardId,
-          fragmentId: fragmentId(),
-        });
-        const fragment = await tx.get(key);
-        return fragment as FragmentState;
-      },
-      {
-        fragmentId: fragmentId(),
-        isLocked: false,
-        rotation: 0,
-        x: 0,
-        y: 0,
-      },
-    );
+    return () => ({
+      fragmentId: fragmentId(),
+      isLocked: false,
+      rotation: 0,
+      x: 0,
+      y: 0,
+    });
+    // return createSubscription(
+    //   replicache(),
+    //   async (tx) => {
+    //     const key = getFragmentKey({
+    //       boardId: args.boardId,
+    //       fragmentId: fragmentId(),
+    //     });
+    //     const fragment = await tx.get(key);
+    //     return fragment as FragmentState;
+    //   },
+    //   {
+    //     fragmentId: fragmentId(),
+    //     isLocked: false,
+    //     rotation: 0,
+    //     x: 0,
+    //     y: 0,
+    //   },
+    // );
   };
 
   return {

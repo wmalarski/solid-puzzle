@@ -4,7 +4,6 @@ import type { FetchEvent } from "solid-start";
 import { serverEnv } from "~/env/serverEnv";
 import { user } from "~/server/auth/schema";
 import { board } from "~/server/board/schema";
-import { message, replicacheClient, space } from "~/server/messages/schema";
 
 type CreateDrizzleArgs = Pick<FetchEvent, "env" | "locals">;
 
@@ -14,7 +13,7 @@ const createDrizzle = (args: CreateDrizzleArgs) => {
   return {
     db: drizzle(instance),
     instance,
-    schema: { board, message, replicacheClient, space, user },
+    schema: { board, user },
   };
 };
 

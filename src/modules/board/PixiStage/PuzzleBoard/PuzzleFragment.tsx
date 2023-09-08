@@ -9,9 +9,8 @@ import {
 } from "solid-js";
 import { randomHexColor } from "~/utils/colors";
 import type { PuzzleFragmentShape } from "~/utils/getPuzzleFragments";
-import { type FragmentState } from "../../ReplicacheClient";
 import { usePixiApp } from "../PixiApp";
-import { usePuzzleStoreContext } from "./PuzzleStore";
+import { usePuzzleStoreContext, type FragmentState } from "./PuzzleStore";
 import { RotationAnchor } from "./RotationAnchor";
 import { useDragObject } from "./useDragObject";
 
@@ -21,7 +20,7 @@ type PuzzleFragmentLabelProps = {
 };
 
 export const PuzzleFragmentLabel: Component<PuzzleFragmentLabelProps> = (
-  props
+  props,
 ) => {
   const text = new PIXI.Text();
 
@@ -48,7 +47,7 @@ type PuzzleFragmentGraphicsProps = {
 };
 
 export const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
-  props
+  props,
 ) => {
   const graphics = new PIXI.Graphics();
 
@@ -124,13 +123,13 @@ export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
   });
 
   createEffect(() => {
-    if (!state().isLocked) {
-      fragment.eventMode = "static";
-      return;
-    }
-    fragment.eventMode = "none";
-    fragment.x = props.shape.min.x;
-    fragment.y = props.shape.min.y;
+    // if (!state().isLocked) {
+    //   fragment.eventMode = "static";
+    //   return;
+    // }
+    // fragment.eventMode = "none";
+    // fragment.x = props.shape.min.x;
+    // fragment.y = props.shape.min.y;
   });
 
   const fragmentId = createMemo(() => {
