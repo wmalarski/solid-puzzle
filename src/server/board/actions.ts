@@ -3,7 +3,7 @@ import server$, {
   redirect,
   useRequest,
 } from "solid-start/server";
-import type { z } from "zod";
+import { parseAsync, type Input } from "valibot";
 import { paths } from "~/utils/paths";
 import { getProtectedRequestContext, getRequestContext } from "../context";
 import { zodFormParse } from "../utils";
@@ -64,14 +64,14 @@ export const deleteBoardAction = () => {
 };
 
 export const selectBoardQueryKey = (
-  args: z.infer<ReturnType<typeof selectBoardArgsSchema>>
+  args: Input<ReturnType<typeof selectBoardArgsSchema>>,
 ) => {
   return ["selectBoard", args] as const;
 };
 
 export const selectBoardServerQuery = server$(
   async ([, args]: ReturnType<typeof selectBoardQueryKey>) => {
-    const parsed = selectBoardArgsSchema().parse(args);
+    const parsed = await parseAsync(selectBoardArgsSchema(), args);
 
     const event = useRequest();
     const ctx = await getRequestContext({
@@ -81,18 +81,18 @@ export const selectBoardServerQuery = server$(
     });
 
     return selectBoard({ ...parsed, ctx });
-  }
+  },
 );
 
 export const selectBoardsKey = (
-  args: z.infer<ReturnType<typeof selectBoardsArgsSchema>>
+  args: Input<ReturnType<typeof selectBoardsArgsSchema>>,
 ) => {
   return ["selectBoards", args] as const;
 };
 
 export const selectBoardsServerQuery = server$(
   async ([, args]: ReturnType<typeof selectBoardsKey>) => {
-    const parsed = selectBoardsArgsSchema().parse(args);
+    const parsed = await parseAsync(selectBoardsArgsSchema(), args);
 
     const event = useRequest();
     const ctx = await getProtectedRequestContext({
@@ -102,5 +102,5 @@ export const selectBoardsServerQuery = server$(
     });
 
     return selectBoards({ ...parsed, ctx });
-  }
+  },
 );

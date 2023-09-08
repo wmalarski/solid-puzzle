@@ -4,15 +4,15 @@ import {
   createServerData$,
   redirect,
 } from "solid-start/server";
-import { z } from "zod";
+import { maxLength, minLength, object, string } from "valibot";
 import { paths } from "~/utils/paths";
 import { zodFormParse } from "../utils";
 import { getLuciaAuth, getSession } from "./lucia";
 
 const signUpArgsSchema = () => {
-  return z.object({
-    password: z.string().min(6).max(20),
-    username: z.string().min(3).max(20),
+  return object({
+    password: string([minLength(6), maxLength(20)]),
+    username: string([minLength(3), maxLength(20)]),
   });
 };
 
@@ -51,9 +51,9 @@ export const createSignUpServerAction = () => {
 };
 
 const signInArgsSchema = () => {
-  return z.object({
-    password: z.string().min(3),
-    username: z.string().min(3),
+  return object({
+    password: string([minLength(3)]),
+    username: string([minLength(3)]),
   });
 };
 

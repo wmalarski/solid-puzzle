@@ -1,20 +1,30 @@
 import { eq } from "drizzle-orm";
 import { nanoid } from "nanoid";
 import { ServerError } from "solid-start/server";
-import { z } from "zod";
+import {
+  coerce,
+  integer,
+  maxValue,
+  minLength,
+  minValue,
+  number,
+  object,
+  string,
+  type Input,
+} from "valibot";
 import { generateCurves } from "~/utils/getPuzzleFragments";
-import { type ProtectedRequestContext, type RequestContext } from "../context";
+import type { ProtectedRequestContext, RequestContext } from "../context";
 
 export const insertBoardArgsSchema = () => {
-  return z.object({
-    columns: z.coerce.number().int().min(3),
-    image: z.string(),
-    name: z.string().min(3),
-    rows: z.coerce.number().int().min(3),
+  return object({
+    columns: coerce(number([integer(), minValue(3)]), Number),
+    image: string(),
+    name: string([minLength(3)]),
+    rows: coerce(number([integer(), minValue(3)]), Number),
   });
 };
 
-type InsertBoardArgs = z.infer<ReturnType<typeof insertBoardArgsSchema>> & {
+type InsertBoardArgs = Input<ReturnType<typeof insertBoardArgsSchema>> & {
   ctx: ProtectedRequestContext;
 };
 
@@ -40,16 +50,16 @@ export const insertBoard = (args: InsertBoardArgs) => {
 };
 
 export const updateBoardArgsSchema = () => {
-  return z.object({
-    columns: z.coerce.number().int().min(3),
-    id: z.string(),
-    image: z.string(),
-    name: z.string().min(3),
-    rows: z.coerce.number().int().min(3),
+  return object({
+    columns: coerce(number([integer(), minValue(3)]), Number),
+    id: string(),
+    image: string(),
+    name: string([minLength(3)]),
+    rows: coerce(number([integer(), minValue(3)]), Number),
   });
 };
 
-type UpdateBoardArgs = z.infer<ReturnType<typeof updateBoardArgsSchema>> & {
+type UpdateBoardArgs = Input<ReturnType<typeof updateBoardArgsSchema>> & {
   ctx: ProtectedRequestContext;
 };
 
@@ -61,7 +71,7 @@ export const updateBoard = (args: UpdateBoardArgs) => {
     .limit(1)
     .get();
 
-  if (args.ctx.session.userId !== board.ownerId) {
+  if (args.ctx.session.userId !== board?.ownerId) {
     throw new ServerError("Unauthorized", { status: 404 });
   }
 
@@ -80,10 +90,10 @@ export const updateBoard = (args: UpdateBoardArgs) => {
 };
 
 export const deleteBoardArgsSchema = () => {
-  return z.object({ id: z.string() });
+  return object({ id: string() });
 };
 
-type DeleteBoardArgs = z.infer<ReturnType<typeof deleteBoardArgsSchema>> & {
+type DeleteBoardArgs = Input<ReturnType<typeof deleteBoardArgsSchema>> & {
   ctx: ProtectedRequestContext;
 };
 
@@ -95,7 +105,7 @@ export const deleteBoard = (args: DeleteBoardArgs) => {
     .limit(1)
     .get();
 
-  if (args.ctx.session.userId !== board.ownerId) {
+  if (args.ctx.session.userId !== board?.ownerId) {
     throw new ServerError("Unauthorized", { status: 404 });
   }
 
@@ -108,10 +118,10 @@ export const deleteBoard = (args: DeleteBoardArgs) => {
 };
 
 export const selectBoardArgsSchema = () => {
-  return z.object({ id: z.string() });
+  return object({ id: string() });
 };
 
-type SelectBoardArgs = z.infer<ReturnType<typeof selectBoardArgsSchema>> & {
+type SelectBoardArgs = Input<ReturnType<typeof selectBoardArgsSchema>> & {
   ctx: RequestContext;
 };
 
@@ -131,13 +141,13 @@ export const selectBoard = (args: SelectBoardArgs) => {
 };
 
 export const selectBoardsArgsSchema = () => {
-  return z.object({
-    limit: z.coerce.number().max(20),
-    offset: z.coerce.number(),
+  return object({
+    limit: coerce(number([maxValue(20)]), Number),
+    offset: coerce(number(), Number),
   });
 };
 
-type SelectBoardsArgs = z.infer<ReturnType<typeof selectBoardsArgsSchema>> & {
+type SelectBoardsArgs = Input<ReturnType<typeof selectBoardsArgsSchema>> & {
   ctx: ProtectedRequestContext;
 };
 

@@ -36,6 +36,7 @@
     "eslint-plugin-solid": "0.13.0",
     "eslint-plugin-sort-keys-fix": "1.1.2",
     "eslint-plugin-tailwindcss": "3.13.0",
+    "partykit": "0.0.7",
     "postcss": "8.4.29",
     "prettier": "3.0.3",
     "solid-start-cloudflare-pages": "0.3.5",
@@ -44,8 +45,7 @@
     "tsx": "3.12.8",
     "typescript": "5.2.2",
     "vite": "4.4.9",
-    "wrangler": "3.7.0",
-    "partykit": "0.0.7"
+    "wrangler": "3.7.0"
   },
   "dependencies": {
     "@kobalte/core": "0.11.0",
@@ -62,6 +62,7 @@
     "jsonwebtoken": "9.0.2",
     "lucia-auth": "1.8.0",
     "nanoid": "4.0.2",
+    "partysocket": "0.0.3",
     "pixi.js": "7.2.4",
     "replicache": "13.0.1",
     "solid-icons": "1.0.11",
@@ -69,8 +70,7 @@
     "solid-start": "0.3.5",
     "tailwind-merge": "1.14.0",
     "undici": "5.23.0",
-    "zod": "3.22.2",
-    "partysocket": "0.0.3"
+    "valibot": "^0.13.1"
   },
   "engines": {
     "node": ">=18"

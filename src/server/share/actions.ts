@@ -1,5 +1,12 @@
 import server$, { createServerAction$, redirect } from "solid-start/server";
-import { z } from "zod";
+import {
+  maxLength,
+  minLength,
+  object,
+  parseAsync,
+  string,
+  type Input,
+} from "valibot";
 import { paths } from "~/utils/paths";
 import { zodFormParse } from "../utils";
 import {
@@ -9,9 +16,9 @@ import {
 } from "./db";
 
 const acceptBoardInviteArgsSchema = () => {
-  return z.object({
-    name: z.string().min(3).max(50),
-    token: z.string(),
+  return object({
+    name: string([minLength(3), maxLength(50)]),
+    token: string(),
   });
 };
 
@@ -22,7 +29,7 @@ export const acceptBoardInviteAction = () => {
       schema: acceptBoardInviteArgsSchema(),
     });
 
-    const result = validateShareToken({
+    const result = await validateShareToken({
       env: event.env,
       token: parsed.token,
     });
@@ -40,20 +47,20 @@ export const acceptBoardInviteAction = () => {
 };
 
 const generateBoardInviteArgsSchema = () => {
-  return z.object({
-    boardId: z.string(),
+  return object({
+    boardId: string(),
   });
 };
 
 export const generateBoardInviteQueryKey = (
-  args: z.infer<ReturnType<typeof generateBoardInviteArgsSchema>>
+  args: Input<ReturnType<typeof generateBoardInviteArgsSchema>>,
 ) => {
   return ["generateBoardInvite", args] as const;
 };
 
 export const generateBoardInviteServerQuery = server$(
-  ([, args]: ReturnType<typeof generateBoardInviteQueryKey>) => {
-    const parsed = generateBoardInviteArgsSchema().parse(args);
+  async ([, args]: ReturnType<typeof generateBoardInviteQueryKey>) => {
+    const parsed = await parseAsync(generateBoardInviteArgsSchema(), args);
 
     const token = issueShareToken({
       boardId: parsed.boardId,
@@ -61,5 +68,5 @@ export const generateBoardInviteServerQuery = server$(
     });
 
     return { token };
-  }
+  },
 );

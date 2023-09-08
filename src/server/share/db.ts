@@ -1,6 +1,13 @@
 import jwt from "jsonwebtoken";
 import { createCookieSessionStorage, type FetchEvent } from "solid-start";
-import { z } from "zod";
+import {
+  array,
+  object,
+  parseAsync,
+  safeParseAsync,
+  string,
+  type Input,
+} from "valibot";
 
 const createStorage = (env: Env) => {
   return createCookieSessionStorage({
@@ -17,17 +24,17 @@ const createStorage = (env: Env) => {
 };
 
 const boardsAccessSchema = () => {
-  return z.object({
-    boards: z.array(
-      z.object({
-        boardId: z.string(),
-        username: z.string(),
+  return object({
+    boards: array(
+      object({
+        boardId: string(),
+        username: string(),
       }),
     ),
   });
 };
 
-export type BoardsAccess = z.infer<ReturnType<typeof boardsAccessSchema>>;
+export type BoardsAccess = Input<ReturnType<typeof boardsAccessSchema>>;
 export type BoardAccess = BoardsAccess["boards"][0];
 
 const boardsKey = "boards";
@@ -39,7 +46,7 @@ const getBoardsAccessFromCookie = async (
 
   const session = await storage.getSession(event.request.headers.get("Cookie"));
 
-  const parsed = boardsAccessSchema().safeParse({
+  const parsed = await safeParseAsync(boardsAccessSchema(), {
     [boardsKey]: session.get(boardsKey),
   });
 
@@ -118,8 +125,8 @@ export const destroyBoardsAccessCookie = async ({
 };
 
 const shareTokenSchema = () => {
-  return z.object({
-    boardId: z.string(),
+  return object({
+    boardId: string(),
   });
 };
 
@@ -137,8 +144,11 @@ type ValidateShareTokenArgs = {
   token: string;
 };
 
-export const validateShareToken = ({ env, token }: ValidateShareTokenArgs) => {
+export const validateShareToken = async ({
+  env,
+  token,
+}: ValidateShareTokenArgs) => {
   const value = jwt.verify(token, env.SESSION_SECRET);
-  const parsed = shareTokenSchema().parse(value);
+  const parsed = await parseAsync(shareTokenSchema(), value);
   return parsed;
 };
