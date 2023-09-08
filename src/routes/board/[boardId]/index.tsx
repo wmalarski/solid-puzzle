@@ -46,7 +46,7 @@ export const routeData = (args: RouteDataArgs) => {
       const board = selectBoard({ ctx, id: boardId });
       const access = await hasBoardAccess({ boardId, event });
 
-      if (!board || (!access && board.ownerId !== ctx.session?.userId)) {
+      if (!board || (!access && board.ownerId !== ctx.session?.user.userId)) {
         throw redirect(paths.notFound);
       }
 

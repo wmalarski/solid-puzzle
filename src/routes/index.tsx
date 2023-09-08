@@ -18,7 +18,7 @@ export default function Home() {
     <SessionProvider value={() => session() || null}>
       <PageLayout>
         <TopNavbar />
-        <Show when={session()?.session}>
+        <Show when={session()}>
           <InsertBoard />
           <BoardsList />
         </Show>

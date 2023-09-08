@@ -51,7 +51,7 @@ const getBoardsAccessFromCookie = async (
   });
 
   if (parsed.success) {
-    return parsed.data;
+    return parsed.output;
   }
 
   return null;

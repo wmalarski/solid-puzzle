@@ -1,5 +1,5 @@
 {
   "out": "./migrations",
-  "schema": "./src/db/schema.ts",
+  "schema": ["./src/server/auth/schema.ts", "./src/server/board/schema.ts"],
   "breakpoints": true
 }

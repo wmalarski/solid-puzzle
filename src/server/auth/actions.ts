@@ -113,7 +113,10 @@ export const createSignOutServerAction = () => {
     const sessionCookie = auth.createSessionCookie(null);
 
     return new Response(null, {
-      headers: { Location: "/login", "Set-Cookie": sessionCookie.serialize() },
+      headers: {
+        Location: paths.signIn,
+        "Set-Cookie": sessionCookie.serialize(),
+      },
       status: 302,
     });
   });
