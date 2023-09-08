@@ -50,7 +50,7 @@ export const routeData = (args: RouteDataArgs) => {
         throw redirect(paths.notFound);
       }
 
-      return { access, board, session: ctx.session, user: ctx.user };
+      return { access, board, session: ctx.session };
     },
     { key: ["board", args.params.boardId] },
   );
@@ -60,7 +60,7 @@ export default function BoardSection() {
   const data = useRouteData<typeof routeData>();
 
   return (
-    <SessionProvider value={() => data()}>
+    <SessionProvider value={() => data()?.session || null}>
       <main class="relative h-screen w-screen">
         <Suspense>
           <BoardQuery

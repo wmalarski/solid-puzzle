@@ -1,31 +1,18 @@
-import type { Session, User } from "lucia";
+import type { Session } from "lucia";
 import { createContext, useContext, type Component, type JSX } from "solid-js";
 
-export type SessionContextState = {
-  session: Session | null;
-  user: User | null;
-};
-
-const sessionContextDefaultValue: SessionContextState = {
-  session: null,
-  user: null,
-};
-
-const SessionContext = createContext<() => SessionContextState>(() => ({
-  session: null,
-  user: null,
-}));
+const SessionContext = createContext<() => Session | null>(() => null);
 
 type SessionProviderProps = {
   children: JSX.Element;
-  value: () => SessionContextState | undefined;
+  value: () => Session | null;
 };
 
 export const SessionProvider: Component<SessionProviderProps> = (props) => {
   return (
     <SessionContext.Provider
       // eslint-disable-next-line solid/reactivity
-      value={() => props.value() || sessionContextDefaultValue}
+      value={() => props.value()}
     >
       {props.children}
     </SessionContext.Provider>

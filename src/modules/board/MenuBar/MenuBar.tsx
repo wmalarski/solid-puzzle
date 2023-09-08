@@ -12,7 +12,7 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
 } from "~/components/DropdownMenu";
-import { createSignOutServerAction } from "~/server/auth";
+import { createSignOutServerAction } from "~/server/auth/actions";
 import { paths } from "~/utils/paths";
 
 const SignOutMenuItem: Component = () => {

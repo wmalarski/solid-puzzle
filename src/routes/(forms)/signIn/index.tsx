@@ -1,6 +1,6 @@
 import { useRouteData } from "solid-start";
 import { SignIn } from "~/modules/auth/SignIn";
-import { createAnonGuardServerData } from "~/server/auth";
+import { createAnonGuardServerData } from "~/server/auth/actions";
 
 export const routeData = () => {
   return createAnonGuardServerData();

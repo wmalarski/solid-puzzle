@@ -5,7 +5,7 @@ import { Button, LinkButton } from "~/components/Button";
 import { Link } from "~/components/Link";
 import { Navbar, NavbarEnd, NavbarStart } from "~/components/Navbar";
 import { useSessionContext } from "~/contexts/SessionContext";
-import { createSignOutServerAction } from "~/server/auth";
+import { createSignOutServerAction } from "~/server/auth/actions";
 import { paths } from "~/utils/paths";
 
 const SignOutButton: Component = () => {
@@ -37,7 +37,7 @@ export const TopNavbar: Component = () => {
       </NavbarStart>
       <NavbarEnd>
         <Show
-          when={session()?.session}
+          when={session()}
           fallback={
             <>
               <LinkButton size="sm" variant="ghost" href={paths.signUp}>

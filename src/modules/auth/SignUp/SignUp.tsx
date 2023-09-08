@@ -10,7 +10,7 @@ import {
   TextFieldLabelText,
   TextFieldRoot,
 } from "~/components/TextField";
-import { createSignUpServerAction } from "~/server/auth";
+import { createSignUpServerAction } from "~/server/auth/actions";
 import { paths } from "~/utils/paths";
 
 export const SignUp: Component = () => {
