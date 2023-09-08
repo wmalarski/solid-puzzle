@@ -17,10 +17,8 @@ export const session = sqliteTable("auth_session", {
 });
 
 export const key = sqliteTable("auth_key", {
-  expires: integer("expires"),
   hashedPassword: text("hashed_password"),
   id: text("id").primaryKey(),
-  primaryKey: integer("primary_key").notNull(),
   userId: text("user_id")
     .notNull()
     .references(() => user.id),

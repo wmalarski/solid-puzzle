@@ -1,4 +1,4 @@
-import type { Session, User } from "lucia-auth";
+import type { Session, User } from "lucia";
 import { createContext, useContext, type Component, type JSX } from "solid-js";
 
 export type SessionContextState = {

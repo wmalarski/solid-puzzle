@@ -1,21 +1,20 @@
 import { betterSqlite3 } from "@lucia-auth/adapter-sqlite";
-import lucia from "lucia-auth";
-import { web } from "lucia-auth/middleware";
+import { lucia } from "lucia";
+import { web } from "lucia/middleware";
 import { ServerError, type FetchEvent } from "solid-start";
-import { getDrizzle, type DrizzleDB } from "~/db/db";
+import { getDrizzle, type DrizzleDB } from "../db";
 
 const getLucia = (database: DrizzleDB["instance"]) => {
   return lucia({
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    adapter: betterSqlite3(database as any),
-    env: process.env.NODE_ENV === "production" ? "PROD" : "DEV",
-    middleware: web(),
-    transformDatabaseUser: (user) => ({
-      lastNames: user.last_names,
-      names: user.names,
-      userId: user.id,
-      username: user.username,
+    adapter: betterSqlite3(database, {
+      key: "auth_key",
+      session: "auth_session",
+      user: "auth_user",
     }),
+    env: process.env.NODE_ENV === "production" ? "PROD" : "DEV",
+    getUserAttributes: (user) => ({ username: user.username }),
+    middleware: web(),
+    sessionCookie: { expires: false },
   });
 };
 
@@ -41,20 +40,20 @@ type GetSessionArgs = Pick<FetchEvent, "env" | "locals" | "request">;
 
 export const getSession = async (event: GetSessionArgs) => {
   const auth = getLuciaAuth(event);
-  const headers = new Headers();
-  const authRequest = auth.handleRequest(event.request, headers);
 
-  const { session, user } = await authRequest.validateUser();
+  const authRequest = auth.handleRequest(event.request);
 
-  return { headers, session, user };
+  const session = await authRequest.validate();
+
+  return session;
 };
 
 export const getSessionOrThrow = async (event: GetSessionArgs) => {
-  const { session, user, headers } = await getSession(event);
+  const session = await getSession(event);
 
-  if (!session || !user) {
+  if (!session) {
     throw new ServerError("Unauthorized", { status: 404 });
   }
 
-  return { headers, session, user };
+  return session;
 };

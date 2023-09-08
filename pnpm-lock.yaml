@@ -41,9 +41,9 @@ dependencies:
   jsonwebtoken:
     specifier: 9.0.2
     version: 9.0.2
-  lucia-auth:
-    specifier: 1.8.0
-    version: 1.8.0
+  lucia:
+    specifier: ^2.5.0
+    version: 2.5.0
   nanoid:
     specifier: 4.0.2
     version: 4.0.2
@@ -6685,10 +6685,6 @@ packages:
     dependencies:
       es5-ext: 0.10.62
     dev: true
-
-  /lucia-auth@1.8.0:
-    resolution: {integrity: sha512-zI8gT2AOpxTPIxYzToEdgoht+GOflrduZiHPsOEmg4/2pThOyCW3o3lXh+Uwh20tJ9QoXwQe9/Omn6PlUG6efw==}
-    dev: false
 
   /lucia@2.5.0:
     resolution: {integrity: sha512-eUUtf4gBsT1vLF1UEkZly3Sh620N4P0TcGzeDMviFqF0qULB7XOgC9GMmobK3y9L/cEfoD8YHNxfIN/AzSXQsg==}

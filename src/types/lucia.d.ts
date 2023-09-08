@@ -1,13 +1,11 @@
-// src/lucia.d.ts
-/// <reference types="lucia-auth" />
-import type { Auth as LuciaAuth } from "../server/auth/lucia";
-
+/// <reference types="lucia" />
 declare namespace Lucia {
-  type Auth = LuciaAuth;
+  // eslint-disable-next-line @typescript-eslint/consistent-type-imports
+  type Auth = import("../server/auth/lucia").Auth;
 
-  type UserAttributes = {
-    lastNames: string;
-    names: string;
+  type DatabaseUserAttributes = {
     username: string;
   };
+
+  type DatabaseSessionAttributes = Record<string, never>;
 }

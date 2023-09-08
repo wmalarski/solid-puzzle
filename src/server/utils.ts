@@ -6,17 +6,15 @@ import {
   type Input,
 } from "valibot";
 
-type ZodFormParse<TSchema extends BaseSchema | BaseSchemaAsync> = {
+type FormParse<TSchema extends BaseSchema | BaseSchemaAsync> = {
   form: FormData;
   schema: TSchema;
 };
 
-export const zodFormParse = async <
-  TSchema extends BaseSchema | BaseSchemaAsync,
->({
+export const formParse = async <TSchema extends BaseSchema | BaseSchemaAsync>({
   form,
   schema,
-}: ZodFormParse<TSchema>): Promise<Input<TSchema>> => {
+}: FormParse<TSchema>): Promise<Input<TSchema>> => {
   const entries = Object.fromEntries(form.entries());
 
   const parsed = await safeParseAsync(schema, entries);

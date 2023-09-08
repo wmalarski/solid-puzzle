@@ -8,7 +8,7 @@ import {
   type Input,
 } from "valibot";
 import { paths } from "~/utils/paths";
-import { zodFormParse } from "../utils";
+import { formParse } from "../utils";
 import {
   issueShareToken,
   setBoardsAccessCookie,
@@ -24,7 +24,7 @@ const acceptBoardInviteArgsSchema = () => {
 
 export const acceptBoardInviteAction = () => {
   return createServerAction$(async (form: FormData, event) => {
-    const parsed = await zodFormParse({
+    const parsed = await formParse({
       form,
       schema: acceptBoardInviteArgsSchema(),
     });

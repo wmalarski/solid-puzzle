@@ -6,7 +6,7 @@ import server$, {
 import { parseAsync, type Input } from "valibot";
 import { paths } from "~/utils/paths";
 import { getProtectedRequestContext, getRequestContext } from "../context";
-import { zodFormParse } from "../utils";
+import { formParse } from "../utils";
 import {
   deleteBoard,
   deleteBoardArgsSchema,
@@ -22,7 +22,7 @@ import {
 
 export const insertBoardAction = () => {
   return createServerAction$(async (form: FormData, event) => {
-    const parsed = await zodFormParse({
+    const parsed = await formParse({
       form,
       schema: insertBoardArgsSchema(),
     });
@@ -37,7 +37,7 @@ export const insertBoardAction = () => {
 
 export const updateBoardAction = () => {
   return createServerAction$(async (form: FormData, event) => {
-    const parsed = await zodFormParse({
+    const parsed = await formParse({
       form,
       schema: updateBoardArgsSchema(),
     });
@@ -50,7 +50,7 @@ export const updateBoardAction = () => {
 
 export const deleteBoardAction = () => {
   return createServerAction$(async (form: FormData, event) => {
-    const parsed = await zodFormParse({
+    const parsed = await formParse({
       form,
       schema: deleteBoardArgsSchema(),
     });

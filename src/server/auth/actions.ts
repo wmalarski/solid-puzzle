@@ -1,3 +1,4 @@
+import { LuciaError } from "lucia";
 import {
   ServerError,
   createServerAction$,
@@ -6,7 +7,7 @@ import {
 } from "solid-start/server";
 import { maxLength, minLength, object, string } from "valibot";
 import { paths } from "~/utils/paths";
-import { zodFormParse } from "../utils";
+import { formParse } from "../utils";
 import { getLuciaAuth, getSession } from "./lucia";
 
 const signUpArgsSchema = () => {
@@ -18,35 +19,35 @@ const signUpArgsSchema = () => {
 
 export const createSignUpServerAction = () => {
   return createServerAction$(async (form: FormData, event) => {
-    const parsed = await zodFormParse({ form, schema: signUpArgsSchema() });
-
+    const parsed = await formParse({ form, schema: signUpArgsSchema() });
     const auth = getLuciaAuth(event);
-    const headers = new Headers();
 
     try {
       const user = await auth.createUser({
-        attributes: {
-          username: parsed.username,
-        },
-        primaryKey: {
+        attributes: { username: parsed.username },
+        key: {
           password: parsed.password,
           providerId: "username",
-          providerUserId: parsed.username,
+          providerUserId: parsed.username.toLowerCase(), // hashed by Lucia
         },
       });
 
-      const session = await auth.createSession(user.userId);
-      const authRequest = auth.handleRequest(event.request, headers);
+      const session = await auth.createSession({
+        attributes: {},
+        userId: user.userId,
+      });
 
-      authRequest.setSession(session);
+      const sessionCookie = auth.createSessionCookie(session);
+
+      return new Response(null, {
+        headers: { Location: "/", "Set-Cookie": sessionCookie.serialize() },
+        status: 302,
+      });
     } catch (error) {
-      // username already used
       // eslint-disable-next-line no-console
       console.error({ error });
-      throw new ServerError("username already used");
+      throw new ServerError("An unknown error occurred", { status: 500 });
     }
-
-    throw redirect("/", { headers, status: 302 });
   });
 };
 
@@ -59,31 +60,37 @@ const signInArgsSchema = () => {
 
 export const createSignInServerAction = () => {
   return createServerAction$(async (form: FormData, event) => {
-    const parsed = await zodFormParse({ form, schema: signInArgsSchema() });
-
+    const parsed = await formParse({ form, schema: signInArgsSchema() });
     const auth = getLuciaAuth(event);
-    const headers = new Headers();
 
     try {
-      const authRequest = auth.handleRequest(event.request, headers);
-
       const key = await auth.useKey(
         "username",
-        parsed.username,
+        parsed.username.toLowerCase(),
         parsed.password,
       );
 
-      const session = await auth.createSession(key.userId);
+      const session = await auth.createSession({
+        attributes: {},
+        userId: key.userId,
+      });
 
-      authRequest.setSession(session);
+      const sessionCookie = auth.createSessionCookie(session);
+
+      return new Response(null, {
+        headers: { Location: "/", "Set-Cookie": sessionCookie.serialize() },
+        status: 302,
+      });
     } catch (error) {
-      // invalid username/password
-      // eslint-disable-next-line no-console
-      console.error({ error });
-      return new ServerError("invalid username/password");
+      if (
+        error instanceof LuciaError &&
+        (error.message === "AUTH_INVALID_KEY_ID" ||
+          error.message === "AUTH_INVALID_PASSWORD")
+      ) {
+        throw new ServerError("Incorrect username or password");
+      }
+      throw new ServerError("An unknown error occurred");
     }
-
-    throw redirect("/", { headers, status: 302 });
   });
 };
 
@@ -91,41 +98,45 @@ export const createSignOutServerAction = () => {
   return createServerAction$(async (_form: FormData, event) => {
     const auth = getLuciaAuth(event);
 
-    const headers = new Headers();
-    const authRequest = auth.handleRequest(event.request, headers);
+    const authRequest = auth.handleRequest(event.request);
 
-    const { session } = await authRequest.validateUser();
+    const session = await authRequest.validate();
 
     if (!session) {
-      throw redirect(paths.signIn, { headers, status: 302 });
+      throw new ServerError("Unauthorized", {
+        status: 401,
+      });
     }
 
     await auth.invalidateSession(session.sessionId);
 
-    authRequest.setSession(null);
+    const sessionCookie = auth.createSessionCookie(null);
 
-    throw redirect(paths.home, { headers, status: 302 });
+    return new Response(null, {
+      headers: { Location: "/login", "Set-Cookie": sessionCookie.serialize() },
+      status: 302,
+    });
   });
 };
 
 export const createGuardSessionServerData = () => {
   return createServerData$(async (_source, event) => {
-    const { headers, session, user } = await getSession(event);
+    const session = await getSession(event);
 
-    if (!user || !session) {
-      throw redirect(paths.signIn, { headers, status: 302 });
+    if (!session) {
+      throw redirect(paths.signIn);
     }
 
-    return { session, user };
+    return session;
   });
 };
 
 export const createAnonGuardServerData = () => {
   return createServerData$(async (_source, event) => {
-    const { headers, session } = await getSession(event);
+    const session = await getSession(event);
 
     if (session) {
-      throw redirect(paths.home, { headers, status: 302 });
+      throw redirect(paths.home);
     }
 
     return {};
@@ -134,8 +145,8 @@ export const createAnonGuardServerData = () => {
 
 export const createSessionServerData = () => {
   return createServerData$(async (_source, event) => {
-    const { session, user } = await getSession(event);
+    const session = await getSession(event);
 
-    return { session, user };
+    return session;
   });
 };
