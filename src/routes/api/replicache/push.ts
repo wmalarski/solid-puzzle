@@ -9,8 +9,7 @@ import {
   updateSpaceVersion,
   upsertLastMutationId,
 } from "~/server/messages/db";
-
-const defaultSpaceId = "0";
+import { defaultSpaceId } from "./init";
 
 async function sendPoke() {
   // TODO
