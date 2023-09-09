@@ -1,7 +1,9 @@
 import { createContext, useContext, type Component, type JSX } from "solid-js";
 import { createStore } from "solid-js/store";
 
-type PlayerState = {
+export type PlayerState = {
+  name: string;
+  selectedId: string | null;
   x: number;
   y: number;
 };
@@ -9,9 +11,10 @@ type PlayerState = {
 type PlayersState = Record<string, PlayerState | undefined>;
 
 type JoinArgs = {
+  name: string;
+  playerId: string;
   x: number;
   y: number;
-  playerId: string;
 };
 
 type LeaveArgs = {
@@ -19,16 +22,21 @@ type LeaveArgs = {
 };
 
 type SetCursorArgs = {
+  playerId: string;
   x: number;
   y: number;
+};
+
+type SetSelectionArgs = {
   playerId: string;
+  selectedId: string | null;
 };
 
 const createPlayerPresenceState = () => {
   const [players, setPlayer] = createStore<PlayersState>({});
 
-  const join = ({ playerId, x, y }: JoinArgs) => {
-    setPlayer(playerId, { x, y });
+  const join = ({ playerId, x, y, name }: JoinArgs) => {
+    setPlayer(playerId, { name, selectedId: null, x, y });
   };
 
   const leave = ({ playerId }: LeaveArgs) => {
@@ -40,7 +48,11 @@ const createPlayerPresenceState = () => {
     setPlayer(playerId, "y", y);
   };
 
-  return { join, leave, players, setCursor };
+  const setSelection = ({ playerId, selectedId }: SetSelectionArgs) => {
+    setPlayer(playerId, "selectedId", selectedId);
+  };
+
+  return { join, leave, players, setCursor, setSelection };
 };
 
 type PlayerPresenceState = ReturnType<typeof createPlayerPresenceState>;
@@ -50,6 +62,7 @@ const PlayerPresenceContext = createContext<PlayerPresenceState>({
   leave: () => void 0,
   players: {},
   setCursor: () => void 0,
+  setSelection: () => void 0,
 });
 
 type PlayerPresenceProviderProps = {
