@@ -3,10 +3,15 @@ import { ClientOnly } from "~/components/ClientOnly";
 import { InfoBar } from "~/modules/common/InfoBar";
 import type { BoardModel } from "~/server/board/types";
 import type { BoardAccess } from "~/server/share/db";
+import { PlayerPresenceProvider } from "../DataProviders/PresenceProvider";
+import { PuzzleStateProvider } from "../DataProviders/PuzzleProvider";
 
 const MenuBar = lazy(() => import("../MenuBar"));
 const TopNavbar = lazy(() => import("../TopBar"));
 const PixiStage = lazy(() => import("../PixiStage"));
+const RealtimeProvider = lazy(
+  () => import("../DataProviders/RealtimeProvider"),
+);
 
 type BoardProps = {
   board: BoardModel;
@@ -48,12 +53,19 @@ const ClientBoard: Component<BoardProps> = (props) => {
 export const Board: Component<BoardProps> = (props) => {
   return (
     <Suspense>
-      <ClientOnly>
-        <ClientBoard board={props.board} />
-      </ClientOnly>
-      <TopNavbar board={props.board} boardAccess={props.boardAccess} />
-      <InfoBar />
-      <MenuBar />
+      <PlayerPresenceProvider>
+        <PuzzleStateProvider>
+          <ClientOnly>
+            <ClientBoard board={props.board} />
+          </ClientOnly>
+          <TopNavbar board={props.board} boardAccess={props.boardAccess} />
+          <InfoBar />
+          <MenuBar />
+        </PuzzleStateProvider>
+      </PlayerPresenceProvider>
+      <Suspense>
+        <RealtimeProvider boardId={props.board.id} />
+      </Suspense>
     </Suspense>
   );
 };

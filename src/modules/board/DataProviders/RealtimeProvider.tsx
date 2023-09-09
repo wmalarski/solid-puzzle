@@ -13,14 +13,14 @@ const createSupabaseClient = () => {
 };
 
 type Props = {
-  roomId: string;
+  boardId: string;
 };
 
-export const RealtimeProvider: Component<Props> = (props) => {
+const RealtimeProvider: Component<Props> = (props) => {
   const supabase = createSupabaseClient();
 
   createEffect(() => {
-    const channel = supabase.channel(props.roomId);
+    const channel = supabase.channel(props.boardId);
 
     const subscription = channel
       .on("presence", { event: "sync" }, () => {
@@ -58,3 +58,5 @@ export const RealtimeProvider: Component<Props> = (props) => {
 
   return null;
 };
+
+export default RealtimeProvider;

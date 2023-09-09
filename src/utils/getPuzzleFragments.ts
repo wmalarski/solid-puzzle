@@ -93,8 +93,8 @@ export const generateCurves = ({ columns, rows }: GenerateCurvesArgs) => {
       Array(columns + 1)
         .fill(0)
         .map((_value, columnIndex) =>
-          getRandomGridPoint({ columnIndex, rowIndex })
-        )
+          getRandomGridPoint({ columnIndex, rowIndex }),
+        ),
     );
 
   const horizontalLines = Array(rows + 1)
@@ -113,7 +113,7 @@ export const generateCurves = ({ columns, rows }: GenerateCurvesArgs) => {
             yCenter: center.y,
           });
           return { center: random, end, start };
-        })
+        }),
     );
 
   const verticalLines = Array(rows)
@@ -132,7 +132,7 @@ export const generateCurves = ({ columns, rows }: GenerateCurvesArgs) => {
             yCenter: center.y,
           });
           return { center: random, end, start };
-        })
+        }),
     );
 
   const rotation = Array(horizontalLines.length - 1)
@@ -140,7 +140,7 @@ export const generateCurves = ({ columns, rows }: GenerateCurvesArgs) => {
     .flatMap(() =>
       Array(verticalLines.length - 1)
         .fill(0)
-        .map(() => 2 * Math.random() * Math.PI)
+        .map(() => 2 * Math.random() * Math.PI),
     );
 
   return { horizontalLines, rotation, version: "1", verticalLines };
@@ -174,10 +174,10 @@ const scaleConfigUp = ({
   return {
     ...config,
     horizontalLines: config.horizontalLines.map((lines) =>
-      lines.map((curve) => scaleCurveUp({ curve, scale }))
+      lines.map((curve) => scaleCurveUp({ curve, scale })),
     ),
     verticalLines: config.verticalLines.map((lines) =>
-      lines.map((curve) => scaleCurveUp({ curve, scale }))
+      lines.map((curve) => scaleCurveUp({ curve, scale })),
     ),
   };
 };
@@ -238,7 +238,7 @@ export const getPuzzleFragments = ({
             max,
             min,
           };
-        })
+        }),
     );
 
   return { fragments, lines };
