@@ -2,6 +2,7 @@ import { betterSqlite3 } from "@lucia-auth/adapter-sqlite";
 import { lucia } from "lucia";
 import { web } from "lucia/middleware";
 import { ServerError, type FetchEvent } from "solid-start";
+import type { Middleware } from "solid-start/entry-server";
 import { getDrizzle, type DrizzleDB } from "../db";
 
 const getLucia = (database: DrizzleDB["instance"]) => {
@@ -18,27 +19,22 @@ const getLucia = (database: DrizzleDB["instance"]) => {
   });
 };
 
-type GetLuciaAuthArgs = Pick<FetchEvent, "env" | "locals">;
-
 export type Auth = ReturnType<typeof getLucia>;
 
-export const getLuciaAuth = (args: GetLuciaAuthArgs) => {
-  const cached = args.locals.auth;
-  if (cached) {
-    return cached as Auth;
-  }
-
-  const { instance } = getDrizzle(args);
-  const auth = getLucia(instance);
-
-  args.locals.auth = auth;
-
-  return auth;
+export const getLuciaAuth = (event: FetchEvent) => {
+  return event.locals.auth as Auth;
 };
 
-type GetSessionArgs = Pick<FetchEvent, "env" | "locals" | "request">;
+export const luciaMiddleware: Middleware = ({ forward }) => {
+  return (event) => {
+    const { instance } = getDrizzle(event);
+    const auth = getLucia(instance);
+    event.locals.auth = auth;
+    return forward(event);
+  };
+};
 
-export const getSession = async (event: GetSessionArgs) => {
+export const getSession = async (event: FetchEvent) => {
   const auth = getLuciaAuth(event);
 
   const authRequest = auth.handleRequest(event.request);
@@ -48,7 +44,7 @@ export const getSession = async (event: GetSessionArgs) => {
   return session;
 };
 
-export const getSessionOrThrow = async (event: GetSessionArgs) => {
+export const getSessionOrThrow = async (event: FetchEvent) => {
   const session = await getSession(event);
 
   if (!session) {

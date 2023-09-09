@@ -11,10 +11,8 @@ export type ProtectedRequestContext = DrizzleDB & {
   session: Session;
 };
 
-type GetRequestContext = Pick<FetchEvent, "env" | "locals" | "request">;
-
 export const getRequestContext = async (
-  args: GetRequestContext,
+  args: FetchEvent,
 ): Promise<RequestContext> => {
   const drizzle = getDrizzle(args);
   const session = await getSession(args);
@@ -22,7 +20,7 @@ export const getRequestContext = async (
 };
 
 export const getProtectedRequestContext = async (
-  args: GetRequestContext,
+  args: FetchEvent,
 ): Promise<ProtectedRequestContext> => {
   const drizzle = getDrizzle(args);
   const session = await getSessionOrThrow(args);

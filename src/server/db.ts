@@ -1,14 +1,13 @@
 import Database from "better-sqlite3";
 import { drizzle } from "drizzle-orm/better-sqlite3";
 import type { FetchEvent } from "solid-start";
-import { serverEnv } from "~/env/serverEnv";
+import type { Middleware } from "solid-start/entry-server";
 import { user } from "~/server/auth/schema";
 import { board } from "~/server/board/schema";
+import { serverEnv } from "./env";
 
-type CreateDrizzleArgs = Pick<FetchEvent, "env" | "locals">;
-
-const createDrizzle = (args: CreateDrizzleArgs) => {
-  const env = serverEnv(args);
+const createDrizzleContext = (event: FetchEvent) => {
+  const env = serverEnv(event);
   const instance = Database(env.DATABASE_URL);
   return {
     db: drizzle(instance),
@@ -17,31 +16,36 @@ const createDrizzle = (args: CreateDrizzleArgs) => {
   };
 };
 
-export type DrizzleDB = ReturnType<typeof createDrizzle>;
+export type DrizzleDB = ReturnType<typeof createDrizzleContext>;
 
 declare global {
   // eslint-disable-next-line no-var
   var db: DrizzleDB;
 }
 
-export const getDrizzle = (args: CreateDrizzleArgs) => {
-  const cached = args.locals.drizzle;
-  if (cached) {
-    return cached as DrizzleDB;
-  }
+const getDrizzleCached = (event: FetchEvent) => {
+  const env = serverEnv(event);
 
   // HOT reload cache
-  const env = serverEnv(args);
   if (env.NODE_ENV !== "production" && typeof global !== "undefined") {
     if (!global.db) {
-      const drizzle = createDrizzle(args);
+      const drizzle = createDrizzleContext(event);
       global.db = drizzle;
-      args.locals.drizzle = drizzle;
     }
     return global.db;
   }
 
-  const drizzle = createDrizzle(args);
-  args.locals.drizzle = drizzle;
-  return drizzle;
+  return createDrizzleContext(event);
+};
+
+export const getDrizzle = (event: FetchEvent) => {
+  return event.locals.drizzle as DrizzleDB;
+};
+
+export const drizzleMiddleware: Middleware = ({ forward }) => {
+  return (event) => {
+    const drizzle = getDrizzleCached(event);
+    event.locals.drizzle = drizzle;
+    return forward(event);
+  };
 };
