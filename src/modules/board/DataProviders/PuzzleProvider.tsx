@@ -10,8 +10,8 @@ import type { BoardModel } from "~/server/board/types";
 import { getDistance } from "~/utils/geometry";
 import {
   getPuzzleFragments,
+  type PuzzleConfig,
   type PuzzleFragmentShape,
-  type PuzzleShapeLine,
 } from "~/utils/getPuzzleFragments";
 
 export type FragmentState = {
@@ -38,13 +38,16 @@ type InitFragmentsArgs = {
 };
 
 const createPuzzleContext = () => {
-  const init: PuzzleState = {};
+  const [fragments, setFragments] = createStore<PuzzleState>({});
 
-  const [fragments, setFragments] = createStore<PuzzleState>(init);
   const [shapes, setShapes] = createSignal<
     ReadonlyMap<string, PuzzleFragmentShape>
   >(new Map());
-  const [lines, setLines] = createSignal<readonly PuzzleShapeLine[]>([]);
+
+  const [config, setConfig] = createSignal<PuzzleConfig>({
+    fragments: [],
+    lines: [],
+  });
 
   const isLockedInPlace = (fragment: SetFragmentStateArgs) => {
     const shape = shapes().get(fragment.fragmentId);
@@ -59,6 +62,7 @@ const createPuzzleContext = () => {
 
   const initFragments = ({ board, height, width }: InitFragmentsArgs) => {
     const shapesMap = new Map<string, PuzzleFragmentShape>();
+    const init: PuzzleState = {};
 
     const config = JSON.parse(board.config);
 
@@ -75,8 +79,9 @@ const createPuzzleContext = () => {
       };
     });
 
+    setConfig(shapes);
+    setFragments(init);
     setShapes(shapesMap);
-    setLines(shapes.lines);
   };
 
   const setFragmentState = (fragment: SetFragmentStateArgs) => {
@@ -88,21 +93,15 @@ const createPuzzleContext = () => {
     setFragments(fragment.fragmentId, "y", fragment.y);
   };
 
-  return {
-    fragments,
-    initFragments,
-    lines,
-    setFragmentState,
-    shapes,
-  };
+  return { config, fragments, initFragments, setFragmentState, shapes };
 };
 
 type PuzzleContextState = ReturnType<typeof createPuzzleContext>;
 
 const PuzzleStateContext = createContext<PuzzleContextState>({
+  config: () => ({ fragments: [], lines: [] }),
   fragments: {},
   initFragments: () => void 0,
-  lines: () => [],
   setFragmentState: () => void 0,
   shapes: () => new Map(),
 });
@@ -123,6 +122,6 @@ export const PuzzleStateProvider: Component<PuzzleStateProviderProps> = (
   );
 };
 
-export const usePuzzleState = () => {
+export const usePuzzleStore = () => {
   return useContext(PuzzleStateContext);
 };

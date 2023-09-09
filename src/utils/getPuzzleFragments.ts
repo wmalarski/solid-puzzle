@@ -244,8 +244,8 @@ export const getPuzzleFragments = ({
   return { fragments, lines };
 };
 
-export type PuzzleFragmentShape = ReturnType<
-  typeof getPuzzleFragments
->["fragments"][0];
+export type PuzzleConfig = ReturnType<typeof getPuzzleFragments>;
 
-export type PuzzleShapeLine = ReturnType<typeof getPuzzleFragments>["lines"][0];
+export type PuzzleFragmentShape = PuzzleConfig["fragments"][0];
+
+export type PuzzleShapeLine = PuzzleConfig["lines"][0];

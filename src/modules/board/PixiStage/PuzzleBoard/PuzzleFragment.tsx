@@ -9,8 +9,10 @@ import {
 } from "solid-js";
 import { randomHexColor } from "~/utils/colors";
 import type { PuzzleFragmentShape } from "~/utils/getPuzzleFragments";
+import { usePlayerPresence } from "../../DataProviders/PresenceProvider";
+import { usePuzzleStore } from "../../DataProviders/PuzzleProvider";
 import { usePixiApp } from "../PixiApp";
-import { usePuzzleStoreContext, type FragmentState } from "./PuzzleStore";
+import { type FragmentState } from "./PuzzleStore";
 import { RotationAnchor } from "./RotationAnchor";
 import { useDragObject } from "./useDragObject";
 
@@ -85,16 +87,16 @@ export const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
   return null;
 };
 
-type PuzzleFragmentProps = {
-  texture: PIXI.Texture;
+type PuzzleContainerProps = {
   shape: PuzzleFragmentShape;
+  state: FragmentState;
+  texture: PIXI.Texture;
 };
 
-export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
+const PuzzleContainer: Component<PuzzleContainerProps> = (props) => {
   const app = usePixiApp();
-  const store = usePuzzleStoreContext();
-
-  const state = store.createFragmentSubscription(() => props.shape.fragmentId);
+  const store = usePuzzleStore();
+  const presence = usePlayerPresence();
 
   const fragment = new PIXI.Container();
 
@@ -139,38 +141,68 @@ export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
   useDragObject({
     displayObject: fragment,
     onDragEnd: () => {
-      store.setFragmentState({ ...state(), x: fragment.x, y: fragment.y });
+      store.setFragmentState({
+        fragmentId: props.shape.fragmentId,
+        rotation: props.state.rotation,
+        x: fragment.x,
+        y: fragment.y,
+      });
     },
     onDragStart: () => {
-      store.setSelectedId(fragmentId());
+      presence.setPlayerSelection(fragmentId());
     },
   });
 
   const onRotationEnd = (rotation: number) => {
-    store.setFragmentState({ ...state(), rotation });
+    store.setFragmentState({ ...props.state, rotation });
   };
 
   const onRotationMove = (rotation: number) => {
-    store.setFragmentState({ ...state(), rotation });
+    store.setFragmentState({ ...props.state, rotation });
   };
 
   return (
     <>
       <PuzzleFragmentGraphics
         container={fragment}
-        state={state()}
+        state={props.state}
         shape={props.shape}
         texture={props.texture}
       />
       <PuzzleFragmentLabel container={fragment} label={fragmentId()} />
-      <Show when={store.state.selectedId === fragmentId()}>
+      <Show when={presence.playerSelection() === fragmentId()}>
         <RotationAnchor
           container={fragment}
-          rotation={state().rotation}
+          rotation={props.state.rotation}
           onEnd={onRotationEnd}
           onRotate={onRotationMove}
         />
       </Show>
     </>
+  );
+};
+
+type PuzzleFragmentProps = {
+  texture: PIXI.Texture;
+  shape: PuzzleFragmentShape;
+};
+
+export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
+  const store = usePuzzleStore();
+
+  const state = createMemo(() => {
+    return store.fragments[props.shape.fragmentId];
+  });
+
+  return (
+    <Show when={state()}>
+      {(state) => (
+        <PuzzleContainer
+          shape={props.shape}
+          texture={props.texture}
+          state={state()}
+        />
+      )}
+    </Show>
   );
 };

@@ -1,4 +1,10 @@
-import { createContext, useContext, type Component, type JSX } from "solid-js";
+import {
+  createContext,
+  createSignal,
+  useContext,
+  type Component,
+  type JSX,
+} from "solid-js";
 import { createStore } from "solid-js/store";
 
 export type PlayerState = {
@@ -33,26 +39,48 @@ type SetSelectionArgs = {
 };
 
 const createPlayerPresenceState = () => {
-  const [players, setPlayer] = createStore<PlayersState>({});
+  const [currentPlayer, setCurrentPlayer] = createSignal<string>();
+  const [players, setPlayers] = createStore<PlayersState>({});
 
   const join = ({ playerId, x, y, name }: JoinArgs) => {
-    setPlayer(playerId, { name, selectedId: null, x, y });
+    setCurrentPlayer(playerId);
+    setPlayers(playerId, { name, selectedId: null, x, y });
   };
 
   const leave = ({ playerId }: LeaveArgs) => {
-    setPlayer(playerId, undefined);
+    setPlayers(playerId, undefined);
   };
 
   const setCursor = ({ playerId, x, y }: SetCursorArgs) => {
-    setPlayer(playerId, "x", x);
-    setPlayer(playerId, "y", y);
+    setPlayers(playerId, "x", x);
+    setPlayers(playerId, "y", y);
   };
 
   const setSelection = ({ playerId, selectedId }: SetSelectionArgs) => {
-    setPlayer(playerId, "selectedId", selectedId);
+    setPlayers(playerId, "selectedId", selectedId);
   };
 
-  return { join, leave, players, setCursor, setSelection };
+  const setPlayerSelection = (selectedId: string | null) => {
+    const player = currentPlayer();
+    if (player) {
+      setPlayers(player, "selectedId", selectedId);
+    }
+  };
+
+  const playerSelection = () => {
+    const player = currentPlayer();
+    return player ? players[player]?.selectedId : null;
+  };
+
+  return {
+    join,
+    leave,
+    playerSelection,
+    players,
+    setCursor,
+    setPlayerSelection,
+    setSelection,
+  };
 };
 
 type PlayerPresenceState = ReturnType<typeof createPlayerPresenceState>;
@@ -60,8 +88,10 @@ type PlayerPresenceState = ReturnType<typeof createPlayerPresenceState>;
 const PlayerPresenceContext = createContext<PlayerPresenceState>({
   join: () => void 0,
   leave: () => void 0,
+  playerSelection: () => null,
   players: {},
   setCursor: () => void 0,
+  setPlayerSelection: () => void 0,
   setSelection: () => void 0,
 });
 

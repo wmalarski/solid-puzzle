@@ -20,7 +20,7 @@ export const PreviewGrid: Component<PreviewGridProps> = (props) => {
         line.center.x,
         line.center.y,
         line.end.x,
-        line.end.y
+        line.end.y,
       );
     });
   });

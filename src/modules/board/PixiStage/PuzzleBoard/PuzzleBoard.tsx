@@ -2,18 +2,18 @@ import * as PIXI from "pixi.js";
 import {
   For,
   Show,
-  createMemo,
+  createEffect,
   createResource,
   onCleanup,
   onMount,
   type Component,
 } from "solid-js";
 import type { BoardModel } from "~/server/board/types";
-import { getPuzzleFragments } from "~/utils/getPuzzleFragments";
+import { usePlayerPresence } from "../../DataProviders/PresenceProvider";
+import { usePuzzleStore } from "../../DataProviders/PuzzleProvider";
 import { usePixiApp } from "../PixiApp";
 import { PreviewGrid, PreviewSprite } from "./PreviewSprite";
 import { PuzzleFragment } from "./PuzzleFragment";
-import { PuzzleStoreProvider, usePuzzleStoreContext } from "./PuzzleStore";
 
 type UseStageDeselectArgs = {
   onDeselect: VoidFunction;
@@ -42,16 +42,17 @@ type BoardProps = {
 };
 
 const Board: Component<BoardProps> = (props) => {
-  const store = usePuzzleStoreContext();
+  const store = usePuzzleStore();
+  const presence = usePlayerPresence();
 
   useStageDeselect({
     onDeselect: () => {
-      store.setSelectedId();
+      presence.setPlayerSelection(null);
     },
   });
 
   return (
-    <For each={store.shapes}>
+    <For each={store.config().fragments}>
       {(shape) => <PuzzleFragment texture={props.texture} shape={shape} />}
     </For>
   );
@@ -63,22 +64,22 @@ type ProviderProps = {
 };
 
 const Provider: Component<ProviderProps> = (props) => {
-  const shapes = createMemo(() => {
-    const config = JSON.parse(props.board.config);
+  const store = usePuzzleStore();
 
-    return getPuzzleFragments({
-      config,
+  createEffect(() => {
+    store.initFragments({
+      board: props.board,
       height: props.texture.height,
       width: props.texture.width,
     });
   });
 
   return (
-    <PuzzleStoreProvider boardId={props.board.id} shapes={shapes().fragments}>
+    <>
       <PreviewSprite texture={props.texture} />
-      <PreviewGrid lines={shapes().lines} />
+      <PreviewGrid lines={store.config().lines} />
       <Board texture={props.texture} />
-    </PuzzleStoreProvider>
+    </>
   );
 };
 
@@ -90,6 +91,7 @@ type Props = {
 export const PuzzleBoard: Component<Props> = (props) => {
   const [texture] = createResource(async () => {
     const asset = await PIXI.Assets.load(props.path);
+
     return asset as PIXI.Texture;
   });
 
