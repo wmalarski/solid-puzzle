@@ -10,7 +10,7 @@ import {
 } from "solid-js";
 
 const PixiAppContext = createContext<() => PIXI.Application>(
-  () => null as unknown as PIXI.Application
+  () => null as unknown as PIXI.Application,
 );
 
 export const usePixiApp = () => {

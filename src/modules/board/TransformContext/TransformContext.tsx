@@ -18,7 +18,7 @@ const scaleBy = 1.1;
 const getNewZoomState = (
   newScale: number,
   point: Point2D,
-  old: TransformState
+  old: TransformState,
 ): TransformState => {
   const { x: stageX, y: stageY, scale: stageScale } = old;
   const mouseX = point.x / stageScale - stageX / stageScale;
