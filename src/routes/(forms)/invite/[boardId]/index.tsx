@@ -19,7 +19,7 @@ export const routeData = (args: RouteDataArgs) => {
 
       return board;
     },
-    { key: ["board", args.params.boardId] }
+    { key: ["board", args.params.boardId] },
   );
 };
 

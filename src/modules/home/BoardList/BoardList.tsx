@@ -1,5 +1,6 @@
 import { createQuery } from "@tanstack/solid-query";
 import { ErrorBoundary, For, Show, Suspense, type Component } from "solid-js";
+import { isServer } from "solid-js/web";
 import { LinkButton } from "~/components/Button";
 import { Card, CardActions, CardBody, CardTitle } from "~/components/Card";
 import {
@@ -45,6 +46,7 @@ const BoardsListLoading: Component = () => {
 
 const BoardsQuery: Component = () => {
   const boardQuery = createQuery(() => ({
+    enabled: !isServer,
     queryFn: (context) => selectBoardsServerQuery(context.queryKey),
     queryKey: selectBoardsKey({ limit: 10, offset: 0 }),
     suspense: true,

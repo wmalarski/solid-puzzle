@@ -17,7 +17,7 @@ import { i18n } from "./utils/i18n";
 const ToastProvider = lazy(() =>
   import("~/components/Toast").then((module) => ({
     default: module.ToastProvider,
-  }))
+  })),
 );
 
 export default function Root() {

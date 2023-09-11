@@ -12,7 +12,7 @@ export type DropdownMenuTriggerProps =
     VariantProps<typeof buttonClass>;
 
 export const DropdownMenuTrigger: Component<DropdownMenuTriggerProps> = (
-  props
+  props,
 ) => {
   const [split, rest] = splitProps(props, [
     "color",
@@ -170,7 +170,7 @@ export const DropdownMenuItemLabel: Component<
       {...props}
       class={twCx(
         "text-sm overflow-ellipsis flex gap-2 items-center",
-        props.class
+        props.class,
       )}
     />
   );
@@ -195,7 +195,7 @@ export const DropdownMenuItemIndicator: Component<
       {...props}
       class={twCx(
         "absolute left-0 h-4 w-4 inline-flex items-center justify-center",
-        props.class
+        props.class,
       )}
     />
   );

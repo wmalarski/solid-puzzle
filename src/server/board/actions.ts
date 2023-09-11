@@ -1,8 +1,4 @@
-import server$, {
-  createServerAction$,
-  redirect,
-  useRequest,
-} from "solid-start/server";
+import server$, { createServerAction$, redirect } from "solid-start/server";
 import { parseAsync, type Input } from "valibot";
 import { paths } from "~/utils/paths";
 import { getProtectedRequestContext, getRequestContext } from "../context";
@@ -73,12 +69,15 @@ export const selectBoardServerQuery = server$(
   async ([, args]: ReturnType<typeof selectBoardQueryKey>) => {
     const parsed = await parseAsync(selectBoardArgsSchema(), args);
 
-    const event = useRequest();
-    const ctx = await getRequestContext({
-      env: event.env || server$.env,
-      locals: event.locals || server$.locals,
-      request: event.request || server$.request,
-    });
+    const event = {
+      clientAddress: server$.clientAddress,
+      env: server$.env,
+      fetch: server$.fetch,
+      locals: server$.locals,
+      request: server$.request,
+    };
+
+    const ctx = await getRequestContext(event);
 
     return selectBoard({ ...parsed, ctx });
   },
@@ -94,12 +93,15 @@ export const selectBoardsServerQuery = server$(
   async ([, args]: ReturnType<typeof selectBoardsKey>) => {
     const parsed = await parseAsync(selectBoardsArgsSchema(), args);
 
-    const event = useRequest();
-    const ctx = await getProtectedRequestContext({
-      env: event.env || server$.env,
-      locals: event.locals || server$.locals,
-      request: event.request || server$.request,
-    });
+    const event = {
+      clientAddress: server$.clientAddress,
+      env: server$.env,
+      fetch: server$.fetch,
+      locals: server$.locals,
+      request: server$.request,
+    };
+
+    const ctx = await getProtectedRequestContext(event);
 
     return selectBoards({ ...parsed, ctx });
   },

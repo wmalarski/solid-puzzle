@@ -28,7 +28,7 @@ export const PopoverTrigger: Component<PopoverTriggerProps> = (props) => {
 };
 
 export const PopoverAnchor: Component<KobaltePopover.PopoverAnchorProps> = (
-  props
+  props,
 ) => {
   return <KobaltePopover.Anchor {...props} class={twCx("", props.class)} />;
 };
@@ -36,7 +36,7 @@ export const PopoverAnchor: Component<KobaltePopover.PopoverAnchorProps> = (
 export const PopoverPortal = KobaltePopover.Portal;
 
 export const PopoverContent: Component<KobaltePopover.PopoverContentProps> = (
-  props
+  props,
 ) => {
   return (
     <KobaltePopover.Content
@@ -44,14 +44,14 @@ export const PopoverContent: Component<KobaltePopover.PopoverContentProps> = (
       class={twCx(
         "z-50 bg-base-100 p-3 rounded-2xl shadow",
         styles.content,
-        props.class
+        props.class,
       )}
     />
   );
 };
 
 export const PopoverArrow: Component<KobaltePopover.PopoverArrowProps> = (
-  props
+  props,
 ) => {
   return <KobaltePopover.Arrow {...props} class={twCx("", props.class)} />;
 };
@@ -64,7 +64,7 @@ export const PopoverHeader: Component<PopoverHeaderProps> = (props) => {
       {...props}
       class={twCx(
         "flex items-baseline mb-1 justify-between gap-4",
-        props.class
+        props.class,
       )}
     />
   );
@@ -82,7 +82,7 @@ export const PopoverCloseButton: Component<
 };
 
 export const PopoverTitle: Component<KobaltePopover.PopoverTitleProps> = (
-  props
+  props,
 ) => {
   return (
     <KobaltePopover.Title

@@ -12,7 +12,7 @@ const ToastList: Component<Toast.ToastListProps> = (props) => {
       {...props}
       class={twCx(
         "p-4 fixed bottom-0 right-0 flex flex-col gap-2 w-96 max-w-[100vw] m-0 list-none z-50 outline-none",
-        props.class
+        props.class,
       )}
     />
   );
@@ -35,7 +35,7 @@ export const ToastRoot: Component<ToastRootProps> = (props) => {
           "ui-swipe-move:translate-x-[var(--kb-toast-swipe-move-x)]",
           "ui-swipe-cancel:translate-x-0 ui-swipe-cancel:transition-transform",
           "ui-swipe-end:animate-swipeOut ui-swipe-end:duration-100 ui-swipe-end:ease-out",
-          props.class
+          props.class,
         ),
         ...split,
       })}
@@ -44,7 +44,7 @@ export const ToastRoot: Component<ToastRootProps> = (props) => {
 };
 
 export const ToastContent: Component<JSX.IntrinsicElements["div"]> = (
-  props
+  props,
 ) => {
   return (
     <div
@@ -55,7 +55,7 @@ export const ToastContent: Component<JSX.IntrinsicElements["div"]> = (
 };
 
 export const ToastCloseButton: Component<Toast.ToastCloseButtonProps> = (
-  props
+  props,
 ) => {
   return (
     <Toast.CloseButton
@@ -75,13 +75,13 @@ export const ToastTitle: Component<Toast.ToastTitleProps> = (props) => {
 };
 
 export const ToastDescription: Component<Toast.ToastDescriptionProps> = (
-  props
+  props,
 ) => {
   return <Toast.Description {...props} class={twCx("text-sm", props.class)} />;
 };
 
 export const ToastProgressTrack: Component<Toast.ToastProgressTrackProps> = (
-  props
+  props,
 ) => {
   return (
     <Toast.ProgressTrack
@@ -92,7 +92,7 @@ export const ToastProgressTrack: Component<Toast.ToastProgressTrackProps> = (
 };
 
 export const ToastProgressFill: Component<Toast.ToastProgressFillProps> = (
-  props
+  props,
 ) => {
   return (
     <Toast.ProgressFill
@@ -100,7 +100,7 @@ export const ToastProgressFill: Component<Toast.ToastProgressFillProps> = (
       class={twCx(
         "bg-base-300 h-full",
         "w-[var(--kb-toast-progress-fill-width)] transition-[width] duration-200 ease-linear",
-        props.class
+        props.class,
       )}
     />
   );

@@ -1,5 +1,6 @@
 import { createQuery } from "@tanstack/solid-query";
 import { Show, Suspense, type Component } from "solid-js";
+import { isServer } from "solid-js/web";
 import { useParams, useRouteData, type RouteDataArgs } from "solid-start";
 import { createServerData$, redirect } from "solid-start/server";
 import { SessionProvider } from "~/contexts/SessionContext";
@@ -23,6 +24,7 @@ const BoardQuery: Component<BoardQueryProps> = (props) => {
   const params = useParams();
 
   const boardQuery = createQuery(() => ({
+    enabled: !isServer,
     initialData: props.initialBoard,
     queryFn: (context) => selectBoardServerQuery(context.queryKey),
     queryKey: selectBoardQueryKey({ id: params.boardId }),
