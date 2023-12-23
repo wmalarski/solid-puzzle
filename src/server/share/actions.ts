@@ -1,4 +1,6 @@
-import { redirect } from "@solidjs/router";
+"use server";
+import { action, redirect } from "@solidjs/router";
+import { decode } from "decode-formdata";
 import {
   maxLength,
   minLength,
@@ -8,7 +10,7 @@ import {
   type Input,
 } from "valibot";
 import { paths } from "~/utils/paths";
-import { formParse } from "../utils";
+import { getRequestEventOrThrow } from "../utils";
 import {
   issueShareToken,
   setBoardsAccessCookie,
@@ -22,29 +24,29 @@ const acceptBoardInviteArgsSchema = () => {
   });
 };
 
-export const acceptBoardInviteAction = () => {
-  return createServerAction$(async (form: FormData, event) => {
-    const parsed = await formParse({
-      form,
-      schema: acceptBoardInviteArgsSchema(),
-    });
+export const acceptBoardInviteAction = action(async (formData: FormData) => {
+  const event = getRequestEventOrThrow();
 
-    const result = await validateShareToken({
-      env: event.env,
-      token: parsed.token,
-    });
+  const parsed = await parseAsync(
+    acceptBoardInviteArgsSchema(),
+    decode(formData),
+  );
 
-    const cookie = await setBoardsAccessCookie({
-      boardId: result.boardId,
-      event,
-      name: parsed.name,
-    });
-
-    return redirect(paths.board(result.boardId), {
-      headers: { "Set-Cookie": cookie },
-    });
+  const result = await validateShareToken({
+    env: event.env,
+    token: parsed.token,
   });
-};
+
+  const cookie = await setBoardsAccessCookie({
+    boardId: result.boardId,
+    event,
+    name: parsed.name,
+  });
+
+  return redirect(paths.board(result.boardId), {
+    headers: { "Set-Cookie": cookie },
+  });
+});
 
 const generateBoardInviteArgsSchema = () => {
   return object({
@@ -58,15 +60,13 @@ export const generateBoardInviteQueryKey = (
   return ["generateBoardInvite", args] as const;
 };
 
-export const generateBoardInviteServerQuery = server$(
-  async ([, args]: ReturnType<typeof generateBoardInviteQueryKey>) => {
-    const parsed = await parseAsync(generateBoardInviteArgsSchema(), args);
+export const generateBoardInviteServerQuery = (boardId: string) => {
+  const event = getRequestEventOrThrow();
 
-    const token = issueShareToken({
-      boardId: parsed.boardId,
-      env: server$.env,
-    });
+  const token = issueShareToken({
+    boardId,
+    env: event.env,
+  });
 
-    return { token };
-  },
-);
+  return { token };
+};

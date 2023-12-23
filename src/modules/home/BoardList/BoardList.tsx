@@ -1,12 +1,8 @@
 import { createQuery } from "@tanstack/solid-query";
 import { ErrorBoundary, For, Show, Suspense, type Component } from "solid-js";
-import { isServer } from "solid-js/web";
 import { LinkButton } from "~/components/Button";
 import { Card, CardActions, CardBody, CardTitle } from "~/components/Card";
-import {
-  selectBoardsKey,
-  selectBoardsServerQuery,
-} from "~/server/board/actions";
+import { selectBoardsServerQueryOptions } from "~/server/board/queries";
 import type { BoardModel } from "~/server/board/types";
 import { paths } from "~/utils/paths";
 
@@ -45,12 +41,9 @@ const BoardsListLoading: Component = () => {
 };
 
 const BoardsQuery: Component = () => {
-  const boardQuery = createQuery(() => ({
-    enabled: !isServer,
-    queryFn: (context) => selectBoardsServerQuery(context.queryKey),
-    queryKey: selectBoardsKey({ limit: 10, offset: 0 }),
-    suspense: true,
-  }));
+  const boardQuery = createQuery(() =>
+    selectBoardsServerQueryOptions({ limit: 10, offset: 0 })(),
+  );
 
   return (
     <For each={boardQuery.data}>{(board) => <BoardItem board={board} />}</For>

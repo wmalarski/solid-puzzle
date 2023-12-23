@@ -1,14 +1,10 @@
 import { useParams } from "@solidjs/router";
 import { createQuery } from "@tanstack/solid-query";
 import { Show, Suspense, type Component } from "solid-js";
-import { isServer } from "solid-js/web";
 import { SessionProvider } from "~/contexts/SessionContext";
 import { Board } from "~/modules/board/Board";
-import {
-  selectBoardQueryKey,
-  selectBoardServerQuery,
-} from "~/server/board/actions";
 import { selectBoard } from "~/server/board/db";
+import { selectBoardServerQueryOptions } from "~/server/board/queries";
 import type { BoardModel } from "~/server/board/types";
 import { getRequestContext } from "~/server/context";
 import { hasBoardAccess, type BoardAccess } from "~/server/share/db";
@@ -22,15 +18,9 @@ type BoardQueryProps = {
 const BoardQuery: Component<BoardQueryProps> = (props) => {
   const params = useParams();
 
-  const boardQuery = createQuery(() => ({
-    enabled: !isServer,
-    initialData: props.initialBoard,
-    queryFn: (context) => selectBoardServerQuery(context.queryKey),
-    queryKey: selectBoardQueryKey({ id: params.boardId }),
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    suspense: true,
-  }));
+  const boardQuery = createQuery(() =>
+    selectBoardServerQueryOptions({ id: params.boardId }, props.initialBoard)(),
+  );
 
   return (
     <Show when={boardQuery.data}>

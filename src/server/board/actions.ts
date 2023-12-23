@@ -1,8 +1,9 @@
-import { redirect } from "@solidjs/router";
+import { action, redirect } from "@solidjs/router";
+import { decode } from "decode-formdata";
 import { parseAsync, type Input } from "valibot";
 import { paths } from "~/utils/paths";
 import { getProtectedRequestContext, getRequestContext } from "../context";
-import { formParse } from "../utils";
+import { getRequestEventOrThrow } from "../utils";
 import {
   deleteBoard,
   deleteBoardArgsSchema,
@@ -16,93 +17,64 @@ import {
   updateBoardArgsSchema,
 } from "./db";
 
-export const insertBoardAction = () => {
-  return createServerAction$(async (form: FormData, event) => {
-    const parsed = await formParse({
-      form,
-      schema: insertBoardArgsSchema(),
-    });
+export const insertBoardAction = action(async (form: FormData) => {
+  const event = getRequestEventOrThrow();
 
-    const ctx = await getProtectedRequestContext(event);
+  const parsed = await parseAsync(
+    insertBoardArgsSchema(),
+    decode(form, { numbers: ["rows", "columns"] }),
+  );
 
-    const boardId = insertBoard({ ...parsed, ctx });
+  const ctx = await getProtectedRequestContext(event);
 
-    throw redirect(paths.board(boardId));
-  });
-};
+  const boardId = insertBoard({ ...parsed, ctx });
 
-export const updateBoardAction = () => {
-  return createServerAction$(async (form: FormData, event) => {
-    const parsed = await formParse({
-      form,
-      schema: updateBoardArgsSchema(),
-    });
+  throw redirect(paths.board(boardId));
+});
 
-    const ctx = await getProtectedRequestContext(event);
+export const updateBoardAction = action(async (form: FormData) => {
+  const event = getRequestEventOrThrow();
 
-    return updateBoard({ ...parsed, ctx });
-  });
-};
+  const parsed = await parseAsync(
+    updateBoardArgsSchema(),
+    decode(form, { numbers: ["rows", "columns"] }),
+  );
 
-export const deleteBoardAction = () => {
-  return createServerAction$(async (form: FormData, event) => {
-    const parsed = await formParse({
-      form,
-      schema: deleteBoardArgsSchema(),
-    });
+  const ctx = await getProtectedRequestContext(event);
 
-    const ctx = await getProtectedRequestContext(event);
+  return updateBoard({ ...parsed, ctx });
+});
 
-    deleteBoard({ ...parsed, ctx });
+export const deleteBoardAction = action(async (form: FormData) => {
+  const event = getRequestEventOrThrow();
 
-    throw redirect(paths.home);
-  });
-};
+  const parsed = await parseAsync(deleteBoardArgsSchema(), decode(form));
 
-export const selectBoardQueryKey = (
+  const ctx = await getProtectedRequestContext(event);
+
+  deleteBoard({ ...parsed, ctx });
+
+  throw redirect(paths.home);
+});
+
+export const selectBoardServerQuery = async (
   args: Input<ReturnType<typeof selectBoardArgsSchema>>,
 ) => {
-  return ["selectBoard", args] as const;
+  const event = getRequestEventOrThrow();
+  const parsed = await parseAsync(selectBoardArgsSchema(), args);
+
+  const ctx = await getRequestContext(event);
+
+  return selectBoard({ ...parsed, ctx });
 };
 
-export const selectBoardServerQuery = server$(
-  async ([, args]: ReturnType<typeof selectBoardQueryKey>) => {
-    const parsed = await parseAsync(selectBoardArgsSchema(), args);
-
-    const event = {
-      clientAddress: server$.clientAddress,
-      env: server$.env,
-      fetch: server$.fetch,
-      locals: server$.locals,
-      request: server$.request,
-    };
-
-    const ctx = await getRequestContext(event);
-
-    return selectBoard({ ...parsed, ctx });
-  },
-);
-
-export const selectBoardsKey = (
+export const selectBoardsServerQuery = async (
   args: Input<ReturnType<typeof selectBoardsArgsSchema>>,
 ) => {
-  return ["selectBoards", args] as const;
+  const event = getRequestEventOrThrow();
+  const parsed = await parseAsync(selectBoardsArgsSchema(), args);
+
+  const ctx = await getProtectedRequestContext(event);
+
+  return selectBoards({ ...parsed, ctx });
 };
-
-export const selectBoardsServerQuery = server$(
-  async ([, args]: ReturnType<typeof selectBoardsKey>) => {
-    const parsed = await parseAsync(selectBoardsArgsSchema(), args);
-
-    const event = {
-      clientAddress: server$.clientAddress,
-      env: server$.env,
-      fetch: server$.fetch,
-      locals: server$.locals,
-      request: server$.request,
-    };
-
-    const ctx = await getProtectedRequestContext(event);
-
-    return selectBoards({ ...parsed, ctx });
-  },
-);

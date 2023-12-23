@@ -21,10 +21,7 @@ import {
 } from "~/components/TextField";
 import { useI18n } from "~/contexts/I18nContext";
 import type { BoardModel } from "~/server/board/types";
-import {
-  generateBoardInviteQueryKey,
-  generateBoardInviteServerQuery,
-} from "~/server/share/actions";
+import { generateBoardInviteQueryOptions } from "~/server/share/queries";
 import { paths } from "~/utils/paths";
 import { buildSearchParams } from "~/utils/searchParams";
 
@@ -35,11 +32,9 @@ type ShareFormProps = {
 const ShareForm: Component<ShareFormProps> = (props) => {
   const { t } = useI18n();
 
-  const inviteQuery = createQuery(() => ({
-    queryFn: (context) => generateBoardInviteServerQuery(context.queryKey),
-    queryKey: generateBoardInviteQueryKey({ boardId: props.board.id }),
-    suspense: false,
-  }));
+  const inviteQuery = createQuery(() =>
+    generateBoardInviteQueryOptions(props.board.id)(),
+  );
 
   const value = createMemo(() => {
     if (inviteQuery.status !== "success") {
