@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
 import { Suspense, createSignal, lazy } from "solid-js";
 import "./app.css";
 import { I18nContextProvider } from "./contexts/I18nContext";
+import { Head } from "./modules/common/Head";
 
 const ToastProvider = lazy(() =>
   import("~/components/Toast").then((module) => ({
@@ -21,6 +22,7 @@ export default function App() {
         <I18nContextProvider>
           <QueryClientProvider client={queryClient()}>
             <MetaProvider>
+              <Head />
               <Suspense>{props.children}</Suspense>
               <Suspense>
                 <ToastProvider />

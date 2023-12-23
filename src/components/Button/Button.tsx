@@ -1,11 +1,5 @@
 import type { VariantProps } from "class-variance-authority";
-import {
-  splitProps,
-  type Component,
-  type ComponentProps,
-  type JSX,
-} from "solid-js";
-import { A } from "solid-start";
+import { splitProps, type Component, type JSX } from "solid-js";
 import { twCva } from "../utils/twCva";
 
 export const buttonClass = twCva("btn no-animation flex items-center gap-1", {
@@ -93,7 +87,7 @@ export const ButtonGroup: Component<ButtonGroupProps> = (props) => {
   );
 };
 
-export type LinkButtonProps = ComponentProps<typeof A> &
+export type LinkButtonProps = JSX.IntrinsicElements["a"] &
   VariantProps<typeof buttonClass>;
 
 export const LinkButton: Component<LinkButtonProps> = (props) => {
@@ -105,5 +99,6 @@ export const LinkButton: Component<LinkButtonProps> = (props) => {
     "variant",
   ]);
 
-  return <A {...rest} class={buttonClass({ class: props.class, ...split })} />;
+  // eslint-disable-next-line jsx-a11y/anchor-has-content
+  return <a {...rest} class={buttonClass({ class: props.class, ...split })} />;
 };

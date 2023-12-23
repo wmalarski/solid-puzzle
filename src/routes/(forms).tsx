@@ -1,11 +1,11 @@
-import { Outlet } from "solid-start";
+import type { RouteSectionProps } from "@solidjs/router";
 import { FormLayout, PageFooter, PageTitle } from "~/modules/common/Layout";
 
-export default function FormsLayout() {
+export default function FormsLayout(props: RouteSectionProps) {
   return (
     <FormLayout>
       <PageTitle />
-      <Outlet />
+      {props.children}
       <PageFooter />
     </FormLayout>
   );

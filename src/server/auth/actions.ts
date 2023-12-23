@@ -1,6 +1,7 @@
+"use server"
 import { LuciaError } from "lucia";
+import { getRequestEvent } from "solid-js/web";
 import {
-  ServerError,
   createServerAction$,
   createServerData$,
   redirect,
@@ -146,10 +147,14 @@ export const createAnonGuardServerData = () => {
   });
 };
 
-export const createSessionServerData = () => {
-  return createServerData$(async (_source, event) => {
-    const session = await getSession(event);
+export const createSessionServerData = async () => {
+  const event = getRequestEvent();
 
-    return session;
-  });
+  if (!event) {
+    throw new ServerError("no request event");
+  }
+
+  const session = await getSession(event);
+
+  return session;
 };

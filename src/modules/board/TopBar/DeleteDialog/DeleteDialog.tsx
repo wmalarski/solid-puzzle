@@ -68,7 +68,7 @@ const FormDialog: Component<FormDialogProps> = (props) => {
   return (
     <DialogRoot open={isOpen()} onOpenChange={setIsOpen}>
       <DialogTrigger>
-      <Trash />
+        <Trash />
         {t("board.settings.delete.button")}
       </DialogTrigger>
       <DialogPortal>

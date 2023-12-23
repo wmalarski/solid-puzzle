@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
-import { createCookieSessionStorage, type FetchEvent } from "solid-start";
+import { RequestEvent } from "solid-js/web";
+import { createCookieSessionStorage } from "solid-start";
 import {
   array,
   object,
@@ -40,7 +41,7 @@ export type BoardAccess = BoardsAccess["boards"][0];
 const boardsKey = "boards";
 
 const getBoardsAccessFromCookie = async (
-  event: FetchEvent,
+  event: RequestEvent,
 ): Promise<BoardsAccess | null> => {
   const storage = createStorage(event.env);
 
@@ -58,7 +59,7 @@ const getBoardsAccessFromCookie = async (
 };
 
 export const getBoardsAccess = (
-  event: FetchEvent,
+  event: RequestEvent,
 ): Promise<BoardsAccess | null> => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const cachedBoards = event.locals.boards;
@@ -74,7 +75,7 @@ export const getBoardsAccess = (
 };
 
 type HasBoardAccessArgs = {
-  event: FetchEvent;
+  event: RequestEvent;
   boardId: string;
 };
 
@@ -89,7 +90,7 @@ export const hasBoardAccess = async ({
 
 type SetSessionCookieArgs = {
   boardId: string;
-  event: FetchEvent;
+  event: RequestEvent;
   name: string;
 };
 

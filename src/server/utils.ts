@@ -1,4 +1,3 @@
-import { ServerError } from "solid-start/server";
 import {
   safeParseAsync,
   type BaseSchema,

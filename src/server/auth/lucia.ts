@@ -1,7 +1,7 @@
 import { betterSqlite3 } from "@lucia-auth/adapter-sqlite";
 import { lucia } from "lucia";
 import { web } from "lucia/middleware";
-import { ServerError, type FetchEvent } from "solid-start";
+import type { RequestEvent } from "solid-js/web";
 import type { Middleware } from "solid-start/entry-server";
 import { getDrizzle, type DrizzleDB } from "../db";
 
@@ -21,7 +21,7 @@ const getLucia = (database: DrizzleDB["instance"]) => {
 
 export type Auth = ReturnType<typeof getLucia>;
 
-export const getLuciaAuth = (event: FetchEvent) => {
+export const getLuciaAuth = (event: RequestEvent) => {
   return event.locals.auth as Auth;
 };
 
@@ -34,7 +34,7 @@ export const luciaMiddleware: Middleware = ({ forward }) => {
   };
 };
 
-export const getSession = async (event: FetchEvent) => {
+export const getSession = async (event: RequestEvent) => {
   const auth = getLuciaAuth(event);
 
   const authRequest = auth.handleRequest(event.request);
@@ -44,7 +44,7 @@ export const getSession = async (event: FetchEvent) => {
   return session;
 };
 
-export const getSessionOrThrow = async (event: FetchEvent) => {
+export const getSessionOrThrow = async (event: RequestEvent) => {
   const session = await getSession(event);
 
   if (!session) {

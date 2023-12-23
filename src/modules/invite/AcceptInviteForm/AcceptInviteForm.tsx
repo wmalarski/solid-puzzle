@@ -1,5 +1,5 @@
+import { useSearchParams } from "@solidjs/router";
 import { Show, type Component } from "solid-js";
-import { useSearchParams } from "solid-start";
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
 import { Card, CardBody, cardTitleClass } from "~/components/Card";

@@ -1,6 +1,6 @@
-import type { FetchEvent } from "solid-start";
+import type { RequestEvent } from "solid-js/web";
 import type { Middleware } from "solid-start/entry-server";
-import { object, parseAsync, string, withDefault, type Input } from "valibot";
+import { object, optional, parseAsync, string, type Input } from "valibot";
 
 if (typeof window !== "undefined") {
   throw new Error("SERVER ON CLIENT!");
@@ -9,19 +9,19 @@ if (typeof window !== "undefined") {
 const getEnvSchema = () => {
   return object({
     DATABASE_URL: string(),
-    NODE_ENV: withDefault(string(), "production"),
+    NODE_ENV: optional(string(), "production"),
     SESSION_SECRET: string(),
   });
 };
 
 type ServerEnv = Input<ReturnType<typeof getEnvSchema>>;
 
-export const serverEnv = (event: FetchEvent) => {
+export const serverEnv = (event: RequestEvent) => {
   return event.locals.env as ServerEnv;
 };
 
 export const serverEnvMiddleware: Middleware = ({ forward }) => {
-  return async (event: FetchEvent) => {
+  return async (event) => {
     const envSchema = getEnvSchema();
 
     const parsed = await parseAsync(envSchema, {

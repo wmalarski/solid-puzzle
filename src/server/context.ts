@@ -1,5 +1,5 @@
 import type { Session } from "lucia";
-import type { FetchEvent } from "solid-start";
+import type { RequestEvent } from "solid-js/web";
 import { getSession, getSessionOrThrow } from "./auth/lucia";
 import { getDrizzle, type DrizzleDB } from "./db";
 
@@ -12,7 +12,7 @@ export type ProtectedRequestContext = DrizzleDB & {
 };
 
 export const getRequestContext = async (
-  args: FetchEvent,
+  args: RequestEvent,
 ): Promise<RequestContext> => {
   const drizzle = getDrizzle(args);
   const session = await getSession(args);
@@ -20,7 +20,7 @@ export const getRequestContext = async (
 };
 
 export const getProtectedRequestContext = async (
-  args: FetchEvent,
+  args: RequestEvent,
 ): Promise<ProtectedRequestContext> => {
   const drizzle = getDrizzle(args);
   const session = await getSessionOrThrow(args);

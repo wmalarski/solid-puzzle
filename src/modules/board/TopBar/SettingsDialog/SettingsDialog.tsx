@@ -25,7 +25,7 @@ export const SettingsDialog: Component<SettingsDialogProps> = (props) => {
   return (
     <DialogRoot>
       <DialogTrigger aria-label={t("board.settings.label")} size="sm">
-      <Settings />
+        <Settings />
       </DialogTrigger>
       <DialogPortal>
         <DialogOverlay />

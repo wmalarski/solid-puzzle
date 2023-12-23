@@ -1,6 +1,5 @@
 import type { VariantProps } from "class-variance-authority";
-import { splitProps, type Component, type ComponentProps } from "solid-js";
-import { A } from "solid-start";
+import { splitProps, type Component, type JSX } from "solid-js";
 import { twCva } from "../utils/twCva";
 
 export const linkClass = twCva("link", {
@@ -26,11 +25,12 @@ export const linkClass = twCva("link", {
   },
 });
 
-export type LinkProps = ComponentProps<typeof A> &
+export type LinkProps = JSX.IntrinsicElements["a"] &
   VariantProps<typeof linkClass>;
 
 export const Link: Component<LinkProps> = (props) => {
   const [split, rest] = splitProps(props, ["color", "hover"]);
 
-  return <A {...rest} class={linkClass({ class: props.class, ...split })} />;
+  // eslint-disable-next-line jsx-a11y/anchor-has-content
+  return <a {...rest} class={linkClass({ class: props.class, ...split })} />;
 };

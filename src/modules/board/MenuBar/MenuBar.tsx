@@ -1,6 +1,6 @@
+import { useNavigate } from "@solidjs/router";
 import { MenuIcon } from "lucide-solid";
 import type { Component } from "solid-js";
-import { useNavigate } from "solid-start";
 import {
   DropdownMenuArrow,
   DropdownMenuContent,
@@ -48,7 +48,7 @@ const Menu: Component = () => {
         variant="ghost"
       >
         <DropdownMenuIcon>
-          <MenuIcon/>
+          <MenuIcon />
         </DropdownMenuIcon>
       </DropdownMenuTrigger>
       <DropdownMenuPortal>

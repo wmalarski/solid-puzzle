@@ -1,12 +1,12 @@
 import Database from "better-sqlite3";
 import { drizzle } from "drizzle-orm/better-sqlite3";
-import type { FetchEvent } from "solid-start";
+import type { RequestEvent } from "solid-js/web";
 import type { Middleware } from "solid-start/entry-server";
 import { user } from "~/server/auth/schema";
 import { board } from "~/server/board/schema";
 import { serverEnv } from "./env";
 
-const createDrizzleContext = (event: FetchEvent) => {
+const createDrizzleContext = (event: RequestEvent) => {
   const env = serverEnv(event);
   const instance = Database(env.DATABASE_URL);
   return {
@@ -23,7 +23,7 @@ declare global {
   var db: DrizzleDB;
 }
 
-const getDrizzleCached = (event: FetchEvent) => {
+const getDrizzleCached = (event: RequestEvent) => {
   const env = serverEnv(event);
 
   // HOT reload cache
@@ -38,7 +38,7 @@ const getDrizzleCached = (event: FetchEvent) => {
   return createDrizzleContext(event);
 };
 
-export const getDrizzle = (event: FetchEvent) => {
+export const getDrizzle = (event: RequestEvent) => {
   return event.locals.drizzle as DrizzleDB;
 };
 

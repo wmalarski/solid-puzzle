@@ -7,6 +7,12 @@ import BoardsList from "~/modules/home/BoardList/BoardList";
 import { InsertBoard } from "~/modules/home/InsertBoard";
 import { createSessionServerData } from "~/server/auth/actions";
 
+export const route = {
+  load: () => {
+    getStudents();
+  },
+};
+
 export const routeData = () => {
   return createSessionServerData();
 };
