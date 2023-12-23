@@ -1,4 +1,3 @@
-import { useI18n } from "@solid-primitives/i18n";
 import { HiSolidXMark } from "solid-icons/hi";
 import { createSignal, type Component, type JSX } from "solid-js";
 import { cardTitleClass } from "~/components/Card";
@@ -13,6 +12,7 @@ import {
   DialogRoot,
   DialogTitle,
 } from "~/components/Dialog";
+import { useI18n } from "~/contexts/I18nContext";
 import { CreateBoardForm } from "~/modules/createBoard/CreateBoardForm";
 import { ImageGrid } from "~/modules/createBoard/ImageGrid";
 
@@ -51,7 +51,7 @@ const FormDialog: Component<FormDialogProps> = (props) => {
 };
 
 export const InsertBoard: Component = () => {
-  const [t] = useI18n();
+  const { t } = useI18n();
 
   const [image, setImage] = createSignal<string>();
   const [isModalOpen, setIsModalOpen] = createSignal(false);

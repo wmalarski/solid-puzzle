@@ -1,4 +1,3 @@
-import { useI18n } from "@solid-primitives/i18n";
 import { createQuery } from "@tanstack/solid-query";
 import { HiOutlineLink, HiSolidXMark } from "solid-icons/hi";
 import { Show, Suspense, createMemo, type Component } from "solid-js";
@@ -20,6 +19,7 @@ import {
   TextFieldLabelText,
   TextFieldRoot,
 } from "~/components/TextField";
+import { useI18n } from "~/contexts/I18nContext";
 import type { BoardModel } from "~/server/board/types";
 import {
   generateBoardInviteQueryKey,
@@ -33,7 +33,7 @@ type ShareFormProps = {
 };
 
 const ShareForm: Component<ShareFormProps> = (props) => {
-  const [t] = useI18n();
+  const { t } = useI18n();
 
   const inviteQuery = createQuery(() => ({
     queryFn: (context) => generateBoardInviteServerQuery(context.queryKey),
@@ -102,7 +102,7 @@ type SharePopoverProps = {
 };
 
 export const SharePopover: Component<SharePopoverProps> = (props) => {
-  const [t] = useI18n();
+  const { t } = useI18n();
 
   return (
     <PopoverRoot>

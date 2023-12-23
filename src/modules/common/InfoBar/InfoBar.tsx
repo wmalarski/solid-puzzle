@@ -1,4 +1,3 @@
-import { useI18n } from "@solid-primitives/i18n";
 import { HiOutlineInformationCircle, HiSolidXMark } from "solid-icons/hi";
 import type { Component } from "solid-js";
 import {
@@ -12,9 +11,10 @@ import {
   PopoverTitle,
   PopoverTrigger,
 } from "~/components/Popover";
+import { useI18n } from "~/contexts/I18nContext";
 
 const InfoPopover: Component = () => {
-  const [t] = useI18n();
+  const { t } = useI18n();
 
   return (
     <PopoverRoot>

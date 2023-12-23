@@ -1,9 +1,11 @@
 // @refresh reload
-import { MetaProvider, Title } from "@solidjs/meta";
+import { MetaProvider } from "@solidjs/meta";
 import { Router } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start";
-import { Suspense, lazy } from "solid-js";
+import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
+import { Suspense, createSignal, lazy } from "solid-js";
 import "./app.css";
+import { I18nContextProvider } from "./contexts/I18nContext";
 
 const ToastProvider = lazy(() =>
   import("~/components/Toast").then((module) => ({
@@ -12,45 +14,23 @@ const ToastProvider = lazy(() =>
 );
 
 export default function App() {
+  const [queryClient] = createSignal(new QueryClient());
   return (
     <Router
       root={(props) => (
-        <MetaProvider>
-          <Title>SolidStart - Basic</Title>
-          <a href="/">Index</a>
-          <a href="/about">About</a>
-          <Suspense>{props.children}</Suspense>
-        </MetaProvider>
+        <I18nContextProvider>
+          <QueryClientProvider client={queryClient()}>
+            <MetaProvider>
+              <Suspense>{props.children}</Suspense>
+              <Suspense>
+                <ToastProvider />
+              </Suspense>
+            </MetaProvider>
+          </QueryClientProvider>
+        </I18nContextProvider>
       )}
     >
       <FileRoutes />
     </Router>
   );
 }
-
-// export default function Root() {
-//   const [queryClient] = createSignal(new QueryClient());
-
-//   return (
-//     <I18nContext.Provider value={i18n}>
-//       <Html lang="en" data-theme="acid">
-//         <Head />
-//         <Body>
-//           <Suspense>
-//             <ErrorBoundary>
-//               <QueryClientProvider client={queryClient()}>
-//                 <Routes>
-//                   <FileRoutes />
-//                 </Routes>
-//                 <Suspense>
-//                   <ToastProvider />
-//                 </Suspense>
-//               </QueryClientProvider>
-//             </ErrorBoundary>
-//           </Suspense>
-//           <Scripts />
-//         </Body>
-//       </Html>
-//     </I18nContext.Provider>
-//   );
-// }

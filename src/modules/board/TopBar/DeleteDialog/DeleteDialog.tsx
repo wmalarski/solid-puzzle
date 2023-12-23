@@ -1,4 +1,3 @@
-import { useI18n } from "@solid-primitives/i18n";
 import { HiSolidTrash, HiSolidXMark } from "solid-icons/hi";
 import { Show, createSignal, type Component } from "solid-js";
 import { Alert, AlertIcon } from "~/components/Alert";
@@ -15,6 +14,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "~/components/Dialog";
+import { useI18n } from "~/contexts/I18nContext";
 import { deleteBoardAction } from "~/server/board/actions";
 
 type DeleteBoardFormProps = {
@@ -23,7 +23,7 @@ type DeleteBoardFormProps = {
 };
 
 const DeleteBoardForm: Component<DeleteBoardFormProps> = (props) => {
-  const [t] = useI18n();
+  const { t } = useI18n();
 
   const [deleteBoard, { Form }] = deleteBoardAction();
 
@@ -57,7 +57,7 @@ type FormDialogProps = {
 };
 
 const FormDialog: Component<FormDialogProps> = (props) => {
-  const [t] = useI18n();
+  const { t } = useI18n();
 
   const [isOpen, setIsOpen] = createSignal(false);
 
@@ -97,7 +97,7 @@ type DeleteBoardProps = {
 };
 
 export const DeleteBoard: Component<DeleteBoardProps> = (props) => {
-  const [t] = useI18n();
+  const { t } = useI18n();
 
   return (
     <section>

@@ -1,15 +1,15 @@
-import { useI18n } from "@solid-primitives/i18n";
 import { HiOutlinePuzzlePiece } from "solid-icons/hi";
 import { Show, type Component } from "solid-js";
 import { Button, LinkButton } from "~/components/Button";
 import { Link } from "~/components/Link";
 import { Navbar, NavbarEnd, NavbarStart } from "~/components/Navbar";
+import { useI18n } from "~/contexts/I18nContext";
 import { useSessionContext } from "~/contexts/SessionContext";
 import { createSignOutServerAction } from "~/server/auth/actions";
 import { paths } from "~/utils/paths";
 
 const SignOutButton: Component = () => {
-  const [t] = useI18n();
+  const { t } = useI18n();
 
   const [signOut, { Form }] = createSignOutServerAction();
 
@@ -23,7 +23,7 @@ const SignOutButton: Component = () => {
 };
 
 export const TopNavbar: Component = () => {
-  const [t] = useI18n();
+  const { t } = useI18n();
 
   const session = useSessionContext();
 

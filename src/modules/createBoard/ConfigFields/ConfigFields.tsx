@@ -1,4 +1,3 @@
-import { useI18n } from "@solid-primitives/i18n";
 import { Show, type Component } from "solid-js";
 import {
   TextFieldInput,
@@ -6,6 +5,7 @@ import {
   TextFieldLabelText,
   TextFieldRoot,
 } from "~/components/TextField";
+import { useI18n } from "~/contexts/I18nContext";
 import { ImageGrid } from "../ImageGrid";
 
 type ConfigFieldsProps = {
@@ -13,7 +13,7 @@ type ConfigFieldsProps = {
 };
 
 export const ConfigFields: Component<ConfigFieldsProps> = (props) => {
-  const [t] = useI18n();
+  const { t } = useI18n();
 
   return (
     <div class="flex flex-col gap-4">

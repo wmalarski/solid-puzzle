@@ -1,4 +1,3 @@
-import { useI18n } from "@solid-primitives/i18n";
 import { Show, type Component } from "solid-js";
 import { useSearchParams } from "solid-start";
 import { Alert, AlertIcon } from "~/components/Alert";
@@ -10,6 +9,7 @@ import {
   TextFieldLabelText,
   TextFieldRoot,
 } from "~/components/TextField";
+import { useI18n } from "~/contexts/I18nContext";
 import type { BoardModel } from "~/server/board/types";
 import { acceptBoardInviteAction } from "~/server/share/actions";
 
@@ -18,7 +18,7 @@ type AcceptInviteFormProps = {
 };
 
 export const AcceptInviteForm: Component<AcceptInviteFormProps> = (props) => {
-  const [t] = useI18n();
+  const { t } = useI18n();
 
   const [searchParams] = useSearchParams();
 

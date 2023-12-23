@@ -1,7 +1,7 @@
-import { useI18n } from "@solid-primitives/i18n";
 import { Show, type Component } from "solid-js";
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
+import { useI18n } from "~/contexts/I18nContext";
 import { ConfigFields } from "~/modules/createBoard/ConfigFields";
 import { updateBoardAction } from "~/server/board/actions";
 
@@ -10,7 +10,7 @@ type UpdateFormProps = {
 };
 
 export const UpdateForm: Component<UpdateFormProps> = (props) => {
-  const [t] = useI18n();
+  const { t } = useI18n();
 
   const [updateBoard, { Form }] = updateBoardAction();
 

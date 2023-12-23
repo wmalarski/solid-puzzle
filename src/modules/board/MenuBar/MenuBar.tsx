@@ -1,4 +1,3 @@
-import { useI18n } from "@solid-primitives/i18n";
 import { HiOutlineBars3 } from "solid-icons/hi";
 import type { Component } from "solid-js";
 import { useNavigate } from "solid-start";
@@ -12,11 +11,12 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
 } from "~/components/DropdownMenu";
+import { useI18n } from "~/contexts/I18nContext";
 import { createSignOutServerAction } from "~/server/auth/actions";
 import { paths } from "~/utils/paths";
 
 const SignOutMenuItem: Component = () => {
-  const [t] = useI18n();
+  const { t } = useI18n();
 
   const [signOut, action] = createSignOutServerAction();
 
@@ -32,7 +32,7 @@ const SignOutMenuItem: Component = () => {
 };
 
 const Menu: Component = () => {
-  const [t] = useI18n();
+  const { t } = useI18n();
 
   const navigate = useNavigate();
 

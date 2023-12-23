@@ -1,4 +1,3 @@
-import { useI18n } from "@solid-primitives/i18n";
 import { Show, type Component } from "solid-js";
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
@@ -10,11 +9,12 @@ import {
   TextFieldLabelText,
   TextFieldRoot,
 } from "~/components/TextField";
+import { useI18n } from "~/contexts/I18nContext";
 import { createSignUpServerAction } from "~/server/auth/actions";
 import { paths } from "~/utils/paths";
 
 export const SignUp: Component = () => {
-  const [t] = useI18n();
+  const { t } = useI18n();
 
   const [signOut, { Form }] = createSignUpServerAction();
 

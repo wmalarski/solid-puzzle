@@ -1,11 +1,11 @@
-import { useI18n } from "@solid-primitives/i18n";
 import { HiOutlinePuzzlePiece } from "solid-icons/hi";
 import type { Component, JSX } from "solid-js";
 import { Link } from "~/components/Link";
+import { useI18n } from "~/contexts/I18nContext";
 import { paths } from "~/utils/paths";
 
 export const PageTitle: Component = () => {
-  const [t] = useI18n();
+  const { t } = useI18n();
 
   return (
     <h1 class="max-6-xs my-16 flex items-center text-center text-4xl uppercase sm:text-6xl">
@@ -18,7 +18,7 @@ export const PageTitle: Component = () => {
 };
 
 export const PageFooter: Component = () => {
-  const [t] = useI18n();
+  const { t } = useI18n();
 
   return (
     <div class="p-4">

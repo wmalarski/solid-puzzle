@@ -1,9 +1,9 @@
-import { useI18n } from "@solid-primitives/i18n";
 import type { Component } from "solid-js";
 import { Meta, Head as SolidHead, Title } from "solid-start";
+import { useI18n } from "~/contexts/I18nContext";
 
 export const Head: Component = () => {
-  const [t] = useI18n();
+  const { t } = useI18n();
 
   return (
     <SolidHead>

@@ -1,4 +1,3 @@
-import { useI18n } from "@solid-primitives/i18n";
 import { HiSolidCog, HiSolidXMark } from "solid-icons/hi";
 import { type Component } from "solid-js";
 import {
@@ -12,6 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "~/components/Dialog";
+import { useI18n } from "~/contexts/I18nContext";
 import { DeleteBoard } from "../DeleteDialog";
 import { UpdateForm } from "../UpdateForm";
 
@@ -20,7 +20,7 @@ type SettingsDialogProps = {
 };
 
 export const SettingsDialog: Component<SettingsDialogProps> = (props) => {
-  const [t] = useI18n();
+  const { t } = useI18n();
 
   return (
     <DialogRoot>
