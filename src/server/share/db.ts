@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
-import { RequestEvent } from "solid-js/web";
-import { createCookieSessionStorage } from "solid-start";
+import type { RequestEvent } from "solid-js/web";
 import {
   array,
   object,

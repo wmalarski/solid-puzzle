@@ -1,24 +1,20 @@
+import { createAsync } from "@solidjs/router";
 import { Show } from "solid-js";
-import { useRouteData } from "solid-start";
 import { SessionProvider } from "~/contexts/SessionContext";
 import { PageLayout } from "~/modules/common/Layout";
 import { TopNavbar } from "~/modules/common/TopNavbar";
 import BoardsList from "~/modules/home/BoardList/BoardList";
 import { InsertBoard } from "~/modules/home/InsertBoard";
-import { createSessionServerData } from "~/server/auth/actions";
+import { getServerSession } from "~/server/auth/actions";
 
 export const route = {
   load: () => {
-    getStudents();
+    getServerSession();
   },
 };
 
-export const routeData = () => {
-  return createSessionServerData();
-};
-
 export default function Home() {
-  const session = useRouteData<typeof routeData>();
+  const session = createAsync(() => getServerSession());
 
   return (
     <SessionProvider value={() => session() || null}>

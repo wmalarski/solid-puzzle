@@ -2,7 +2,6 @@ import { betterSqlite3 } from "@lucia-auth/adapter-sqlite";
 import { lucia } from "lucia";
 import { web } from "lucia/middleware";
 import type { RequestEvent } from "solid-js/web";
-import type { Middleware } from "solid-start/entry-server";
 import { getDrizzle, type DrizzleDB } from "../db";
 
 const getLucia = (database: DrizzleDB["instance"]) => {

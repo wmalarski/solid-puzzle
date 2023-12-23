@@ -1,14 +1,9 @@
-"use server"
+"use server";
+import { cache, redirect } from "@solidjs/router";
 import { LuciaError } from "lucia";
-import { getRequestEvent } from "solid-js/web";
-import {
-  createServerAction$,
-  createServerData$,
-  redirect,
-} from "solid-start/server";
 import { maxLength, minLength, object, string } from "valibot";
 import { paths } from "~/utils/paths";
-import { formParse } from "../utils";
+import { formParse, getRequestEventOrThrow } from "../utils";
 import { getLuciaAuth, getSession } from "./lucia";
 
 const signUpArgsSchema = () => {
@@ -123,38 +118,19 @@ export const createSignOutServerAction = () => {
   });
 };
 
-export const createGuardSessionServerData = () => {
-  return createServerData$(async (_source, event) => {
-    const session = await getSession(event);
-
-    if (!session) {
-      throw redirect(paths.signIn);
-    }
-
-    return session;
-  });
-};
-
-export const createAnonGuardServerData = () => {
-  return createServerData$(async (_source, event) => {
-    const session = await getSession(event);
-
-    if (session) {
-      throw redirect(paths.home);
-    }
-
-    return {};
-  });
-};
-
-export const createSessionServerData = async () => {
-  const event = getRequestEvent();
-
-  if (!event) {
-    throw new ServerError("no request event");
-  }
+export const getServerSession = cache(async () => {
+  const event = getRequestEventOrThrow();
 
   const session = await getSession(event);
 
   return session;
+}, "session");
+
+export const getServerAnonGuard = async () => {
+  const session = await getServerSession();
+
+  if (session) {
+    throw redirect(paths.home);
+  }
+  return {};
 };

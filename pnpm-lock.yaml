@@ -38,6 +38,9 @@ dependencies:
   class-variance-authority:
     specifier: 0.7.0
     version: 0.7.0
+  decode-formdata:
+    specifier: ^0.5.0
+    version: 0.5.0
   dotenv:
     specifier: 16.3.1
     version: 16.3.1
@@ -3903,6 +3906,10 @@ packages:
         optional: true
     dependencies:
       ms: 2.1.2
+
+  /decode-formdata@0.5.0:
+    resolution: {integrity: sha512-0/G81bwn9ZBqQvTyTjthUBh0E4Z2qhnha5j4vStTD6wydfjCXLNcArbjh3x0WSx69g3uDXCgukNRV6lV+DGw6w==}
+    dev: false
 
   /decompress-response@6.0.0:
     resolution: {integrity: sha512-aW35yZM6Bb/4oJlZncMH2LCoZtJXTRxES17vE3hoRiowU2kWHaJKFkSBDnDR+cm9J+9QhXmREyIfv0pji9ejCQ==}

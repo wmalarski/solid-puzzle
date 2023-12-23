@@ -1,10 +1,14 @@
 import { Show } from "solid-js";
-import { useRouteData, type RouteDataArgs } from "solid-start";
-import { createServerData$, redirect } from "solid-start/server";
 import { AcceptInviteForm } from "~/modules/invite/AcceptInviteForm";
 import { selectBoard } from "~/server/board/db";
 import { getRequestContext } from "~/server/context";
 import { paths } from "~/utils/paths";
+
+export const route = {
+  load: () => {
+    getServerSession();
+  },
+};
 
 export const routeData = (args: RouteDataArgs) => {
   return createServerData$(

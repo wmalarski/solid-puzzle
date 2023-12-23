@@ -1,6 +1,5 @@
 import { eq } from "drizzle-orm";
 import { nanoid } from "nanoid";
-import { ServerError } from "solid-start/server";
 import {
   coerce,
   integer,

@@ -1,8 +1,7 @@
+import { useParams } from "@solidjs/router";
 import { createQuery } from "@tanstack/solid-query";
 import { Show, Suspense, type Component } from "solid-js";
 import { isServer } from "solid-js/web";
-import { useParams, useRouteData, type RouteDataArgs } from "solid-start";
-import { createServerData$, redirect } from "solid-start/server";
 import { SessionProvider } from "~/contexts/SessionContext";
 import { Board } from "~/modules/board/Board";
 import {

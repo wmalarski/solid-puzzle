@@ -1,9 +1,12 @@
+import { redirect } from "@solidjs/router";
+import { getRequestEvent } from "solid-js/web";
 import {
   safeParseAsync,
   type BaseSchema,
   type BaseSchemaAsync,
   type Input,
 } from "valibot";
+import { paths } from "~/utils/paths";
 
 type FormParse<TSchema extends BaseSchema | BaseSchemaAsync> = {
   form: FormData;
@@ -19,8 +22,18 @@ export const formParse = async <TSchema extends BaseSchema | BaseSchemaAsync>({
   const parsed = await safeParseAsync(schema, entries);
 
   if (!parsed.success) {
-    throw new ServerError(JSON.stringify(parsed.issues[0].message));
+    throw new Error(JSON.stringify(parsed.issues[0].message));
   }
 
   return parsed.output;
+};
+
+export const getRequestEventOrThrow = () => {
+  const event = getRequestEvent();
+
+  if (!event) {
+    throw redirect(paths.notFound);
+  }
+
+  return event;
 };

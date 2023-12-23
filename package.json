@@ -55,6 +55,7 @@
     "@tanstack/solid-query": "5.14.2",
     "better-sqlite3": "9.2.2",
     "class-variance-authority": "0.7.0",
+    "decode-formdata": "^0.5.0",
     "dotenv": "16.3.1",
     "drizzle-orm": "0.29.1",
     "jsonwebtoken": "9.0.2",

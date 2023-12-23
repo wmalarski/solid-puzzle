@@ -1,4 +1,4 @@
-import server$, { createServerAction$, redirect } from "solid-start/server";
+import { redirect } from "@solidjs/router";
 import { parseAsync, type Input } from "valibot";
 import { paths } from "~/utils/paths";
 import { getProtectedRequestContext, getRequestContext } from "../context";

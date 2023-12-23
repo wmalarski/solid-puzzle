@@ -1,13 +1,12 @@
-import { useRouteData } from "solid-start";
 import { SignUp } from "~/modules/auth/SignUp";
-import { createAnonGuardServerData } from "~/server/auth/actions";
+import { getServerAnonGuard } from "~/server/auth/actions";
 
-export const routeData = () => {
-  return createAnonGuardServerData();
+export const route = {
+  load: () => {
+    getServerAnonGuard();
+  },
 };
 
 export default function SignUpPage() {
-  useRouteData<typeof routeData>();
-
   return <SignUp />;
 }
