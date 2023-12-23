@@ -53,6 +53,13 @@ const RealtimeProvider: Component<Props> = (props) => {
 
     onCleanup(() => {
       subscription.unsubscribe();
+
+      const untrackPresence = async () => {
+        const presenceUntrackStatus = await channel.untrack();
+        console.log(presenceUntrackStatus);
+      };
+
+      untrackPresence();
     });
   });
 

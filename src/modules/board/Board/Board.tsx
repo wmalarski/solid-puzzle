@@ -1,4 +1,11 @@
-import { Show, Suspense, createSignal, lazy, type Component } from "solid-js";
+import {
+  ErrorBoundary,
+  Show,
+  Suspense,
+  createSignal,
+  lazy,
+  type Component,
+} from "solid-js";
 import { ClientOnly } from "~/components/ClientOnly";
 import { InfoBar } from "~/modules/common/InfoBar";
 import type { BoardModel } from "~/server/board/types";
@@ -21,24 +28,8 @@ type BoardProps = {
 const ClientBoard: Component<BoardProps> = (props) => {
   const [canvas, setCanvas] = createSignal<HTMLCanvasElement>();
 
-  // const replicache = useReplicache();
-
-  // const messages = createSubscription(
-  //   replicache(),
-  //   async (tx) => {
-  //     const list = await tx.scan({ prefix: "message/" }).entries().toArray();
-  //     return list;
-  //   },
-  //   [],
-  // );
-
-  // createEffect(() => {
-  //   console.log("messages()", messages());
-  // });
-
   return (
     <>
-      {/* <pre>{JSON.stringify(messages(), null, 2)}</pre> */}
       <canvas ref={setCanvas} class="h-full w-full" />
       <Show when={canvas()}>
         {(canvas) => (
@@ -50,22 +41,34 @@ const ClientBoard: Component<BoardProps> = (props) => {
     </>
   );
 };
+
+const ErrorFallback = (err: unknown, reset: VoidFunction) => {
+  return (
+    <div>
+      <pre>{JSON.stringify(err, null, 2)}</pre>
+      <button onClick={reset}>Reset</button>
+    </div>
+  );
+};
+
 export const Board: Component<BoardProps> = (props) => {
   return (
-    <Suspense>
-      <PlayerPresenceProvider>
-        <PuzzleStateProvider>
-          <ClientOnly>
-            <ClientBoard board={props.board} />
-          </ClientOnly>
-          <TopNavbar board={props.board} boardAccess={props.boardAccess} />
-          <InfoBar />
-          <MenuBar />
-        </PuzzleStateProvider>
-      </PlayerPresenceProvider>
+    <ErrorBoundary fallback={ErrorFallback}>
       <Suspense>
-        <RealtimeProvider boardId={props.board.id} />
+        <PlayerPresenceProvider>
+          <PuzzleStateProvider>
+            <ClientOnly>
+              <ClientBoard board={props.board} />
+            </ClientOnly>
+            <TopNavbar board={props.board} boardAccess={props.boardAccess} />
+            <InfoBar />
+            <MenuBar />
+          </PuzzleStateProvider>
+        </PlayerPresenceProvider>
+        <Suspense>
+          <RealtimeProvider boardId={props.board.id} />
+        </Suspense>
       </Suspense>
-    </Suspense>
+    </ErrorBoundary>
   );
 };
