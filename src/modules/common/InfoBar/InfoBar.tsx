@@ -1,4 +1,4 @@
-import { HiOutlineInformationCircle, HiSolidXMark } from "solid-icons/hi";
+import { Info, X } from "lucide-solid";
 import type { Component } from "solid-js";
 import {
   PopoverArrow,
@@ -19,7 +19,7 @@ const InfoPopover: Component = () => {
   return (
     <PopoverRoot>
       <PopoverTrigger variant="ghost" size="sm">
-        <HiOutlineInformationCircle />
+        <Info />
       </PopoverTrigger>
       <PopoverPortal>
         <PopoverContent>
@@ -27,7 +27,7 @@ const InfoPopover: Component = () => {
           <PopoverHeader>
             <PopoverTitle>{t("info.title")}</PopoverTitle>
             <PopoverCloseButton>
-              <HiSolidXMark />
+              <X />
             </PopoverCloseButton>
           </PopoverHeader>
           <PopoverDescription>{t("info.madeBy")}</PopoverDescription>

@@ -1,4 +1,4 @@
-import { HiSolidCog, HiSolidXMark } from "solid-icons/hi";
+import { X, Settings } from "lucide-solid";
 import { type Component } from "solid-js";
 import {
   DialogCloseButton,
@@ -25,7 +25,7 @@ export const SettingsDialog: Component<SettingsDialogProps> = (props) => {
   return (
     <DialogRoot>
       <DialogTrigger aria-label={t("board.settings.label")} size="sm">
-        <HiSolidCog />
+      <Settings />
       </DialogTrigger>
       <DialogPortal>
         <DialogOverlay />

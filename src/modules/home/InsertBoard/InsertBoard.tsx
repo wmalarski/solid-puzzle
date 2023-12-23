@@ -1,4 +1,4 @@
-import { HiSolidXMark } from "solid-icons/hi";
+import { X } from "lucide-solid";
 import { createSignal, type Component, type JSX } from "solid-js";
 import { cardTitleClass } from "~/components/Card";
 import {
@@ -33,7 +33,7 @@ const FormDialog: Component<FormDialogProps> = (props) => {
             <DialogHeader>
               <DialogTitle>About Kobalte</DialogTitle>
               <DialogCloseButton>
-                <HiSolidXMark />
+                <X />
               </DialogCloseButton>
             </DialogHeader>
             <DialogDescription>

@@ -1,4 +1,4 @@
-import { HiOutlineBars3 } from "solid-icons/hi";
+import { MenuIcon } from "lucide-solid";
 import type { Component } from "solid-js";
 import { useNavigate } from "solid-start";
 import {
@@ -48,7 +48,7 @@ const Menu: Component = () => {
         variant="ghost"
       >
         <DropdownMenuIcon>
-          <HiOutlineBars3 />
+          <MenuIcon/>
         </DropdownMenuIcon>
       </DropdownMenuTrigger>
       <DropdownMenuPortal>

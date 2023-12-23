@@ -1,5 +1,5 @@
 import { createQuery } from "@tanstack/solid-query";
-import { HiOutlineLink, HiSolidXMark } from "solid-icons/hi";
+import { Share2, X } from "lucide-solid";
 import { Show, Suspense, createMemo, type Component } from "solid-js";
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
@@ -107,7 +107,7 @@ export const SharePopover: Component<SharePopoverProps> = (props) => {
   return (
     <PopoverRoot>
       <PopoverTrigger size="sm" aria-label={t("board.share.title")}>
-        <HiOutlineLink />
+        <Share2 />
       </PopoverTrigger>
       <PopoverPortal>
         <PopoverContent>
@@ -115,7 +115,7 @@ export const SharePopover: Component<SharePopoverProps> = (props) => {
           <PopoverHeader>
             <PopoverTitle>{t("board.share.title")}</PopoverTitle>
             <PopoverCloseButton>
-              <HiSolidXMark />
+              <X />
             </PopoverCloseButton>
           </PopoverHeader>
           <Suspense>

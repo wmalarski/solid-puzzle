@@ -1,4 +1,4 @@
-import { HiSolidTrash, HiSolidXMark } from "solid-icons/hi";
+import { X, Trash } from "lucide-solid";
 import { Show, createSignal, type Component } from "solid-js";
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
@@ -68,7 +68,7 @@ const FormDialog: Component<FormDialogProps> = (props) => {
   return (
     <DialogRoot open={isOpen()} onOpenChange={setIsOpen}>
       <DialogTrigger>
-        <HiSolidTrash />
+      <Trash />
         {t("board.settings.delete.button")}
       </DialogTrigger>
       <DialogPortal>
@@ -78,7 +78,7 @@ const FormDialog: Component<FormDialogProps> = (props) => {
             <DialogHeader>
               <DialogTitle>{t("board.settings.delete.title")}</DialogTitle>
               <DialogCloseButton>
-                <HiSolidXMark />
+                <X />
               </DialogCloseButton>
             </DialogHeader>
             <DeleteBoardForm

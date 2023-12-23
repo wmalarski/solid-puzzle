@@ -1,10 +1,5 @@
 import type { VariantProps } from "class-variance-authority";
-import {
-  HiOutlineCheckCircle,
-  HiOutlineExclamationCircle,
-  HiOutlineExclamationTriangle,
-  HiOutlineInformationCircle,
-} from "solid-icons/hi";
+import { CheckCircleIcon } from "lucide-solid";
 import { splitProps, type Component, type JSX } from "solid-js";
 import { Dynamic } from "solid-js/web";
 import { twCva } from "../utils/twCva";
@@ -34,12 +29,12 @@ export const Alert: Component<AlertProps> = (props) => {
 
 const alertIconMap: Record<
   "error" | "info" | "success" | "warning",
-  typeof HiOutlineCheckCircle
+  typeof CheckCircleIcon
 > = {
   error: HiOutlineExclamationCircle,
   info: HiOutlineInformationCircle,
-  success: HiOutlineCheckCircle,
-  warning: HiOutlineExclamationTriangle,
+  success: CheckCircleIcon,
+  warning: Tr,
 };
 
 export type AlertIconProps = {

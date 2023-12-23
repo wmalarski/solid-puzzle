@@ -1,4 +1,4 @@
-import { HiSolidArrowLeft, HiSolidArrowRight } from "solid-icons/hi";
+import { ArrowLeft, ArrowRight } from "lucide-solid";
 import { For, createSignal, type Component } from "solid-js";
 import { Button } from "~/components/Button";
 import { Carousel, CarouselItem } from "~/components/Carousel";
@@ -54,7 +54,7 @@ export const ImageGrid: Component<ImageGridProps> = (props) => {
           size="sm"
           type="button"
         >
-          <HiSolidArrowLeft />
+          <ArrowLeft />
         </Button>
         <Button
           class="absolute right-1 top-1/2"
@@ -63,7 +63,7 @@ export const ImageGrid: Component<ImageGridProps> = (props) => {
           size="sm"
           type="button"
         >
-          <HiSolidArrowRight />
+          <ArrowRight />
         </Button>
       </Carousel>
     </div>

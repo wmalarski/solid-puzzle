@@ -1,4 +1,4 @@
-import { HiOutlinePuzzlePiece } from "solid-icons/hi";
+import { Puzzle } from "lucide-solid";
 import { Show, type Component } from "solid-js";
 import { Button, LinkButton } from "~/components/Button";
 import { Link } from "~/components/Link";
@@ -31,7 +31,7 @@ export const TopNavbar: Component = () => {
     <Navbar>
       <NavbarStart>
         <Link class="flex text-3xl uppercase" hover href={paths.home}>
-          <HiOutlinePuzzlePiece class="h-8 w-8" />
+          <Puzzle class="h-8 w-8" />
           {t("home.title")}
         </Link>
       </NavbarStart>
