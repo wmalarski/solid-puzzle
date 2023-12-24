@@ -1,4 +1,4 @@
-import { createAsync } from "@solidjs/router";
+import { createAsync, type RouteDefinition } from "@solidjs/router";
 import { Show } from "solid-js";
 import { SessionProvider } from "~/contexts/SessionContext";
 import { PageLayout } from "~/modules/common/Layout";
@@ -8,10 +8,10 @@ import { InsertBoard } from "~/modules/home/InsertBoard";
 import { getServerSession } from "~/server/auth/actions";
 
 export const route = {
-  load: () => {
-    getServerSession();
+  load: async () => {
+    await getServerSession();
   },
-};
+} satisfies RouteDefinition;
 
 export default function Home() {
   const session = createAsync(() => getServerSession());

@@ -1,15 +1,15 @@
-import { useNavigate } from "@solidjs/router";
+import { useAction, useNavigate, useSubmission } from "@solidjs/router";
 import { MenuIcon } from "lucide-solid";
 import type { Component } from "solid-js";
 import {
-    DropdownMenuArrow,
-    DropdownMenuContent,
-    DropdownMenuIcon,
-    DropdownMenuItem,
-    DropdownMenuItemLabel,
-    DropdownMenuPortal,
-    DropdownMenuRoot,
-    DropdownMenuTrigger,
+  DropdownMenuArrow,
+  DropdownMenuContent,
+  DropdownMenuIcon,
+  DropdownMenuItem,
+  DropdownMenuItemLabel,
+  DropdownMenuPortal,
+  DropdownMenuRoot,
+  DropdownMenuTrigger,
 } from "~/components/DropdownMenu";
 import { useI18n } from "~/contexts/I18nContext";
 import { signOutServerAction } from "~/server/auth/actions";
@@ -18,14 +18,16 @@ import { paths } from "~/utils/paths";
 const SignOutMenuItem: Component = () => {
   const { t } = useI18n();
 
-  const [signOut, action] = signOutServerAction();
+  const action = useAction(signOutServerAction);
+
+  const submission = useSubmission(signOutServerAction);
 
   const onSelect = async () => {
-    await action(new FormData());
+    await action();
   };
 
   return (
-    <DropdownMenuItem disabled={signOut.pending} onSelect={onSelect}>
+    <DropdownMenuItem disabled={submission.pending} onSelect={onSelect}>
       <DropdownMenuItemLabel>{t("auth.signOut")}</DropdownMenuItemLabel>
     </DropdownMenuItem>
   );

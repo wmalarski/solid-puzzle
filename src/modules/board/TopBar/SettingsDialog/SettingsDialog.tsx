@@ -1,4 +1,4 @@
-import { X, Settings } from "lucide-solid";
+import { Settings, X } from "lucide-solid";
 import { type Component } from "solid-js";
 import {
   DialogCloseButton,
@@ -34,7 +34,7 @@ export const SettingsDialog: Component<SettingsDialogProps> = (props) => {
             <DialogHeader>
               <DialogTitle>{t("board.settings.title")}</DialogTitle>
               <DialogCloseButton>
-                <HiSolidXMark />
+                <X />
               </DialogCloseButton>
             </DialogHeader>
             <UpdateForm boardId={props.boardId} />

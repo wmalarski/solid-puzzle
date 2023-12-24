@@ -67,7 +67,13 @@ export const selectBoardServerQuery = cache(
 
     const ctx = await getRequestContext(event);
 
-    return selectBoard({ ...parsed, ctx });
+    const board = selectBoard({ ...parsed, ctx });
+
+    if (!board) {
+      throw redirect(paths.notFound);
+    }
+
+    return board;
   },
   SELECT_BOARD_CACHE_NAME,
 );

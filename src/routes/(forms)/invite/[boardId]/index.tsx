@@ -1,34 +1,20 @@
+import { createAsync, useParams, type RouteDefinition } from "@solidjs/router";
 import { Show } from "solid-js";
 import { AcceptInviteForm } from "~/modules/invite/AcceptInviteForm";
-import { selectBoard } from "~/server/board/db";
-import { getRequestContext } from "~/server/context";
-import { paths } from "~/utils/paths";
+import { selectBoardServerQuery } from "~/server/board/actions";
 
 export const route = {
-  load: () => {
-    getServerSession();
+  load: async (context) => {
+    await selectBoardServerQuery({ id: context.params.boardId });
   },
-};
-
-export const routeData = (args: RouteDataArgs) => {
-  return createServerData$(
-    async ([, boardId], event) => {
-      const ctx = await getRequestContext(event);
-
-      const board = selectBoard({ ctx, id: boardId });
-
-      if (!board) {
-        throw redirect(paths.notFound);
-      }
-
-      return board;
-    },
-    { key: ["board", args.params.boardId] },
-  );
-};
+} satisfies RouteDefinition;
 
 export default function InviteSection() {
-  const boardResource = useRouteData<typeof routeData>();
+  const params = useParams();
+
+  const boardResource = createAsync(() =>
+    selectBoardServerQuery({ id: params.boardId }),
+  );
 
   return (
     <Show when={boardResource()}>
