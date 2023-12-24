@@ -1,4 +1,4 @@
-import { useSearchParams } from "@solidjs/router";
+import { useSearchParams, useSubmission } from "@solidjs/router";
 import { Show, type Component } from "solid-js";
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
@@ -22,7 +22,7 @@ export const AcceptInviteForm: Component<AcceptInviteFormProps> = (props) => {
 
   const [searchParams] = useSearchParams();
 
-  const [acceptBoardInvite, { Form }] = acceptBoardInviteAction();
+  const submission = useSubmission(acceptBoardInviteAction);
 
   return (
     <Card variant="bordered" class="w-full max-w-md">
@@ -32,15 +32,13 @@ export const AcceptInviteForm: Component<AcceptInviteFormProps> = (props) => {
             {t("invite.title", { name: props.board.name })}
           </h2>
         </header>
-        <Form class="flex flex-col gap-4">
+        <form class="flex flex-col gap-4">
           <input type="hidden" name="token" value={searchParams.token} />
-          <Show when={acceptBoardInvite.error}>
-            {(error) => (
-              <Alert variant="error">
-                <AlertIcon variant="error" />
-                {error().message}
-              </Alert>
-            )}
+          <Show when={submission.result && !submission.result.ok}>
+            <Alert variant="error">
+              <AlertIcon variant="error" />
+              Error
+            </Alert>
           </Show>
           <TextFieldRoot>
             <TextFieldLabel for="name">
@@ -56,13 +54,13 @@ export const AcceptInviteForm: Component<AcceptInviteFormProps> = (props) => {
             />
           </TextFieldRoot>
           <Button
-            disabled={acceptBoardInvite.pending}
-            isLoading={acceptBoardInvite.pending}
+            disabled={submission.pending}
+            isLoading={submission.pending}
             type="submit"
           >
             {t("invite.button")}
           </Button>
-        </Form>
+        </form>
       </CardBody>
     </Card>
   );

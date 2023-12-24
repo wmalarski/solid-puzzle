@@ -1,3 +1,4 @@
+import { useSubmission } from "@solidjs/router";
 import { Show, type Component } from "solid-js";
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
@@ -12,27 +13,25 @@ type UpdateFormProps = {
 export const UpdateForm: Component<UpdateFormProps> = (props) => {
   const { t } = useI18n();
 
-  const [updateBoard, { Form }] = updateBoardAction();
+  const submission = useSubmission(updateBoardAction);
 
   return (
-    <Form class="flex flex-col gap-4">
-      <Show when={updateBoard.error}>
-        {(error) => (
-          <Alert variant="error">
-            <AlertIcon variant="error" />
-            {error().message}
-          </Alert>
-        )}
+    <form action={updateBoardAction} class="flex flex-col gap-4">
+      <Show when={submission.result && submission.result < 1}>
+        <Alert variant="error">
+          <AlertIcon variant="error" />
+          Error
+        </Alert>
       </Show>
       <input name="id" value={props.boardId} type="hidden" />
       <ConfigFields />
       <Button
-        disabled={updateBoard.pending}
-        isLoading={updateBoard.pending}
+        disabled={submission.pending}
+        isLoading={submission.pending}
         type="submit"
       >
         {t("board.settings.update.button")}
       </Button>
-    </Form>
+    </form>
   );
 };

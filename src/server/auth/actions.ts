@@ -7,6 +7,8 @@ import { paths } from "~/utils/paths";
 import { getRequestEventOrThrow } from "../utils";
 import { getLuciaAuth, getSession } from "./lucia";
 
+const SESSION_CACHE_NAME = "boards";
+
 const signUpArgsSchema = () => {
   return object({
     password: string([minLength(6), maxLength(20)]),
@@ -14,7 +16,7 @@ const signUpArgsSchema = () => {
   });
 };
 
-export const createSignUpServerAction = action(async (form: FormData) => {
+export const signUpServerAction = action(async (form: FormData) => {
   const event = getRequestEventOrThrow();
   const parsed = await parseAsync(signUpArgsSchema(), decode(form));
   const auth = getLuciaAuth(event);
@@ -54,7 +56,7 @@ const signInArgsSchema = () => {
   });
 };
 
-export const createSignInServerAction = action(async (form: FormData) => {
+export const signInServerAction = action(async (form: FormData) => {
   const event = getRequestEventOrThrow();
   const parsed = await parseAsync(signInArgsSchema(), decode(form));
   const auth = getLuciaAuth(event);
@@ -89,7 +91,7 @@ export const createSignInServerAction = action(async (form: FormData) => {
   }
 });
 
-export const createSignOutServerAction = action(async () => {
+export const signOutServerAction = action(async () => {
   const event = getRequestEventOrThrow();
   const auth = getLuciaAuth(event);
 
@@ -122,7 +124,7 @@ export const getServerSession = cache(async () => {
   const session = await getSession(event);
 
   return session;
-}, "session");
+}, SESSION_CACHE_NAME);
 
 export const getServerAnonGuard = async () => {
   const session = await getServerSession();

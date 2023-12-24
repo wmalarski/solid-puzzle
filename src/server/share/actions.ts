@@ -1,5 +1,5 @@
 "use server";
-import { action, redirect } from "@solidjs/router";
+import { action, cache, redirect } from "@solidjs/router";
 import { decode } from "decode-formdata";
 import {
   maxLength,
@@ -16,6 +16,8 @@ import {
   setBoardsAccessCookie,
   validateShareToken,
 } from "./db";
+
+const BOARD_INVITE_CACHE_NAME = "invite";
 
 const acceptBoardInviteArgsSchema = () => {
   return object({
@@ -60,7 +62,7 @@ export const generateBoardInviteQueryKey = (
   return ["generateBoardInvite", args] as const;
 };
 
-export const generateBoardInviteServerQuery = (boardId: string) => {
+export const generateBoardInviteServerQuery = cache((boardId: string) => {
   const event = getRequestEventOrThrow();
 
   const token = issueShareToken({
@@ -69,4 +71,4 @@ export const generateBoardInviteServerQuery = (boardId: string) => {
   });
 
   return { token };
-};
+}, BOARD_INVITE_CACHE_NAME);

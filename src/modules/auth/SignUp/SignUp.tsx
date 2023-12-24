@@ -1,3 +1,4 @@
+import { useSubmission } from "@solidjs/router";
 import { Show, type Component } from "solid-js";
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
@@ -10,13 +11,13 @@ import {
   TextFieldRoot,
 } from "~/components/TextField";
 import { useI18n } from "~/contexts/I18nContext";
-import { createSignUpServerAction } from "~/server/auth/actions";
+import { signUpServerAction } from "~/server/auth/actions";
 import { paths } from "~/utils/paths";
 
 export const SignUp: Component = () => {
   const { t } = useI18n();
 
-  const [signOut, { Form }] = createSignUpServerAction();
+  const submission = useSubmission(signUpServerAction);
 
   return (
     <Card variant="bordered" class="w-full max-w-md">
@@ -24,14 +25,12 @@ export const SignUp: Component = () => {
         <header class="flex items-center justify-between gap-2">
           <h2 class={cardTitleClass()}>{t("signUp.title")}</h2>
         </header>
-        <Form class="flex flex-col gap-4">
-          <Show when={signOut.error}>
-            {(error) => (
-              <Alert variant="error">
-                <AlertIcon variant="error" />
-                {error().message}
-              </Alert>
-            )}
+        <form class="flex flex-col gap-4">
+          <Show when={submission.result && !submission.result.ok}>
+            <Alert variant="error">
+              <AlertIcon variant="error" />
+              Error
+            </Alert>
           </Show>
           <TextFieldRoot>
             <TextFieldLabel for="username">
@@ -61,8 +60,8 @@ export const SignUp: Component = () => {
             />
           </TextFieldRoot>
           <Button
-            disabled={signOut.pending}
-            isLoading={signOut.pending}
+            disabled={submission.pending}
+            isLoading={submission.pending}
             type="submit"
           >
             {t("signUp.button")}
@@ -72,7 +71,7 @@ export const SignUp: Component = () => {
               {t("signUp.signIn")}
             </Link>
           </div>
-        </Form>
+        </form>
       </CardBody>
     </Card>
   );

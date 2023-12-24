@@ -1,4 +1,5 @@
-import { X, Trash } from "lucide-solid";
+import { useSubmission } from "@solidjs/router";
+import { Trash, X } from "lucide-solid";
 import { Show, createSignal, type Component } from "solid-js";
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
@@ -25,30 +26,28 @@ type DeleteBoardFormProps = {
 const DeleteBoardForm: Component<DeleteBoardFormProps> = (props) => {
   const { t } = useI18n();
 
-  const [deleteBoard, { Form }] = deleteBoardAction();
+  const submission = useSubmission(deleteBoardAction);
 
   return (
-    <Form class="flex flex-col gap-4">
-      <Show when={deleteBoard.error}>
-        {(error) => (
-          <Alert variant="error">
-            <AlertIcon variant="error" />
-            {error().message}
-          </Alert>
-        )}
+    <form action={deleteBoardAction} class="flex flex-col gap-4">
+      <Show when={submission.result}>
+        <Alert variant="error">
+          <AlertIcon variant="error" />
+          Error
+        </Alert>
       </Show>
       <input type="hidden" name="id" value={props.boardId} />
       <Button variant="ghost" onClick={props.onCancelClick} type="button">
         {t("board.settings.delete.cancel")}
       </Button>
       <Button
-        disabled={deleteBoard.pending}
-        isLoading={deleteBoard.pending}
+        disabled={submission.pending}
+        isLoading={submission.pending}
         type="submit"
       >
         {t("board.settings.delete.button")}
       </Button>
-    </Form>
+    </form>
   );
 };
 

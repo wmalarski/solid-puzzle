@@ -1,4 +1,4 @@
-import { action, redirect } from "@solidjs/router";
+import { action, cache, redirect } from "@solidjs/router";
 import { decode } from "decode-formdata";
 import { parseAsync, type Input } from "valibot";
 import { paths } from "~/utils/paths";
@@ -16,6 +16,9 @@ import {
   updateBoard,
   updateBoardArgsSchema,
 } from "./db";
+
+const SELECT_BOARD_CACHE_NAME = "board";
+const SELECT_BOARDS_CACHE_NAME = "boards";
 
 export const insertBoardAction = action(async (form: FormData) => {
   const event = getRequestEventOrThrow();
@@ -57,24 +60,26 @@ export const deleteBoardAction = action(async (form: FormData) => {
   throw redirect(paths.home);
 });
 
-export const selectBoardServerQuery = async (
-  args: Input<ReturnType<typeof selectBoardArgsSchema>>,
-) => {
-  const event = getRequestEventOrThrow();
-  const parsed = await parseAsync(selectBoardArgsSchema(), args);
+export const selectBoardServerQuery = cache(
+  async (args: Input<ReturnType<typeof selectBoardArgsSchema>>) => {
+    const event = getRequestEventOrThrow();
+    const parsed = await parseAsync(selectBoardArgsSchema(), args);
 
-  const ctx = await getRequestContext(event);
+    const ctx = await getRequestContext(event);
 
-  return selectBoard({ ...parsed, ctx });
-};
+    return selectBoard({ ...parsed, ctx });
+  },
+  SELECT_BOARD_CACHE_NAME,
+);
 
-export const selectBoardsServerQuery = async (
-  args: Input<ReturnType<typeof selectBoardsArgsSchema>>,
-) => {
-  const event = getRequestEventOrThrow();
-  const parsed = await parseAsync(selectBoardsArgsSchema(), args);
+export const selectBoardsServerQuery = cache(
+  async (args: Input<ReturnType<typeof selectBoardsArgsSchema>>) => {
+    const event = getRequestEventOrThrow();
+    const parsed = await parseAsync(selectBoardsArgsSchema(), args);
 
-  const ctx = await getProtectedRequestContext(event);
+    const ctx = await getProtectedRequestContext(event);
 
-  return selectBoards({ ...parsed, ctx });
-};
+    return selectBoards({ ...parsed, ctx });
+  },
+  SELECT_BOARDS_CACHE_NAME,
+);

@@ -2,23 +2,23 @@ import { useNavigate } from "@solidjs/router";
 import { MenuIcon } from "lucide-solid";
 import type { Component } from "solid-js";
 import {
-  DropdownMenuArrow,
-  DropdownMenuContent,
-  DropdownMenuIcon,
-  DropdownMenuItem,
-  DropdownMenuItemLabel,
-  DropdownMenuPortal,
-  DropdownMenuRoot,
-  DropdownMenuTrigger,
+    DropdownMenuArrow,
+    DropdownMenuContent,
+    DropdownMenuIcon,
+    DropdownMenuItem,
+    DropdownMenuItemLabel,
+    DropdownMenuPortal,
+    DropdownMenuRoot,
+    DropdownMenuTrigger,
 } from "~/components/DropdownMenu";
 import { useI18n } from "~/contexts/I18nContext";
-import { createSignOutServerAction } from "~/server/auth/actions";
+import { signOutServerAction } from "~/server/auth/actions";
 import { paths } from "~/utils/paths";
 
 const SignOutMenuItem: Component = () => {
   const { t } = useI18n();
 
-  const [signOut, action] = createSignOutServerAction();
+  const [signOut, action] = signOutServerAction();
 
   const onSelect = async () => {
     await action(new FormData());

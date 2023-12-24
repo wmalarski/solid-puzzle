@@ -1,3 +1,4 @@
+import { useSubmission } from "@solidjs/router";
 import { Show, type Component } from "solid-js";
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
@@ -12,26 +13,24 @@ type CreateBoardFormProps = {
 export const CreateBoardForm: Component<CreateBoardFormProps> = (props) => {
   const { t } = useI18n();
 
-  const [insertBoard, { Form }] = insertBoardAction();
+  const submission = useSubmission(insertBoardAction);
 
   return (
-    <Form class="flex flex-col gap-4">
-      <Show when={insertBoard.error}>
-        {(error) => (
-          <Alert variant="error">
-            <AlertIcon variant="error" />
-            {error().message}
-          </Alert>
-        )}
+    <form action={insertBoardAction} class="flex flex-col gap-4">
+      <Show when={submission.result}>
+        <Alert variant="error">
+          <AlertIcon variant="error" />
+          Error
+        </Alert>
       </Show>
       <ConfigFields image={props.image} />
       <Button
-        disabled={insertBoard.pending}
-        isLoading={insertBoard.pending}
+        disabled={submission.pending}
+        isLoading={submission.pending}
         type="submit"
       >
         {t("createBoard.button")}
       </Button>
-    </Form>
+    </form>
   );
 };

@@ -1,3 +1,4 @@
+import { useSubmission } from "@solidjs/router";
 import { Puzzle } from "lucide-solid";
 import { Show, type Component } from "solid-js";
 import { Button, LinkButton } from "~/components/Button";
@@ -5,20 +6,20 @@ import { Link } from "~/components/Link";
 import { Navbar, NavbarEnd, NavbarStart } from "~/components/Navbar";
 import { useI18n } from "~/contexts/I18nContext";
 import { useSessionContext } from "~/contexts/SessionContext";
-import { createSignOutServerAction } from "~/server/auth/actions";
+import { signOutServerAction } from "~/server/auth/actions";
 import { paths } from "~/utils/paths";
 
 const SignOutButton: Component = () => {
   const { t } = useI18n();
 
-  const [signOut, { Form }] = createSignOutServerAction();
+  const submission = useSubmission(signOutServerAction);
 
   return (
-    <Form>
-      <Button size="sm" disabled={signOut.pending}>
+    <form action={signOutServerAction}>
+      <Button size="sm" disabled={submission.pending}>
         {t("auth.signOut")}
       </Button>
-    </Form>
+    </form>
   );
 };
 
