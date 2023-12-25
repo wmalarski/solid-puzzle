@@ -28,7 +28,7 @@ export const insertBoardAction = action(async (form: FormData) => {
     decode(form, { numbers: ["rows", "columns"] }),
   );
 
-  const ctx = await getProtectedRequestContext(event);
+  const ctx = getProtectedRequestContext(event);
 
   const boardId = insertBoard({ ...parsed, ctx });
 
@@ -43,7 +43,7 @@ export const updateBoardAction = action(async (form: FormData) => {
     decode(form, { numbers: ["rows", "columns"] }),
   );
 
-  const ctx = await getProtectedRequestContext(event);
+  const ctx = getProtectedRequestContext(event);
 
   return updateBoard({ ...parsed, ctx });
 });
@@ -53,7 +53,7 @@ export const deleteBoardAction = action(async (form: FormData) => {
 
   const parsed = await parseAsync(deleteBoardArgsSchema(), decode(form));
 
-  const ctx = await getProtectedRequestContext(event);
+  const ctx = getProtectedRequestContext(event);
 
   deleteBoard({ ...parsed, ctx });
 
@@ -65,7 +65,7 @@ export const selectBoardServerQuery = cache(
     const event = getRequestEventOrThrow();
     const parsed = await parseAsync(selectBoardArgsSchema(), args);
 
-    const ctx = await getRequestContext(event);
+    const ctx = getRequestContext(event);
 
     const board = selectBoard({ ...parsed, ctx });
 
@@ -83,7 +83,7 @@ export const selectBoardsServerQuery = cache(
     const event = getRequestEventOrThrow();
     const parsed = await parseAsync(selectBoardsArgsSchema(), args);
 
-    const ctx = await getProtectedRequestContext(event);
+    const ctx = getProtectedRequestContext(event);
 
     return selectBoards({ ...parsed, ctx });
   },

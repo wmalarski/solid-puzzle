@@ -5,7 +5,7 @@ import { LuciaError } from "lucia";
 import { maxLength, minLength, object, parseAsync, string } from "valibot";
 import { paths } from "~/utils/paths";
 import { getRequestEventOrThrow } from "../utils";
-import { getLuciaAuth, getSession } from "./lucia";
+import { getLuciaAuth } from "./lucia";
 
 const SESSION_CACHE_NAME = "boards";
 
@@ -118,16 +118,13 @@ export const signOutServerAction = action(async () => {
   });
 });
 
-export const getServerSession = cache(async () => {
+export const getServerSession = cache(() => {
   const event = getRequestEventOrThrow();
-
-  const session = await getSession(event);
-
-  return session;
+  return event.context.session;
 }, SESSION_CACHE_NAME);
 
-export const getServerAnonGuard = async () => {
-  const session = await getServerSession();
+export const getServerAnonGuard = () => {
+  const session = getServerSession();
 
   if (session) {
     throw redirect(paths.home);
