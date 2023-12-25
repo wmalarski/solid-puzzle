@@ -1,13 +1,13 @@
+/* eslint-disable @typescript-eslint/consistent-type-definitions */
+import type { FetchEvent } from "@solidjs/start/server/types";
 import Database from "better-sqlite3";
 import { drizzle } from "drizzle-orm/better-sqlite3";
 import type { RequestEvent } from "solid-js/web";
 import { user } from "~/server/auth/schema";
 import { board } from "~/server/board/schema";
-import { serverEnv } from "./env";
 
 const createDrizzleContext = (event: RequestEvent) => {
-  const env = serverEnv(event);
-  const instance = Database(env.DATABASE_URL);
+  const instance = Database(event.context.env.DATABASE_URL);
   return {
     db: drizzle(instance),
     instance,
@@ -23,10 +23,11 @@ declare global {
 }
 
 export const getDrizzleCached = (event: RequestEvent) => {
-  const env = serverEnv(event);
-
   // HOT reload cache
-  if (env.NODE_ENV !== "production" && typeof global !== "undefined") {
+  if (
+    event.context.env.NODE_ENV !== "production" &&
+    typeof global !== "undefined"
+  ) {
     if (!global.db) {
       const drizzle = createDrizzleContext(event);
       global.db = drizzle;
@@ -37,14 +38,13 @@ export const getDrizzleCached = (event: RequestEvent) => {
   return createDrizzleContext(event);
 };
 
-export const getDrizzle = (event: RequestEvent) => {
-  return event.locals.drizzle as DrizzleDB;
+export const drizzleMiddleware = (event: FetchEvent) => {
+  const drizzle = getDrizzleCached(event);
+  event.context.drizzle = drizzle;
 };
 
-// export const drizzleMiddleware: Middleware = ({ forward }) => {
-//   return (event) => {
-//     const drizzle = getDrizzleCached(event);
-//     event.locals.drizzle = drizzle;
-//     return forward(event);
-//   };
-// };
+declare module "vinxi/server" {
+  interface H3EventContext {
+    db: DrizzleDB;
+  }
+}

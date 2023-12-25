@@ -4,7 +4,7 @@ import { appendHeader, getCookie, getHeader } from "@solidjs/start/server";
 import type { FetchEvent } from "@solidjs/start/server/types";
 import { Lucia, verifyRequestOrigin, type Session, type User } from "lucia";
 import type { RequestEvent } from "solid-js/web";
-import { getDrizzle, type DrizzleDB } from "../db";
+import type { DrizzleDB } from "../db";
 
 const getLucia = (database: DrizzleDB["instance"]) => {
   const adapter = new BetterSqlite3Adapter(database, {
@@ -24,8 +24,7 @@ export const getLuciaAuth = (event: RequestEvent) => {
 };
 
 export const luciaMiddleware = async (event: FetchEvent) => {
-  const { instance } = getDrizzle(event);
-  const lucia = getLucia(instance);
+  const lucia = getLucia(event.context.db.instance);
 
   if (event.node.req.method !== "GET") {
     const originHeader = getHeader(event, "Origin") ?? null;

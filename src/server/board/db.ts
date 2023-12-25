@@ -41,7 +41,7 @@ export const insertBoard = (args: InsertBoardArgs) => {
       id: boardId,
       media: args.image,
       name: args.name,
-      ownerId: args.ctx.session.user.userId,
+      ownerId: args.ctx.session.userId,
     })
     .run();
 
@@ -70,8 +70,8 @@ export const updateBoard = (args: UpdateBoardArgs) => {
     .limit(1)
     .get();
 
-  if (args.ctx.session.user.userId !== board?.ownerId) {
-    throw new ServerError("Unauthorized", { status: 404 });
+  if (args.ctx.session.userId !== board?.ownerId) {
+    throw new Response("Unauthorized", { status: 404 });
   }
 
   const config = generateCurves({
@@ -104,8 +104,8 @@ export const deleteBoard = (args: DeleteBoardArgs) => {
     .limit(1)
     .get();
 
-  if (args.ctx.session.user.userId !== board?.ownerId) {
-    throw new ServerError("Unauthorized", { status: 404 });
+  if (args.ctx.session.userId !== board?.ownerId) {
+    throw new Response("Unauthorized", { status: 404 });
   }
 
   args.ctx.db
@@ -155,7 +155,7 @@ export const selectBoards = (args: SelectBoardsArgs) => {
     const result = args.ctx.db
       .select()
       .from(args.ctx.schema.board)
-      .where(eq(args.ctx.schema.board.ownerId, args.ctx.session.user.userId))
+      .where(eq(args.ctx.schema.board.ownerId, args.ctx.session.userId))
       .limit(args.limit)
       .offset(args.offset)
       .all();

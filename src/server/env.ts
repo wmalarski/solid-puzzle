@@ -1,5 +1,6 @@
-import type { RequestEvent } from "solid-js/web";
-import { object, optional, string, type Input } from "valibot";
+/* eslint-disable @typescript-eslint/consistent-type-definitions */
+import type { FetchEvent } from "@solidjs/start/server/types";
+import { object, optional, parseAsync, string, type Input } from "valibot";
 
 if (typeof window !== "undefined") {
   throw new Error("SERVER ON CLIENT!");
@@ -15,23 +16,20 @@ const getEnvSchema = () => {
 
 type ServerEnv = Input<ReturnType<typeof getEnvSchema>>;
 
-export const serverEnv = (event: RequestEvent) => {
-  console.log("event", event);
-  return event.locals.env as ServerEnv;
+export const serverEnvMiddleware = async (event: FetchEvent) => {
+  const envSchema = getEnvSchema();
+
+  const parsed = await parseAsync(envSchema, {
+    DATABASE_URL: import.meta.env.DATABASE_URL,
+    NODE_ENV: import.meta.env.NODE_ENV,
+    SESSION_SECRET: import.meta.env.SESSION_SECRET,
+  });
+
+  event.locals.env = parsed;
 };
 
-// export const serverEnvMiddleware: Middleware = ({ forward }) => {
-//   return async (event) => {
-//     const envSchema = getEnvSchema();
-
-//     const parsed = await parseAsync(envSchema, {
-//       DATABASE_URL: event.env.DATABASE_URL,
-//       NODE_ENV: event.env.NODE_ENV,
-//       SESSION_SECRET: event.env.SESSION_SECRET,
-//     });
-
-//     event.locals.env = parsed;
-
-//     return forward(event);
-//   };
-// };
+declare module "vinxi/server" {
+  interface H3EventContext {
+    env: ServerEnv;
+  }
+}
