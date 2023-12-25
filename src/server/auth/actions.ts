@@ -2,12 +2,12 @@
 import { action, cache, redirect } from "@solidjs/router";
 import { appendHeader } from "@solidjs/start/server";
 import { decode } from "decode-formdata";
-import { eq } from "drizzle-orm";
 import { generateId } from "lucia";
 import { Argon2id } from "oslo/password";
 import { maxLength, minLength, object, parseAsync, string } from "valibot";
 import { paths } from "~/utils/paths";
 import { getRequestEventOrThrow } from "../utils";
+import { insertUser, selectUserByUsername } from "./db";
 import { getLucia } from "./lucia";
 
 const SESSION_CACHE_NAME = "boards";
@@ -28,9 +28,9 @@ export const signUpServerAction = action(async (form: FormData) => {
   const userId = generateId(15);
 
   try {
-    event.context.db.insert(event.context.schema.user).values({
-      id: userId,
-      password: hashedPassword,
+    insertUser({
+      ctx: event.context,
+      hashedPassword,
       username: parsed.username,
     });
 
@@ -61,13 +61,10 @@ export const signInServerAction = action(async (form: FormData) => {
   const parsed = await parseAsync(signInArgsSchema(), decode(form));
   const lucia = getLucia(event.context);
 
-  const existingUser = event.context.db
-    .select()
-    .from(event.context.schema.user)
-    .where(eq(event.context.schema.user.username, parsed.username))
-    .limit(0)
-    .all()
-    .at(0);
+  const existingUser = selectUserByUsername({
+    ctx: event.context,
+    username: parsed.username,
+  });
 
   if (!existingUser || !existingUser.password) {
     return new Error("Incorrect username or password");
