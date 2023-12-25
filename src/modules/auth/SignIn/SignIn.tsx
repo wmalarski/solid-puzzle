@@ -26,7 +26,7 @@ export const SignIn: Component = () => {
           <h2 class={cardTitleClass()}>{t("signIn.title")}</h2>
         </header>
         <form action={signInServerAction} class="flex flex-col gap-4">
-          <Show when={submission.result && !submission.result.ok}>
+          <Show when={submission.result && !submission.result.message}>
             <Alert variant="error">
               <AlertIcon variant="error" />
               Error

@@ -1,53 +1,9 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "df88bdd4-241f-4f54-bfc1-7c5839ef9112",
+  "id": "398510b5-63bf-422f-9933-5fa1d23a5c90",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
-    "auth_key": {
-      "name": "auth_key",
-      "columns": {
-        "hashed_password": {
-          "name": "hashed_password",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "user_id": {
-          "name": "user_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "auth_key_user_id_auth_user_id_fk": {
-          "name": "auth_key_user_id_auth_user_id_fk",
-          "tableFrom": "auth_key",
-          "tableTo": "auth_user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
     "auth_session": {
       "name": "auth_session",
       "columns": {
@@ -118,6 +74,13 @@
         },
         "names": {
           "name": "names",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "password": {
+          "name": "password",
           "type": "text",
           "primaryKey": false,
           "notNull": false,

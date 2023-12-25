@@ -1,10 +1,3 @@
-CREATE TABLE `auth_key` (
-	`hashed_password` text,
-	`id` text PRIMARY KEY NOT NULL,
-	`user_id` text NOT NULL,
-	FOREIGN KEY (`user_id`) REFERENCES `auth_user`(`id`) ON UPDATE no action ON DELETE no action
-);
---> statement-breakpoint
 CREATE TABLE `auth_session` (
 	`active_expires` integer NOT NULL,
 	`id` text PRIMARY KEY NOT NULL,
@@ -17,6 +10,7 @@ CREATE TABLE `auth_user` (
 	`id` text PRIMARY KEY NOT NULL,
 	`last_names` text,
 	`names` text,
+	`password` text,
 	`username` text
 );
 --> statement-breakpoint
