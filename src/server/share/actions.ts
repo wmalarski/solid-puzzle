@@ -6,18 +6,19 @@ import {
   minLength,
   object,
   parseAsync,
-  string,
-  type Input,
+  string
 } from "valibot";
 import { paths } from "~/utils/paths";
 import { getRequestEventOrThrow } from "../utils";
 import {
+  hasBoardAccess,
   issueShareToken,
   setBoardsAccessCookie,
   validateShareToken,
 } from "./db";
 
 const BOARD_INVITE_CACHE_NAME = "invite";
+const HAS_BOARD_ACCESS_CACHE_NAME = "has_access";
 
 const acceptBoardInviteArgsSchema = () => {
   return object({
@@ -50,18 +51,6 @@ export const acceptBoardInviteAction = action(async (formData: FormData) => {
   });
 });
 
-const generateBoardInviteArgsSchema = () => {
-  return object({
-    boardId: string(),
-  });
-};
-
-export const generateBoardInviteQueryKey = (
-  args: Input<ReturnType<typeof generateBoardInviteArgsSchema>>,
-) => {
-  return ["generateBoardInvite", args] as const;
-};
-
 export const generateBoardInviteServerQuery = cache((boardId: string) => {
   const event = getRequestEventOrThrow();
 
@@ -72,3 +61,15 @@ export const generateBoardInviteServerQuery = cache((boardId: string) => {
 
   return { token };
 }, BOARD_INVITE_CACHE_NAME);
+
+export const hasBoardAccessServerQuery = cache((boardId: string) => {
+  const event = getRequestEventOrThrow();
+
+  const access = hasBoardAccess({ boardId, event });
+
+  if (!access) {
+    throw redirect(paths.notFound);
+  }
+
+  return access;
+}, HAS_BOARD_ACCESS_CACHE_NAME);

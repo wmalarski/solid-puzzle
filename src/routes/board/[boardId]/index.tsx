@@ -1,14 +1,32 @@
-import { useParams } from "@solidjs/router";
+import { createAsync, redirect, useParams } from "@solidjs/router";
 import { createQuery } from "@tanstack/solid-query";
 import { Show, Suspense, type Component } from "solid-js";
 import { SessionProvider } from "~/contexts/SessionContext";
 import { Board } from "~/modules/board/Board";
-import { selectBoard } from "~/server/board/db";
+import { selectBoardServerQuery } from "~/server/board/actions";
 import { selectBoardServerQueryOptions } from "~/server/board/queries";
 import type { BoardModel } from "~/server/board/types";
-import { getRequestContext } from "~/server/context";
-import { hasBoardAccess, type BoardAccess } from "~/server/share/db";
+import { hasBoardAccessServerQuery } from "~/server/share/actions";
+import { type BoardAccess } from "~/server/share/db";
+import { getRequestEventOrThrow } from "~/server/utils";
 import { paths } from "~/utils/paths";
+
+export const selectProtectedBoardServerQuery = async (id: string) => {
+  "use server";
+
+  const [board, access] = await Promise.all([
+    selectBoardServerQuery({ id }),
+    hasBoardAccessServerQuery(id),
+  ]);
+
+  const event = getRequestEventOrThrow();
+
+  if (board.ownerId !== event.session?.user.userId) {
+    throw redirect(paths.notFound);
+  }
+
+  return { access, board };
+};
 
 type BoardQueryProps = {
   boardAccess?: BoardAccess;
@@ -29,26 +47,12 @@ const BoardQuery: Component<BoardQueryProps> = (props) => {
   );
 };
 
-export const routeData = (args: RouteDataArgs) => {
-  return createServerData$(
-    async ([, boardId], event) => {
-      const ctx = await getRequestContext(event);
-
-      const board = selectBoard({ ctx, id: boardId });
-      const access = await hasBoardAccess({ boardId, event });
-
-      if (!board || (!access && board.ownerId !== ctx.session?.user.userId)) {
-        throw redirect(paths.notFound);
-      }
-
-      return { access, board, session: ctx.session };
-    },
-    { key: ["board", args.params.boardId] },
-  );
-};
-
 export default function BoardSection() {
-  const data = useRouteData<typeof routeData>();
+  const params = useParams();
+
+  const data = createAsync(() =>
+    selectProtectedBoardServerQuery(params.boardId),
+  );
 
   return (
     <SessionProvider value={() => data()?.session || null}>
