@@ -8,9 +8,8 @@ import {
 } from "@solidjs/start/server";
 import type { FetchEvent } from "@solidjs/start/server/types";
 import { Lucia, verifyRequestOrigin, type Session, type User } from "lucia";
-import type { RequestEvent } from "solid-js/web";
 
-const getLucia = (context: H3EventContext) => {
+export const getLucia = (context: H3EventContext) => {
   const adapter = new BetterSqlite3Adapter(context.instance, {
     session: "auth_session",
     user: "auth_user",
@@ -22,10 +21,6 @@ const getLucia = (context: H3EventContext) => {
 };
 
 export type LuciaAuth = ReturnType<typeof getLucia>;
-
-export const getLuciaAuth = (event: RequestEvent) => {
-  return event.locals.auth as LuciaAuth;
-};
 
 export const luciaMiddleware = async (event: FetchEvent) => {
   const lucia = getLucia(event.context);
