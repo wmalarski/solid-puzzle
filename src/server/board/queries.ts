@@ -1,13 +1,14 @@
 import { queryOptions } from "@tanstack/solid-query";
-import type { Input } from "valibot";
 import { selectBoardServerQuery, selectBoardsServerQuery } from "./actions";
-import type { selectBoardArgsSchema, selectBoardsArgsSchema } from "./db";
+
 import type { BoardModel } from "./types";
 
-export const selectBoardServerQueryOptions = (
-  args: Input<ReturnType<typeof selectBoardArgsSchema>>,
-  initialBoard?: BoardModel,
-) => {
+export const selectBoardServerQueryOptions = ({
+  initialBoard,
+  ...args
+}: Awaited<Parameters<typeof selectBoardServerQuery>[0]> & {
+  initialBoard?: BoardModel;
+}) => {
   return queryOptions(() => ({
     initialData: initialBoard,
     queryFn: () => selectBoardServerQuery(args),
@@ -18,7 +19,7 @@ export const selectBoardServerQueryOptions = (
 };
 
 export const selectBoardsServerQueryOptions = (
-  args: Input<ReturnType<typeof selectBoardsArgsSchema>>,
+  args: Awaited<Parameters<typeof selectBoardsServerQuery>[0]>,
 ) => {
   return queryOptions(() => ({
     queryFn: () => selectBoardsServerQuery(args),

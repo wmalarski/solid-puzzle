@@ -4,9 +4,17 @@ import type { RequestEvent } from "solid-js/web";
 import type { H3EventContext } from "vinxi/server";
 import { paths } from "~/utils/paths";
 
+export type WithH3EventContext<T> = T & {
+  ctx: H3EventContext;
+};
+
 export type ProtectedH3EventContext = H3EventContext & {
   session: Session;
   user: User;
+};
+
+export type WithProtectedH3EventContext<T> = T & {
+  ctx: ProtectedH3EventContext;
 };
 
 export const getProtectedRequestContext = (

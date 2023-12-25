@@ -1,32 +1,17 @@
 import { eq } from "drizzle-orm";
 import { nanoid } from "nanoid";
-import {
-  coerce,
-  integer,
-  maxValue,
-  minLength,
-  minValue,
-  number,
-  object,
-  string,
-  type Input,
-} from "valibot";
-import type { H3EventContext } from "vinxi/server";
 import { generateCurves } from "~/utils/getPuzzleFragments";
-import type { ProtectedH3EventContext } from "../context";
+import type {
+  WithH3EventContext,
+  WithProtectedH3EventContext,
+} from "../context";
 
-export const insertBoardArgsSchema = () => {
-  return object({
-    columns: coerce(number([integer(), minValue(3)]), Number),
-    image: string(),
-    name: string([minLength(3)]),
-    rows: coerce(number([integer(), minValue(3)]), Number),
-  });
-};
-
-type InsertBoardArgs = Input<ReturnType<typeof insertBoardArgsSchema>> & {
-  ctx: ProtectedH3EventContext;
-};
+type InsertBoardArgs = WithProtectedH3EventContext<{
+  columns: number;
+  image: string;
+  name: string;
+  rows: number;
+}>;
 
 export const insertBoard = (args: InsertBoardArgs) => {
   const boardId = nanoid();
@@ -49,19 +34,13 @@ export const insertBoard = (args: InsertBoardArgs) => {
   return boardId;
 };
 
-export const updateBoardArgsSchema = () => {
-  return object({
-    columns: coerce(number([integer(), minValue(3)]), Number),
-    id: string(),
-    image: string(),
-    name: string([minLength(3)]),
-    rows: coerce(number([integer(), minValue(3)]), Number),
-  });
-};
-
-type UpdateBoardArgs = Input<ReturnType<typeof updateBoardArgsSchema>> & {
-  ctx: ProtectedH3EventContext;
-};
+type UpdateBoardArgs = WithProtectedH3EventContext<{
+  columns: number;
+  id: string;
+  image: string;
+  name: string;
+  rows: number;
+}>;
 
 export const updateBoard = (args: UpdateBoardArgs) => {
   const board = args.ctx.db
@@ -89,13 +68,9 @@ export const updateBoard = (args: UpdateBoardArgs) => {
   return result.changes;
 };
 
-export const deleteBoardArgsSchema = () => {
-  return object({ id: string() });
-};
-
-type DeleteBoardArgs = Input<ReturnType<typeof deleteBoardArgsSchema>> & {
-  ctx: ProtectedH3EventContext;
-};
+type DeleteBoardArgs = WithProtectedH3EventContext<{
+  id: string;
+}>;
 
 export const deleteBoard = (args: DeleteBoardArgs) => {
   const board = args.ctx.db
@@ -117,13 +92,9 @@ export const deleteBoard = (args: DeleteBoardArgs) => {
   return board;
 };
 
-export const selectBoardArgsSchema = () => {
-  return object({ id: string() });
-};
-
-type SelectBoardArgs = Input<ReturnType<typeof selectBoardArgsSchema>> & {
-  ctx: H3EventContext;
-};
+type SelectBoardArgs = WithH3EventContext<{
+  id: string;
+}>;
 
 export const selectBoard = (args: SelectBoardArgs) => {
   try {
@@ -140,16 +111,10 @@ export const selectBoard = (args: SelectBoardArgs) => {
   }
 };
 
-export const selectBoardsArgsSchema = () => {
-  return object({
-    limit: coerce(number([maxValue(20)]), Number),
-    offset: coerce(number(), Number),
-  });
-};
-
-type SelectBoardsArgs = Input<ReturnType<typeof selectBoardsArgsSchema>> & {
-  ctx: ProtectedH3EventContext;
-};
+type SelectBoardsArgs = WithProtectedH3EventContext<{
+  limit: number;
+  offset: number;
+}>;
 
 export const selectBoards = (args: SelectBoardsArgs) => {
   try {

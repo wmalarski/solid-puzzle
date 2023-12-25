@@ -24,7 +24,7 @@ export const getLuciaAuth = (event: RequestEvent) => {
 };
 
 export const luciaMiddleware = async (event: FetchEvent) => {
-  const lucia = getLucia(event.context.db.instance);
+  const lucia = getLucia(event.context.instance);
 
   if (event.node.req.method !== "GET") {
     const originHeader = getHeader(event, "Origin") ?? null;

@@ -1,9 +1,11 @@
 import { queryOptions } from "@tanstack/solid-query";
 import { generateBoardInviteServerQuery } from "./actions";
 
-export const generateBoardInviteQueryOptions = (boardId: string) => {
+export const generateBoardInviteQueryOptions = (
+  args: Awaited<Parameters<typeof generateBoardInviteServerQuery>[0]>,
+) => {
   return queryOptions(() => ({
-    queryFn: () => generateBoardInviteServerQuery(boardId),
-    queryKey: ["generateBoardInvite", boardId] as const,
+    queryFn: () => generateBoardInviteServerQuery(args),
+    queryKey: ["generateBoardInvite", args] as const,
   }));
 };

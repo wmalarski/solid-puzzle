@@ -16,7 +16,7 @@ export const selectProtectedBoardServerQuery = async (id: string) => {
 
   const [board, access] = await Promise.all([
     selectBoardServerQuery({ id }),
-    hasBoardAccessServerQuery(id),
+    hasBoardAccessServerQuery({ id }),
   ]);
 
   const event = getRequestEventOrThrow();
@@ -38,7 +38,10 @@ const BoardQuery: Component<BoardQueryProps> = (props) => {
   const params = useParams();
 
   const boardQuery = createQuery(() =>
-    selectBoardServerQueryOptions({ id: params.boardId }, props.initialBoard)(),
+    selectBoardServerQueryOptions({
+      id: params.boardId,
+      initialBoard: props.initialBoard,
+    })(),
   );
 
   return (

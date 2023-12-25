@@ -1,7 +1,14 @@
 "use server";
 import { action, cache, redirect } from "@solidjs/router";
 import { decode } from "decode-formdata";
-import { maxLength, minLength, object, parseAsync, string } from "valibot";
+import {
+  maxLength,
+  minLength,
+  object,
+  parseAsync,
+  string,
+  type Input,
+} from "valibot";
 import { paths } from "~/utils/paths";
 import { getRequestEventOrThrow } from "../utils";
 import {
@@ -45,25 +52,44 @@ export const acceptBoardInviteAction = action(async (formData: FormData) => {
   });
 });
 
-export const generateBoardInviteServerQuery = cache((boardId: string) => {
-  const event = getRequestEventOrThrow();
+const generateBoardInviteArgsSchema = () => {
+  return object({ id: string() });
+};
 
-  const token = issueShareToken({
-    boardId,
-    env: event.context.env,
-  });
+export const generateBoardInviteServerQuery = cache(
+  async (args: Input<ReturnType<typeof generateBoardInviteArgsSchema>>) => {
+    const event = getRequestEventOrThrow();
+    const parsed = await parseAsync(generateBoardInviteArgsSchema(), args);
 
-  return { token };
-}, BOARD_INVITE_CACHE_NAME);
+    const token = issueShareToken({
+      boardId: parsed.id,
+      env: event.context.env,
+    });
 
-export const hasBoardAccessServerQuery = cache((boardId: string) => {
-  const event = getRequestEventOrThrow();
+    return { token };
+  },
+  BOARD_INVITE_CACHE_NAME,
+);
 
-  const access = hasBoardAccess({ boardId, event });
+const hasBoardAccessArgsSchema = () => {
+  return object({ id: string() });
+};
 
-  if (!access) {
-    throw redirect(paths.notFound);
-  }
+export const hasBoardAccessServerQuery = cache(
+  async (args: Input<ReturnType<typeof hasBoardAccessArgsSchema>>) => {
+    const event = getRequestEventOrThrow();
+    const parsed = await parseAsync(hasBoardAccessArgsSchema(), args);
 
-  return access;
-}, HAS_BOARD_ACCESS_CACHE_NAME);
+    const access = hasBoardAccess({
+      boardId: parsed.id,
+      event,
+    });
+
+    if (!access) {
+      throw redirect(paths.notFound);
+    }
+
+    return access;
+  },
+  HAS_BOARD_ACCESS_CACHE_NAME,
+);

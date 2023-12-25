@@ -33,7 +33,7 @@ const ShareForm: Component<ShareFormProps> = (props) => {
   const { t } = useI18n();
 
   const inviteQuery = createQuery(() =>
-    generateBoardInviteQueryOptions(props.board.id)(),
+    generateBoardInviteQueryOptions({ id: props.board.id })(),
   );
 
   const value = createMemo(() => {
@@ -41,9 +41,8 @@ const ShareForm: Component<ShareFormProps> = (props) => {
       return;
     }
 
-    return `${window.location.origin}${paths.invite(
-      props.board.id,
-    )}?${buildSearchParams({ token: inviteQuery.data.token })}`;
+    const search = buildSearchParams({ token: inviteQuery.data.token });
+    return `${window.location.origin}${paths.invite(props.board.id)}?${search}`;
   });
 
   const onCopyToClipboard = () => {
