@@ -30,7 +30,7 @@ export const acceptBoardInviteAction = action(async (formData: FormData) => {
   );
 
   const result = await validateShareToken({
-    env: event.env,
+    env: event.context.env,
     token: parsed.token,
   });
 
@@ -50,7 +50,7 @@ export const generateBoardInviteServerQuery = cache((boardId: string) => {
 
   const token = issueShareToken({
     boardId,
-    env: event.env,
+    env: event.context.env,
   });
 
   return { token };

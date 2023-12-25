@@ -20,12 +20,13 @@ export const selectProtectedBoardServerQuery = async (id: string) => {
   ]);
 
   const event = getRequestEventOrThrow();
+  const session = event.context.session;
 
-  if (board.ownerId !== event.session?.user.userId) {
+  if (board.ownerId !== session?.userId) {
     throw redirect(paths.notFound);
   }
 
-  return { access, board };
+  return { access, board, session };
 };
 
 type BoardQueryProps = {

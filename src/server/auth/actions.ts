@@ -1,7 +1,6 @@
 "use server";
 import { action, cache, redirect } from "@solidjs/router";
 import { decode } from "decode-formdata";
-import { LuciaError } from "lucia";
 import { maxLength, minLength, object, parseAsync, string } from "valibot";
 import { paths } from "~/utils/paths";
 import { getRequestEventOrThrow } from "../utils";

@@ -8,8 +8,9 @@ import {
   string,
   type Input,
 } from "valibot";
+import type { ServerEnv } from "../env";
 
-const createStorage = (env: Env) => {
+const createStorage = (env: ServerEnv) => {
   return createCookieSessionStorage({
     cookie: {
       httpOnly: true,
@@ -42,7 +43,7 @@ const boardsKey = "boards";
 const getBoardsAccessFromCookie = async (
   event: RequestEvent,
 ): Promise<BoardsAccess | null> => {
-  const storage = createStorage(event.env);
+  const storage = createStorage(event.context.env);
 
   const session = await storage.getSession(event.request.headers.get("Cookie"));
 
@@ -101,7 +102,7 @@ export const setBoardsAccessCookie = async ({
   const boardsAccess = await getBoardsAccessFromCookie(event);
   const next = [...(boardsAccess?.boards || []), { boardId, name }];
 
-  const storage = createStorage(event.env);
+  const storage = createStorage(event.context.env);
   const session = await storage.getSession(event.request.headers.get("Cookie"));
   session.set(boardsKey, next);
 
@@ -109,7 +110,7 @@ export const setBoardsAccessCookie = async ({
 };
 
 type DestroyBoardsAccessCookieArgs = {
-  env: Env;
+  env: ServerEnv;
   request: Request;
 };
 
@@ -132,7 +133,7 @@ const shareTokenSchema = () => {
 
 type IssueShareTokenArgs = {
   boardId: string;
-  env: Env;
+  env: ServerEnv;
 };
 
 export const issueShareToken = ({ boardId, env }: IssueShareTokenArgs) => {
@@ -140,7 +141,7 @@ export const issueShareToken = ({ boardId, env }: IssueShareTokenArgs) => {
 };
 
 type ValidateShareTokenArgs = {
-  env: Env;
+  env: ServerEnv;
   token: string;
 };
 

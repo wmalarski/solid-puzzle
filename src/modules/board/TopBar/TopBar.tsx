@@ -46,7 +46,7 @@ export const TopBar: Component<TopBarProps> = (props) => {
       <div class="flex flex-col pl-4">
         <div class="flex items-center gap-2">
           <h1 class="font-bold">{props.board.name}</h1>
-          <Show when={props.board.ownerId === session()?.user.userId}>
+          <Show when={props.board.ownerId === session()?.userId}>
             <SettingsDialog boardId={props.board.id} />
           </Show>
           <SharePopover board={props.board} />

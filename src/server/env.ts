@@ -14,7 +14,7 @@ const getEnvSchema = () => {
   });
 };
 
-type ServerEnv = Input<ReturnType<typeof getEnvSchema>>;
+export type ServerEnv = Input<ReturnType<typeof getEnvSchema>>;
 
 export const serverEnvMiddleware = async (event: FetchEvent) => {
   const envSchema = getEnvSchema();
