@@ -2,7 +2,7 @@ import { action, cache, redirect } from "@solidjs/router";
 import { decode } from "decode-formdata";
 import { parseAsync, type Input } from "valibot";
 import { paths } from "~/utils/paths";
-import { getProtectedRequestContext, getRequestContext } from "../context";
+import { getProtectedRequestContext } from "../context";
 import { getRequestEventOrThrow } from "../utils";
 import {
   deleteBoard,
@@ -65,9 +65,7 @@ export const selectBoardServerQuery = cache(
     const event = getRequestEventOrThrow();
     const parsed = await parseAsync(selectBoardArgsSchema(), args);
 
-    const ctx = getRequestContext(event);
-
-    const board = selectBoard({ ...parsed, ctx });
+    const board = selectBoard({ ...parsed, ctx: event.context });
 
     if (!board) {
       throw redirect(paths.notFound);

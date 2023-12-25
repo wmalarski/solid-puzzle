@@ -11,8 +11,9 @@ import {
   string,
   type Input,
 } from "valibot";
+import type { H3EventContext } from "vinxi/server";
 import { generateCurves } from "~/utils/getPuzzleFragments";
-import type { ProtectedRequestContext, RequestContext } from "../context";
+import type { ProtectedH3EventContext } from "../context";
 
 export const insertBoardArgsSchema = () => {
   return object({
@@ -24,7 +25,7 @@ export const insertBoardArgsSchema = () => {
 };
 
 type InsertBoardArgs = Input<ReturnType<typeof insertBoardArgsSchema>> & {
-  ctx: ProtectedRequestContext;
+  ctx: ProtectedH3EventContext;
 };
 
 export const insertBoard = (args: InsertBoardArgs) => {
@@ -59,7 +60,7 @@ export const updateBoardArgsSchema = () => {
 };
 
 type UpdateBoardArgs = Input<ReturnType<typeof updateBoardArgsSchema>> & {
-  ctx: ProtectedRequestContext;
+  ctx: ProtectedH3EventContext;
 };
 
 export const updateBoard = (args: UpdateBoardArgs) => {
@@ -93,7 +94,7 @@ export const deleteBoardArgsSchema = () => {
 };
 
 type DeleteBoardArgs = Input<ReturnType<typeof deleteBoardArgsSchema>> & {
-  ctx: ProtectedRequestContext;
+  ctx: ProtectedH3EventContext;
 };
 
 export const deleteBoard = (args: DeleteBoardArgs) => {
@@ -121,7 +122,7 @@ export const selectBoardArgsSchema = () => {
 };
 
 type SelectBoardArgs = Input<ReturnType<typeof selectBoardArgsSchema>> & {
-  ctx: RequestContext;
+  ctx: H3EventContext;
 };
 
 export const selectBoard = (args: SelectBoardArgs) => {
@@ -147,7 +148,7 @@ export const selectBoardsArgsSchema = () => {
 };
 
 type SelectBoardsArgs = Input<ReturnType<typeof selectBoardsArgsSchema>> & {
-  ctx: ProtectedRequestContext;
+  ctx: ProtectedH3EventContext;
 };
 
 export const selectBoards = (args: SelectBoardsArgs) => {

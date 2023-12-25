@@ -40,11 +40,15 @@ export const getDrizzleCached = (event: RequestEvent) => {
 
 export const drizzleMiddleware = (event: FetchEvent) => {
   const drizzle = getDrizzleCached(event);
-  event.context.drizzle = drizzle;
+  event.context.db = drizzle.db;
+  event.context.instance = drizzle.instance;
+  event.context.schema = drizzle.schema;
 };
 
 declare module "vinxi/server" {
   interface H3EventContext {
-    db: DrizzleDB;
+    db: DrizzleDB["db"];
+    instance: DrizzleDB["instance"];
+    schema: DrizzleDB["schema"];
   }
 }

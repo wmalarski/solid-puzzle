@@ -18,14 +18,3 @@ export default createHandler(() => (
     )}
   />
 ));
-
-// import { luciaMiddleware } from "./server/auth/lucia";
-// import { drizzleMiddleware } from "./server/db";
-// import { serverEnvMiddleware } from "./server/env";
-
-// export default createHandler(
-//   serverEnvMiddleware,
-//   drizzleMiddleware,
-//   luciaMiddleware,
-//   renderAsync((event) => <StartServer event={event} />),
-// );

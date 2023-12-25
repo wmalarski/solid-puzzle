@@ -14,7 +14,7 @@ export const route = {
 } satisfies RouteDefinition;
 
 export default function Home() {
-  const session = createAsync(() => getServerSession());
+  const session = createAsync(() => Promise.resolve(getServerSession()));
 
   return (
     <SessionProvider value={() => session() || null}>
