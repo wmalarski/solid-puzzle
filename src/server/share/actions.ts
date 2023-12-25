@@ -41,15 +41,13 @@ export const acceptBoardInviteAction = action(async (formData: FormData) => {
     token: parsed.token,
   });
 
-  const cookie = await setBoardsAccessCookie({
+  await setBoardsAccessCookie({
     boardId: result.boardId,
     event,
     name: parsed.name,
   });
 
-  return redirect(paths.board(result.boardId), {
-    headers: { "Set-Cookie": cookie },
-  });
+  return redirect(paths.board(result.boardId));
 });
 
 const generateBoardInviteArgsSchema = () => {

@@ -6,7 +6,7 @@ export const getRequestEventOrThrow = () => {
   const event = getRequestEvent();
 
   if (!event) {
-    throw redirect(paths.notFound);
+    throw redirect(paths.notFound, { status: 500 });
   }
 
   return event;

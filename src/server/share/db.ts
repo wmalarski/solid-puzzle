@@ -1,3 +1,4 @@
+import { deleteCookie, getCookie, setCookie } from "@solidjs/start/server";
 import jwt from "jsonwebtoken";
 import type { RequestEvent } from "solid-js/web";
 import {
@@ -6,56 +7,51 @@ import {
   parseAsync,
   safeParseAsync,
   string,
-  type Input,
+  type Output,
 } from "valibot";
 import type { ServerEnv } from "../env";
 
-const createStorage = (env: ServerEnv) => {
-  return createCookieSessionStorage({
-    cookie: {
-      httpOnly: true,
-      maxAge: 60 * 60 * 24 * 30, // 30 days
-      name: "boards",
-      path: "/",
-      sameSite: "lax",
-      secrets: [env.SESSION_SECRET],
-      secure: true,
-    },
-  });
+const options = (env: ServerEnv) => {
+  return {
+    httpOnly: true,
+    maxAge: 60 * 60 * 24 * 30, // 30 days
+    path: "/",
+    sameSite: "lax",
+    secrets: [env.SESSION_SECRET],
+    secure: true,
+  } as const;
 };
 
 const boardsAccessSchema = () => {
-  return object({
-    boards: array(
-      object({
-        boardId: string(),
-        username: string(),
-      }),
-    ),
-  });
+  return array(
+    object({
+      boardId: string(),
+      username: string(),
+    }),
+  );
 };
 
-export type BoardsAccess = Input<ReturnType<typeof boardsAccessSchema>>;
-export type BoardAccess = BoardsAccess["boards"][0];
+export type BoardsAccess = Output<ReturnType<typeof boardsAccessSchema>>;
+export type BoardAccess = BoardsAccess[0];
 
 const boardsKey = "boards";
 
 const getBoardsAccessFromCookie = async (
   event: RequestEvent,
 ): Promise<BoardsAccess | null> => {
-  const storage = createStorage(event.context.env);
+  const value = getCookie(event, boardsKey);
 
-  const session = await storage.getSession(event.request.headers.get("Cookie"));
-
-  const parsed = await safeParseAsync(boardsAccessSchema(), {
-    [boardsKey]: session.get(boardsKey),
-  });
-
-  if (parsed.success) {
-    return parsed.output;
+  if (!value) {
+    return null;
   }
 
-  return null;
+  const parsed = await safeParseAsync(boardsAccessSchema(), JSON.parse(value));
+
+  if (!parsed.success) {
+    return null;
+  }
+
+  return parsed.output;
 };
 
 export const getBoardsAccess = (
@@ -85,7 +81,7 @@ export const hasBoardAccess = async ({
 }: HasBoardAccessArgs): Promise<BoardAccess | undefined> => {
   const boardAccesses = await getBoardsAccess(event);
 
-  return boardAccesses?.boards.find((board) => board.boardId === boardId);
+  return boardAccesses?.find((board) => board.boardId === boardId);
 };
 
 type SetSessionCookieArgs = {
@@ -100,29 +96,19 @@ export const setBoardsAccessCookie = async ({
   name,
 }: SetSessionCookieArgs) => {
   const boardsAccess = await getBoardsAccessFromCookie(event);
-  const next = [...(boardsAccess?.boards || []), { boardId, name }];
-
-  const storage = createStorage(event.context.env);
-  const session = await storage.getSession(event.request.headers.get("Cookie"));
-  session.set(boardsKey, next);
-
-  return storage.commitSession(session);
+  const next = [...(boardsAccess || []), { boardId, name }];
+  event.locals.boards = next;
+  setCookie(event, boardsKey, JSON.stringify(next), options(event.context.env));
 };
 
 type DestroyBoardsAccessCookieArgs = {
-  env: ServerEnv;
-  request: Request;
+  event: RequestEvent;
 };
 
-export const destroyBoardsAccessCookie = async ({
-  request,
-  env,
+export const destroyBoardsAccessCookie = ({
+  event,
 }: DestroyBoardsAccessCookieArgs) => {
-  const storage = createStorage(env);
-
-  const session = await storage.getSession(request.headers.get("Cookie"));
-
-  return storage.destroySession(session);
+  deleteCookie(event, boardsKey, options(event.context.env));
 };
 
 const shareTokenSchema = () => {

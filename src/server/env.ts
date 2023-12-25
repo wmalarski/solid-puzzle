@@ -25,7 +25,7 @@ export const serverEnvMiddleware = async (event: FetchEvent) => {
     SESSION_SECRET: import.meta.env.SESSION_SECRET,
   });
 
-  event.locals.env = parsed;
+  event.context.env = parsed;
 };
 
 declare module "vinxi/server" {

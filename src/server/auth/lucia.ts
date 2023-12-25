@@ -1,13 +1,17 @@
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
 import { BetterSqlite3Adapter } from "@lucia-auth/adapter-sqlite";
-import { appendHeader, getCookie, getHeader } from "@solidjs/start/server";
+import {
+  appendHeader,
+  getCookie,
+  getHeader,
+  type H3EventContext,
+} from "@solidjs/start/server";
 import type { FetchEvent } from "@solidjs/start/server/types";
 import { Lucia, verifyRequestOrigin, type Session, type User } from "lucia";
 import type { RequestEvent } from "solid-js/web";
-import type { DrizzleDB } from "../db";
 
-const getLucia = (database: DrizzleDB["instance"]) => {
-  const adapter = new BetterSqlite3Adapter(database, {
+const getLucia = (context: H3EventContext) => {
+  const adapter = new BetterSqlite3Adapter(context.instance, {
     session: "auth_session",
     user: "auth_user",
   });
@@ -24,7 +28,7 @@ export const getLuciaAuth = (event: RequestEvent) => {
 };
 
 export const luciaMiddleware = async (event: FetchEvent) => {
-  const lucia = getLucia(event.context.instance);
+  const lucia = getLucia(event.context);
 
   if (event.node.req.method !== "GET") {
     const originHeader = getHeader(event, "Origin") ?? null;
