@@ -21,11 +21,11 @@ export const PageFooter: Component = () => {
   const { t } = useI18n();
 
   return (
-    <div class="p-4">
+    <footer class="p-4">
       <a class="link text-xs" href={paths.repository}>
         {t("footer.madeBy")}
       </a>
-    </div>
+    </footer>
   );
 };
 

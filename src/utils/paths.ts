@@ -4,6 +4,6 @@ export const paths = {
   invite: (boardId: string) => `/invite/${boardId}`,
   notFound: "/404",
   repository: "https://github.com/wmalarski/solid-puzzle",
-  signIn: "/signIn",
-  signUp: "/signUp",
+  signIn: "/sign-in",
+  signUp: "/sign-up",
 };

@@ -108,13 +108,13 @@ export const signOutServerAction = action(async () => {
   throw redirect(paths.signIn);
 });
 
-export const getServerSession = cache(() => {
+export const getServerSession = cache(async () => {
   const event = getRequestEventOrThrow();
-  return event.context.session;
+  return await Promise.resolve(event.context.session);
 }, SESSION_CACHE_NAME);
 
-export const getServerAnonGuard = () => {
-  const session = getServerSession();
+export const getServerAnonGuard = async () => {
+  const session = await getServerSession();
 
   if (session) {
     throw redirect(paths.home);
