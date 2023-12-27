@@ -4,7 +4,7 @@ import {
   acceptBoardInviteServerAction,
   generateBoardInviteServerLoader,
   hasBoardAccessServerLoader,
-} from "./actions";
+} from "./rpc";
 
 const BOARD_INVITE_CACHE_NAME = "invite";
 const HAS_BOARD_ACCESS_CACHE_NAME = "has_access";

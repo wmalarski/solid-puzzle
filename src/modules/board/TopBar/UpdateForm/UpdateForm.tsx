@@ -4,7 +4,7 @@ import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
 import { useI18n } from "~/contexts/I18nContext";
 import { ConfigFields } from "~/modules/createBoard/ConfigFields";
-import { updateBoardServerAction } from "~/server/board/actions";
+import { updateBoardAction } from "~/server/board/client";
 
 type UpdateFormProps = {
   boardId: string;
@@ -13,10 +13,10 @@ type UpdateFormProps = {
 export const UpdateForm: Component<UpdateFormProps> = (props) => {
   const { t } = useI18n();
 
-  const submission = useSubmission(updateBoardServerAction);
+  const submission = useSubmission(updateBoardAction);
 
   return (
-    <form action={updateBoardServerAction} class="flex flex-col gap-4">
+    <form action={updateBoardAction} class="flex flex-col gap-4">
       <Show when={submission.result && submission.result < 1}>
         <Alert variant="error">
           <AlertIcon variant="error" />

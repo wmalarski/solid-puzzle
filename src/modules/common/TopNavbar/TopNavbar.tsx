@@ -6,16 +6,16 @@ import { Link } from "~/components/Link";
 import { Navbar, NavbarEnd, NavbarStart } from "~/components/Navbar";
 import { useI18n } from "~/contexts/I18nContext";
 import { useSessionContext } from "~/contexts/SessionContext";
-import { signOutServerAction } from "~/server/auth/actions";
+import { signOutAction } from "~/server/auth/client";
 import { paths } from "~/utils/paths";
 
 const SignOutButton: Component = () => {
   const { t } = useI18n();
 
-  const submission = useSubmission(signOutServerAction);
+  const submission = useSubmission(signOutAction);
 
   return (
-    <form action={signOutServerAction}>
+    <form action={signOutAction}>
       <Button size="sm" disabled={submission.pending}>
         {t("auth.signOut")}
       </Button>

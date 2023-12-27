@@ -6,7 +6,7 @@ import {
   selectBoardServerLoader,
   selectBoardsServerLoader,
   updateBoardServerAction,
-} from "./actions";
+} from "./rpc";
 import type { BoardModel } from "./types";
 
 const SELECT_BOARD_CACHE_NAME = "board";

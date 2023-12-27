@@ -11,7 +11,7 @@ import {
 } from "~/components/TextField";
 import { useI18n } from "~/contexts/I18nContext";
 import type { BoardModel } from "~/server/board/types";
-import { acceptBoardInviteServerAction } from "~/server/share/actions";
+import { acceptBoardInviteAction } from "~/server/share/client";
 
 type AcceptInviteFormProps = {
   board: BoardModel;
@@ -22,7 +22,7 @@ export const AcceptInviteForm: Component<AcceptInviteFormProps> = (props) => {
 
   const [searchParams] = useSearchParams();
 
-  const submission = useSubmission(acceptBoardInviteServerAction);
+  const submission = useSubmission(acceptBoardInviteAction);
 
   return (
     <Card variant="bordered" class="w-full max-w-md">
@@ -32,7 +32,7 @@ export const AcceptInviteForm: Component<AcceptInviteFormProps> = (props) => {
             {t("invite.title", { name: props.board.name })}
           </h2>
         </header>
-        <form class="flex flex-col gap-4">
+        <form action={acceptBoardInviteAction} class="flex flex-col gap-4">
           <input type="hidden" name="token" value={searchParams.token} />
           <Show when={submission.result && !submission.result.ok}>
             <Alert variant="error">

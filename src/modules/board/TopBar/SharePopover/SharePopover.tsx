@@ -22,7 +22,7 @@ import {
 } from "~/components/TextField";
 import { useI18n } from "~/contexts/I18nContext";
 import type { BoardModel } from "~/server/board/types";
-import { generateBoardInviteQueryOptions } from "~/server/share/queries";
+import { generateBoardInviteQueryOptions } from "~/server/share/client";
 import { paths } from "~/utils/paths";
 import { buildSearchParams } from "~/utils/searchParams";
 

@@ -3,15 +3,15 @@ import { createQuery } from "@tanstack/solid-query";
 import { Show, Suspense, type Component } from "solid-js";
 import { SessionProvider } from "~/contexts/SessionContext";
 import { Board } from "~/modules/board/Board";
-import { selectBoardServerLoader } from "~/server/board/actions";
-import { selectBoardServerQueryOptions } from "~/server/board/queries";
+import { selectBoardQueryOptions } from "~/server/board/client";
+import { selectBoardServerLoader } from "~/server/board/rpc";
 import type { BoardModel } from "~/server/board/types";
-import { hasBoardAccessServerLoader } from "~/server/share/actions";
 import { type BoardAccess } from "~/server/share/db";
+import { hasBoardAccessServerLoader } from "~/server/share/rpc";
 import { getRequestEventOrThrow } from "~/server/utils";
 import { paths } from "~/utils/paths";
 
-export const selectProtectedBoardServerQuery = async (id: string) => {
+export const selectProtectedBoardLoader = async (id: string) => {
   "use server";
 
   const [board, access] = await Promise.all([
@@ -38,7 +38,7 @@ const BoardQuery: Component<BoardQueryProps> = (props) => {
   const params = useParams();
 
   const boardQuery = createQuery(() =>
-    selectBoardServerQueryOptions({
+    selectBoardQueryOptions({
       id: params.boardId,
       initialBoard: props.initialBoard,
     })(),
@@ -54,9 +54,7 @@ const BoardQuery: Component<BoardQueryProps> = (props) => {
 export default function BoardSection() {
   const params = useParams();
 
-  const data = createAsync(() =>
-    selectProtectedBoardServerQuery(params.boardId),
-  );
+  const data = createAsync(() => selectProtectedBoardLoader(params.boardId));
 
   return (
     <SessionProvider value={() => data()?.session || null}>

@@ -2,7 +2,7 @@ import { createQuery } from "@tanstack/solid-query";
 import { ErrorBoundary, For, Show, Suspense, type Component } from "solid-js";
 import { LinkButton } from "~/components/Button";
 import { Card, CardActions, CardBody, CardTitle } from "~/components/Card";
-import { selectBoardsServerQueryOptions } from "~/server/board/queries";
+import { selectBoardsQueryOptions } from "~/server/board/client";
 import type { BoardModel } from "~/server/board/types";
 import { paths } from "~/utils/paths";
 
@@ -42,7 +42,7 @@ const BoardsListLoading: Component = () => {
 
 const BoardsQuery: Component = () => {
   const boardQuery = createQuery(() =>
-    selectBoardsServerQueryOptions({ limit: 10, offset: 0 })(),
+    selectBoardsQueryOptions({ limit: 10, offset: 0 })(),
   );
 
   return (

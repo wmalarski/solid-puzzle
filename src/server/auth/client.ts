@@ -4,7 +4,7 @@ import {
   signInServerAction,
   signOutServerAction,
   signUpServerAction,
-} from "./actions";
+} from "./rpc";
 
 const SESSION_CACHE_NAME = "session";
 

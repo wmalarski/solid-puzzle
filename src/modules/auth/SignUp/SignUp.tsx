@@ -11,13 +11,13 @@ import {
   TextFieldRoot,
 } from "~/components/TextField";
 import { useI18n } from "~/contexts/I18nContext";
-import { signUpServerAction } from "~/server/auth/actions";
+import { signUpAction } from "~/server/auth/client";
 import { paths } from "~/utils/paths";
 
 export const SignUp: Component = () => {
   const { t } = useI18n();
 
-  const submission = useSubmission(signUpServerAction);
+  const submission = useSubmission(signUpAction);
 
   return (
     <Card variant="bordered" class="w-full max-w-md">
@@ -25,7 +25,7 @@ export const SignUp: Component = () => {
         <header class="flex items-center justify-between gap-2">
           <h2 class={cardTitleClass()}>{t("signUp.title")}</h2>
         </header>
-        <form class="flex flex-col gap-4">
+        <form action={signUpAction} class="flex flex-col gap-4">
           <Show when={submission.result && !submission.result.message}>
             <Alert variant="error">
               <AlertIcon variant="error" />

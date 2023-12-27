@@ -12,15 +12,15 @@ import {
 } from "~/components/DropdownMenu";
 import { MenuIcon } from "~/components/Icons/MenuIcon";
 import { useI18n } from "~/contexts/I18nContext";
-import { signOutServerAction } from "~/server/auth/actions";
+import { signOutAction } from "~/server/auth/client";
 import { paths } from "~/utils/paths";
 
 const SignOutMenuItem: Component = () => {
   const { t } = useI18n();
 
-  const action = useAction(signOutServerAction);
+  const action = useAction(signOutAction);
 
-  const submission = useSubmission(signOutServerAction);
+  const submission = useSubmission(signOutAction);
 
   const onSelect = async () => {
     await action();

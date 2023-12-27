@@ -1,11 +1,11 @@
 import { createAsync, useParams, type RouteDefinition } from "@solidjs/router";
 import { Show } from "solid-js";
 import { AcceptInviteForm } from "~/modules/invite/AcceptInviteForm";
-import { selectBoardServerLoader } from "~/server/board/actions";
+import { selectBoardLoader } from "~/server/board/client";
 
 export const route = {
   load: async (context) => {
-    await selectBoardServerLoader({ id: context.params.boardId });
+    await selectBoardLoader({ id: context.params.boardId });
   },
 } satisfies RouteDefinition;
 
@@ -13,7 +13,7 @@ export default function InviteSection() {
   const params = useParams();
 
   const boardResource = createAsync(() =>
-    selectBoardServerLoader({ id: params.boardId }),
+    selectBoardLoader({ id: params.boardId }),
   );
 
   return (

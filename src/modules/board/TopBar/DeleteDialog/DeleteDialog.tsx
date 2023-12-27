@@ -17,7 +17,7 @@ import {
 import { TrashIcon } from "~/components/Icons/TrashIcon";
 import { XIcon } from "~/components/Icons/XIcon";
 import { useI18n } from "~/contexts/I18nContext";
-import { deleteBoardServerAction } from "~/server/board/actions";
+import { deleteBoardAction } from "~/server/board/client";
 
 type DeleteBoardFormProps = {
   boardId: string;
@@ -27,10 +27,10 @@ type DeleteBoardFormProps = {
 const DeleteBoardForm: Component<DeleteBoardFormProps> = (props) => {
   const { t } = useI18n();
 
-  const submission = useSubmission(deleteBoardServerAction);
+  const submission = useSubmission(deleteBoardAction);
 
   return (
-    <form action={deleteBoardServerAction} class="flex flex-col gap-4">
+    <form action={deleteBoardAction} class="flex flex-col gap-4">
       <Show when={submission.result}>
         <Alert variant="error">
           <AlertIcon variant="error" />
