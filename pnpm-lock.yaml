@@ -53,9 +53,6 @@ dependencies:
   lucia:
     specifier: 3.0.0-beta.13
     version: 3.0.0-beta.13
-  lucide-solid:
-    specifier: ^0.302.0
-    version: 0.302.0(solid-js@1.8.7)
   nanoid:
     specifier: 5.0.4
     version: 5.0.4
@@ -8656,14 +8653,6 @@ packages:
     resolution: {integrity: sha512-p5qJWSFax+MSuifh1lJ37lj9l7q7hB3JgMNutRgy6PKF+3Aw4hMii+Sts5yR4t1ETodqlDmuOBE7mdarGQunwg==}
     dependencies:
       oslo: 0.25.1
-    dev: false
-
-  /lucide-solid@0.302.0(solid-js@1.8.7):
-    resolution: {integrity: sha512-JlDI04Rz5EiJOPjSj+TwFk3aLGGODd6sOi7cMdYBZxbSnPLi0iEy/eZ/JRTo6td2pmbeBZDGLU/LtQYSqSsGag==}
-    peerDependencies:
-      solid-js: ^1.4.7
-    dependencies:
-      solid-js: 1.8.7
     dev: false
 
   /magic-string@0.30.5:

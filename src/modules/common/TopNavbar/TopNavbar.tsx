@@ -1,7 +1,7 @@
 import { useSubmission } from "@solidjs/router";
-import { Puzzle } from "lucide-solid";
 import { Show, type Component } from "solid-js";
 import { Button, LinkButton } from "~/components/Button";
+import { PuzzleIcon } from "~/components/Icons/PuzzleIcon";
 import { Link } from "~/components/Link";
 import { Navbar, NavbarEnd, NavbarStart } from "~/components/Navbar";
 import { useI18n } from "~/contexts/I18nContext";
@@ -32,7 +32,7 @@ export const TopNavbar: Component = () => {
     <Navbar>
       <NavbarStart>
         <Link class="flex text-3xl uppercase" hover href={paths.home}>
-          <Puzzle class="h-8 w-8" />
+          <PuzzleIcon class="h-8 w-8" />
           {t("home.title")}
         </Link>
       </NavbarStart>

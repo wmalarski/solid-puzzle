@@ -1,7 +1,8 @@
-import { ArrowLeft, ArrowRight } from "lucide-solid";
 import { For, createSignal, type Component } from "solid-js";
 import { Button } from "~/components/Button";
 import { Carousel, CarouselItem } from "~/components/Carousel";
+import { ArrowLeftIcon } from "~/components/Icons/ArrowLeftIcon";
+import { ArrowRightIcon } from "~/components/Icons/ArrowRightIcon";
 import { getImages } from "~/utils/images";
 
 type ImageGridProps = {
@@ -54,7 +55,7 @@ export const ImageGrid: Component<ImageGridProps> = (props) => {
           size="sm"
           type="button"
         >
-          <ArrowLeft />
+          <ArrowLeftIcon />
         </Button>
         <Button
           class="absolute right-1 top-1/2"
@@ -63,7 +64,7 @@ export const ImageGrid: Component<ImageGridProps> = (props) => {
           size="sm"
           type="button"
         >
-          <ArrowRight />
+          <ArrowRightIcon />
         </Button>
       </Carousel>
     </div>

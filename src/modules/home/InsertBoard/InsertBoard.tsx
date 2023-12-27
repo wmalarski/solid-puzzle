@@ -1,4 +1,3 @@
-import { X } from "lucide-solid";
 import { createSignal, type Component, type JSX } from "solid-js";
 import { cardTitleClass } from "~/components/Card";
 import {
@@ -12,6 +11,7 @@ import {
   DialogRoot,
   DialogTitle,
 } from "~/components/Dialog";
+import { XIcon } from "~/components/Icons/XIcon";
 import { useI18n } from "~/contexts/I18nContext";
 import { CreateBoardForm } from "~/modules/createBoard/CreateBoardForm";
 import { ImageGrid } from "~/modules/createBoard/ImageGrid";
@@ -33,7 +33,7 @@ const FormDialog: Component<FormDialogProps> = (props) => {
             <DialogHeader>
               <DialogTitle>About Kobalte</DialogTitle>
               <DialogCloseButton>
-                <X />
+                <XIcon />
               </DialogCloseButton>
             </DialogHeader>
             <DialogDescription>

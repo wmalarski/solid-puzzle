@@ -1,7 +1,10 @@
 import type { VariantProps } from "class-variance-authority";
-import { AlertCircle, CheckCircleIcon, Info, XCircle } from "lucide-solid";
 import { splitProps, type Component, type JSX } from "solid-js";
 import { Dynamic } from "solid-js/web";
+import { AlertCircleIcon } from "../Icons/AlertCircleIcon";
+import { CheckCircleIcon } from "../Icons/CheckCircleIcon";
+import { InfoIcon } from "../Icons/InfoIcon";
+import { XCircleIcon } from "../Icons/XCircleIcon";
 import { twCva } from "../utils/twCva";
 
 export const alertClass = twCva("alert justify-start", {
@@ -31,10 +34,10 @@ const alertIconMap: Record<
   "error" | "info" | "success" | "warning",
   typeof CheckCircleIcon
 > = {
-  error: XCircle,
-  info: Info,
+  error: XCircleIcon,
+  info: InfoIcon,
   success: CheckCircleIcon,
-  warning: AlertCircle,
+  warning: AlertCircleIcon,
 };
 
 export type AlertIconProps = {

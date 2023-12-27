@@ -1,4 +1,3 @@
-import { Settings, X } from "lucide-solid";
 import { type Component } from "solid-js";
 import {
   DialogCloseButton,
@@ -11,6 +10,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "~/components/Dialog";
+import { SettingsIcon } from "~/components/Icons/SettingsIcon";
+import { XIcon } from "~/components/Icons/XIcon";
 import { useI18n } from "~/contexts/I18nContext";
 import { DeleteBoard } from "../DeleteDialog";
 import { UpdateForm } from "../UpdateForm";
@@ -25,7 +26,7 @@ export const SettingsDialog: Component<SettingsDialogProps> = (props) => {
   return (
     <DialogRoot>
       <DialogTrigger aria-label={t("board.settings.label")} size="sm">
-        <Settings />
+        <SettingsIcon />
       </DialogTrigger>
       <DialogPortal>
         <DialogOverlay />
@@ -34,7 +35,7 @@ export const SettingsDialog: Component<SettingsDialogProps> = (props) => {
             <DialogHeader>
               <DialogTitle>{t("board.settings.title")}</DialogTitle>
               <DialogCloseButton>
-                <X />
+                <XIcon />
               </DialogCloseButton>
             </DialogHeader>
             <UpdateForm boardId={props.boardId} />

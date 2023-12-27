@@ -1,8 +1,9 @@
 import { createQuery } from "@tanstack/solid-query";
-import { Share2, X } from "lucide-solid";
 import { Show, Suspense, createMemo, type Component } from "solid-js";
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
+import { ShareIcon } from "~/components/Icons/ShareIcon";
+import { XIcon } from "~/components/Icons/XIcon";
 import {
   PopoverArrow,
   PopoverCloseButton,
@@ -101,7 +102,7 @@ export const SharePopover: Component<SharePopoverProps> = (props) => {
   return (
     <PopoverRoot>
       <PopoverTrigger size="sm" aria-label={t("board.share.title")}>
-        <Share2 />
+        <ShareIcon />
       </PopoverTrigger>
       <PopoverPortal>
         <PopoverContent>
@@ -109,7 +110,7 @@ export const SharePopover: Component<SharePopoverProps> = (props) => {
           <PopoverHeader>
             <PopoverTitle>{t("board.share.title")}</PopoverTitle>
             <PopoverCloseButton>
-              <X />
+              <XIcon />
             </PopoverCloseButton>
           </PopoverHeader>
           <Suspense>

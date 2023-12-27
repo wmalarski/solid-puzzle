@@ -1,5 +1,4 @@
 import { useSubmission } from "@solidjs/router";
-import { Trash, X } from "lucide-solid";
 import { Show, createSignal, type Component } from "solid-js";
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
@@ -15,6 +14,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "~/components/Dialog";
+import { TrashIcon } from "~/components/Icons/TrashIcon";
+import { XIcon } from "~/components/Icons/XIcon";
 import { useI18n } from "~/contexts/I18nContext";
 import { deleteBoardAction } from "~/server/board/actions";
 
@@ -67,7 +68,7 @@ const FormDialog: Component<FormDialogProps> = (props) => {
   return (
     <DialogRoot open={isOpen()} onOpenChange={setIsOpen}>
       <DialogTrigger>
-        <Trash />
+        <TrashIcon />
         {t("board.settings.delete.button")}
       </DialogTrigger>
       <DialogPortal>
@@ -77,7 +78,7 @@ const FormDialog: Component<FormDialogProps> = (props) => {
             <DialogHeader>
               <DialogTitle>{t("board.settings.delete.title")}</DialogTitle>
               <DialogCloseButton>
-                <X />
+                <XIcon />
               </DialogCloseButton>
             </DialogHeader>
             <DeleteBoardForm

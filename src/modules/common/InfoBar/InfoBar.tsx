@@ -1,5 +1,6 @@
-import { Info, X } from "lucide-solid";
 import type { Component } from "solid-js";
+import { InfoIcon } from "~/components/Icons/InfoIcon";
+import { XIcon } from "~/components/Icons/XIcon";
 import {
   PopoverArrow,
   PopoverCloseButton,
@@ -19,7 +20,7 @@ const InfoPopover: Component = () => {
   return (
     <PopoverRoot>
       <PopoverTrigger variant="ghost" size="sm">
-        <Info />
+        <InfoIcon />
       </PopoverTrigger>
       <PopoverPortal>
         <PopoverContent>
@@ -27,7 +28,7 @@ const InfoPopover: Component = () => {
           <PopoverHeader>
             <PopoverTitle>{t("info.title")}</PopoverTitle>
             <PopoverCloseButton>
-              <X />
+              <XIcon />
             </PopoverCloseButton>
           </PopoverHeader>
           <PopoverDescription>{t("info.madeBy")}</PopoverDescription>

@@ -1,5 +1,5 @@
-import { Puzzle } from "lucide-solid";
 import type { Component, JSX } from "solid-js";
+import { PuzzleIcon } from "~/components/Icons/PuzzleIcon";
 import { Link } from "~/components/Link";
 import { useI18n } from "~/contexts/I18nContext";
 import { paths } from "~/utils/paths";
@@ -9,7 +9,7 @@ export const PageTitle: Component = () => {
 
   return (
     <h1 class="max-6-xs my-16 flex items-center text-center text-4xl uppercase sm:text-6xl">
-      <Puzzle />
+      <PuzzleIcon />
       <Link hover href={paths.home}>
         {t("home.title")}
       </Link>

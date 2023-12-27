@@ -1,5 +1,4 @@
 import { useAction, useNavigate, useSubmission } from "@solidjs/router";
-import { MenuIcon } from "lucide-solid";
 import type { Component } from "solid-js";
 import {
   DropdownMenuArrow,
@@ -11,6 +10,7 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
 } from "~/components/DropdownMenu";
+import { MenuIcon } from "~/components/Icons/MenuIcon";
 import { useI18n } from "~/contexts/I18nContext";
 import { signOutServerAction } from "~/server/auth/actions";
 import { paths } from "~/utils/paths";
