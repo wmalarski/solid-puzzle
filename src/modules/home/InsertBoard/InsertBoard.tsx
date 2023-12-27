@@ -74,7 +74,7 @@ export const InsertBoard: Component = () => {
       <header class="flex items-center justify-between gap-2">
         <h2 class={cardTitleClass()}>{t("createBoard.title")}</h2>
       </header>
-      <form ref={setFormRef} onChange={onFormChange}>
+      <form ref={setFormRef} onChange={onFormChange} method="post">
         <ImageGrid name="image" />
       </form>
       <FormDialog

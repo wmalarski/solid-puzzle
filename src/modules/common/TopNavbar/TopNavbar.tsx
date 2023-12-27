@@ -15,7 +15,7 @@ const SignOutButton: Component = () => {
   const submission = useSubmission(signOutAction);
 
   return (
-    <form action={signOutAction}>
+    <form action={signOutAction} method="post">
       <Button size="sm" disabled={submission.pending}>
         {t("auth.signOut")}
       </Button>

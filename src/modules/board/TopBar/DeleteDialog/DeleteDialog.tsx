@@ -30,7 +30,7 @@ const DeleteBoardForm: Component<DeleteBoardFormProps> = (props) => {
   const submission = useSubmission(deleteBoardAction);
 
   return (
-    <form action={deleteBoardAction} class="flex flex-col gap-4">
+    <form action={deleteBoardAction} class="flex flex-col gap-4" method="post">
       <Show when={submission.result}>
         <Alert variant="error">
           <AlertIcon variant="error" />

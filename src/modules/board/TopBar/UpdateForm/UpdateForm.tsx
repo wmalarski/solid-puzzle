@@ -16,7 +16,7 @@ export const UpdateForm: Component<UpdateFormProps> = (props) => {
   const submission = useSubmission(updateBoardAction);
 
   return (
-    <form action={updateBoardAction} class="flex flex-col gap-4">
+    <form action={updateBoardAction} class="flex flex-col gap-4" method="post">
       <Show when={submission.result && submission.result < 1}>
         <Alert variant="error">
           <AlertIcon variant="error" />

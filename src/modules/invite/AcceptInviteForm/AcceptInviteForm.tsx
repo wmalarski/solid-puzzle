@@ -32,7 +32,11 @@ export const AcceptInviteForm: Component<AcceptInviteFormProps> = (props) => {
             {t("invite.title", { name: props.board.name })}
           </h2>
         </header>
-        <form action={acceptBoardInviteAction} class="flex flex-col gap-4">
+        <form
+          action={acceptBoardInviteAction}
+          class="flex flex-col gap-4"
+          method="post"
+        >
           <input type="hidden" name="token" value={searchParams.token} />
           <Show when={submission.result && !submission.result.ok}>
             <Alert variant="error">

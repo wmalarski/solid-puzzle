@@ -51,7 +51,7 @@ const ShareForm: Component<ShareFormProps> = (props) => {
   };
 
   return (
-    <form class="flex flex-col gap-4">
+    <form class="flex flex-col gap-4" method="post">
       <input type="hidden" name="boardId" value={props.board.id} />
       <Show when={inviteQuery.error}>
         {(error) => (

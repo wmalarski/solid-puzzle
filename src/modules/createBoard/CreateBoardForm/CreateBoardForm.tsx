@@ -16,7 +16,7 @@ export const CreateBoardForm: Component<CreateBoardFormProps> = (props) => {
   const submission = useSubmission(insertBoardAction);
 
   return (
-    <form action={insertBoardAction} class="flex flex-col gap-4">
+    <form action={insertBoardAction} class="flex flex-col gap-4" method="post">
       <Show when={submission.result}>
         <Alert variant="error">
           <AlertIcon variant="error" />
