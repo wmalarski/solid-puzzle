@@ -1,7 +1,5 @@
 import { createAsync, type RouteDefinition } from "@solidjs/router";
 import { SessionProvider } from "~/contexts/SessionContext";
-import { PageLayout } from "~/modules/common/Layout";
-import { TopNavbar } from "~/modules/common/TopNavbar";
 import { getServerSession } from "~/server/auth/actions";
 
 export const route = {
@@ -15,13 +13,14 @@ export default function Home() {
 
   return (
     <SessionProvider value={() => session() || null}>
-      <PageLayout>
-        <TopNavbar />
-        {/* <Show when={session()}>
+      {/* <PageLayout> */}
+      {/* <TopNavbar /> */}
+      {/* <Show when={session()}>
           <InsertBoard />
           <BoardsList />
         </Show> */}
-      </PageLayout>
+      {/* </PageLayout> */}
+      AA
     </SessionProvider>
   );
 }
