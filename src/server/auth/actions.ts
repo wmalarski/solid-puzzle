@@ -1,5 +1,5 @@
 "use server";
-import { action, cache, redirect } from "@solidjs/router";
+import { redirect } from "@solidjs/router";
 import { appendHeader } from "@solidjs/start/server";
 import { decode } from "decode-formdata";
 import { generateId } from "lucia";
@@ -10,8 +10,6 @@ import { getRequestEventOrThrow } from "../utils";
 import { insertUser, selectUserByUsername } from "./db";
 import { getLucia } from "./lucia";
 
-const SESSION_CACHE_NAME = "boards";
-
 const signUpArgsSchema = () => {
   return object({
     password: string([minLength(6), maxLength(20)]),
@@ -19,7 +17,7 @@ const signUpArgsSchema = () => {
   });
 };
 
-export const signUpServerAction = action(async (form: FormData) => {
+export const signUpServerAction = async (form: FormData) => {
   const event = getRequestEventOrThrow();
   const parsed = await parseAsync(signUpArgsSchema(), decode(form));
   const lucia = getLucia(event.context);
@@ -47,7 +45,7 @@ export const signUpServerAction = action(async (form: FormData) => {
     return new Error("An unknown error occurred");
   }
   throw redirect(paths.home);
-});
+};
 
 const signInArgsSchema = () => {
   return object({
@@ -56,7 +54,7 @@ const signInArgsSchema = () => {
   });
 };
 
-export const signInServerAction = action(async (form: FormData) => {
+export const signInServerAction = async (form: FormData) => {
   const event = getRequestEventOrThrow();
   const parsed = await parseAsync(signInArgsSchema(), decode(form));
   const lucia = getLucia(event.context);
@@ -88,9 +86,9 @@ export const signInServerAction = action(async (form: FormData) => {
   );
 
   throw redirect(paths.home);
-});
+};
 
-export const signOutServerAction = action(async () => {
+export const signOutServerAction = async () => {
   const event = getRequestEventOrThrow();
   const lucia = getLucia(event.context);
 
@@ -106,18 +104,9 @@ export const signOutServerAction = action(async () => {
   );
 
   throw redirect(paths.signIn);
-});
+};
 
-export const getServerSession = cache(async () => {
+export const getSessionServerLoader = async () => {
   const event = getRequestEventOrThrow();
   return await Promise.resolve(event.context.session);
-}, SESSION_CACHE_NAME);
-
-export const getServerAnonGuard = async () => {
-  const session = await getServerSession();
-
-  if (session) {
-    throw redirect(paths.home);
-  }
-  return {};
 };

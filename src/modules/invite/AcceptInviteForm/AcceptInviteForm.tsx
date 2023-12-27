@@ -11,7 +11,7 @@ import {
 } from "~/components/TextField";
 import { useI18n } from "~/contexts/I18nContext";
 import type { BoardModel } from "~/server/board/types";
-import { acceptBoardInviteAction } from "~/server/share/actions";
+import { acceptBoardInviteServerAction } from "~/server/share/actions";
 
 type AcceptInviteFormProps = {
   board: BoardModel;
@@ -22,7 +22,7 @@ export const AcceptInviteForm: Component<AcceptInviteFormProps> = (props) => {
 
   const [searchParams] = useSearchParams();
 
-  const submission = useSubmission(acceptBoardInviteAction);
+  const submission = useSubmission(acceptBoardInviteServerAction);
 
   return (
     <Card variant="bordered" class="w-full max-w-md">

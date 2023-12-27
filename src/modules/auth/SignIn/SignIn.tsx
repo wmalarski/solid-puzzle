@@ -25,7 +25,7 @@ export const SignIn: Component = () => {
         <header class="flex items-center justify-between gap-2">
           <h2 class={cardTitleClass()}>{t("signIn.title")}</h2>
         </header>
-        <form action={signInServerAction} class="flex flex-col gap-4">
+        <form action={signInServerAction.url} class="flex flex-col gap-4">
           <Show when={submission.result && !submission.result.message}>
             <Alert variant="error">
               <AlertIcon variant="error" />

@@ -3,7 +3,7 @@ import { Show, type Component } from "solid-js";
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
 import { useI18n } from "~/contexts/I18nContext";
-import { insertBoardAction } from "~/server/board/actions";
+import { insertBoardServerAction } from "~/server/board/actions";
 import { ConfigFields } from "../ConfigFields";
 
 type CreateBoardFormProps = {
@@ -13,10 +13,10 @@ type CreateBoardFormProps = {
 export const CreateBoardForm: Component<CreateBoardFormProps> = (props) => {
   const { t } = useI18n();
 
-  const submission = useSubmission(insertBoardAction);
+  const submission = useSubmission(insertBoardServerAction);
 
   return (
-    <form action={insertBoardAction} class="flex flex-col gap-4">
+    <form action={insertBoardServerAction} class="flex flex-col gap-4">
       <Show when={submission.result}>
         <Alert variant="error">
           <AlertIcon variant="error" />

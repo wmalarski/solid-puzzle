@@ -1,5 +1,5 @@
 "use server";
-import { action, cache, redirect } from "@solidjs/router";
+import { redirect } from "@solidjs/router";
 import { decode } from "decode-formdata";
 import {
   coerce,
@@ -24,9 +24,6 @@ import {
   updateBoard,
 } from "./db";
 
-const SELECT_BOARD_CACHE_NAME = "board";
-const SELECT_BOARDS_CACHE_NAME = "boards";
-
 const boardDimension = () => {
   return coerce(number([integer(), minValue(3)]), Number);
 };
@@ -40,7 +37,7 @@ const insertBoardArgsSchema = () => {
   });
 };
 
-export const insertBoardAction = action(async (form: FormData) => {
+export const insertBoardServerAction = async (form: FormData) => {
   const event = getRequestEventOrThrow();
 
   const parsed = await parseAsync(
@@ -53,7 +50,7 @@ export const insertBoardAction = action(async (form: FormData) => {
   const boardId = insertBoard({ ...parsed, ctx });
 
   throw redirect(paths.board(boardId));
-});
+};
 
 const updateBoardArgsSchema = () => {
   return object({
@@ -65,7 +62,7 @@ const updateBoardArgsSchema = () => {
   });
 };
 
-export const updateBoardAction = action(async (form: FormData) => {
+export const updateBoardServerAction = async (form: FormData) => {
   const event = getRequestEventOrThrow();
 
   const parsed = await parseAsync(
@@ -76,13 +73,13 @@ export const updateBoardAction = action(async (form: FormData) => {
   const ctx = getProtectedRequestContext(event);
 
   return updateBoard({ ...parsed, ctx });
-});
+};
 
 const deleteBoardArgsSchema = () => {
   return object({ id: string() });
 };
 
-export const deleteBoardAction = action(async (form: FormData) => {
+export const deleteBoardServerAction = async (form: FormData) => {
   const event = getRequestEventOrThrow();
 
   const parsed = await parseAsync(deleteBoardArgsSchema(), decode(form));
@@ -92,27 +89,26 @@ export const deleteBoardAction = action(async (form: FormData) => {
   deleteBoard({ ...parsed, ctx });
 
   throw redirect(paths.home);
-});
+};
 
 const selectBoardArgsSchema = () => {
   return object({ id: string() });
 };
 
-export const selectBoardServerQuery = cache(
-  async (args: Input<ReturnType<typeof selectBoardArgsSchema>>) => {
-    const event = getRequestEventOrThrow();
-    const parsed = await parseAsync(selectBoardArgsSchema(), args);
+export const selectBoardServerLoader = async (
+  args: Input<ReturnType<typeof selectBoardArgsSchema>>,
+) => {
+  const event = getRequestEventOrThrow();
+  const parsed = await parseAsync(selectBoardArgsSchema(), args);
 
-    const board = selectBoard({ ...parsed, ctx: event.context });
+  const board = selectBoard({ ...parsed, ctx: event.context });
 
-    if (!board) {
-      throw redirect(paths.notFound);
-    }
+  if (!board) {
+    throw redirect(paths.notFound);
+  }
 
-    return board;
-  },
-  SELECT_BOARD_CACHE_NAME,
-);
+  return board;
+};
 
 const selectBoardsArgsSchema = () => {
   return object({
@@ -121,14 +117,13 @@ const selectBoardsArgsSchema = () => {
   });
 };
 
-export const selectBoardsServerQuery = cache(
-  async (args: Input<ReturnType<typeof selectBoardsArgsSchema>>) => {
-    const event = getRequestEventOrThrow();
-    const parsed = await parseAsync(selectBoardsArgsSchema(), args);
+export const selectBoardsServerLoader = async (
+  args: Input<ReturnType<typeof selectBoardsArgsSchema>>,
+) => {
+  const event = getRequestEventOrThrow();
+  const parsed = await parseAsync(selectBoardsArgsSchema(), args);
 
-    const ctx = getProtectedRequestContext(event);
+  const ctx = getProtectedRequestContext(event);
 
-    return selectBoards({ ...parsed, ctx });
-  },
-  SELECT_BOARDS_CACHE_NAME,
-);
+  return selectBoards({ ...parsed, ctx });
+};

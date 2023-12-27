@@ -3,10 +3,10 @@ import { createQuery } from "@tanstack/solid-query";
 import { Show, Suspense, type Component } from "solid-js";
 import { SessionProvider } from "~/contexts/SessionContext";
 import { Board } from "~/modules/board/Board";
-import { selectBoardServerQuery } from "~/server/board/actions";
+import { selectBoardServerLoader } from "~/server/board/actions";
 import { selectBoardServerQueryOptions } from "~/server/board/queries";
 import type { BoardModel } from "~/server/board/types";
-import { hasBoardAccessServerQuery } from "~/server/share/actions";
+import { hasBoardAccessServerLoader } from "~/server/share/actions";
 import { type BoardAccess } from "~/server/share/db";
 import { getRequestEventOrThrow } from "~/server/utils";
 import { paths } from "~/utils/paths";
@@ -15,8 +15,8 @@ export const selectProtectedBoardServerQuery = async (id: string) => {
   "use server";
 
   const [board, access] = await Promise.all([
-    selectBoardServerQuery({ id }),
-    hasBoardAccessServerQuery({ id }),
+    selectBoardServerLoader({ id }),
+    hasBoardAccessServerLoader({ id }),
   ]);
 
   const event = getRequestEventOrThrow();

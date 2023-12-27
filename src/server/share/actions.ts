@@ -1,5 +1,5 @@
 "use server";
-import { action, cache, redirect } from "@solidjs/router";
+import { redirect } from "@solidjs/router";
 import { decode } from "decode-formdata";
 import {
   maxLength,
@@ -18,9 +18,6 @@ import {
   validateShareToken,
 } from "./db";
 
-const BOARD_INVITE_CACHE_NAME = "invite";
-const HAS_BOARD_ACCESS_CACHE_NAME = "has_access";
-
 const acceptBoardInviteArgsSchema = () => {
   return object({
     name: string([minLength(3), maxLength(50)]),
@@ -28,7 +25,7 @@ const acceptBoardInviteArgsSchema = () => {
   });
 };
 
-export const acceptBoardInviteAction = action(async (formData: FormData) => {
+export const acceptBoardInviteServerAction = async (formData: FormData) => {
   const event = getRequestEventOrThrow();
 
   const parsed = await parseAsync(
@@ -48,46 +45,44 @@ export const acceptBoardInviteAction = action(async (formData: FormData) => {
   });
 
   return redirect(paths.board(result.boardId));
-});
+};
 
 const generateBoardInviteArgsSchema = () => {
   return object({ id: string() });
 };
 
-export const generateBoardInviteServerQuery = cache(
-  async (args: Input<ReturnType<typeof generateBoardInviteArgsSchema>>) => {
-    const event = getRequestEventOrThrow();
-    const parsed = await parseAsync(generateBoardInviteArgsSchema(), args);
+export const generateBoardInviteServerLoader = async (
+  args: Input<ReturnType<typeof generateBoardInviteArgsSchema>>,
+) => {
+  const event = getRequestEventOrThrow();
+  const parsed = await parseAsync(generateBoardInviteArgsSchema(), args);
 
-    const token = issueShareToken({
-      boardId: parsed.id,
-      env: event.context.env,
-    });
+  const token = issueShareToken({
+    boardId: parsed.id,
+    env: event.context.env,
+  });
 
-    return { token };
-  },
-  BOARD_INVITE_CACHE_NAME,
-);
+  return { token };
+};
 
 const hasBoardAccessArgsSchema = () => {
   return object({ id: string() });
 };
 
-export const hasBoardAccessServerQuery = cache(
-  async (args: Input<ReturnType<typeof hasBoardAccessArgsSchema>>) => {
-    const event = getRequestEventOrThrow();
-    const parsed = await parseAsync(hasBoardAccessArgsSchema(), args);
+export const hasBoardAccessServerLoader = async (
+  args: Input<ReturnType<typeof hasBoardAccessArgsSchema>>,
+) => {
+  const event = getRequestEventOrThrow();
+  const parsed = await parseAsync(hasBoardAccessArgsSchema(), args);
 
-    const access = hasBoardAccess({
-      boardId: parsed.id,
-      event,
-    });
+  const access = hasBoardAccess({
+    boardId: parsed.id,
+    event,
+  });
 
-    if (!access) {
-      throw redirect(paths.notFound);
-    }
+  if (!access) {
+    throw redirect(paths.notFound);
+  }
 
-    return access;
-  },
-  HAS_BOARD_ACCESS_CACHE_NAME,
-);
+  return access;
+};
