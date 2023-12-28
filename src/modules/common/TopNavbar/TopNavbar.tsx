@@ -50,6 +50,9 @@ export const TopNavbar: Component = () => {
             </>
           }
         >
+          <Link class="flex text-3xl uppercase" hover href={paths.boards}>
+            {t("home.boards")}
+          </Link>
           <SignOutButton />
         </Show>
       </NavbarEnd>

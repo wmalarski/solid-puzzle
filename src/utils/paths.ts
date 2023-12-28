@@ -1,5 +1,6 @@
 export const paths = {
   board: (boardId: string) => `/board/${boardId}`,
+  boards: "/board",
   home: "/",
   invite: (boardId: string) => `/invite/${boardId}`,
   notFound: "/404",

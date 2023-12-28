@@ -67,6 +67,7 @@ const en_dict = {
   },
   home: {
     addBoard: "Add board",
+    boards: "Boards",
     error: "Error",
     signIn: "Sign In",
     signUp: "Sign Up",
