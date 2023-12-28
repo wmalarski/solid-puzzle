@@ -18,25 +18,23 @@ const signUpArgsSchema = () => {
 };
 
 export const signUpServerAction = async (form: FormData) => {
-  console.log("signUpServerAction-1");
   const event = getRequestEventOrThrow();
   const parsed = await parseAsync(signUpArgsSchema(), decode(form));
   const lucia = getLucia(event.context);
-  console.log("signUpServerAction0");
+
   const hashedPassword = await new Argon2id().hash(parsed.password);
   const userId = generateId(15);
-
-  console.log("signUpServerAction1");
 
   try {
     insertUser({
       ctx: event.context,
       hashedPassword,
+      id: userId,
       username: parsed.username,
     });
-    console.log("signUpServerAction2");
+
     const session = await lucia.createSession(userId, {});
-    console.log("signUpServerAction3");
+
     appendHeader(
       event,
       "Set-Cookie",
@@ -47,7 +45,7 @@ export const signUpServerAction = async (form: FormData) => {
     console.error(error);
     return new Error("An unknown error occurred");
   }
-  console.log("signUpServerAction4");
+
   throw redirect(paths.home);
 };
 
