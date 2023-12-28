@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
 import type { FetchEvent } from "@solidjs/start/server/types";
-import { object, optional, parseAsync, string, type Input } from "valibot";
+import { object, optional, safeParseAsync, string, type Input } from "valibot";
 
 if (typeof window !== "undefined") {
   throw new Error("SERVER ON CLIENT!");
@@ -19,13 +19,15 @@ export type ServerEnv = Input<ReturnType<typeof getEnvSchema>>;
 export const serverEnvMiddleware = async (event: FetchEvent) => {
   const envSchema = getEnvSchema();
 
-  const parsed = await parseAsync(envSchema, {
-    DATABASE_URL: import.meta.env.DATABASE_URL,
-    NODE_ENV: import.meta.env.NODE_ENV,
-    SESSION_SECRET: import.meta.env.SESSION_SECRET,
+  const parsed = await safeParseAsync(envSchema, {
+    DATABASE_URL: process.env.DATABASE_URL,
+    NODE_ENV: import.meta.env.MODE,
+    SESSION_SECRET: process.env.SESSION_SECRET,
   });
 
-  event.context.env = parsed;
+  if (parsed.success) {
+    event.context.env = parsed.output;
+  }
 };
 
 declare module "vinxi/server" {

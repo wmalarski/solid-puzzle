@@ -1,7 +1,7 @@
 import { redirect } from "@solidjs/router";
+import type { H3EventContext } from "@solidjs/start/server";
 import type { Session, User } from "lucia";
 import type { RequestEvent } from "solid-js/web";
-import type { H3EventContext } from "vinxi/server";
 import { paths } from "~/utils/paths";
 
 export type WithH3EventContext<T> = T & {

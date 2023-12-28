@@ -8,6 +8,13 @@
       "when": 1703526422002,
       "tag": "0000_nostalgic_franklin_richards",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1703781778409,
+      "tag": "0001_giant_mariko_yashida",
+      "breakpoints": true
     }
   ]
 }
