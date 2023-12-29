@@ -121,6 +121,9 @@ export const selectBoardsServerLoader = async (
   args: Input<ReturnType<typeof selectBoardsArgsSchema>>,
 ) => {
   const event = getRequestEventOrThrow();
+
+  console.log("selectBoardsServerLoader", args);
+
   const parsed = await parseAsync(selectBoardsArgsSchema(), args);
 
   const ctx = getProtectedRequestContext(event);

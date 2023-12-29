@@ -31,7 +31,7 @@ export const TopNavbar: Component = () => {
   return (
     <Navbar>
       <NavbarStart>
-        <Link class="flex text-3xl uppercase" hover href={paths.home}>
+        <Link class="flex gap-2 text-3xl uppercase" hover href={paths.home}>
           <PuzzleIcon class="h-8 w-8" />
           {t("home.title")}
         </Link>
@@ -50,7 +50,7 @@ export const TopNavbar: Component = () => {
             </>
           }
         >
-          <Link class="flex text-3xl uppercase" hover href={paths.boards}>
+          <Link class="flex text-sm uppercase" hover href={paths.boards}>
             {t("home.boards")}
           </Link>
           <SignOutButton />

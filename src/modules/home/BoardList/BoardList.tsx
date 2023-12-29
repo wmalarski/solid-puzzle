@@ -2,7 +2,10 @@ import { createQuery } from "@tanstack/solid-query";
 import { ErrorBoundary, For, Show, Suspense, type Component } from "solid-js";
 import { LinkButton } from "~/components/Button";
 import { Card, CardActions, CardBody, CardTitle } from "~/components/Card";
-import { selectBoardsQueryOptions } from "~/server/board/client";
+import {
+  SELECT_BOARDS_DEFAULT_LIMIT,
+  selectBoardsQueryOptions,
+} from "~/server/board/client";
 import type { BoardModel } from "~/server/board/types";
 import { paths } from "~/utils/paths";
 
@@ -40,22 +43,30 @@ const BoardsListLoading: Component = () => {
   return <pre>Loading</pre>;
 };
 
-const BoardsQuery: Component = () => {
-  const boardQuery = createQuery(() =>
-    selectBoardsQueryOptions({ limit: 10, offset: 0 })(),
-  );
-
-  return (
-    <For each={boardQuery.data}>{(board) => <BoardItem board={board} />}</For>
-  );
+const BoardsListEmpty: Component = () => {
+  return <pre>Empty</pre>;
 };
 
 export default function BoardsList() {
+  const boardQuery = createQuery(() =>
+    selectBoardsQueryOptions({
+      limit: SELECT_BOARDS_DEFAULT_LIMIT,
+      offset: 0,
+    })(),
+  );
+
   return (
     <section class="flex gap-1">
       <ErrorBoundary fallback={<BoardsListError />}>
         <Suspense fallback={<BoardsListLoading />}>
-          <BoardsQuery />
+          <Show
+            when={boardQuery.data && boardQuery.data.length > 1}
+            fallback={<BoardsListEmpty />}
+          >
+            <For each={boardQuery.data}>
+              {(board) => <BoardItem board={board} />}
+            </For>
+          </Show>
         </Suspense>
       </ErrorBoundary>
     </section>

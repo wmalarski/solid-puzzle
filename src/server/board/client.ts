@@ -12,6 +12,8 @@ import type { BoardModel } from "./types";
 const SELECT_BOARD_CACHE_NAME = "board";
 const SELECT_BOARDS_CACHE_NAME = "boards";
 
+export const SELECT_BOARDS_DEFAULT_LIMIT = 10;
+
 export const insertBoardAction = action(
   insertBoardServerAction,
   "insertBoardAction",
