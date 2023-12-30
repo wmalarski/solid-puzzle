@@ -1,4 +1,8 @@
-import type * as PIXI from "pixi.js";
+import type {
+  DisplayObject,
+  FederatedMouseEvent,
+  FederatedPointerEvent,
+} from "pixi.js";
 import { createSignal, onCleanup, onMount } from "solid-js";
 import { subtractPoint, type Point2D } from "~/utils/geometry";
 
@@ -9,10 +13,10 @@ type DragConstraintArgs = {
 
 type UseDragObjectArgs = {
   dragConstraint?: (args: DragConstraintArgs) => Point2D;
-  onDragEnd?: (event: PIXI.FederatedMouseEvent) => void;
-  onDragMove?: (event: PIXI.FederatedMouseEvent) => void;
-  onDragStart?: (event: PIXI.FederatedMouseEvent) => void;
-  displayObject: PIXI.DisplayObject;
+  onDragEnd?: (event: FederatedMouseEvent) => void;
+  onDragMove?: (event: FederatedMouseEvent) => void;
+  onDragStart?: (event: FederatedMouseEvent) => void;
+  displayObject: DisplayObject;
 };
 
 const defaultDragConstraint = (args: DragConstraintArgs) => {
@@ -22,7 +26,7 @@ const defaultDragConstraint = (args: DragConstraintArgs) => {
 export const useDragObject = (args: UseDragObjectArgs) => {
   const [shift, setShift] = createSignal<Point2D>();
 
-  const onDragMove = (event: PIXI.FederatedPointerEvent) => {
+  const onDragMove = (event: FederatedPointerEvent) => {
     const point = shift();
     const parent = args.displayObject.parent;
     if (!point || !parent) {
@@ -41,7 +45,7 @@ export const useDragObject = (args: UseDragObjectArgs) => {
     args.onDragMove?.(event);
   };
 
-  const onDragEnd = (event: PIXI.FederatedMouseEvent) => {
+  const onDragEnd = (event: FederatedMouseEvent) => {
     const parent = args.displayObject.parent;
 
     if (!parent) {
@@ -56,7 +60,7 @@ export const useDragObject = (args: UseDragObjectArgs) => {
     args.onDragEnd?.(event);
   };
 
-  const onPointerDown = (event: PIXI.FederatedMouseEvent) => {
+  const onPointerDown = (event: FederatedMouseEvent) => {
     const parent = args.displayObject.parent;
 
     if (event.button === 2 || !parent) {

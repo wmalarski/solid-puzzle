@@ -1,4 +1,4 @@
-import * as PIXI from "pixi.js";
+import { Graphics, Sprite, type Texture } from "pixi.js";
 import { createEffect, onCleanup, onMount, type Component } from "solid-js";
 import type { PuzzleShapeLine } from "~/utils/getPuzzleFragments";
 import { usePixiApp } from "../PixiApp";
@@ -10,7 +10,7 @@ type PreviewGridProps = {
 export const PreviewGrid: Component<PreviewGridProps> = (props) => {
   const app = usePixiApp();
 
-  const graphics = new PIXI.Graphics();
+  const graphics = new Graphics();
 
   createEffect(() => {
     graphics.lineStyle(1, 0xffffff, 1);
@@ -37,13 +37,13 @@ export const PreviewGrid: Component<PreviewGridProps> = (props) => {
 };
 
 type PreviewSpriteProps = {
-  texture: PIXI.Texture;
+  texture: Texture;
 };
 
 export const PreviewSprite: Component<PreviewSpriteProps> = (props) => {
   const app = usePixiApp();
 
-  const sprite = new PIXI.Sprite();
+  const sprite = new Sprite();
   sprite.alpha = 0.5;
 
   createEffect(() => {

@@ -1,9 +1,14 @@
-import * as PIXI from "pixi.js";
+import {
+  Graphics,
+  type Container,
+  type FederatedMouseEvent,
+  type FederatedPointerEvent,
+} from "pixi.js";
 import { createEffect, onCleanup, onMount, type Component } from "solid-js";
 import { usePixiApp } from "../PixiApp";
 
 type RotationAnchorProps = {
-  container: PIXI.Container;
+  container: Container;
   rotation: number;
   onRotate: (rotation: number) => void;
   onEnd: (rotation: number) => void;
@@ -14,7 +19,7 @@ const rotationAnchorRadius = 10;
 export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
   const app = usePixiApp();
 
-  const graphics = new PIXI.Graphics();
+  const graphics = new Graphics();
   graphics.eventMode = "static";
   graphics.tint = "blue";
 
@@ -33,17 +38,17 @@ export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
     graphics.rotation = props.rotation;
   });
 
-  const toRotation = (event: PIXI.FederatedPointerEvent) => {
+  const toRotation = (event: FederatedPointerEvent) => {
     const local = props.container.toLocal(event.global);
     return Math.atan2(local.y, local.x) + Math.PI / 2;
   };
 
-  const onDragMove = (event: PIXI.FederatedPointerEvent) => {
+  const onDragMove = (event: FederatedPointerEvent) => {
     const rotation = toRotation(event);
     props.onRotate(rotation);
   };
 
-  const onDragEnd = (event: PIXI.FederatedPointerEvent) => {
+  const onDragEnd = (event: FederatedPointerEvent) => {
     app().stage.off("pointermove", onDragMove);
     app().stage.off("pointerup", onDragEnd);
     app().stage.off("pointerupoutside", onDragEnd);
@@ -52,7 +57,7 @@ export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
     props.onEnd(rotation);
   };
 
-  const onPointerDown = (event: PIXI.FederatedMouseEvent) => {
+  const onPointerDown = (event: FederatedMouseEvent) => {
     if (event.button === 2) {
       return;
     }

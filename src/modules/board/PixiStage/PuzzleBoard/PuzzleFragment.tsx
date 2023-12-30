@@ -1,4 +1,4 @@
-import * as PIXI from "pixi.js";
+import { Container, Graphics, Matrix, Text, type Texture } from "pixi.js";
 import {
   Show,
   createEffect,
@@ -17,14 +17,14 @@ import { RotationAnchor } from "./RotationAnchor";
 import { useDragObject } from "./useDragObject";
 
 type PuzzleFragmentLabelProps = {
-  container: PIXI.Container;
+  container: Container;
   label: string;
 };
 
 export const PuzzleFragmentLabel: Component<PuzzleFragmentLabelProps> = (
   props,
 ) => {
-  const text = new PIXI.Text();
+  const text = new Text();
 
   createEffect(() => {
     text.text = props.label;
@@ -42,19 +42,19 @@ export const PuzzleFragmentLabel: Component<PuzzleFragmentLabelProps> = (
 };
 
 type PuzzleFragmentGraphicsProps = {
-  container: PIXI.Container;
+  container: Container;
   state: FragmentState;
   shape: PuzzleFragmentShape;
-  texture: PIXI.Texture;
+  texture: Texture;
 };
 
 export const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
   props,
 ) => {
-  const graphics = new PIXI.Graphics();
+  const graphics = new Graphics();
 
   onMount(() => {
-    const matrix = new PIXI.Matrix(1, 0, 0, 1);
+    const matrix = new Matrix(1, 0, 0, 1);
     matrix.translate(-props.shape.min.x, -props.shape.min.y);
 
     graphics.beginTextureFill({ matrix, texture: props.texture });
@@ -90,7 +90,7 @@ export const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
 type PuzzleContainerProps = {
   shape: PuzzleFragmentShape;
   state: FragmentState;
-  texture: PIXI.Texture;
+  texture: Texture;
 };
 
 const PuzzleContainer: Component<PuzzleContainerProps> = (props) => {
@@ -98,7 +98,7 @@ const PuzzleContainer: Component<PuzzleContainerProps> = (props) => {
   const store = usePuzzleStore();
   const presence = usePlayerPresence();
 
-  const fragment = new PIXI.Container();
+  const fragment = new Container();
 
   onMount(() => {
     // console.log(
@@ -183,7 +183,7 @@ const PuzzleContainer: Component<PuzzleContainerProps> = (props) => {
 };
 
 type PuzzleFragmentProps = {
-  texture: PIXI.Texture;
+  texture: Texture;
   shape: PuzzleFragmentShape;
 };
 

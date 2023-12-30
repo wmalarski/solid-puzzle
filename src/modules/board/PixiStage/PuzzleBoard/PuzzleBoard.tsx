@@ -1,4 +1,4 @@
-import * as PIXI from "pixi.js";
+import { Assets, type FederatedPointerEvent, type Texture } from "pixi.js";
 import {
   For,
   Show,
@@ -22,7 +22,7 @@ type UseStageDeselectArgs = {
 const useStageDeselect = (args: UseStageDeselectArgs) => {
   const app = usePixiApp();
 
-  const onPointerDown = (event: PIXI.FederatedPointerEvent) => {
+  const onPointerDown = (event: FederatedPointerEvent) => {
     if (event.target === app().stage && event.button !== 2) {
       args.onDeselect();
     }
@@ -38,7 +38,7 @@ const useStageDeselect = (args: UseStageDeselectArgs) => {
 };
 
 type BoardProps = {
-  texture: PIXI.Texture;
+  texture: Texture;
 };
 
 const Board: Component<BoardProps> = (props) => {
@@ -60,7 +60,7 @@ const Board: Component<BoardProps> = (props) => {
 
 type ProviderProps = {
   board: BoardModel;
-  texture: PIXI.Texture;
+  texture: Texture;
 };
 
 const Provider: Component<ProviderProps> = (props) => {
@@ -90,9 +90,9 @@ type Props = {
 
 export const PuzzleBoard: Component<Props> = (props) => {
   const [texture] = createResource(async () => {
-    const asset = await PIXI.Assets.load(props.path);
+    const asset = await Assets.load(props.path);
 
-    return asset as PIXI.Texture;
+    return asset as Texture;
   });
 
   return (

@@ -1,7 +1,7 @@
-import * as PIXI from "pixi.js";
+import { Application } from "pixi.js";
 import {
   createContext,
-  createMemo,
+  createResource,
   onCleanup,
   onMount,
   useContext,
@@ -9,8 +9,8 @@ import {
   type JSX,
 } from "solid-js";
 
-const PixiAppContext = createContext<() => PIXI.Application>(
-  () => null as unknown as PIXI.Application,
+const PixiAppContext = createContext<() => Application>(
+  () => null as unknown as Application,
 );
 
 export const usePixiApp = () => {
@@ -23,22 +23,24 @@ type Props = {
 };
 
 export const PixiAppProvider: Component<Props> = (props) => {
-  const value = createMemo(() => {
-    const app = new PIXI.Application({
+  const app = new Application();
+
+  createResource(async () => {
+    await app.init({
       antialias: true,
       background: "white",
+      canvas: props.canvas,
+      eventMode: "static",
       height: window.innerHeight,
-      view: props.canvas,
       width: window.innerWidth,
     });
-    app.stage.eventMode = "static";
+
     app.stage.hitArea = app.screen;
     app.renderer.resize(window.innerWidth, window.innerHeight);
-    return app;
   });
 
   const onResize = () => {
-    value().renderer.resize(window.innerWidth, window.innerHeight);
+    app.renderer.resize(window.innerWidth, window.innerHeight);
   };
 
   onMount(() => {
@@ -50,7 +52,7 @@ export const PixiAppProvider: Component<Props> = (props) => {
   });
 
   return (
-    <PixiAppContext.Provider value={value}>
+    <PixiAppContext.Provider value={() => app}>
       {props.children}
     </PixiAppContext.Provider>
   );

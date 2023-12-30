@@ -1,4 +1,4 @@
-import type * as PIXI from "pixi.js";
+import type { FederatedPointerEvent, FederatedWheelEvent } from "pixi.js";
 import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import { useTransformContext } from "../TransformContext";
 import { usePixiApp } from "./PixiApp";
@@ -23,7 +23,7 @@ const usePane = () => {
   const [originX, setOriginX] = createSignal<number>();
   const [originY, setOriginY] = createSignal<number>();
 
-  const onPointerDown = (event: PIXI.FederatedPointerEvent) => {
+  const onPointerDown = (event: FederatedPointerEvent) => {
     setStartX(transform.x());
     setStartY(transform.y());
     setOriginX(event.x);
@@ -45,7 +45,7 @@ const usePane = () => {
       return;
     }
 
-    const onPointerMove = (event: PIXI.FederatedPointerEvent) => {
+    const onPointerMove = (event: FederatedPointerEvent) => {
       transform.setX(startX() - originXPosition + event.x);
       transform.setY(startY() - originYPosition + event.y);
     };
@@ -74,7 +74,7 @@ const useWheel = () => {
   const app = usePixiApp();
   const transform = useTransformContext();
 
-  const onWheel = (event: PIXI.FederatedWheelEvent) => {
+  const onWheel = (event: FederatedWheelEvent) => {
     const point = { x: event.globalX, y: event.globalY };
 
     if (event.deltaY < 0) {
