@@ -44,7 +44,7 @@ export const acceptBoardInviteServerAction = async (formData: FormData) => {
     name: parsed.name,
   });
 
-  return redirect(paths.board(result.boardId));
+  return true;
 };
 
 const generateBoardInviteArgsSchema = () => {

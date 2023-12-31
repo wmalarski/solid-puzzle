@@ -1,4 +1,5 @@
-import { createMutation } from "@tanstack/solid-query";
+import { useNavigate } from "@solidjs/router";
+import { createMutation, useQueryClient } from "@tanstack/solid-query";
 import { Show, createSignal, type Component, type JSX } from "solid-js";
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
@@ -17,7 +18,9 @@ import {
 import { TrashIcon } from "~/components/Icons/TrashIcon";
 import { XIcon } from "~/components/Icons/XIcon";
 import { useI18n } from "~/contexts/I18nContext";
+import { invalidateSelectBoardsQueries } from "~/server/board/client";
 import { deleteBoardServerAction } from "~/server/board/rpc";
+import { paths } from "~/utils/paths";
 
 type DeleteBoardFormProps = {
   boardId: string;
@@ -27,8 +30,17 @@ type DeleteBoardFormProps = {
 const DeleteBoardForm: Component<DeleteBoardFormProps> = (props) => {
   const { t } = useI18n();
 
+  const navigate = useNavigate();
+
+  const queryClient = useQueryClient();
+
   const mutation = createMutation(() => ({
     mutationFn: deleteBoardServerAction,
+    onSuccess() {
+      navigate(paths.home);
+
+      queryClient.invalidateQueries(invalidateSelectBoardsQueries());
+    },
   }));
 
   const onSubmit: JSX.IntrinsicElements["form"]["onSubmit"] = (event) => {

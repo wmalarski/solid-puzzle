@@ -1,20 +1,28 @@
-import { createMutation } from "@tanstack/solid-query";
+import { useNavigate } from "@solidjs/router";
+import { createMutation, useQueryClient } from "@tanstack/solid-query";
 import { Show, type Component, type JSX } from "solid-js";
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
 import { useI18n } from "~/contexts/I18nContext";
+import { invalidateSelectBoardsQueries } from "~/server/board/client";
 import { insertBoardServerAction } from "~/server/board/rpc";
+import { paths } from "~/utils/paths";
 import { ConfigFields } from "../ConfigFields";
 
-type CreateBoardFormProps = {
-  image?: string;
-};
-
-export const CreateBoardForm: Component<CreateBoardFormProps> = (props) => {
+export const CreateBoardForm: Component = () => {
   const { t } = useI18n();
+
+  const navigate = useNavigate();
+
+  const queryClient = useQueryClient();
 
   const mutation = createMutation(() => ({
     mutationFn: insertBoardServerAction,
+    onSuccess(board) {
+      navigate(paths.board(board.id));
+
+      queryClient.invalidateQueries(invalidateSelectBoardsQueries());
+    },
   }));
 
   const onSubmit: JSX.IntrinsicElements["form"]["onSubmit"] = (event) => {
@@ -27,13 +35,13 @@ export const CreateBoardForm: Component<CreateBoardFormProps> = (props) => {
 
   return (
     <form onSubmit={onSubmit} class="flex flex-col gap-4" method="post">
-      <Show when={mutation.data}>
+      <Show when={mutation.error}>
         <Alert variant="error">
           <AlertIcon variant="error" />
-          Error
+          {mutation.error?.message}
         </Alert>
       </Show>
-      <ConfigFields image={props.image} />
+      <ConfigFields />
       <Button
         disabled={mutation.isPending}
         isLoading={mutation.isPending}

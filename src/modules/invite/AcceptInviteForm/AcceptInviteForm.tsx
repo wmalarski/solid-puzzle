@@ -1,5 +1,5 @@
-import { useSearchParams } from "@solidjs/router";
-import { createMutation } from "@tanstack/solid-query";
+import { useNavigate, useSearchParams } from "@solidjs/router";
+import { createMutation, useQueryClient } from "@tanstack/solid-query";
 import { Show, type Component, type JSX } from "solid-js";
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
@@ -11,8 +11,10 @@ import {
   TextFieldRoot,
 } from "~/components/TextField";
 import { useI18n } from "~/contexts/I18nContext";
+import { invalidateSelectBoardsQueries } from "~/server/board/client";
 import type { BoardModel } from "~/server/board/types";
 import { acceptBoardInviteServerAction } from "~/server/share/rpc";
+import { paths } from "~/utils/paths";
 
 type AcceptInviteFormProps = {
   board: BoardModel;
@@ -23,8 +25,17 @@ export const AcceptInviteForm: Component<AcceptInviteFormProps> = (props) => {
 
   const [searchParams] = useSearchParams();
 
+  const navigate = useNavigate();
+
+  const queryClient = useQueryClient();
+
   const mutation = createMutation(() => ({
     mutationFn: acceptBoardInviteServerAction,
+    onSuccess() {
+      navigate(paths.home);
+
+      queryClient.invalidateQueries(invalidateSelectBoardsQueries());
+    },
   }));
 
   const onSubmit: JSX.IntrinsicElements["form"]["onSubmit"] = (event) => {
@@ -45,10 +56,10 @@ export const AcceptInviteForm: Component<AcceptInviteFormProps> = (props) => {
         </header>
         <form onSubmit={onSubmit} class="flex flex-col gap-4" method="post">
           <input type="hidden" name="token" value={searchParams.token} />
-          <Show when={mutation.data && !mutation.data.ok}>
+          <Show when={mutation.error}>
             <Alert variant="error">
               <AlertIcon variant="error" />
-              Error
+              {mutation.error?.message}
             </Alert>
           </Show>
           <TextFieldRoot>

@@ -1,5 +1,8 @@
 import { cache } from "@solidjs/router";
-import { queryOptions } from "@tanstack/solid-query";
+import {
+  queryOptions,
+  type InvalidateQueryFilters,
+} from "@tanstack/solid-query";
 import { selectBoardServerLoader, selectBoardsServerLoader } from "./rpc";
 import type { BoardModel } from "./types";
 
@@ -33,6 +36,13 @@ export const selectBoardQueryOptions = ({
   }));
 };
 
+export const invalidateSelectBoardQuery = (
+  boardId: string,
+): InvalidateQueryFilters => {
+  const options = selectBoardQueryOptions({ id: boardId })();
+  return { queryKey: options.queryKey };
+};
+
 export const selectBoardsQueryOptions = (
   args: Parameters<typeof selectBoardsLoader>[0],
 ) => {
@@ -40,4 +50,9 @@ export const selectBoardsQueryOptions = (
     queryFn: () => selectBoardsLoader(args),
     queryKey: ["selectBoards", args] as const,
   }));
+};
+
+export const invalidateSelectBoardsQueries = (): InvalidateQueryFilters => {
+  const options = selectBoardsQueryOptions({ limit: 0, offset: 0 })();
+  return { queryKey: options.queryKey.slice(0, 1) };
 };

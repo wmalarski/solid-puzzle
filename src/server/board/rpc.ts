@@ -38,7 +38,6 @@ const insertBoardArgsSchema = () => {
 };
 
 export const insertBoardServerAction = async (form: FormData) => {
-  console.log("insertBoardServerAction");
   const event = getRequestEventOrThrow();
 
   const parsed = await parseAsync(
@@ -50,7 +49,7 @@ export const insertBoardServerAction = async (form: FormData) => {
 
   const boardId = insertBoard({ ...parsed, ctx });
 
-  throw redirect(paths.board(boardId));
+  return { id: boardId };
 };
 
 const updateBoardArgsSchema = () => {
@@ -89,7 +88,7 @@ export const deleteBoardServerAction = async (form: FormData) => {
 
   deleteBoard({ ...parsed, ctx });
 
-  throw redirect(paths.home);
+  return true;
 };
 
 const selectBoardArgsSchema = () => {
@@ -122,8 +121,6 @@ export const selectBoardsServerLoader = async (
   args: Input<ReturnType<typeof selectBoardsArgsSchema>>,
 ) => {
   const event = getRequestEventOrThrow();
-
-  console.log("selectBoardsServerLoader", args);
 
   const parsed = await parseAsync(selectBoardsArgsSchema(), args);
 

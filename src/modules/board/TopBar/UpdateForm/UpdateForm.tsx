@@ -1,9 +1,13 @@
-import { createMutation } from "@tanstack/solid-query";
+import { createMutation, useQueryClient } from "@tanstack/solid-query";
 import { Show, type Component, type JSX } from "solid-js";
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
 import { useI18n } from "~/contexts/I18nContext";
 import { ConfigFields } from "~/modules/createBoard/ConfigFields";
+import {
+  invalidateSelectBoardQuery,
+  invalidateSelectBoardsQueries,
+} from "~/server/board/client";
 import { updateBoardServerAction } from "~/server/board/rpc";
 
 type UpdateFormProps = {
@@ -13,8 +17,14 @@ type UpdateFormProps = {
 export const UpdateForm: Component<UpdateFormProps> = (props) => {
   const { t } = useI18n();
 
+  const queryClient = useQueryClient();
+
   const mutation = createMutation(() => ({
     mutationFn: updateBoardServerAction,
+    onSuccess() {
+      queryClient.invalidateQueries(invalidateSelectBoardQuery(props.boardId));
+      queryClient.invalidateQueries(invalidateSelectBoardsQueries());
+    },
   }));
 
   const onSubmit: JSX.IntrinsicElements["form"]["onSubmit"] = (event) => {
