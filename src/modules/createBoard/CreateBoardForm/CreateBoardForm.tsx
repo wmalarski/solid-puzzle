@@ -1,5 +1,5 @@
 import { useSubmission } from "@solidjs/router";
-import { Show, type Component } from "solid-js";
+import { Show, createEffect, type Component } from "solid-js";
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
 import { useI18n } from "~/contexts/I18nContext";
@@ -14,6 +14,12 @@ export const CreateBoardForm: Component<CreateBoardFormProps> = (props) => {
   const { t } = useI18n();
 
   const submission = useSubmission(insertBoardAction);
+
+  // const action = useAction(insertBoardAction);
+
+  createEffect(() => {
+    console.log("submission", submission);
+  });
 
   return (
     <form action={insertBoardAction} class="flex flex-col gap-4" method="post">

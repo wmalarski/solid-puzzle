@@ -38,6 +38,7 @@ const insertBoardArgsSchema = () => {
 };
 
 export const insertBoardServerAction = async (form: FormData) => {
+  console.log("insertBoardServerAction");
   const event = getRequestEventOrThrow();
 
   const parsed = await parseAsync(

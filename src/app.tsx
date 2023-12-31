@@ -3,6 +3,7 @@ import { MetaProvider } from "@solidjs/meta";
 import { Router } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start";
 import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
+import { SolidQueryDevtools } from "@tanstack/solid-query-devtools";
 import { Suspense, createSignal, lazy } from "solid-js";
 import "./app.css";
 import { I18nContextProvider } from "./contexts/I18nContext";
@@ -28,6 +29,7 @@ export default function App() {
                 <ToastProvider />
               </Suspense>
             </MetaProvider>
+            <SolidQueryDevtools />
           </QueryClientProvider>
         </I18nContextProvider>
       )}
