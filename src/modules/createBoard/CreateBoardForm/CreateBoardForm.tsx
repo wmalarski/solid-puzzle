@@ -1,9 +1,9 @@
-import { useSubmission } from "@solidjs/router";
-import { Show, createEffect, type Component } from "solid-js";
+import { createMutation } from "@tanstack/solid-query";
+import { Show, type Component, type JSX } from "solid-js";
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
 import { useI18n } from "~/contexts/I18nContext";
-import { insertBoardAction } from "~/server/board/client";
+import { insertBoardServerAction } from "~/server/board/rpc";
 import { ConfigFields } from "../ConfigFields";
 
 type CreateBoardFormProps = {
@@ -13,17 +13,21 @@ type CreateBoardFormProps = {
 export const CreateBoardForm: Component<CreateBoardFormProps> = (props) => {
   const { t } = useI18n();
 
-  const submission = useSubmission(insertBoardAction);
+  const mutation = createMutation(() => ({
+    mutationFn: insertBoardServerAction,
+  }));
 
-  // const action = useAction(insertBoardAction);
+  const onSubmit: JSX.IntrinsicElements["form"]["onSubmit"] = (event) => {
+    event.preventDefault();
 
-  createEffect(() => {
-    console.log("submission", submission);
-  });
+    const data = new FormData(event.currentTarget);
+
+    mutation.mutate(data);
+  };
 
   return (
-    <form action={insertBoardAction} class="flex flex-col gap-4" method="post">
-      <Show when={submission.result}>
+    <form onSubmit={onSubmit} class="flex flex-col gap-4" method="post">
+      <Show when={mutation.data}>
         <Alert variant="error">
           <AlertIcon variant="error" />
           Error
@@ -31,8 +35,8 @@ export const CreateBoardForm: Component<CreateBoardFormProps> = (props) => {
       </Show>
       <ConfigFields image={props.image} />
       <Button
-        disabled={submission.pending}
-        isLoading={submission.pending}
+        disabled={mutation.isPending}
+        isLoading={mutation.isPending}
         type="submit"
       >
         {t("createBoard.button")}

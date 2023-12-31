@@ -1,22 +1,30 @@
-import { useSubmission } from "@solidjs/router";
-import { Show, type Component } from "solid-js";
+import { createMutation } from "@tanstack/solid-query";
+import { Show, type Component, type JSX } from "solid-js";
 import { Button, LinkButton } from "~/components/Button";
 import { PuzzleIcon } from "~/components/Icons/PuzzleIcon";
 import { Link } from "~/components/Link";
 import { Navbar, NavbarEnd, NavbarStart } from "~/components/Navbar";
 import { useI18n } from "~/contexts/I18nContext";
 import { useSessionContext } from "~/contexts/SessionContext";
-import { signOutAction } from "~/server/auth/client";
+import { signOutServerAction } from "~/server/auth/rpc";
 import { paths } from "~/utils/paths";
 
 const SignOutButton: Component = () => {
   const { t } = useI18n();
 
-  const submission = useSubmission(signOutAction);
+  const mutation = createMutation(() => ({
+    mutationFn: signOutServerAction,
+  }));
+
+  const onSubmit: JSX.IntrinsicElements["form"]["onSubmit"] = (event) => {
+    event.preventDefault();
+
+    mutation.mutate();
+  };
 
   return (
-    <form action={signOutAction} method="post">
-      <Button size="sm" disabled={submission.pending}>
+    <form onSubmit={onSubmit} method="post">
+      <Button size="sm" disabled={mutation.isPending}>
         {t("auth.signOut")}
       </Button>
     </form>

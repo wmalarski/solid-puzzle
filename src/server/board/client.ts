@@ -1,32 +1,12 @@
-import { action, cache } from "@solidjs/router";
+import { cache } from "@solidjs/router";
 import { queryOptions } from "@tanstack/solid-query";
-import {
-  deleteBoardServerAction,
-  insertBoardServerAction,
-  selectBoardServerLoader,
-  selectBoardsServerLoader,
-  updateBoardServerAction,
-} from "./rpc";
+import { selectBoardServerLoader, selectBoardsServerLoader } from "./rpc";
 import type { BoardModel } from "./types";
 
 const SELECT_BOARD_CACHE_NAME = "board";
 const SELECT_BOARDS_CACHE_NAME = "boards";
 
 export const SELECT_BOARDS_DEFAULT_LIMIT = 10;
-
-export const insertBoardAction = action(
-  insertBoardServerAction,
-  "insertBoardAction",
-);
-export const updateBoardAction = action(
-  updateBoardServerAction,
-  "updateBoardAction",
-);
-
-export const deleteBoardAction = action(
-  deleteBoardServerAction,
-  "deleteBoardAction",
-);
 
 export const selectBoardLoader = cache(
   selectBoardServerLoader,
@@ -41,7 +21,7 @@ export const selectBoardsLoader = cache(
 export const selectBoardQueryOptions = ({
   initialBoard,
   ...args
-}: Awaited<Parameters<typeof selectBoardLoader>[0]> & {
+}: Parameters<typeof selectBoardLoader>[0] & {
   initialBoard?: BoardModel;
 }) => {
   return queryOptions(() => ({
@@ -54,7 +34,7 @@ export const selectBoardQueryOptions = ({
 };
 
 export const selectBoardsQueryOptions = (
-  args: Awaited<Parameters<typeof selectBoardsLoader>[0]>,
+  args: Parameters<typeof selectBoardsLoader>[0],
 ) => {
   return queryOptions(() => ({
     queryFn: () => selectBoardsLoader(args),

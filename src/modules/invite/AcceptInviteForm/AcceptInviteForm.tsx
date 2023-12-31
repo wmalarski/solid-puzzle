@@ -1,5 +1,6 @@
-import { useSearchParams, useSubmission } from "@solidjs/router";
-import { Show, type Component } from "solid-js";
+import { useSearchParams } from "@solidjs/router";
+import { createMutation } from "@tanstack/solid-query";
+import { Show, type Component, type JSX } from "solid-js";
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
 import { Card, CardBody, cardTitleClass } from "~/components/Card";
@@ -11,7 +12,7 @@ import {
 } from "~/components/TextField";
 import { useI18n } from "~/contexts/I18nContext";
 import type { BoardModel } from "~/server/board/types";
-import { acceptBoardInviteAction } from "~/server/share/client";
+import { acceptBoardInviteServerAction } from "~/server/share/rpc";
 
 type AcceptInviteFormProps = {
   board: BoardModel;
@@ -22,7 +23,17 @@ export const AcceptInviteForm: Component<AcceptInviteFormProps> = (props) => {
 
   const [searchParams] = useSearchParams();
 
-  const submission = useSubmission(acceptBoardInviteAction);
+  const mutation = createMutation(() => ({
+    mutationFn: acceptBoardInviteServerAction,
+  }));
+
+  const onSubmit: JSX.IntrinsicElements["form"]["onSubmit"] = (event) => {
+    event.preventDefault();
+
+    const data = new FormData(event.currentTarget);
+
+    mutation.mutate(data);
+  };
 
   return (
     <Card variant="bordered" class="w-full max-w-md">
@@ -32,13 +43,9 @@ export const AcceptInviteForm: Component<AcceptInviteFormProps> = (props) => {
             {t("invite.title", { name: props.board.name })}
           </h2>
         </header>
-        <form
-          action={acceptBoardInviteAction}
-          class="flex flex-col gap-4"
-          method="post"
-        >
+        <form onSubmit={onSubmit} class="flex flex-col gap-4" method="post">
           <input type="hidden" name="token" value={searchParams.token} />
-          <Show when={submission.result && !submission.result.ok}>
+          <Show when={mutation.data && !mutation.data.ok}>
             <Alert variant="error">
               <AlertIcon variant="error" />
               Error
@@ -58,8 +65,8 @@ export const AcceptInviteForm: Component<AcceptInviteFormProps> = (props) => {
             />
           </TextFieldRoot>
           <Button
-            disabled={submission.pending}
-            isLoading={submission.pending}
+            disabled={mutation.isPending}
+            isLoading={mutation.isPending}
             type="submit"
           >
             {t("invite.button")}

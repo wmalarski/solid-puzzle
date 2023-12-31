@@ -1,4 +1,5 @@
-import { useAction, useNavigate, useSubmission } from "@solidjs/router";
+import { useNavigate } from "@solidjs/router";
+import { createMutation } from "@tanstack/solid-query";
 import type { Component } from "solid-js";
 import {
   DropdownMenuArrow,
@@ -12,22 +13,22 @@ import {
 } from "~/components/DropdownMenu";
 import { MenuIcon } from "~/components/Icons/MenuIcon";
 import { useI18n } from "~/contexts/I18nContext";
-import { signOutAction } from "~/server/auth/client";
+import { signOutServerAction } from "~/server/auth/rpc";
 import { paths } from "~/utils/paths";
 
 const SignOutMenuItem: Component = () => {
   const { t } = useI18n();
 
-  const action = useAction(signOutAction);
+  const mutation = createMutation(() => ({
+    mutationFn: signOutServerAction,
+  }));
 
-  const submission = useSubmission(signOutAction);
-
-  const onSelect = async () => {
-    await action();
+  const onSelect = () => {
+    mutation.mutate();
   };
 
   return (
-    <DropdownMenuItem disabled={submission.pending} onSelect={onSelect}>
+    <DropdownMenuItem disabled={mutation.isPending} onSelect={onSelect}>
       <DropdownMenuItemLabel>{t("auth.signOut")}</DropdownMenuItemLabel>
     </DropdownMenuItem>
   );

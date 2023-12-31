@@ -1,5 +1,5 @@
-import { useSubmission } from "@solidjs/router";
-import { Show, type Component } from "solid-js";
+import { createMutation } from "@tanstack/solid-query";
+import { Show, type Component, type JSX } from "solid-js";
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
 import { Card, CardBody, cardTitleClass } from "~/components/Card";
@@ -11,13 +11,23 @@ import {
   TextFieldRoot,
 } from "~/components/TextField";
 import { useI18n } from "~/contexts/I18nContext";
-import { signUpAction } from "~/server/auth/client";
+import { signUpServerAction } from "~/server/auth/rpc";
 import { paths } from "~/utils/paths";
 
 export const SignUp: Component = () => {
   const { t } = useI18n();
 
-  const submission = useSubmission(signUpAction);
+  const mutation = createMutation(() => ({
+    mutationFn: signUpServerAction,
+  }));
+
+  const onSubmit: JSX.IntrinsicElements["form"]["onSubmit"] = (event) => {
+    event.preventDefault();
+
+    const data = new FormData(event.currentTarget);
+
+    mutation.mutate(data);
+  };
 
   return (
     <Card variant="bordered" class="w-full max-w-md">
@@ -25,11 +35,11 @@ export const SignUp: Component = () => {
         <header class="flex items-center justify-between gap-2">
           <h2 class={cardTitleClass()}>{t("signUp.title")}</h2>
         </header>
-        <form action={signUpAction} class="flex flex-col gap-4" method="post">
-          <Show when={submission.result}>
+        <form onSubmit={onSubmit} class="flex flex-col gap-4" method="post">
+          <Show when={mutation.data}>
             <Alert variant="error">
               <AlertIcon variant="error" />
-              {submission.result?.message}
+              {mutation.data?.message}
             </Alert>
           </Show>
           <TextFieldRoot>
@@ -60,8 +70,8 @@ export const SignUp: Component = () => {
             />
           </TextFieldRoot>
           <Button
-            disabled={submission.pending}
-            isLoading={submission.pending}
+            disabled={mutation.isPending}
+            isLoading={mutation.isPending}
             type="submit"
           >
             {t("signUp.button")}

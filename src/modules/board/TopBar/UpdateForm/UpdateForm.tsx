@@ -1,10 +1,10 @@
-import { useSubmission } from "@solidjs/router";
-import { Show, type Component } from "solid-js";
+import { createMutation } from "@tanstack/solid-query";
+import { Show, type Component, type JSX } from "solid-js";
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
 import { useI18n } from "~/contexts/I18nContext";
 import { ConfigFields } from "~/modules/createBoard/ConfigFields";
-import { updateBoardAction } from "~/server/board/client";
+import { updateBoardServerAction } from "~/server/board/rpc";
 
 type UpdateFormProps = {
   boardId: string;
@@ -13,11 +13,21 @@ type UpdateFormProps = {
 export const UpdateForm: Component<UpdateFormProps> = (props) => {
   const { t } = useI18n();
 
-  const submission = useSubmission(updateBoardAction);
+  const mutation = createMutation(() => ({
+    mutationFn: updateBoardServerAction,
+  }));
+
+  const onSubmit: JSX.IntrinsicElements["form"]["onSubmit"] = (event) => {
+    event.preventDefault();
+
+    const data = new FormData(event.currentTarget);
+
+    mutation.mutate(data);
+  };
 
   return (
-    <form action={updateBoardAction} class="flex flex-col gap-4" method="post">
-      <Show when={submission.result && submission.result < 1}>
+    <form onSubmit={onSubmit} class="flex flex-col gap-4" method="post">
+      <Show when={mutation.data && mutation.data < 1}>
         <Alert variant="error">
           <AlertIcon variant="error" />
           Error
@@ -26,8 +36,8 @@ export const UpdateForm: Component<UpdateFormProps> = (props) => {
       <input name="id" value={props.boardId} type="hidden" />
       <ConfigFields />
       <Button
-        disabled={submission.pending}
-        isLoading={submission.pending}
+        disabled={mutation.isPending}
+        isLoading={mutation.isPending}
         type="submit"
       >
         {t("board.settings.update.button")}

@@ -1,5 +1,5 @@
-import { useSubmission } from "@solidjs/router";
-import { Show, createSignal, type Component } from "solid-js";
+import { createMutation } from "@tanstack/solid-query";
+import { Show, createSignal, type Component, type JSX } from "solid-js";
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
 import { cardTitleClass } from "~/components/Card";
@@ -17,7 +17,7 @@ import {
 import { TrashIcon } from "~/components/Icons/TrashIcon";
 import { XIcon } from "~/components/Icons/XIcon";
 import { useI18n } from "~/contexts/I18nContext";
-import { deleteBoardAction } from "~/server/board/client";
+import { deleteBoardServerAction } from "~/server/board/rpc";
 
 type DeleteBoardFormProps = {
   boardId: string;
@@ -27,11 +27,21 @@ type DeleteBoardFormProps = {
 const DeleteBoardForm: Component<DeleteBoardFormProps> = (props) => {
   const { t } = useI18n();
 
-  const submission = useSubmission(deleteBoardAction);
+  const mutation = createMutation(() => ({
+    mutationFn: deleteBoardServerAction,
+  }));
+
+  const onSubmit: JSX.IntrinsicElements["form"]["onSubmit"] = (event) => {
+    event.preventDefault();
+
+    const data = new FormData(event.currentTarget);
+
+    mutation.mutate(data);
+  };
 
   return (
-    <form action={deleteBoardAction} class="flex flex-col gap-4" method="post">
-      <Show when={submission.result}>
+    <form onSubmit={onSubmit} class="flex flex-col gap-4" method="post">
+      <Show when={mutation.error}>
         <Alert variant="error">
           <AlertIcon variant="error" />
           Error
@@ -42,8 +52,8 @@ const DeleteBoardForm: Component<DeleteBoardFormProps> = (props) => {
         {t("board.settings.delete.cancel")}
       </Button>
       <Button
-        disabled={submission.pending}
-        isLoading={submission.pending}
+        disabled={mutation.isPending}
+        isLoading={mutation.isPending}
         type="submit"
       >
         {t("board.settings.delete.button")}
