@@ -1,16 +1,12 @@
 "use server";
-import { redirect } from "@solidjs/router";
 import { appendHeader } from "@solidjs/start/server";
 import { decode } from "decode-formdata";
 import { generateId } from "lucia";
 import { Argon2id } from "oslo/password";
 import { maxLength, minLength, object, parseAsync, string } from "valibot";
-import { paths } from "~/utils/paths";
 import { getRequestEventOrThrow } from "../utils";
 import { insertUser, selectUserByUsername } from "./db";
 import { getLucia } from "./lucia";
-
-const SESSION_CACHE_NAME = "session";
 
 const signUpArgsSchema = () => {
   return object({
@@ -45,10 +41,10 @@ export const signUpServerAction = async (form: FormData) => {
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error(error);
-    return new Error("An unknown error occurred");
+    throw new Error("An unknown error occurred");
   }
 
-  throw redirect(paths.home);
+  return true;
 };
 
 const signInArgsSchema = () => {
@@ -97,7 +93,7 @@ export const signOutServerAction = async () => {
   const lucia = getLucia(event.context);
 
   if (!event.context.session) {
-    return new Error("Unauthorized");
+    throw new Error("Unauthorized");
   }
 
   await lucia.invalidateSession(event.context.session.id);
@@ -107,7 +103,7 @@ export const signOutServerAction = async () => {
     lucia.createBlankSessionCookie().serialize(),
   );
 
-  throw redirect(paths.signIn, { revalidate: SESSION_CACHE_NAME });
+  return true;
 };
 
 export const getSessionServerLoader = async () => {

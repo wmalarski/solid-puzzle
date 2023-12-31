@@ -1,3 +1,4 @@
+import { revalidate, useNavigate } from "@solidjs/router";
 import { createMutation } from "@tanstack/solid-query";
 import { Show, type Component, type JSX } from "solid-js";
 import { Alert, AlertIcon } from "~/components/Alert";
@@ -11,14 +12,21 @@ import {
   TextFieldRoot,
 } from "~/components/TextField";
 import { useI18n } from "~/contexts/I18nContext";
+import { SESSION_CACHE_NAME } from "~/server/auth/client";
 import { signUpServerAction } from "~/server/auth/rpc";
 import { paths } from "~/utils/paths";
 
 export const SignUp: Component = () => {
   const { t } = useI18n();
 
+  const navigate = useNavigate();
+
   const mutation = createMutation(() => ({
     mutationFn: signUpServerAction,
+    async onSuccess() {
+      await revalidate(SESSION_CACHE_NAME);
+      navigate(paths.home);
+    },
   }));
 
   const onSubmit: JSX.IntrinsicElements["form"]["onSubmit"] = (event) => {
@@ -36,10 +44,10 @@ export const SignUp: Component = () => {
           <h2 class={cardTitleClass()}>{t("signUp.title")}</h2>
         </header>
         <form onSubmit={onSubmit} class="flex flex-col gap-4" method="post">
-          <Show when={mutation.data}>
+          <Show when={mutation.error}>
             <Alert variant="error">
               <AlertIcon variant="error" />
-              {mutation.data?.message}
+              {mutation.error?.message}
             </Alert>
           </Show>
           <TextFieldRoot>

@@ -1,4 +1,4 @@
-import { useNavigate } from "@solidjs/router";
+import { revalidate, useNavigate } from "@solidjs/router";
 import { createMutation } from "@tanstack/solid-query";
 import type { Component } from "solid-js";
 import {
@@ -13,14 +13,21 @@ import {
 } from "~/components/DropdownMenu";
 import { MenuIcon } from "~/components/Icons/MenuIcon";
 import { useI18n } from "~/contexts/I18nContext";
+import { SESSION_CACHE_NAME } from "~/server/auth/client";
 import { signOutServerAction } from "~/server/auth/rpc";
 import { paths } from "~/utils/paths";
 
 const SignOutMenuItem: Component = () => {
   const { t } = useI18n();
 
+  const navigate = useNavigate();
+
   const mutation = createMutation(() => ({
     mutationFn: signOutServerAction,
+    async onSuccess() {
+      await revalidate(SESSION_CACHE_NAME);
+      navigate(paths.home);
+    },
   }));
 
   const onSelect = () => {
