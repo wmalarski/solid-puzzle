@@ -10,6 +10,8 @@ import { getRequestEventOrThrow } from "../utils";
 import { insertUser, selectUserByUsername } from "./db";
 import { getLucia } from "./lucia";
 
+const SESSION_CACHE_NAME = "session";
+
 const signUpArgsSchema = () => {
   return object({
     password: string([minLength(6), maxLength(20)]),
@@ -67,7 +69,7 @@ export const signInServerAction = async (form: FormData) => {
   });
 
   if (!existingUser || !existingUser.password) {
-    return new Error("Incorrect username or password");
+    throw new Error("Incorrect username or password");
   }
 
   const isValidPassword = await new Argon2id().verify(
@@ -76,7 +78,7 @@ export const signInServerAction = async (form: FormData) => {
   );
 
   if (!isValidPassword) {
-    return new Error("Incorrect username or password");
+    throw new Error("Incorrect username or password");
   }
 
   const session = await lucia.createSession(existingUser.id, {});
@@ -87,7 +89,7 @@ export const signInServerAction = async (form: FormData) => {
     lucia.createSessionCookie(session.id).serialize(),
   );
 
-  throw redirect(paths.home);
+  return session;
 };
 
 export const signOutServerAction = async () => {
@@ -105,7 +107,7 @@ export const signOutServerAction = async () => {
     lucia.createBlankSessionCookie().serialize(),
   );
 
-  throw redirect(paths.signIn);
+  throw redirect(paths.signIn, { revalidate: SESSION_CACHE_NAME });
 };
 
 export const getSessionServerLoader = async () => {

@@ -1,7 +1,7 @@
 import { cache } from "@solidjs/router";
 import { getSessionServerLoader } from "./rpc";
 
-const SESSION_CACHE_NAME = "session";
+export const SESSION_CACHE_NAME = "session";
 
 export const getSessionLoader = cache(
   getSessionServerLoader,

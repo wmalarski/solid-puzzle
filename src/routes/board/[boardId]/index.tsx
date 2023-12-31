@@ -1,4 +1,9 @@
-import { createAsync, redirect, useParams } from "@solidjs/router";
+import {
+  createAsync,
+  redirect,
+  useParams,
+  type RouteDefinition,
+} from "@solidjs/router";
 import { createQuery } from "@tanstack/solid-query";
 import { Show, Suspense, type Component } from "solid-js";
 import { SessionProvider } from "~/contexts/SessionContext";
@@ -50,6 +55,12 @@ const BoardQuery: Component<BoardQueryProps> = (props) => {
     </Show>
   );
 };
+
+export const route = {
+  load: async ({ params }) => {
+    await selectProtectedBoardLoader(params.boardId);
+  },
+} satisfies RouteDefinition;
 
 export default function BoardSection() {
   const params = useParams();
