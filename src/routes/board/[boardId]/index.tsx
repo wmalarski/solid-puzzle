@@ -1,38 +1,14 @@
-import {
-  createAsync,
-  redirect,
-  useParams,
-  type RouteDefinition,
-} from "@solidjs/router";
+import { createAsync, useParams, type RouteDefinition } from "@solidjs/router";
 import { createQuery } from "@tanstack/solid-query";
 import { Show, Suspense, type Component } from "solid-js";
 import { SessionProvider } from "~/contexts/SessionContext";
 import { Board } from "~/modules/board/Board";
-import { selectBoardQueryOptions } from "~/server/board/client";
-import { selectBoardServerLoader } from "~/server/board/rpc";
+import {
+  selectBoardQueryOptions,
+  selectProtectedBoardLoader,
+} from "~/server/board/client";
 import type { BoardModel } from "~/server/board/types";
-import { type BoardAccess } from "~/server/share/db";
-import { hasBoardAccessServerLoader } from "~/server/share/rpc";
-import { getRequestEventOrThrow } from "~/server/utils";
-import { paths } from "~/utils/paths";
-
-export const selectProtectedBoardLoader = async (id: string) => {
-  "use server";
-
-  const [board, access] = await Promise.all([
-    selectBoardServerLoader({ id }),
-    hasBoardAccessServerLoader({ id }),
-  ]);
-
-  const event = getRequestEventOrThrow();
-  const session = event.context.session;
-
-  if (board.ownerId !== session?.userId) {
-    throw redirect(paths.notFound);
-  }
-
-  return { access, board, session };
-};
+import type { BoardAccess } from "~/server/share/db";
 
 type BoardQueryProps = {
   boardAccess?: BoardAccess;
@@ -58,14 +34,16 @@ const BoardQuery: Component<BoardQueryProps> = (props) => {
 
 export const route = {
   load: async ({ params }) => {
-    await selectProtectedBoardLoader(params.boardId);
+    await selectProtectedBoardLoader({ id: params.boardId });
   },
 } satisfies RouteDefinition;
 
 export default function BoardSection() {
   const params = useParams();
 
-  const data = createAsync(() => selectProtectedBoardLoader(params.boardId));
+  const data = createAsync(() =>
+    selectProtectedBoardLoader({ id: params.boardId }),
+  );
 
   return (
     <SessionProvider value={() => data()?.session || null}>

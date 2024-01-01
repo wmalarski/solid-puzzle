@@ -3,10 +3,15 @@ import {
   queryOptions,
   type InvalidateQueryFilters,
 } from "@tanstack/solid-query";
-import { selectBoardServerLoader, selectBoardsServerLoader } from "./rpc";
+import {
+  selectBoardServerLoader,
+  selectBoardsServerLoader,
+  selectProtectedBoardServerLoader,
+} from "./rpc";
 import type { BoardModel } from "./types";
 
 const SELECT_BOARD_CACHE_NAME = "board";
+const SELECT_PROTECTED_BOARD_CACHE_NAME = "protected-board";
 const SELECT_BOARDS_CACHE_NAME = "boards";
 
 export const SELECT_BOARDS_DEFAULT_LIMIT = 10;
@@ -14,6 +19,11 @@ export const SELECT_BOARDS_DEFAULT_LIMIT = 10;
 export const selectBoardLoader = cache(
   selectBoardServerLoader,
   SELECT_BOARD_CACHE_NAME,
+);
+
+export const selectProtectedBoardLoader = cache(
+  selectProtectedBoardServerLoader,
+  SELECT_PROTECTED_BOARD_CACHE_NAME,
 );
 
 export const selectBoardsLoader = cache(

@@ -1,5 +1,4 @@
 "use server";
-import { redirect } from "@solidjs/router";
 import { decode } from "decode-formdata";
 import {
   coerce,
@@ -13,8 +12,8 @@ import {
   string,
   type Input,
 } from "valibot";
-import { paths } from "~/utils/paths";
 import { getProtectedRequestContext } from "../context";
+import { hasBoardAccess } from "../share/db";
 import { getRequestEventOrThrow } from "../utils";
 import {
   deleteBoard,
@@ -104,10 +103,38 @@ export const selectBoardServerLoader = async (
   const board = selectBoard({ ...parsed, ctx: event.context });
 
   if (!board) {
-    throw redirect(paths.notFound);
+    throw new Error("Board not found");
   }
 
   return board;
+};
+
+export const selectProtectedBoardServerLoader = async (
+  args: Input<ReturnType<typeof selectBoardArgsSchema>>,
+) => {
+  const event = getRequestEventOrThrow();
+  const parsed = await parseAsync(selectBoardArgsSchema(), args);
+
+  const board = selectBoard({ ...parsed, ctx: event.context });
+
+  if (!board) {
+    throw new Error("Board not found");
+  }
+
+  const access = await hasBoardAccess({ boardId: parsed.id, event });
+  const user = event.context.user;
+  const session = event.context.session;
+
+  if (access) {
+    return { access, board, session };
+  }
+
+  if (board.ownerId !== user?.id) {
+    throw new Error("No access to board");
+  }
+
+  const ownerAccess = { boardId: parsed.id, username: user.username };
+  return { access: ownerAccess, board, session };
 };
 
 const selectBoardsArgsSchema = () => {
