@@ -1,6 +1,20 @@
 import type { JSX } from "solid-js";
-import minusIcon from "./resources/minus-icon.svg";
 
-export const MinusIcon = (props: JSX.IntrinsicElements["img"]) => {
-  return <img src={minusIcon} alt="minus" {...props} />;
+export const MinusIcon = (props: JSX.IntrinsicElements["svg"]) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      {...props}
+    >
+      <path d="M5 12h14" />
+    </svg>
+  );
 };
