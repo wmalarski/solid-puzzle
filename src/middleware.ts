@@ -4,9 +4,14 @@ import { drizzleMiddleware } from "./server/db";
 import { serverEnvMiddleware } from "./server/env";
 
 export default createMiddleware({
-  onRequest: async (event) => {
-    await serverEnvMiddleware(event);
-    drizzleMiddleware(event);
-    await luciaMiddleware(event);
-  },
+  onRequest: [
+    serverEnvMiddleware,
+    drizzleMiddleware,
+    luciaMiddleware,
+    (event) => {
+      if (event.method === "POST") {
+        console.log("EVENT", Object.fromEntries(event.headers.entries()));
+      }
+    },
+  ],
 });

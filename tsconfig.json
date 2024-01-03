@@ -8,6 +8,7 @@
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
     "allowJs": true,
+    "sourceMap": true,
     "strict": true,
     "noEmit": true,
     "types": [

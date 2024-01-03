@@ -7,7 +7,7 @@ export const InsertBoard: Component = () => {
   const { t } = useI18n();
 
   return (
-    <section class="flex max-w-screen-lg flex-col items-center justify-between gap-2 pt-8">
+    <section class="flex w-full max-w-screen-lg flex-col items-center justify-between gap-2 px-4 pt-8">
       <header class="flex items-center justify-between gap-2">
         <h2 class={cardTitleClass()}>{t("createBoard.title")}</h2>
       </header>
