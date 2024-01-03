@@ -8,16 +8,17 @@ import { getRequestEventOrThrow } from "../utils";
 import { insertUser, selectUserByUsername } from "./db";
 import { getLucia } from "./lucia";
 
-const signUpArgsSchema = () => {
-  return object({
-    password: string([minLength(6), maxLength(20)]),
-    username: string([minLength(3), maxLength(20)]),
-  });
-};
-
 export const signUpServerAction = async (form: FormData) => {
   const event = getRequestEventOrThrow();
-  const parsed = await parseAsync(signUpArgsSchema(), decode(form));
+
+  const parsed = await parseAsync(
+    object({
+      password: string([minLength(6), maxLength(20)]),
+      username: string([minLength(3), maxLength(20)]),
+    }),
+    decode(form),
+  );
+
   const lucia = getLucia(event.context);
 
   const hashedPassword = await new Argon2id().hash(parsed.password);
@@ -47,16 +48,17 @@ export const signUpServerAction = async (form: FormData) => {
   return true;
 };
 
-const signInArgsSchema = () => {
-  return object({
-    password: string([minLength(3)]),
-    username: string([minLength(3)]),
-  });
-};
-
 export const signInServerAction = async (form: FormData) => {
   const event = getRequestEventOrThrow();
-  const parsed = await parseAsync(signInArgsSchema(), decode(form));
+
+  const parsed = await parseAsync(
+    object({
+      password: string([minLength(3)]),
+      username: string([minLength(3)]),
+    }),
+    decode(form),
+  );
+
   const lucia = getLucia(event.context);
 
   const existingUser = selectUserByUsername({

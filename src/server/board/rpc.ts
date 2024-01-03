@@ -2,19 +2,16 @@
 import { decode } from "decode-formdata";
 import {
   coerce,
-  integer,
   maxValue,
   minLength,
-  minValue,
   number,
   object,
   parseAsync,
   string,
-  type Input,
 } from "valibot";
 import { getProtectedRequestContext } from "../context";
 import { hasBoardAccess } from "../share/db";
-import { getRequestEventOrThrow } from "../utils";
+import { boardDimension, getRequestEventOrThrow } from "../utils";
 import {
   deleteBoard,
   insertBoard,
@@ -23,26 +20,18 @@ import {
   updateBoard,
 } from "./db";
 
-const boardDimension = () => {
-  return coerce(number([integer(), minValue(3)]), Number);
-};
-
-const insertBoardArgsSchema = () => {
-  return object({
-    columns: boardDimension(),
-    image: string(),
-    name: string([minLength(3)]),
-    rows: boardDimension(),
-  });
-};
-
 export const insertBoardServerAction = async (form: FormData) => {
   console.log("insertBoardServerAction", Object.fromEntries(form.entries()));
 
   const event = getRequestEventOrThrow();
 
   const parsed = await parseAsync(
-    insertBoardArgsSchema(),
+    object({
+      columns: boardDimension(),
+      image: string(),
+      name: string([minLength(3)]),
+      rows: boardDimension(),
+    }),
     decode(form, { numbers: ["rows", "columns"] }),
   );
 
@@ -53,21 +42,17 @@ export const insertBoardServerAction = async (form: FormData) => {
   return { id: boardId };
 };
 
-const updateBoardArgsSchema = () => {
-  return object({
-    columns: boardDimension(),
-    id: string(),
-    image: string(),
-    name: string([minLength(3)]),
-    rows: boardDimension(),
-  });
-};
-
 export const updateBoardServerAction = async (form: FormData) => {
   const event = getRequestEventOrThrow();
 
   const parsed = await parseAsync(
-    updateBoardArgsSchema(),
+    object({
+      columns: boardDimension(),
+      id: string(),
+      image: string(),
+      name: string([minLength(3)]),
+      rows: boardDimension(),
+    }),
     decode(form, { numbers: ["rows", "columns"] }),
   );
 
@@ -76,14 +61,10 @@ export const updateBoardServerAction = async (form: FormData) => {
   return updateBoard({ ...parsed, ctx });
 };
 
-const deleteBoardArgsSchema = () => {
-  return object({ id: string() });
-};
-
 export const deleteBoardServerAction = async (form: FormData) => {
   const event = getRequestEventOrThrow();
 
-  const parsed = await parseAsync(deleteBoardArgsSchema(), decode(form));
+  const parsed = await parseAsync(object({ id: string() }), decode(form));
 
   const ctx = getProtectedRequestContext(event);
 
@@ -92,15 +73,15 @@ export const deleteBoardServerAction = async (form: FormData) => {
   return true;
 };
 
-const selectBoardArgsSchema = () => {
-  return object({ id: string() });
+type SelectBoardServerLoaderArgs = {
+  id: string;
 };
 
 export const selectBoardServerLoader = async (
-  args: Input<ReturnType<typeof selectBoardArgsSchema>>,
+  args: SelectBoardServerLoaderArgs,
 ) => {
   const event = getRequestEventOrThrow();
-  const parsed = await parseAsync(selectBoardArgsSchema(), args);
+  const parsed = await parseAsync(object({ id: string() }), args);
 
   const board = selectBoard({ ...parsed, ctx: event.context });
 
@@ -112,10 +93,10 @@ export const selectBoardServerLoader = async (
 };
 
 export const selectProtectedBoardServerLoader = async (
-  args: Input<ReturnType<typeof selectBoardArgsSchema>>,
+  args: SelectBoardServerLoaderArgs,
 ) => {
   const event = getRequestEventOrThrow();
-  const parsed = await parseAsync(selectBoardArgsSchema(), args);
+  const parsed = await parseAsync(object({ id: string() }), args);
 
   const board = selectBoard({ ...parsed, ctx: event.context });
 
@@ -139,19 +120,23 @@ export const selectProtectedBoardServerLoader = async (
   return { access: ownerAccess, board, session };
 };
 
-const selectBoardsArgsSchema = () => {
-  return object({
-    limit: coerce(number([maxValue(20)]), Number),
-    offset: coerce(number(), Number),
-  });
+type SelectBoardsServerLoaderArgs = {
+  limit: number;
+  offset: number;
 };
 
 export const selectBoardsServerLoader = async (
-  args: Input<ReturnType<typeof selectBoardsArgsSchema>>,
+  args: SelectBoardsServerLoaderArgs,
 ) => {
   const event = getRequestEventOrThrow();
 
-  const parsed = await parseAsync(selectBoardsArgsSchema(), args);
+  const parsed = await parseAsync(
+    object({
+      limit: coerce(number([maxValue(20)]), Number),
+      offset: coerce(number(), Number),
+    }),
+    args,
+  );
 
   const ctx = getProtectedRequestContext(event);
 

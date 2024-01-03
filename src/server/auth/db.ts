@@ -1,4 +1,3 @@
-"use server";
 import { eq } from "drizzle-orm";
 import type { WithH3EventContext } from "../context";
 

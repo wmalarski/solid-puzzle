@@ -1,5 +1,6 @@
 import { redirect } from "@solidjs/router";
 import { getRequestEvent } from "solid-js/web";
+import { coerce, integer, minValue, number } from "valibot";
 import { paths } from "~/utils/paths";
 
 export const getRequestEventOrThrow = () => {
@@ -10,4 +11,8 @@ export const getRequestEventOrThrow = () => {
   }
 
   return event;
+};
+
+export const boardDimension = () => {
+  return coerce(number([integer(), minValue(3)]), Number);
 };
