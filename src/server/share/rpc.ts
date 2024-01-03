@@ -8,7 +8,7 @@ import {
   validateShareToken,
 } from "./db";
 
-export const acceptBoardInviteServerAction = async (formData: FormData) => {
+export async function acceptBoardInviteServerAction(formData: FormData) {
   const event = getRequestEventOrThrow();
 
   const parsed = await parseAsync(
@@ -31,15 +31,15 @@ export const acceptBoardInviteServerAction = async (formData: FormData) => {
   });
 
   return true;
-};
+}
 
 type GenerateBoardInviteServerLoaderArgs = {
   id: string;
 };
 
-export const generateBoardInviteServerLoader = async (
+export async function generateBoardInviteServerLoader(
   args: GenerateBoardInviteServerLoaderArgs,
-) => {
+) {
   const event = getRequestEventOrThrow();
   const parsed = await parseAsync(object({ id: string() }), args);
 
@@ -49,4 +49,4 @@ export const generateBoardInviteServerLoader = async (
   });
 
   return { token };
-};
+}

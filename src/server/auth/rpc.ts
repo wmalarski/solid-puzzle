@@ -8,7 +8,7 @@ import { getRequestEventOrThrow } from "../utils";
 import { insertUser, selectUserByUsername } from "./db";
 import { getLucia } from "./lucia";
 
-export const signUpServerAction = async (form: FormData) => {
+export async function signUpServerAction(form: FormData) {
   const event = getRequestEventOrThrow();
 
   const parsed = await parseAsync(
@@ -46,9 +46,9 @@ export const signUpServerAction = async (form: FormData) => {
   }
 
   return true;
-};
+}
 
-export const signInServerAction = async (form: FormData) => {
+export async function signInServerAction(form: FormData) {
   const event = getRequestEventOrThrow();
 
   const parsed = await parseAsync(
@@ -88,9 +88,9 @@ export const signInServerAction = async (form: FormData) => {
   );
 
   return session;
-};
+}
 
-export const signOutServerAction = async () => {
+export async function signOutServerAction() {
   const event = getRequestEventOrThrow();
   const lucia = getLucia(event.context);
 
@@ -106,9 +106,9 @@ export const signOutServerAction = async () => {
   );
 
   return true;
-};
+}
 
-export const getSessionServerLoader = async () => {
+export async function getSessionServerLoader() {
   const event = getRequestEventOrThrow();
   return await Promise.resolve(event.context.session);
-};
+}

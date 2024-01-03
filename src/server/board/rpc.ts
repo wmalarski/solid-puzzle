@@ -20,7 +20,7 @@ import {
   updateBoard,
 } from "./db";
 
-export const insertBoardServerAction = async (form: FormData) => {
+export async function insertBoardServerAction(form: FormData) {
   console.log("insertBoardServerAction", Object.fromEntries(form.entries()));
 
   const event = getRequestEventOrThrow();
@@ -40,9 +40,9 @@ export const insertBoardServerAction = async (form: FormData) => {
   const boardId = insertBoard({ ...parsed, ctx });
 
   return { id: boardId };
-};
+}
 
-export const updateBoardServerAction = async (form: FormData) => {
+export async function updateBoardServerAction(form: FormData) {
   const event = getRequestEventOrThrow();
 
   const parsed = await parseAsync(
@@ -59,9 +59,9 @@ export const updateBoardServerAction = async (form: FormData) => {
   const ctx = getProtectedRequestContext(event);
 
   return updateBoard({ ...parsed, ctx });
-};
+}
 
-export const deleteBoardServerAction = async (form: FormData) => {
+export async function deleteBoardServerAction(form: FormData) {
   const event = getRequestEventOrThrow();
 
   const parsed = await parseAsync(object({ id: string() }), decode(form));
@@ -71,15 +71,15 @@ export const deleteBoardServerAction = async (form: FormData) => {
   deleteBoard({ ...parsed, ctx });
 
   return true;
-};
+}
 
 type SelectBoardServerLoaderArgs = {
   id: string;
 };
 
-export const selectBoardServerLoader = async (
+export async function selectBoardServerLoader(
   args: SelectBoardServerLoaderArgs,
-) => {
+) {
   const event = getRequestEventOrThrow();
   const parsed = await parseAsync(object({ id: string() }), args);
 
@@ -90,11 +90,11 @@ export const selectBoardServerLoader = async (
   }
 
   return board;
-};
+}
 
-export const selectProtectedBoardServerLoader = async (
+export async function selectProtectedBoardServerLoader(
   args: SelectBoardServerLoaderArgs,
-) => {
+) {
   const event = getRequestEventOrThrow();
   const parsed = await parseAsync(object({ id: string() }), args);
 
@@ -118,16 +118,16 @@ export const selectProtectedBoardServerLoader = async (
 
   const ownerAccess = { boardId: parsed.id, username: user.username };
   return { access: ownerAccess, board, session };
-};
+}
 
 type SelectBoardsServerLoaderArgs = {
   limit: number;
   offset: number;
 };
 
-export const selectBoardsServerLoader = async (
+export async function selectBoardsServerLoader(
   args: SelectBoardsServerLoaderArgs,
-) => {
+) {
   const event = getRequestEventOrThrow();
 
   const parsed = await parseAsync(
@@ -141,4 +141,4 @@ export const selectBoardsServerLoader = async (
   const ctx = getProtectedRequestContext(event);
 
   return selectBoards({ ...parsed, ctx });
-};
+}
