@@ -1,6 +1,7 @@
 "use server";
 import { decode } from "decode-formdata";
 import { maxLength, minLength, object, safeParseAsync, string } from "valibot";
+import { issuesToRpcResponse, rpcParseIssueError } from "../types";
 import { getRequestEventOrThrow } from "../utils";
 import {
   issueShareToken,
@@ -19,15 +20,23 @@ export async function acceptBoardInviteServerAction(formData: FormData) {
     decode(formData),
   );
 
+  if (!parsed.success) {
+    return issuesToRpcResponse(parsed.issues);
+  }
+
   const result = await validateShareToken({
     env: event.context.env,
-    token: parsed.token,
+    token: parsed.output.token,
   });
 
+  if (!result.success) {
+    return issuesToRpcResponse(result.issues);
+  }
+
   await setBoardsAccessCookie({
-    boardId: result.boardId,
+    boardId: result.output.boardId,
     event,
-    name: parsed.name,
+    name: parsed.output.name,
   });
 
   return true;
@@ -43,8 +52,12 @@ export async function generateBoardInviteServerLoader(
   const event = getRequestEventOrThrow();
   const parsed = await safeParseAsync(object({ id: string() }), args);
 
+  if (!parsed.success) {
+    throw rpcParseIssueError(parsed.issues);
+  }
+
   const token = issueShareToken({
-    boardId: parsed.id,
+    boardId: parsed.output.id,
     env: event.context.env,
   });
 

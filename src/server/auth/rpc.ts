@@ -4,11 +4,12 @@ import { decode } from "decode-formdata";
 import { generateId } from "lucia";
 import { Argon2id } from "oslo/password";
 import { maxLength, minLength, object, safeParseAsync, string } from "valibot";
+import { issuesToRpcResponse, type RpcResponse } from "../types";
 import { getRequestEventOrThrow } from "../utils";
 import { insertUser, selectUserByUsername } from "./db";
 import { getLucia } from "./lucia";
 
-export async function signUpServerAction(form: FormData) {
+export async function signUpServerAction(form: FormData): Promise<RpcResponse> {
   const event = getRequestEventOrThrow();
 
   const parsed = await safeParseAsync(
@@ -19,9 +20,13 @@ export async function signUpServerAction(form: FormData) {
     decode(form),
   );
 
+  if (!parsed.success) {
+    return issuesToRpcResponse(parsed.issues);
+  }
+
   const lucia = getLucia(event.context);
 
-  const hashedPassword = await new Argon2id().hash(parsed.password);
+  const hashedPassword = await new Argon2id().hash(parsed.output.password);
   const userId = generateId(15);
 
   try {
@@ -29,7 +34,7 @@ export async function signUpServerAction(form: FormData) {
       ctx: event.context,
       hashedPassword,
       id: userId,
-      username: parsed.username,
+      username: parsed.output.username,
     });
 
     const session = await lucia.createSession(userId, {});
@@ -45,10 +50,10 @@ export async function signUpServerAction(form: FormData) {
     throw new Error("An unknown error occurred");
   }
 
-  return true;
+  return { success: true };
 }
 
-export async function signInServerAction(form: FormData) {
+export async function signInServerAction(form: FormData): Promise<RpcResponse> {
   const event = getRequestEventOrThrow();
 
   const parsed = await safeParseAsync(
@@ -59,11 +64,15 @@ export async function signInServerAction(form: FormData) {
     decode(form),
   );
 
+  if (!parsed.success) {
+    return issuesToRpcResponse(parsed.issues);
+  }
+
   const lucia = getLucia(event.context);
 
   const existingUser = selectUserByUsername({
     ctx: event.context,
-    username: parsed.username,
+    username: parsed.output.username,
   });
 
   if (!existingUser || !existingUser.password) {
@@ -72,7 +81,7 @@ export async function signInServerAction(form: FormData) {
 
   const isValidPassword = await new Argon2id().verify(
     existingUser.password,
-    parsed.password,
+    parsed.output.password,
   );
 
   if (!isValidPassword) {
@@ -87,7 +96,7 @@ export async function signInServerAction(form: FormData) {
     lucia.createSessionCookie(session.id).serialize(),
   );
 
-  return session;
+  return { success: true };
 }
 
 export async function signOutServerAction() {

@@ -7,10 +7,11 @@ import {
   number,
   object,
   safeParseAsync,
-  string
+  string,
 } from "valibot";
 import { getProtectedRequestContext } from "../context";
 import { hasBoardAccess } from "../share/db";
+import { issuesToRpcResponse, rpcParseIssueError } from "../types";
 import { boardDimension, getRequestEventOrThrow } from "../utils";
 import {
   deleteBoard,
@@ -35,9 +36,13 @@ export async function insertBoardServerAction(form: FormData) {
     decode(form, { numbers: ["rows", "columns"] }),
   );
 
+  if (!parsed.success) {
+    return issuesToRpcResponse(parsed.issues);
+  }
+
   const ctx = getProtectedRequestContext(event);
 
-  const boardId = insertBoard({ ...parsed, ctx });
+  const boardId = insertBoard({ ...parsed.output, ctx });
 
   return { id: boardId };
 }
@@ -56,9 +61,15 @@ export async function updateBoardServerAction(form: FormData) {
     decode(form, { numbers: ["rows", "columns"] }),
   );
 
+  if (!parsed.success) {
+    return issuesToRpcResponse(parsed.issues);
+  }
+
   const ctx = getProtectedRequestContext(event);
 
-  return updateBoard({ ...parsed, ctx });
+  const count = updateBoard({ ...parsed.output, ctx });
+
+  return { count, success: true } as const;
 }
 
 export async function deleteBoardServerAction(form: FormData) {
@@ -66,11 +77,15 @@ export async function deleteBoardServerAction(form: FormData) {
 
   const parsed = await safeParseAsync(object({ id: string() }), decode(form));
 
+  if (!parsed.success) {
+    return issuesToRpcResponse(parsed.issues);
+  }
+
   const ctx = getProtectedRequestContext(event);
 
-  deleteBoard({ ...parsed, ctx });
+  deleteBoard({ ...parsed.output, ctx });
 
-  return true;
+  return { success: true } as const;
 }
 
 type SelectBoardServerLoaderArgs = {
@@ -81,9 +96,14 @@ export async function selectBoardServerLoader(
   args: SelectBoardServerLoaderArgs,
 ) {
   const event = getRequestEventOrThrow();
+
   const parsed = await safeParseAsync(object({ id: string() }), args);
 
-  const board = selectBoard({ ...parsed, ctx: event.context });
+  if (!parsed.success) {
+    throw rpcParseIssueError(parsed.issues);
+  }
+
+  const board = selectBoard({ ...parsed.output, ctx: event.context });
 
   if (!board) {
     throw new Error("Board not found");
@@ -96,15 +116,20 @@ export async function selectProtectedBoardServerLoader(
   args: SelectBoardServerLoaderArgs,
 ) {
   const event = getRequestEventOrThrow();
+
   const parsed = await safeParseAsync(object({ id: string() }), args);
 
-  const board = selectBoard({ ...parsed, ctx: event.context });
+  if (!parsed.success) {
+    throw rpcParseIssueError(parsed.issues);
+  }
+
+  const board = selectBoard({ ...parsed.output, ctx: event.context });
 
   if (!board) {
     throw new Error("Board not found");
   }
 
-  const access = await hasBoardAccess({ boardId: parsed.id, event });
+  const access = await hasBoardAccess({ boardId: parsed.output.id, event });
   const user = event.context.user;
   const session = event.context.session;
 
@@ -116,7 +141,7 @@ export async function selectProtectedBoardServerLoader(
     throw new Error("No access to board");
   }
 
-  const ownerAccess = { boardId: parsed.id, username: user.username };
+  const ownerAccess = { boardId: parsed.output.id, username: user.username };
   return { access: ownerAccess, board, session };
 }
 
@@ -138,7 +163,11 @@ export async function selectBoardsServerLoader(
     args,
   );
 
+  if (!parsed.success) {
+    throw rpcParseIssueError(parsed.issues);
+  }
+
   const ctx = getProtectedRequestContext(event);
 
-  return selectBoards({ ...parsed, ctx });
+  return selectBoards({ ...parsed.output, ctx });
 }
