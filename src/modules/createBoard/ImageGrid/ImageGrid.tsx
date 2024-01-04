@@ -26,8 +26,8 @@ export const ImageGrid: Component<ImageGridProps> = (props) => {
   const images = getImages();
 
   return (
-    <div class="relative">
-      <Carousel ref={setRoot}>
+    <div class="relative max-w-lg">
+      <Carousel ref={setRoot} class="max-w-lg">
         <For each={images}>
           {(image, index) => (
             <CarouselItem>

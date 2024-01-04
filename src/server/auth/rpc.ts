@@ -4,12 +4,11 @@ import { decode } from "decode-formdata";
 import { generateId } from "lucia";
 import { Argon2id } from "oslo/password";
 import { maxLength, minLength, object, safeParseAsync, string } from "valibot";
-import { issuesToRpcResponse, type RpcResponse } from "../types";
-import { getRequestEventOrThrow } from "../utils";
+import { getRequestEventOrThrow, rpcParseIssueError } from "../utils";
 import { insertUser, selectUserByUsername } from "./db";
 import { getLucia } from "./lucia";
 
-export async function signUpServerAction(form: FormData): Promise<RpcResponse> {
+export async function signUpServerAction(form: FormData) {
   const event = getRequestEventOrThrow();
 
   const parsed = await safeParseAsync(
@@ -21,7 +20,7 @@ export async function signUpServerAction(form: FormData): Promise<RpcResponse> {
   );
 
   if (!parsed.success) {
-    return issuesToRpcResponse(parsed.issues);
+    throw rpcParseIssueError(parsed.issues);
   }
 
   const lucia = getLucia(event.context);
@@ -53,7 +52,7 @@ export async function signUpServerAction(form: FormData): Promise<RpcResponse> {
   return { success: true };
 }
 
-export async function signInServerAction(form: FormData): Promise<RpcResponse> {
+export async function signInServerAction(form: FormData) {
   const event = getRequestEventOrThrow();
 
   const parsed = await safeParseAsync(
@@ -65,7 +64,7 @@ export async function signInServerAction(form: FormData): Promise<RpcResponse> {
   );
 
   if (!parsed.success) {
-    return issuesToRpcResponse(parsed.issues);
+    throw rpcParseIssueError(parsed.issues);
   }
 
   const lucia = getLucia(event.context);

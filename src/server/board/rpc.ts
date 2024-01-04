@@ -11,8 +11,11 @@ import {
 } from "valibot";
 import { getProtectedRequestContext } from "../context";
 import { hasBoardAccess } from "../share/db";
-import { issuesToRpcResponse, rpcParseIssueError } from "../types";
-import { boardDimension, getRequestEventOrThrow } from "../utils";
+import {
+  boardDimension,
+  getRequestEventOrThrow,
+  rpcParseIssueError,
+} from "../utils";
 import {
   deleteBoard,
   insertBoard,
@@ -37,14 +40,12 @@ export async function insertBoardServerAction(form: FormData) {
   );
 
   if (!parsed.success) {
-    return issuesToRpcResponse(parsed.issues);
+    throw rpcParseIssueError(parsed.issues);
   }
 
   const ctx = getProtectedRequestContext(event);
 
-  const boardId = insertBoard({ ...parsed.output, ctx });
-
-  return { id: boardId };
+  return insertBoard({ ...parsed.output, ctx });
 }
 
 export async function updateBoardServerAction(form: FormData) {
@@ -62,14 +63,14 @@ export async function updateBoardServerAction(form: FormData) {
   );
 
   if (!parsed.success) {
-    return issuesToRpcResponse(parsed.issues);
+    throw rpcParseIssueError(parsed.issues);
   }
 
   const ctx = getProtectedRequestContext(event);
 
   const count = updateBoard({ ...parsed.output, ctx });
 
-  return { count, success: true } as const;
+  return { count };
 }
 
 export async function deleteBoardServerAction(form: FormData) {
@@ -78,14 +79,14 @@ export async function deleteBoardServerAction(form: FormData) {
   const parsed = await safeParseAsync(object({ id: string() }), decode(form));
 
   if (!parsed.success) {
-    return issuesToRpcResponse(parsed.issues);
+    throw rpcParseIssueError(parsed.issues);
   }
 
   const ctx = getProtectedRequestContext(event);
 
   deleteBoard({ ...parsed.output, ctx });
 
-  return { success: true } as const;
+  return { success: true };
 }
 
 type SelectBoardServerLoaderArgs = {

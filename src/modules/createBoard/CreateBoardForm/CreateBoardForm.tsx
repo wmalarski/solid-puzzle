@@ -23,8 +23,7 @@ export const CreateBoardForm: Component = () => {
     },
     onSuccess(board) {
       console.log("onSuccess", board);
-
-      navigate(paths.board(board.id));
+      navigate(paths.board(board));
 
       queryClient.invalidateQueries(invalidateSelectBoardsQueries());
     },
