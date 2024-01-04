@@ -1,6 +1,6 @@
 "use server";
 import { decode } from "decode-formdata";
-import { maxLength, minLength, object, parseAsync, string } from "valibot";
+import { maxLength, minLength, object, safeParseAsync, string } from "valibot";
 import { getRequestEventOrThrow } from "../utils";
 import {
   issueShareToken,
@@ -11,7 +11,7 @@ import {
 export async function acceptBoardInviteServerAction(formData: FormData) {
   const event = getRequestEventOrThrow();
 
-  const parsed = await parseAsync(
+  const parsed = await safeParseAsync(
     object({
       name: string([minLength(3), maxLength(50)]),
       token: string(),
@@ -41,7 +41,7 @@ export async function generateBoardInviteServerLoader(
   args: GenerateBoardInviteServerLoaderArgs,
 ) {
   const event = getRequestEventOrThrow();
-  const parsed = await parseAsync(object({ id: string() }), args);
+  const parsed = await safeParseAsync(object({ id: string() }), args);
 
   const token = issueShareToken({
     boardId: parsed.id,

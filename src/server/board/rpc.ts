@@ -6,8 +6,8 @@ import {
   minLength,
   number,
   object,
-  parseAsync,
-  string,
+  safeParseAsync,
+  string
 } from "valibot";
 import { getProtectedRequestContext } from "../context";
 import { hasBoardAccess } from "../share/db";
@@ -25,7 +25,7 @@ export async function insertBoardServerAction(form: FormData) {
 
   const event = getRequestEventOrThrow();
 
-  const parsed = await parseAsync(
+  const parsed = await safeParseAsync(
     object({
       columns: boardDimension(),
       image: string(),
@@ -45,7 +45,7 @@ export async function insertBoardServerAction(form: FormData) {
 export async function updateBoardServerAction(form: FormData) {
   const event = getRequestEventOrThrow();
 
-  const parsed = await parseAsync(
+  const parsed = await safeParseAsync(
     object({
       columns: boardDimension(),
       id: string(),
@@ -64,7 +64,7 @@ export async function updateBoardServerAction(form: FormData) {
 export async function deleteBoardServerAction(form: FormData) {
   const event = getRequestEventOrThrow();
 
-  const parsed = await parseAsync(object({ id: string() }), decode(form));
+  const parsed = await safeParseAsync(object({ id: string() }), decode(form));
 
   const ctx = getProtectedRequestContext(event);
 
@@ -81,7 +81,7 @@ export async function selectBoardServerLoader(
   args: SelectBoardServerLoaderArgs,
 ) {
   const event = getRequestEventOrThrow();
-  const parsed = await parseAsync(object({ id: string() }), args);
+  const parsed = await safeParseAsync(object({ id: string() }), args);
 
   const board = selectBoard({ ...parsed, ctx: event.context });
 
@@ -96,7 +96,7 @@ export async function selectProtectedBoardServerLoader(
   args: SelectBoardServerLoaderArgs,
 ) {
   const event = getRequestEventOrThrow();
-  const parsed = await parseAsync(object({ id: string() }), args);
+  const parsed = await safeParseAsync(object({ id: string() }), args);
 
   const board = selectBoard({ ...parsed, ctx: event.context });
 
@@ -130,7 +130,7 @@ export async function selectBoardsServerLoader(
 ) {
   const event = getRequestEventOrThrow();
 
-  const parsed = await parseAsync(
+  const parsed = await safeParseAsync(
     object({
       limit: coerce(number([maxValue(20)]), Number),
       offset: coerce(number(), Number),

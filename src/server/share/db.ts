@@ -1,14 +1,7 @@
 import { deleteCookie, getCookie, setCookie } from "@solidjs/start/server";
 import jwt from "jsonwebtoken";
 import type { RequestEvent } from "solid-js/web";
-import {
-  array,
-  object,
-  parseAsync,
-  safeParseAsync,
-  string,
-  type Output,
-} from "valibot";
+import { array, object, safeParseAsync, string, type Output } from "valibot";
 import type { ServerEnv } from "../env";
 
 const options = (env: ServerEnv) => {
@@ -136,6 +129,6 @@ export const validateShareToken = async ({
   token,
 }: ValidateShareTokenArgs) => {
   const value = jwt.verify(token, env.SESSION_SECRET);
-  const parsed = await parseAsync(shareTokenSchema(), value);
+  const parsed = await safeParseAsync(shareTokenSchema(), value);
   return parsed;
 };

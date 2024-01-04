@@ -3,7 +3,7 @@ import { appendHeader } from "@solidjs/start/server";
 import { decode } from "decode-formdata";
 import { generateId } from "lucia";
 import { Argon2id } from "oslo/password";
-import { maxLength, minLength, object, parseAsync, string } from "valibot";
+import { maxLength, minLength, object, safeParseAsync, string } from "valibot";
 import { getRequestEventOrThrow } from "../utils";
 import { insertUser, selectUserByUsername } from "./db";
 import { getLucia } from "./lucia";
@@ -11,7 +11,7 @@ import { getLucia } from "./lucia";
 export async function signUpServerAction(form: FormData) {
   const event = getRequestEventOrThrow();
 
-  const parsed = await parseAsync(
+  const parsed = await safeParseAsync(
     object({
       password: string([minLength(6), maxLength(20)]),
       username: string([minLength(3), maxLength(20)]),
@@ -51,7 +51,7 @@ export async function signUpServerAction(form: FormData) {
 export async function signInServerAction(form: FormData) {
   const event = getRequestEventOrThrow();
 
-  const parsed = await parseAsync(
+  const parsed = await safeParseAsync(
     object({
       password: string([minLength(3)]),
       username: string([minLength(3)]),
