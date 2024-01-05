@@ -1,8 +1,5 @@
 import { For, createSignal, type Component } from "solid-js";
-import { Button } from "~/components/Button";
-import { Carousel, CarouselItem } from "~/components/Carousel";
-import { ArrowLeftIcon } from "~/components/Icons/ArrowLeftIcon";
-import { ArrowRightIcon } from "~/components/Icons/ArrowRightIcon";
+import { twCx } from "~/components/utils/twCva";
 import { getImages } from "~/utils/images";
 
 type ImageGridProps = {
@@ -10,63 +7,34 @@ type ImageGridProps = {
   name: string;
 };
 
-const scrollWidth = 200;
-
 export const ImageGrid: Component<ImageGridProps> = (props) => {
-  const [root, setRoot] = createSignal<HTMLDivElement>();
-
-  const onLeftClick = () => {
-    root()?.scrollBy({ behavior: "smooth", left: -scrollWidth });
-  };
-
-  const onRightClick = () => {
-    root()?.scrollBy({ behavior: "smooth", left: scrollWidth });
-  };
-
   const images = getImages();
 
+  const [value, setValue] = createSignal(images[0]);
+
+  const onButtonClick = (image: string) => () => {
+    setValue(image);
+  };
+
   return (
-    <div class="relative max-w-lg">
-      <Carousel ref={setRoot} class="max-w-lg">
+    <div class="max-h-96">
+      <input name={props.name} type="hidden" value={value()} />
+      <div class="flex h-96 flex-col gap-1 overflow-x-hidden overflow-y-scroll">
         <For each={images}>
-          {(image, index) => (
-            <CarouselItem>
-              <input
-                id={`image-${image}`}
-                name={props.name}
-                type="radio"
-                value={image}
-                class="peer sr-only"
-                checked={props.hasDefault && index() === 0}
-              />
-              <label
-                class="flex rounded p-2 peer-checked:bg-base-200"
-                for={`image-${image}`}
-              >
-                <img src={image} alt={""} />
-              </label>
-            </CarouselItem>
+          {(image) => (
+            <button
+              class={twCx(
+                "flex rounded border-2 border-base-300 p-2 items-center justify-center",
+                value() === image ? "border-accent bg-base-300" : null,
+              )}
+              onClick={onButtonClick(image)}
+              type="button"
+            >
+              <img src={image} alt={""} />
+            </button>
           )}
         </For>
-        <Button
-          class="absolute left-1 top-1/2"
-          onClick={onLeftClick}
-          shape="circle"
-          size="sm"
-          type="button"
-        >
-          <ArrowLeftIcon />
-        </Button>
-        <Button
-          class="absolute right-1 top-1/2"
-          onClick={onRightClick}
-          shape="circle"
-          size="sm"
-          type="button"
-        >
-          <ArrowRightIcon />
-        </Button>
-      </Carousel>
+      </div>
     </div>
   );
 };
