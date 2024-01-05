@@ -86,6 +86,9 @@ const en_dict = {
       placeholder: "Your name",
     },
   },
+  list: {
+    go: "Dalej",
+  },
   signIn: {
     button: "Sign In",
     signUp: "Sign Up",

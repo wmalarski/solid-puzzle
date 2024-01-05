@@ -18,11 +18,7 @@ export const CreateBoardForm: Component = () => {
 
   const mutation = createMutation(() => ({
     mutationFn: insertBoardServerAction,
-    onSettled(data, error, variables) {
-      console.log({ data, error, variables });
-    },
     onSuccess(board) {
-      console.log("onSuccess", board);
       navigate(paths.board(board));
 
       queryClient.invalidateQueries(invalidateSelectBoardsQueries());
@@ -34,7 +30,6 @@ export const CreateBoardForm: Component = () => {
 
     const data = new FormData(event.currentTarget);
 
-    console.log("onSubmit", Object.fromEntries(data.entries()));
     mutation.mutate(data);
   };
 

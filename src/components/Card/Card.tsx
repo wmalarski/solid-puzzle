@@ -17,8 +17,9 @@ export const cardClass = twCva("card", {
   },
   variants: {
     bg: {
-      "gray-100": "bg-gray-100",
-      "gray-50": "bg-gray-50",
+      "base-100": "bg-base-100",
+      "base-200": "bg-base-200",
+      "base-300": "bg-base-300",
     },
     color: {
       accent: "border-l-8 border-l-accent",

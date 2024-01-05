@@ -2,6 +2,7 @@ import { createQuery } from "@tanstack/solid-query";
 import { ErrorBoundary, For, Show, Suspense, type Component } from "solid-js";
 import { LinkButton } from "~/components/Button";
 import { Card, CardActions, CardBody, CardTitle } from "~/components/Card";
+import { useI18n } from "~/contexts/I18nContext";
 import {
   SELECT_BOARDS_DEFAULT_LIMIT,
   selectBoardsQueryOptions,
@@ -14,8 +15,10 @@ type BoardItemProps = {
 };
 
 const BoardItem: Component<BoardItemProps> = (props) => {
+  const { t } = useI18n();
+
   return (
-    <Card variant="bordered" size="compact">
+    <Card variant="bordered" size="compact" bg="base-300">
       <Show when={props.board.media}>
         {(src) => (
           <figure>
@@ -27,7 +30,7 @@ const BoardItem: Component<BoardItemProps> = (props) => {
         <CardTitle component="h3">{props.board.name}</CardTitle>
         <CardActions justify="end">
           <LinkButton size="sm" href={paths.board(props.board.id)}>
-            {props.board.name}
+            {t("list.go")}
           </LinkButton>
         </CardActions>
       </CardBody>
