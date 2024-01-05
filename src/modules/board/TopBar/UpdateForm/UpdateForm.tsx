@@ -37,7 +37,7 @@ export const UpdateForm: Component<UpdateFormProps> = (props) => {
 
   return (
     <form onSubmit={onSubmit} class="flex flex-col gap-4" method="post">
-      <Show when={mutation.data && mutation.data < 1}>
+      <Show when={mutation.data && mutation.data.count < 1}>
         <Alert variant="error">
           <AlertIcon variant="error" />
           Error

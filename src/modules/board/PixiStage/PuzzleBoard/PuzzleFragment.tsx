@@ -7,7 +7,6 @@ import {
   onMount,
   type Component,
 } from "solid-js";
-import { randomHexColor } from "~/utils/colors";
 import type { PuzzleFragmentShape } from "~/utils/getPuzzleFragments";
 import { usePlayerPresence } from "../../DataProviders/PresenceProvider";
 import { usePuzzleStore } from "../../DataProviders/PuzzleProvider";
@@ -57,8 +56,8 @@ export const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
     const matrix = new Matrix(1, 0, 0, 1);
     matrix.translate(-props.shape.min.x, -props.shape.min.y);
 
-    graphics.beginTextureFill({ matrix, texture: props.texture });
-    graphics.lineStyle(4, randomHexColor(), 1);
+    // graphics.beginTextureFill({ matrix, texture: props.texture });
+    // graphics.lineStyle(4, randomHexColor(), 1);
 
     const elements = props.shape.curvePoints;
     const last = elements[elements.length - 1];

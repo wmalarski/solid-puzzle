@@ -70,7 +70,6 @@ declare module "lucia" {
   }
   interface DatabaseUserAttributes {
     username: string;
-    github_id: number;
   }
 }
 

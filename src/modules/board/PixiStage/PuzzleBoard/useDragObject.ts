@@ -1,8 +1,4 @@
-import type {
-  DisplayObject,
-  FederatedMouseEvent,
-  FederatedPointerEvent,
-} from "pixi.js";
+import type { FederatedMouseEvent, FederatedPointerEvent } from "pixi.js";
 import { createSignal, onCleanup, onMount } from "solid-js";
 import { subtractPoint, type Point2D } from "~/utils/geometry";
 
@@ -16,7 +12,8 @@ type UseDragObjectArgs = {
   onDragEnd?: (event: FederatedMouseEvent) => void;
   onDragMove?: (event: FederatedMouseEvent) => void;
   onDragStart?: (event: FederatedMouseEvent) => void;
-  displayObject: DisplayObject;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  displayObject: any;
 };
 
 const defaultDragConstraint = (args: DragConstraintArgs) => {

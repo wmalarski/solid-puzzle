@@ -4,12 +4,12 @@ import { useTransformContext } from "../TransformContext";
 import { usePixiApp } from "./PixiApp";
 
 const useZoom = () => {
-  const app = usePixiApp();
-  const transform = useTransformContext();
+  // const app = usePixiApp();
+  // const transform = useTransformContext();
 
   createEffect(() => {
-    app().stage.transform.scale.set(transform.scale());
-    app().stage.transform.position.set(transform.x(), transform.y());
+    // app().stage.localTransform.scale.set(transform.scale());
+    // app().stage.transform.position.set(transform.x(), transform.y());
   });
 };
 
