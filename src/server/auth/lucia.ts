@@ -39,6 +39,7 @@ export const luciaMiddleware = async (event: FetchEvent) => {
   }
 
   const sessionId = getCookie(event, lucia.sessionCookieName) ?? null;
+
   if (!sessionId) {
     event.context.session = null;
     event.context.user = null;

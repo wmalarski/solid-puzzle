@@ -40,7 +40,7 @@ const InfoPopover: Component = () => {
 
 export const InfoBar: Component = () => {
   return (
-    <div class="absolute bottom-4 right-4 rounded-3xl bg-neutral-100 p-1 shadow">
+    <div class="absolute bottom-4 right-4 rounded-3xl bg-base-300 p-1 shadow">
       <InfoPopover />
     </div>
   );

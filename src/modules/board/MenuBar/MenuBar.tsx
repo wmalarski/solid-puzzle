@@ -79,7 +79,7 @@ const Menu: Component = () => {
 
 export const MenuBar: Component = () => {
   return (
-    <div class="absolute left-4 top-4 rounded-3xl bg-neutral-100 p-1 shadow">
+    <div class="absolute left-4 top-4 rounded-3xl bg-base-300 p-1 shadow">
       <Menu />
     </div>
   );

@@ -7,28 +7,26 @@ import {
   selectBoardQueryOptions,
   selectProtectedBoardLoader,
 } from "~/server/board/client";
-import type { BoardModel } from "~/server/board/types";
 import type { BoardAccess } from "~/server/share/db";
 
 type BoardQueryProps = {
   boardAccess?: BoardAccess;
-  initialBoard?: BoardModel;
+  boardId: string;
 };
 
 const BoardQuery: Component<BoardQueryProps> = (props) => {
-  const params = useParams();
-
   const boardQuery = createQuery(() =>
     selectBoardQueryOptions({
-      id: params.boardId,
-      initialBoard: props.initialBoard,
+      id: props.boardId,
     })(),
   );
 
   return (
-    <Show when={boardQuery.data}>
-      {(board) => <Board board={board()} boardAccess={props.boardAccess} />}
-    </Show>
+    <Suspense>
+      <Show when={boardQuery.data}>
+        {(board) => <Board board={board()} boardAccess={props.boardAccess} />}
+      </Show>
+    </Suspense>
   );
 };
 
@@ -48,12 +46,7 @@ export default function BoardSection() {
   return (
     <SessionProvider value={() => data()?.session || null}>
       <main class="relative h-screen w-screen">
-        <Suspense>
-          <BoardQuery
-            boardAccess={data()?.access}
-            initialBoard={data()?.board}
-          />
-        </Suspense>
+        <BoardQuery boardAccess={data()?.access} boardId={params.boardId} />
       </main>
     </SessionProvider>
   );

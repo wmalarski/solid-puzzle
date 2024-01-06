@@ -42,7 +42,7 @@ export const TopBar: Component<TopBarProps> = (props) => {
   const session = useSessionContext();
 
   return (
-    <div class="absolute inset-x-auto right-4 top-4 flex w-min items-center gap-4 rounded-3xl bg-neutral-100 p-1 shadow-lg">
+    <div class="absolute inset-x-auto right-4 top-4 flex w-min items-center gap-4 rounded-3xl bg-base-300 p-1 shadow-lg">
       <div class="flex flex-col pl-4">
         <div class="flex items-center gap-2">
           <h1 class="font-bold">{props.board.name}</h1>

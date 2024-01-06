@@ -16,7 +16,7 @@ export const ZoomBar: Component = () => {
   };
 
   return (
-    <div class="absolute bottom-4 left-4 flex gap-1 rounded-3xl bg-neutral-100 p-1 shadow">
+    <div class="absolute bottom-4 left-4 flex gap-1 rounded-3xl bg-base-300 p-1 shadow">
       <Button variant="ghost" size="sm" onClick={onZoomInClick}>
         <PlusIcon />
       </Button>

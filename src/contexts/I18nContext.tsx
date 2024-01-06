@@ -22,6 +22,9 @@ const en_dict = {
     },
   },
   board: {
+    error: {
+      reload: "Reload",
+    },
     home: "Home",
     menu: "Menu",
     newGame: "New game",
