@@ -10,10 +10,10 @@ dependencies:
     version: 0.11.2(solid-js@1.8.8)
   '@kobalte/tailwindcss':
     specifier: 0.9.0
-    version: 0.9.0(tailwindcss@3.4.0)
+    version: 0.9.0(tailwindcss@3.4.1)
   '@lucia-auth/adapter-sqlite':
-    specifier: 3.0.0-beta.11
-    version: 3.0.0-beta.11(better-sqlite3@9.2.2)(lucia@3.0.0-beta.13)
+    specifier: 3.0.0-beta.12
+    version: 3.0.0-beta.12(better-sqlite3@9.2.2)(lucia@3.0.0-beta.14)
   '@solid-primitives/i18n':
     specifier: 2.0.0
     version: 2.0.0(solid-js@1.8.8)
@@ -27,17 +27,17 @@ dependencies:
     specifier: 0.10.6
     version: 0.10.6(solid-js@1.8.8)
   '@solidjs/start':
-    specifier: 0.4.3
-    version: 0.4.3(solid-js@1.8.8)(vinxi@0.1.1)(vite@4.5.1)
+    specifier: 0.4.4
+    version: 0.4.4(solid-js@1.8.8)(vinxi@0.1.1)(vite@4.5.1)
   '@supabase/supabase-js':
     specifier: ^2.39.2
     version: 2.39.2
   '@tanstack/solid-query':
-    specifier: 5.17.1
-    version: 5.17.1(solid-js@1.8.8)
+    specifier: 5.17.4
+    version: 5.17.4(solid-js@1.8.8)
   '@tanstack/solid-query-devtools':
-    specifier: ^5.17.1
-    version: 5.17.1(@tanstack/solid-query@5.17.1)(solid-js@1.8.8)
+    specifier: ^5.17.4
+    version: 5.17.4(@tanstack/solid-query@5.17.4)(solid-js@1.8.8)
   better-sqlite3:
     specifier: 9.2.2
     version: 9.2.2
@@ -57,8 +57,8 @@ dependencies:
     specifier: 9.0.2
     version: 9.0.2
   lucia:
-    specifier: 3.0.0-beta.13
-    version: 3.0.0-beta.13
+    specifier: 3.0.0-beta.14
+    version: 3.0.0-beta.14
   nanoid:
     specifier: 5.0.4
     version: 5.0.4
@@ -66,8 +66,8 @@ dependencies:
     specifier: ^0.27.0
     version: 0.27.0
   pixi.js:
-    specifier: 8.0.0-rc
-    version: 8.0.0-rc
+    specifier: 8.0.0-rc.1
+    version: 8.0.0-rc.1
   solid-js:
     specifier: 1.8.8
     version: 1.8.8
@@ -138,7 +138,7 @@ devDependencies:
     version: 1.1.2
   eslint-plugin-tailwindcss:
     specifier: 3.13.1
-    version: 3.13.1(tailwindcss@3.4.0)
+    version: 3.13.1(tailwindcss@3.4.1)
   postcss:
     specifier: 8.4.33
     version: 8.4.33
@@ -146,8 +146,8 @@ devDependencies:
     specifier: 3.1.1
     version: 3.1.1
   tailwindcss:
-    specifier: 3.4.0
-    version: 3.4.0
+    specifier: 3.4.1
+    version: 3.4.1
   tsx:
     specifier: 4.7.0
     version: 4.7.0
@@ -1101,12 +1101,12 @@ packages:
       solid-js: 1.8.8
     dev: false
 
-  /@kobalte/tailwindcss@0.9.0(tailwindcss@3.4.0):
+  /@kobalte/tailwindcss@0.9.0(tailwindcss@3.4.1):
     resolution: {integrity: sha512-WbueJTVRiO4yrmfHIBwp07y3M5iibJ/gauEAQ7mOyg1tZulvpO7SM/UdgzX95a9a0KDt1mQFxwO7RmpOUXWOWA==}
     peerDependencies:
       tailwindcss: ^3.3.3
     dependencies:
-      tailwindcss: 3.4.0
+      tailwindcss: 3.4.1
     dev: false
 
   /@kobalte/utils@0.9.0(solid-js@1.8.8):
@@ -1124,12 +1124,12 @@ packages:
       solid-js: 1.8.8
     dev: false
 
-  /@lucia-auth/adapter-sqlite@3.0.0-beta.11(better-sqlite3@9.2.2)(lucia@3.0.0-beta.13):
-    resolution: {integrity: sha512-Yvnu6p3hP81ldeoaKC66svzc0Kyfxtc54pYukxAMQKFdc+puCcMzCAk71/s5BJwFeyzepA+F1WdV/7jvduKw+g==}
+  /@lucia-auth/adapter-sqlite@3.0.0-beta.12(better-sqlite3@9.2.2)(lucia@3.0.0-beta.14):
+    resolution: {integrity: sha512-DZpBsdOjxwibUohQK+2EDr/Lwl5IJTs4yUCUoDqXziniwHOuJSsOezpv5FsI9Y9bOwWWUP5wLyzV502CCsy1Mw==}
     peerDependencies:
       '@libsql/client': ^0.3.0
       better-sqlite3: 8.x - 9.x
-      lucia: 3.0.0-beta.13
+      lucia: 3.0.0-beta.14
     peerDependenciesMeta:
       '@libsql/client':
         optional: true
@@ -1137,7 +1137,7 @@ packages:
         optional: true
     dependencies:
       better-sqlite3: 9.2.2
-      lucia: 3.0.0-beta.13
+      lucia: 3.0.0-beta.14
     dev: false
 
   /@mapbox/node-pre-gyp@1.0.11:
@@ -2067,8 +2067,8 @@ packages:
       solid-js: 1.8.8
     dev: false
 
-  /@solidjs/start@0.4.3(solid-js@1.8.8)(vinxi@0.1.1)(vite@4.5.1):
-    resolution: {integrity: sha512-J2eLAYao5ie4N9lpCrw3cwxzxuWoCms0jKdZ95xXZw/EvYFVz4+ErgSOx9NPFqcvHpqagh8ZIuUiA2GSyjFpWw==}
+  /@solidjs/start@0.4.4(solid-js@1.8.8)(vinxi@0.1.1)(vite@4.5.1):
+    resolution: {integrity: sha512-SQhPOBeaqikmd42IMGJVMYE4c01EvcH5S3FhwRo/rrX7WOdiHxfNlLuXikK1LGirOdYa2TG2wzoB8+NT9XPjFA==}
     dependencies:
       '@vinxi/plugin-directives': 0.1.0(vinxi@0.1.1)
       '@vinxi/server-components': 0.1.0(vinxi@0.1.1)
@@ -2154,31 +2154,31 @@ packages:
       tslib: 2.5.2
     dev: false
 
-  /@tanstack/query-core@5.17.1:
-    resolution: {integrity: sha512-kUXozQmU7NBtzX5dM6qfFNZN+YK/9Ct37hnG/ogdgI4mExIx7VH/qRepsPhKfNrJz2w81/JykmM3Uug6sVpUSw==}
+  /@tanstack/query-core@5.17.4:
+    resolution: {integrity: sha512-1J2vINgJ6OH1/qgN/ouDjnRZc67TnKQ2mlIODKQr36Aa2vjMdH6Fb3pIbCRh5N6u95q6z1olp90n22eTlp9Ykg==}
     dev: false
 
   /@tanstack/query-devtools@5.17.1:
     resolution: {integrity: sha512-gNdt6PYzYlyjtSAoO8Jt9GIFq5VSLLDV2qq0TCi1t/PGnpAIlIHqNZGYkQTPsy0FyGUTX3pCq4bd7v5z/wzf3A==}
     dev: false
 
-  /@tanstack/solid-query-devtools@5.17.1(@tanstack/solid-query@5.17.1)(solid-js@1.8.8):
-    resolution: {integrity: sha512-Im8Yg31v1L1/onFLsurZ1PXYI0K4OTehCx3EVDvHcD+pBs/vH9e1vzZTnbk6cGMxTAxxogqIwGU6EjcaK9YONQ==}
+  /@tanstack/solid-query-devtools@5.17.4(@tanstack/solid-query@5.17.4)(solid-js@1.8.8):
+    resolution: {integrity: sha512-StaF8v/R7FqzQ31RSXTQcyEbV2psfz9Exg0OgIPyc514yJxfPF+4gJ3bIZMXGZYoLGYKD1YTMfqOjfftBzEagw==}
     peerDependencies:
-      '@tanstack/solid-query': ^5.17.1
+      '@tanstack/solid-query': ^5.17.4
       solid-js: ^1.8.7
     dependencies:
       '@tanstack/query-devtools': 5.17.1
-      '@tanstack/solid-query': 5.17.1(solid-js@1.8.8)
+      '@tanstack/solid-query': 5.17.4(solid-js@1.8.8)
       solid-js: 1.8.8
     dev: false
 
-  /@tanstack/solid-query@5.17.1(solid-js@1.8.8):
-    resolution: {integrity: sha512-kApXm+h1psNnWWoVwXTwnq4HoFc0h3B7MqD3qW/ruMOTf5GRIV9NrbQzICE5GGEmEY/3GrqtFs9Fj5fw7I4CdA==}
+  /@tanstack/solid-query@5.17.4(solid-js@1.8.8):
+    resolution: {integrity: sha512-SJy7xHJ1C/40BQpyEEwPYnVDzhCUc/CHiKd3HQjgnDDaPZwHAJl+4eOBYagLfl2h9qZT+L5BL3pCpRKsN7+XQg==}
     peerDependencies:
       solid-js: ^1.6.0
     dependencies:
-      '@tanstack/query-core': 5.17.1
+      '@tanstack/query-core': 5.17.4
       solid-js: 1.8.8
     dev: false
 
@@ -2220,12 +2220,12 @@ packages:
     resolution: {integrity: sha512-0WR3b8eaISjEW7RpZnclONaLFDf7buaowRHdqLp4vLj54AsSAYWfh3DRbfiYJY9XDxMgx1B4sE1Afw2PGpuHOA==}
     dev: false
 
-  /@types/css-font-loading-module@0.0.8:
-    resolution: {integrity: sha512-PdJeLlCJj/ShOA+c0dXdZ/e1P0Cdjhip+dRBtPaigOqwKd0DiFx3NeO6T2E7AQ5JszSR3dub3YkQjc2hcQyxSw==}
+  /@types/css-font-loading-module@0.0.12:
+    resolution: {integrity: sha512-x2tZZYkSxXqWvTDgveSynfjq/T2HyiZHXb00j/+gy19yp70PHCizM48XFdjBCWH7eHBD0R5i/pw9yMBP/BH5uA==}
     dev: false
 
-  /@types/earcut@2.1.1:
-    resolution: {integrity: sha512-w8oigUCDjElRHRRrMvn/spybSMyX8MTkKA5Dv+tS1IE/TgmNZPqUYtvYBXGY8cieSE66gm+szeK+bnbxC2xHTQ==}
+  /@types/earcut@2.1.4:
+    resolution: {integrity: sha512-qp3m9PPz4gULB9MhjGID7wpo3gJ4bTGXm7ltNDsmOvsPduTeHp8wSW9YckBj3mljeOh4F0m2z/0JKAALRKbmLQ==}
     dev: false
 
   /@types/estree@1.0.1:
@@ -4298,7 +4298,7 @@ packages:
       requireindex: 1.2.0
     dev: true
 
-  /eslint-plugin-tailwindcss@3.13.1(tailwindcss@3.4.0):
+  /eslint-plugin-tailwindcss@3.13.1(tailwindcss@3.4.1):
     resolution: {integrity: sha512-2Nlgr9doO6vFAG9w4iGU0sspWXuzypfng10HTF+dFS2NterhweWtgdRvf/f7aaoOUUxVZM8wMIXzazrZ7CxyeA==}
     engines: {node: '>=12.13.0'}
     peerDependencies:
@@ -4306,7 +4306,7 @@ packages:
     dependencies:
       fast-glob: 3.3.2
       postcss: 8.4.33
-      tailwindcss: 3.4.0
+      tailwindcss: 3.4.1
     dev: true
 
   /eslint-scope@7.2.2:
@@ -4514,6 +4514,7 @@ packages:
       glob-parent: 5.1.2
       merge2: 1.4.1
       micromatch: 4.0.5
+    dev: true
 
   /fast-glob@3.3.2:
     resolution: {integrity: sha512-oX2ruAFQwf/Orj8m737Y5adxDQO0LAB7/S5MnxCdTNDd4p6BsyIVsv9JQsATbTSq8KHRpLwIHbVlUNatxd+1Ow==}
@@ -5135,6 +5136,7 @@ packages:
     resolution: {integrity: sha512-Z7dk6Qo8pOCp3l4tsX2C5ZVas4V+UxwQodwZhLopL91TX8UyyHEXafPcyoeeWuLrwzHcr3igO78wNLwHJHsMCQ==}
     dependencies:
       has: 1.0.3
+    dev: true
 
   /is-core-module@2.13.1:
     resolution: {integrity: sha512-hHrIjvZsftOsvKSn2TRYl63zvxsgE0K+0mYMoH6gD4omR5IWB2KynivBQczo3+wF1cCkjzvptnI9Q0sPU66ilw==}
@@ -5638,10 +5640,10 @@ packages:
       es5-ext: 0.10.62
     dev: true
 
-  /lucia@3.0.0-beta.13:
-    resolution: {integrity: sha512-p5qJWSFax+MSuifh1lJ37lj9l7q7hB3JgMNutRgy6PKF+3Aw4hMii+Sts5yR4t1ETodqlDmuOBE7mdarGQunwg==}
+  /lucia@3.0.0-beta.14:
+    resolution: {integrity: sha512-MXJILHb4xyvf3qjO7w7mDnvVOub2LGWLSjgP1TBGPLDkBF62uXNfvPNH7QRvOwvuSLtQK+w7JoPjnjiFiIj9rg==}
     dependencies:
-      oslo: 0.25.1
+      oslo: 0.27.0
     dev: false
 
   /magic-string@0.30.5:
@@ -6198,13 +6200,6 @@ packages:
       type-check: 0.4.0
     dev: true
 
-  /oslo@0.25.1:
-    resolution: {integrity: sha512-XEmUNC9qeMx8UVtHsP6I2xXYSmzVsv/sZw5VsKMTJvXHd3boHAY016ZJtviXiBbE18ah/mU9Dyv4MizwOGShxw==}
-    dependencies:
-      '@node-rs/argon2': 1.5.2
-      '@node-rs/bcrypt': 1.7.3
-    dev: false
-
   /oslo@0.27.0:
     resolution: {integrity: sha512-93bfsAlsn2du5rUVUmdmXyTJW7nsO1dViouMc2B9sjmCUzqnTYMtvHSuqti/cmgm96XZIVJEjU+mMWfceLWyYQ==}
     dependencies:
@@ -6300,12 +6295,12 @@ packages:
     resolution: {integrity: sha512-8V9+HQPupnaXMA23c5hvl69zXvTwTzyAYasnkb0Tts4XvO4CliqONMOnvlq26rkhLC3nWDFBJf73LU1e1VZLaQ==}
     engines: {node: '>= 6'}
 
-  /pixi.js@8.0.0-rc:
-    resolution: {integrity: sha512-AW1TWj+TfQ6XbAiJD6cC0Y5wGQ3qXkKacxulnuKg9BkR2Cl40jF94nW37D63i2ZUwqw4Pz3+vmbpzTPky41C/w==}
+  /pixi.js@8.0.0-rc.1:
+    resolution: {integrity: sha512-Epja9iYeQ0XS+8UKmeSpTFZrl6hjZFZHlnEiFOEw1eXJ3fJn7DN2Mt1DY1g5jOhsHlgy9Uq9Tj1NUDoxHc01xA==}
     dependencies:
       '@pixi/colord': 2.9.6
-      '@types/css-font-loading-module': 0.0.8
-      '@types/earcut': 2.1.1
+      '@types/css-font-loading-module': 0.0.12
+      '@types/earcut': 2.1.4
       '@webgpu/types': 0.1.40
       '@xmldom/xmldom': 0.8.10
       earcut: 2.2.4
@@ -6331,7 +6326,7 @@ packages:
       postcss: 8.4.33
       postcss-value-parser: 4.2.0
       read-cache: 1.0.0
-      resolve: 1.22.4
+      resolve: 1.22.8
 
   /postcss-js@4.0.1(postcss@8.4.33):
     resolution: {integrity: sha512-dDLF8pEO191hJMtlHFPRa8xsizHaM82MLfNkUHdUtVEV3tgTp5oj+8qbEqYM57SLfc74KSbw//4SeJma2LRVIw==}
@@ -6607,6 +6602,7 @@ packages:
       is-core-module: 2.13.0
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
+    dev: true
 
   /resolve@1.22.8:
     resolution: {integrity: sha512-oKWePCxqpd6FlLvGV1VU0x7bkPmmCNolxzjMf4NczoDnQcIWrAF+cPtZn5i6n+RfD2d9i0tzpKnG6Yk168yIyw==}
@@ -6615,7 +6611,6 @@ packages:
       is-core-module: 2.13.1
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
-    dev: false
 
   /reusify@1.0.4:
     resolution: {integrity: sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==}
@@ -7121,8 +7116,8 @@ packages:
       '@babel/runtime': 7.23.6
     dev: false
 
-  /tailwindcss@3.4.0:
-    resolution: {integrity: sha512-VigzymniH77knD1dryXbyxR+ePHihHociZbXnLZHUyzf2MMs2ZVqlUrZ3FvpXP8pno9JzmILt1sZPD19M3IxtA==}
+  /tailwindcss@3.4.1:
+    resolution: {integrity: sha512-qAYmXRfk3ENzuPBakNK0SRrUDipP8NQnEY6772uDhflcQz5EhRdD7JNZxyrFHVQNCwULPBn6FNPp9brpO7ctcA==}
     engines: {node: '>=14.0.0'}
     hasBin: true
     dependencies:
@@ -7131,7 +7126,7 @@ packages:
       chokidar: 3.5.3
       didyoumean: 1.2.2
       dlv: 1.1.3
-      fast-glob: 3.3.1
+      fast-glob: 3.3.2
       glob-parent: 6.0.2
       is-glob: 4.0.3
       jiti: 1.21.0
@@ -7146,7 +7141,7 @@ packages:
       postcss-load-config: 4.0.1(postcss@8.4.33)
       postcss-nested: 6.0.1(postcss@8.4.33)
       postcss-selector-parser: 6.0.13
-      resolve: 1.22.4
+      resolve: 1.22.8
       sucrase: 3.32.0
     transitivePeerDependencies:
       - ts-node
