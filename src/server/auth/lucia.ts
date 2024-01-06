@@ -3,7 +3,6 @@ import { BetterSqlite3Adapter } from "@lucia-auth/adapter-sqlite";
 import {
   appendHeader,
   getCookie,
-  // getCookie,
   getHeader,
   type H3EventContext,
 } from "@solidjs/start/server";

@@ -63,7 +63,11 @@ export default function BoardsList() {
       <ErrorBoundary fallback={<BoardsListError />}>
         <Suspense fallback={<BoardsListLoading />}>
           <Show
-            when={boardQuery.data && boardQuery.data.length > 1}
+            when={
+              boardQuery.status === "success" &&
+              boardQuery.data &&
+              boardQuery.data.length > 0
+            }
             fallback={<BoardsListEmpty />}
           >
             <For each={boardQuery.data}>

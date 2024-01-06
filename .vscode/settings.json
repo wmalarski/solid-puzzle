@@ -15,5 +15,9 @@
     "undici",
     "valibot",
     "vinxi"
+  ],
+  "tailwindCSS.experimental.classRegex": [
+    ["twCva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+    ["twCx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
   ]
 }
