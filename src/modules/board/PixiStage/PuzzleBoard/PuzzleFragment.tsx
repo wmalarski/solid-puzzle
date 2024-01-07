@@ -10,7 +10,7 @@ import {
 import type { PuzzleFragmentShape } from "~/utils/getPuzzleFragments";
 import { usePlayerPresence } from "../../DataProviders/PresenceProvider";
 import { usePuzzleStore } from "../../DataProviders/PuzzleProvider";
-import { usePixiApp } from "../PixiApp";
+import { usePixiContainer } from "../PixiApp";
 import { type FragmentState } from "./PuzzleStore";
 import { RotationAnchor } from "./RotationAnchor";
 import { useDragObject } from "./useDragObject";
@@ -96,9 +96,9 @@ type PuzzleContainerProps = {
 };
 
 const PuzzleContainer: Component<PuzzleContainerProps> = (props) => {
-  const app = usePixiApp();
   const store = usePuzzleStore();
   const presence = usePlayerPresence();
+  const container = usePixiContainer();
 
   const fragment = new Container();
 
@@ -107,11 +107,11 @@ const PuzzleContainer: Component<PuzzleContainerProps> = (props) => {
     //   "PuzzleFragment",
     //   JSON.stringify({ shape: props.shape, state: props.state }, null, 2)
     // );
-    app().stage.addChild(fragment);
+    container.addChild(fragment);
   });
 
   onCleanup(() => {
-    app().stage.removeChild(fragment);
+    container.removeChild(fragment);
   });
 
   onMount(() => {

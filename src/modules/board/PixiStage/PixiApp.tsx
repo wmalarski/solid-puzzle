@@ -1,4 +1,4 @@
-import { Application } from "pixi.js";
+import { Application, Container } from "pixi.js";
 import {
   createContext,
   createResource,
@@ -9,12 +9,18 @@ import {
   type JSX,
 } from "solid-js";
 
-const PixiAppContext = createContext<() => Application>(
-  () => null as unknown as Application,
-);
+const PixiAppContext = createContext<Application>({} as unknown as Application);
 
 export const usePixiApp = () => {
   return useContext(PixiAppContext);
+};
+
+const PixiContainerContext = createContext<Container>(
+  {} as unknown as Container,
+);
+
+export const usePixiContainer = () => {
+  return useContext(PixiContainerContext);
 };
 
 type Props = {
@@ -28,7 +34,6 @@ export const PixiAppProvider: Component<Props> = (props) => {
   createResource(async () => {
     await app.init({
       antialias: true,
-      background: "white",
       canvas: props.canvas,
       eventMode: "static",
       height: window.innerHeight,
@@ -51,9 +56,22 @@ export const PixiAppProvider: Component<Props> = (props) => {
     window.removeEventListener("resize", onResize);
   });
 
+  const container = new Container();
+
+  onMount(() => {
+    app.stage.addChild(container);
+  });
+
+  onCleanup(() => {
+    app.stage.removeChild(container);
+    container.destroy();
+  });
+
   return (
-    <PixiAppContext.Provider value={() => app}>
-      {props.children}
+    <PixiAppContext.Provider value={app}>
+      <PixiContainerContext.Provider value={app.stage}>
+        {props.children}
+      </PixiContainerContext.Provider>
     </PixiAppContext.Provider>
   );
 };
