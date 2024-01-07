@@ -101,6 +101,7 @@ const PuzzleContainer: Component<PuzzleContainerProps> = (props) => {
   const container = usePixiContainer();
 
   const fragment = new Container();
+  fragment.zIndex = 1;
 
   onMount(() => {
     // console.log(

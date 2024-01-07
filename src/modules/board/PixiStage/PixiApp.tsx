@@ -8,6 +8,7 @@ import {
   type Component,
   type JSX,
 } from "solid-js";
+import { BoardBackground } from "./PuzzleBoard/BoardBorder";
 
 const PixiAppContext = createContext<Application>({} as unknown as Application);
 
@@ -45,6 +46,7 @@ export const PixiAppProvider: Component<Props> = (props) => {
   });
 
   const onResize = () => {
+    app.stage.hitArea = app.screen;
     app.renderer.resize(window.innerWidth, window.innerHeight);
   };
 
@@ -59,6 +61,7 @@ export const PixiAppProvider: Component<Props> = (props) => {
   const container = new Container();
 
   onMount(() => {
+    container.eventMode = "static";
     app.stage.addChild(container);
   });
 
@@ -69,7 +72,9 @@ export const PixiAppProvider: Component<Props> = (props) => {
 
   return (
     <PixiAppContext.Provider value={app}>
-      <PixiContainerContext.Provider value={app.stage}>
+      <PixiContainerContext.Provider value={container}>
+        <BoardBackground />
+        {/* <BoardBorder color={0xffff00} container={app.stage} /> */}
         {props.children}
       </PixiContainerContext.Provider>
     </PixiAppContext.Provider>

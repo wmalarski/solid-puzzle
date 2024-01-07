@@ -5,6 +5,7 @@ import {
   Suspense,
   createSignal,
   lazy,
+  onMount,
   type Component,
 } from "solid-js";
 import { useI18n } from "~/contexts/I18nContext";
@@ -31,7 +32,7 @@ const ClientBoard: Component<BoardProps> = (props) => {
 
   return (
     <>
-      <canvas ref={setCanvas} class="h-full w-full" />
+      <canvas ref={setCanvas} class="h-full w-full bg-base-100" />
       <Show when={canvas()}>
         {(canvas) => (
           <Suspense>
@@ -45,6 +46,11 @@ const ClientBoard: Component<BoardProps> = (props) => {
 
 const ErrorFallback = (err: unknown, reset: VoidFunction) => {
   const { t } = useI18n();
+
+  onMount(() => {
+    // eslint-disable-next-line no-console
+    console.error("ERR", err);
+  });
 
   return (
     <div>

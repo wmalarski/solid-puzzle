@@ -24,6 +24,7 @@ const usePane = () => {
   const [originY, setOriginY] = createSignal<number>();
 
   const onPointerDown = (event: FederatedPointerEvent) => {
+    console.log("onPointerDown", event);
     setStartX(transform.x());
     setStartY(transform.y());
     setOriginX(event.x);
