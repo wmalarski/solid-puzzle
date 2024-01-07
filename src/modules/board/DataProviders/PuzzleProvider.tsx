@@ -79,8 +79,6 @@ const createPuzzleContext = () => {
       };
     });
 
-    console.log(shapes, config);
-
     setConfig(shapes);
     setFragments(init);
     setShapes(shapesMap);

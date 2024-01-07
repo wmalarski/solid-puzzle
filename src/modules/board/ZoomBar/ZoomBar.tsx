@@ -7,12 +7,16 @@ import { useTransformContext } from "../TransformContext";
 export const ZoomBar: Component = () => {
   const transform = useTransformContext();
 
+  const center = () => {
+    return { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+  };
+
   const onZoomInClick = () => {
-    transform.zoomIn({ x: 0, y: 0 });
+    transform.zoomIn(center());
   };
 
   const onZoomOutClick = () => {
-    transform.zoomOut({ x: 0, y: 0 });
+    transform.zoomOut(center());
   };
 
   return (

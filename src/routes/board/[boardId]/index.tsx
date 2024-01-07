@@ -1,6 +1,6 @@
 import { createAsync, useParams, type RouteDefinition } from "@solidjs/router";
 import { createQuery } from "@tanstack/solid-query";
-import { Show, Suspense, createEffect, type Component } from "solid-js";
+import { Show, Suspense, type Component } from "solid-js";
 import { SessionProvider } from "~/contexts/SessionContext";
 import { Board } from "~/modules/board/Board";
 import {
@@ -8,7 +8,6 @@ import {
   selectProtectedBoardLoader,
 } from "~/server/board/client";
 import type { BoardAccess } from "~/server/share/db";
-import { generateCurves } from "~/utils/getPuzzleFragments";
 
 type BoardQueryProps = {
   boardAccess?: BoardAccess;
@@ -47,10 +46,6 @@ export default function BoardSection() {
   const data = createAsync(() =>
     selectProtectedBoardLoader({ id: params.boardId }),
   );
-
-  createEffect(() => {
-    console.log("CURVES", generateCurves({ columns: 10, rows: 10 }));
-  });
 
   return (
     <SessionProvider value={() => data()?.session || null}>

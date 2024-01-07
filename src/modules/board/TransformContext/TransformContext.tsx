@@ -28,20 +28,7 @@ const getNewZoomState = (
   return { ...old, scale: newScale, x: newStageX, y: newStageY };
 };
 
-export type TransformContextValue = {
-  reset: VoidFunction;
-  scale: () => number;
-  setScale: (scale: number) => void;
-  setX: (x: number) => void;
-  setY: (y: number) => void;
-  zoomIn: (point: Point2D) => void;
-  zoomOut: (point: Point2D) => void;
-  setZoom: (point: Point2D, scale: number) => void;
-  x: () => number;
-  y: () => number;
-};
-
-const createTransform = (): TransformContextValue => {
+const createTransform = () => {
   const [scale, setScale] = createSignal(1);
   const [x, setX] = createSignal(0);
   const [y, setY] = createSignal(0);
@@ -79,6 +66,8 @@ const createTransform = (): TransformContextValue => {
 
   return { reset, scale, setScale, setX, setY, setZoom, x, y, zoomIn, zoomOut };
 };
+
+export type TransformContextValue = ReturnType<typeof createTransform>;
 
 const TransformContext = createContext<TransformContextValue>({
   reset: () => void 0,

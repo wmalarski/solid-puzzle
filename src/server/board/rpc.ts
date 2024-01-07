@@ -25,8 +25,6 @@ import {
 } from "./db";
 
 export async function insertBoardServerAction(form: FormData) {
-  console.log("insertBoardServerAction", Object.fromEntries(form.entries()));
-
   const event = getRequestEventOrThrow();
 
   const parsed = await safeParseAsync(
