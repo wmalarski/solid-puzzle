@@ -6,7 +6,5 @@ const getImage = () => {
 };
 
 export const getImages = () => {
-  return Array(20)
-    .fill(0)
-    .map(() => getImage());
+  return Array.from({ length: 20 }, () => getImage());
 };

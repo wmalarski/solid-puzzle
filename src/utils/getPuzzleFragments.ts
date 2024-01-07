@@ -87,61 +87,46 @@ type GenerateCurvesArgs = {
 export const generateCurves = ({ columns, rows }: GenerateCurvesArgs) => {
   const getRandomGridPoint = getRandomGridPointFactory({ columns, rows });
 
-  const points = Array(rows + 1)
-    .fill(0)
-    .map((_value, rowIndex) =>
-      Array(columns + 1)
-        .fill(0)
-        .map((_value, columnIndex) =>
-          getRandomGridPoint({ columnIndex, rowIndex }),
-        ),
-    );
+  const points = Array.from({ length: rows + 1 }, (_, rowIndex) =>
+    Array.from({ length: columns + 1 }, (_, columnIndex) =>
+      getRandomGridPoint({ columnIndex, rowIndex }),
+    ),
+  );
 
-  const horizontalLines = Array(rows + 1)
-    .fill(0)
-    .map((_value, rowIndex) =>
-      Array(columns)
-        .fill(0)
-        .map((_value, columnIndex) => {
-          const start = points[rowIndex][columnIndex];
-          const end = points[rowIndex][columnIndex + 1];
-          const center = getCenterFromPoints([start, end]);
-          const random = getRandomGridPoint({
-            columnIndex,
-            rowIndex,
-            xCenter: center.x,
-            yCenter: center.y,
-          });
-          return { center: random, end, start };
-        }),
-    );
+  const horizontalLines = Array.from({ length: rows + 1 }, (_, rowIndex) =>
+    Array.from({ length: columns }, (_, columnIndex) => {
+      const start = points[rowIndex][columnIndex];
+      const end = points[rowIndex][columnIndex + 1];
+      const center = getCenterFromPoints([start, end]);
+      const random = getRandomGridPoint({
+        columnIndex,
+        rowIndex,
+        xCenter: center.x,
+        yCenter: center.y,
+      });
+      return { center: random, end, start };
+    }),
+  );
 
-  const verticalLines = Array(rows)
-    .fill(0)
-    .map((_value, rowIndex) =>
-      Array(columns + 1)
-        .fill(0)
-        .map((_value, columnIndex) => {
-          const start = points[rowIndex][columnIndex];
-          const end = points[rowIndex + 1][columnIndex];
-          const center = getCenterFromPoints([start, end]);
-          const random = getRandomGridPoint({
-            columnIndex,
-            rowIndex,
-            xCenter: center.x,
-            yCenter: center.y,
-          });
-          return { center: random, end, start };
-        }),
-    );
+  const verticalLines = Array.from({ length: rows }, (_, rowIndex) =>
+    Array.from({ length: columns + 1 }, (_, columnIndex) => {
+      const start = points[rowIndex][columnIndex];
+      const end = points[rowIndex + 1][columnIndex];
+      const center = getCenterFromPoints([start, end]);
+      const random = getRandomGridPoint({
+        columnIndex,
+        rowIndex,
+        xCenter: center.x,
+        yCenter: center.y,
+      });
+      return { center: random, end, start };
+    }),
+  );
 
-  const rotation = Array(horizontalLines.length - 1)
-    .fill(0)
-    .flatMap(() =>
-      Array(verticalLines.length - 1)
-        .fill(0)
-        .map(() => 2 * Math.random() * Math.PI),
-    );
+  const rotation = Array.from(
+    { length: rows * columns },
+    () => 2 * Math.random() * Math.PI,
+  );
 
   return { horizontalLines, rotation, version: "1", verticalLines };
 };
@@ -198,48 +183,47 @@ export const getPuzzleFragments = ({
   const lines = [...horizontalLines, ...verticalLines].flat();
   const rotation = [...config.rotation];
 
-  const fragments = Array(horizontalLines.length - 1)
-    .fill(0)
-    .flatMap((_value, rowIndex) =>
-      Array(verticalLines.length - 1)
-        .fill(0)
-        .map((_value, columnIndex) => {
-          const top = horizontalLines[rowIndex][columnIndex];
-          const bottom = horizontalLines[rowIndex + 1][columnIndex];
-          const left = verticalLines[rowIndex][columnIndex];
-          const right = verticalLines[rowIndex][columnIndex + 1];
+  const rows = horizontalLines.length - 1;
+  const columns = verticalLines[0].length - 1;
 
-          const absoluteCurvePoints = [
-            { control: left.center, to: left.end },
-            { control: bottom.center, to: bottom.end },
-            { control: right.center, to: right.start },
-            { control: top.center, to: top.start },
-          ];
+  const fragments = Array.from({ length: rows }, (_, rowIndex) =>
+    Array.from({ length: columns }, (_, columnIndex) => {
+      const top = horizontalLines[rowIndex][columnIndex];
+      const bottom = horizontalLines[rowIndex + 1][columnIndex];
+      const left = verticalLines[rowIndex][columnIndex];
+      const right = verticalLines[rowIndex][columnIndex + 1];
 
-          const points = absoluteCurvePoints.flatMap((curve) => [
-            curve.control,
-            curve.to,
-          ]);
-          const { max, min } = getMinMaxFromPoints(points);
-          const center = getCenterFromPoints([max, min]);
+      const absoluteCurvePoints = [
+        { control: left.center, to: left.end },
+        { control: bottom.center, to: bottom.end },
+        { control: right.center, to: right.start },
+        { control: top.center, to: top.start },
+      ];
 
-          const curvePoints = absoluteCurvePoints.map((curve) => ({
-            control: subtractPoint(curve.control, min),
-            to: subtractPoint(curve.to, min),
-          }));
+      const points = absoluteCurvePoints.flatMap((curve) => [
+        curve.control,
+        curve.to,
+      ]);
+      const { max, min } = getMinMaxFromPoints(points);
+      const center = getCenterFromPoints([max, min]);
 
-          const initialRotation = rotation.pop() || 0;
+      const curvePoints = absoluteCurvePoints.map((curve) => ({
+        control: subtractPoint(curve.control, min),
+        to: subtractPoint(curve.to, min),
+      }));
 
-          return {
-            center,
-            curvePoints,
-            fragmentId: getFragmentId({ columnIndex, rowIndex }),
-            initialRotation,
-            max,
-            min,
-          };
-        }),
-    );
+      const initialRotation = rotation.pop() || 0;
+
+      return {
+        center,
+        curvePoints,
+        fragmentId: getFragmentId({ columnIndex, rowIndex }),
+        initialRotation,
+        max,
+        min,
+      };
+    }),
+  ).flat();
 
   return { fragments, lines };
 };

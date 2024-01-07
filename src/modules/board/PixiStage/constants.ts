@@ -1,0 +1,1 @@
+export const PREVIEW_STROKE_COLOR = 0x777777;

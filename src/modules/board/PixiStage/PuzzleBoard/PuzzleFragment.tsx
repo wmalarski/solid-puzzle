@@ -61,12 +61,15 @@ export const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
 
     const elements = props.shape.curvePoints;
     const last = elements[elements.length - 1];
+
     graphics.moveTo(last.to.x, last.to.y);
     props.shape.curvePoints.forEach(({ control, to }) => {
       graphics.quadraticCurveTo(control.x, control.y, to.x, to.y);
     });
 
-    graphics.endFill();
+    graphics.fill({ matrix, texture: props.texture });
+
+    // graphics.endFill();
     // graphics.pivot.set(graphics.width / 2, graphics.height / 2);
   });
 
@@ -80,7 +83,7 @@ export const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
   });
 
   createEffect(() => {
-    graphics.rotation = props.state.isLocked ? 0 : props.state.rotation;
+    // graphics.rotation = props.state.isLocked ? 0 : props.state.rotation;
   });
 
   return null;
