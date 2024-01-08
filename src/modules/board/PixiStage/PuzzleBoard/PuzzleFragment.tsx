@@ -121,13 +121,13 @@ const PuzzleContainer: Component<PuzzleContainerProps> = (props) => {
   });
 
   createEffect(() => {
-    // if (!state().isLocked) {
-    //   fragment.eventMode = "static";
-    //   return;
-    // }
-    // fragment.eventMode = "none";
-    // fragment.x = props.shape.min.x;
-    // fragment.y = props.shape.min.y;
+    if (!props.state.isLocked) {
+      fragment.eventMode = "static";
+      return;
+    }
+    fragment.eventMode = "none";
+    fragment.x = props.shape.min.x;
+    fragment.y = props.shape.min.y;
   });
 
   const fragmentId = createMemo(() => {

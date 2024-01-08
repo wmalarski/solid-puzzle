@@ -23,7 +23,7 @@ export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
   graphics.eventMode = "static";
 
   onMount(() => {
-    const radius = Math.max(props.container.width, props.container.height) / 2;
+    const radius = Math.max(props.container.width, props.container.height) / 4;
     const x = 0;
     const y = -radius;
 
