@@ -33,11 +33,11 @@ dependencies:
     specifier: ^2.39.2
     version: 2.39.2
   '@tanstack/solid-query':
-    specifier: 5.17.8
-    version: 5.17.8(solid-js@1.8.8)
+    specifier: 5.17.9
+    version: 5.17.9(solid-js@1.8.8)
   '@tanstack/solid-query-devtools':
-    specifier: ^5.17.8
-    version: 5.17.8(@tanstack/solid-query@5.17.8)(solid-js@1.8.8)
+    specifier: ^5.17.9
+    version: 5.17.9(@tanstack/solid-query@5.17.9)(solid-js@1.8.8)
   better-sqlite3:
     specifier: 9.2.2
     version: 9.2.2
@@ -79,7 +79,7 @@ dependencies:
     version: 0.25.0
   vinxi:
     specifier: ^0.1.1
-    version: 0.1.1(@types/node@20.10.6)(preact@10.19.3)
+    version: 0.1.1(@types/node@20.10.7)(preact@10.19.3)
 
 devDependencies:
   '@types/better-sqlite3':
@@ -89,8 +89,8 @@ devDependencies:
     specifier: 9.0.5
     version: 9.0.5
   '@types/node':
-    specifier: 20.10.6
-    version: 20.10.6
+    specifier: 20.10.7
+    version: 20.10.7
   '@typescript-eslint/eslint-plugin':
     specifier: 6.18.0
     version: 6.18.0(@typescript-eslint/parser@6.18.0)(eslint@8.56.0)(typescript@5.3.3)
@@ -156,7 +156,7 @@ devDependencies:
     version: 5.3.3
   vite:
     specifier: 4.5.1
-    version: 4.5.1(@types/node@20.10.6)
+    version: 4.5.1(@types/node@20.10.7)
 
 packages:
 
@@ -1641,7 +1641,7 @@ packages:
       magic-string: 0.30.5
       node-html-parser: 6.1.12
       resolve: 1.22.8
-      vite: 4.5.0(@types/node@20.10.6)
+      vite: 4.5.0(@types/node@20.10.7)
     transitivePeerDependencies:
       - preact
       - supports-color
@@ -1675,7 +1675,7 @@ packages:
       '@prefresh/utils': 1.2.0
       '@rollup/pluginutils': 4.2.1
       preact: 10.19.3
-      vite: 4.5.0(@types/node@20.10.6)
+      vite: 4.5.0(@types/node@20.10.7)
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -2154,31 +2154,31 @@ packages:
       tslib: 2.5.2
     dev: false
 
-  /@tanstack/query-core@5.17.8:
-    resolution: {integrity: sha512-V4hQv4jmRwbji9wo3F6/JQEjbWLUlv2sE2K5R49girEyok71ksDnVHbQiAvp4+FbovMY8A3IbP3cH3jqAUe/BQ==}
+  /@tanstack/query-core@5.17.9:
+    resolution: {integrity: sha512-8xcvpWIPaRMDNLMvG9ugcUJMgFK316ZsqkPPbsI+TMZsb10N9jk0B6XgPk4/kgWC2ziHyWR7n7wUhxmD0pChQw==}
     dev: false
 
   /@tanstack/query-devtools@5.17.7:
     resolution: {integrity: sha512-TfgvOqza5K7Sk6slxqkRIvXlEJoUoPSsGGwpuYSrpqgSwLSSvPPpZhq7hv7hcY5IvRoTNGoq6+MT01C/jILqoQ==}
     dev: false
 
-  /@tanstack/solid-query-devtools@5.17.8(@tanstack/solid-query@5.17.8)(solid-js@1.8.8):
-    resolution: {integrity: sha512-0c+Qm0tuw+sakKTMYB6b1xNTPxx35SBH0l0Bnlir7Pwgjv2wzNAiMJkWCCa8zfDGIyvbcH6CHcl+L5RqqRZRzQ==}
+  /@tanstack/solid-query-devtools@5.17.9(@tanstack/solid-query@5.17.9)(solid-js@1.8.8):
+    resolution: {integrity: sha512-DlMeQAtGqRrtFu3fI4sxFP5KnN5ZxnK81Iq42pGDujytT3GOdoVLAwbTePK9YIBbAYyxiu3Ud4pOEgRPAC/N6Q==}
     peerDependencies:
-      '@tanstack/solid-query': ^5.17.8
+      '@tanstack/solid-query': ^5.17.9
       solid-js: ^1.8.7
     dependencies:
       '@tanstack/query-devtools': 5.17.7
-      '@tanstack/solid-query': 5.17.8(solid-js@1.8.8)
+      '@tanstack/solid-query': 5.17.9(solid-js@1.8.8)
       solid-js: 1.8.8
     dev: false
 
-  /@tanstack/solid-query@5.17.8(solid-js@1.8.8):
-    resolution: {integrity: sha512-KE2yJBt0g+gcDiN+znBn9K/NWL5FOAgK4uF74WOS5IxxBCqvTsR0qs6btODZvH5WMrFDYVWI1Ugyhi385MmDJg==}
+  /@tanstack/solid-query@5.17.9(solid-js@1.8.8):
+    resolution: {integrity: sha512-ebcoTLajGoy4HRm9yAVH4N28CQZU5OPj5Gu2PwjWIePuCkWLFBYJcvYxgRxyf4GCh2GmelKNUu72HAvJbmKUOQ==}
     peerDependencies:
       solid-js: ^1.6.0
     dependencies:
-      '@tanstack/query-core': 5.17.8
+      '@tanstack/query-core': 5.17.9
       solid-js: 1.8.8
     dev: false
 
@@ -2214,7 +2214,7 @@ packages:
   /@types/better-sqlite3@7.6.8:
     resolution: {integrity: sha512-ASndM4rdGrzk7iXXqyNC4fbwt4UEjpK0i3j4q4FyeQrLAthfB6s7EF135ZJE0qQxtKIMFwmyT6x0switET7uIw==}
     dependencies:
-      '@types/node': 20.10.6
+      '@types/node': 20.10.7
 
   /@types/braces@3.0.4:
     resolution: {integrity: sha512-0WR3b8eaISjEW7RpZnclONaLFDf7buaowRHdqLp4vLj54AsSAYWfh3DRbfiYJY9XDxMgx1B4sE1Afw2PGpuHOA==}
@@ -2239,7 +2239,7 @@ packages:
   /@types/http-proxy@1.17.14:
     resolution: {integrity: sha512-SSrD0c1OQzlFX7pGu1eXxSEjemej64aaNPRhhVYUGqXh0BtldAAx37MG8btcumvpgKyZp1F5Gn3JkktdxiFv6w==}
     dependencies:
-      '@types/node': 20.10.6
+      '@types/node': 20.10.7
     dev: false
 
   /@types/json-schema@7.0.12:
@@ -2253,7 +2253,7 @@ packages:
   /@types/jsonwebtoken@9.0.5:
     resolution: {integrity: sha512-VRLSGzik+Unrup6BsouBeHsf4d1hOEgYWTm/7Nmw1sXoN1+tRly/Gy/po3yeahnP4jfnQWWAhQAqcNfH7ngOkA==}
     dependencies:
-      '@types/node': 20.10.6
+      '@types/node': 20.10.7
     dev: true
 
   /@types/micromatch@4.0.6:
@@ -2266,8 +2266,8 @@ packages:
     resolution: {integrity: sha512-iJt33IQnVRkqeqC7PzBHPTC6fDlRNRW8vjrgqtScAhrmMwe8c4Eo7+fUGTa+XdWrpEgpyKWMYmi2dIwMAYRzPw==}
     dev: false
 
-  /@types/node@20.10.6:
-    resolution: {integrity: sha512-Vac8H+NlRNNlAmDfGUP7b5h/KA+AtWIzuXy0E6OyP8f1tCLYAtPvKRRDJjAPqhpCb0t6U2j7/xqAuLEebW2kiw==}
+  /@types/node@20.10.7:
+    resolution: {integrity: sha512-fRbIKb8C/Y2lXxB5eVMj4IU7xpdox0Lh8bUPEdtLysaylsml1hOOx1+STloRs/B9nf7C6kPRmmg/V7aQW7usNg==}
     dependencies:
       undici-types: 5.26.5
 
@@ -2288,13 +2288,13 @@ packages:
     dependencies:
       '@types/http-errors': 2.0.4
       '@types/mime': 3.0.4
-      '@types/node': 20.10.6
+      '@types/node': 20.10.7
     dev: false
 
   /@types/ws@8.5.5:
     resolution: {integrity: sha512-lwhs8hktwxSjf9UaZ9tG5M03PGogvFaH8gUgLNbN9HKIg0dvv6q+gkSuJ8HN4/VbyxkuLzCjlN7GquQ0gUJfIg==}
     dependencies:
-      '@types/node': 20.10.6
+      '@types/node': 20.10.7
     dev: false
 
   /@typescript-eslint/eslint-plugin@6.18.0(@typescript-eslint/parser@6.18.0)(eslint@8.56.0)(typescript@5.3.3):
@@ -2574,7 +2574,7 @@ packages:
       magicast: 0.2.11
       recast: 0.23.4
       tslib: 2.6.2
-      vinxi: 0.1.1(@types/node@20.10.6)(preact@10.19.3)
+      vinxi: 0.1.1(@types/node@20.10.7)(preact@10.19.3)
     dev: false
 
   /@vinxi/server-components@0.1.0(vinxi@0.1.1):
@@ -2589,7 +2589,7 @@ packages:
       astring: 1.8.6
       magicast: 0.2.11
       recast: 0.23.4
-      vinxi: 0.1.1(@types/node@20.10.6)(preact@10.19.3)
+      vinxi: 0.1.1(@types/node@20.10.7)(preact@10.19.3)
     dev: false
 
   /@vinxi/server-functions@0.1.0(vinxi@0.1.1):
@@ -2604,7 +2604,7 @@ packages:
       astring: 1.8.6
       magicast: 0.2.11
       recast: 0.23.4
-      vinxi: 0.1.1(@types/node@20.10.6)(preact@10.19.3)
+      vinxi: 0.1.1(@types/node@20.10.7)(preact@10.19.3)
     dev: false
 
   /@webgpu/types@0.1.40:
@@ -7619,7 +7619,7 @@ packages:
     resolution: {integrity: sha512-hGdgQozCsQJMyfK5urgFcWEqsSSrK63Awe0t/IMR0bZ0QMtnuaiHzThW81guu3qx9abLi99NEuiaN6P9gVYsNg==}
     dev: false
 
-  /vinxi@0.1.1(@types/node@20.10.6)(preact@10.19.3):
+  /vinxi@0.1.1(@types/node@20.10.7)(preact@10.19.3):
     resolution: {integrity: sha512-4egpAxqukve31zR485WhuKsFdbSBnSyJkuRxq+A4OzSoJ5Z/nTQNQ1YeooVY8Rs6lFkbczUjhq1YLQP7/+X1Dg==}
     hasBin: true
     dependencies:
@@ -7662,7 +7662,7 @@ packages:
       unenv: 1.8.0
       unimport: 3.7.0(rollup@4.9.1)
       unstorage: 1.10.1
-      vite: 4.5.0(@types/node@20.10.6)
+      vite: 4.5.0(@types/node@20.10.7)
       ws: 8.15.1
       zod: 3.22.2
     transitivePeerDependencies:
@@ -7714,7 +7714,7 @@ packages:
       open: 9.1.0
       picocolors: 1.0.0
       sirv: 2.0.3
-      vite: 4.5.0(@types/node@20.10.6)
+      vite: 4.5.0(@types/node@20.10.7)
     transitivePeerDependencies:
       - rollup
       - supports-color
@@ -7738,7 +7738,7 @@ packages:
       open: 9.1.0
       picocolors: 1.0.0
       sirv: 2.0.3
-      vite: 4.5.1(@types/node@20.10.6)
+      vite: 4.5.1(@types/node@20.10.7)
     transitivePeerDependencies:
       - rollup
       - supports-color
@@ -7757,7 +7757,7 @@ packages:
       merge-anything: 5.1.7
       solid-js: 1.8.8
       solid-refresh: 0.5.3(solid-js@1.8.8)
-      vite: 4.5.0(@types/node@20.10.6)
+      vite: 4.5.0(@types/node@20.10.7)
       vitefu: 0.2.5(vite@4.5.0)
     transitivePeerDependencies:
       - supports-color
@@ -7776,13 +7776,13 @@ packages:
       merge-anything: 5.1.7
       solid-js: 1.8.8
       solid-refresh: 0.5.3(solid-js@1.8.8)
-      vite: 4.5.1(@types/node@20.10.6)
+      vite: 4.5.1(@types/node@20.10.7)
       vitefu: 0.2.5(vite@4.5.1)
     transitivePeerDependencies:
       - supports-color
     dev: false
 
-  /vite@4.5.0(@types/node@20.10.6):
+  /vite@4.5.0(@types/node@20.10.7):
     resolution: {integrity: sha512-ulr8rNLA6rkyFAlVWw2q5YJ91v098AFQ2R0PRFwPzREXOUJQPtFUG0t+/ZikhaOCDqFoDhN6/v8Sq0o4araFAw==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -7810,7 +7810,7 @@ packages:
       terser:
         optional: true
     dependencies:
-      '@types/node': 20.10.6
+      '@types/node': 20.10.7
       esbuild: 0.18.20
       postcss: 8.4.33
       rollup: 3.29.0
@@ -7818,7 +7818,7 @@ packages:
       fsevents: 2.3.3
     dev: false
 
-  /vite@4.5.1(@types/node@20.10.6):
+  /vite@4.5.1(@types/node@20.10.7):
     resolution: {integrity: sha512-AXXFaAJ8yebyqzoNB9fu2pHoo/nWX+xZlaRwoeYUxEqBO+Zj4msE5G+BhGBll9lYEKv9Hfks52PAF2X7qDYXQA==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -7846,7 +7846,7 @@ packages:
       terser:
         optional: true
     dependencies:
-      '@types/node': 20.10.6
+      '@types/node': 20.10.7
       esbuild: 0.18.20
       postcss: 8.4.33
       rollup: 3.29.0
@@ -7861,7 +7861,7 @@ packages:
       vite:
         optional: true
     dependencies:
-      vite: 4.5.0(@types/node@20.10.6)
+      vite: 4.5.0(@types/node@20.10.7)
     dev: false
 
   /vitefu@0.2.5(vite@4.5.1):
@@ -7872,7 +7872,7 @@ packages:
       vite:
         optional: true
     dependencies:
-      vite: 4.5.1(@types/node@20.10.6)
+      vite: 4.5.1(@types/node@20.10.7)
     dev: false
 
   /webidl-conversions@3.0.1:
