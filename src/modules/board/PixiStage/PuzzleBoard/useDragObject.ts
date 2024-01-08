@@ -1,4 +1,8 @@
-import type { FederatedMouseEvent, FederatedPointerEvent } from "pixi.js";
+import type {
+  Container,
+  FederatedMouseEvent,
+  FederatedPointerEvent,
+} from "pixi.js";
 import { createSignal, onCleanup, onMount } from "solid-js";
 import { subtractPoint, type Point2D } from "~/utils/geometry";
 
@@ -12,8 +16,7 @@ type UseDragObjectArgs = {
   onDragEnd?: (event: FederatedMouseEvent) => void;
   onDragMove?: (event: FederatedMouseEvent) => void;
   onDragStart?: (event: FederatedMouseEvent) => void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  displayObject: any;
+  displayObject: Container;
 };
 
 const defaultDragConstraint = (args: DragConstraintArgs) => {
@@ -66,7 +69,7 @@ export const useDragObject = (args: UseDragObjectArgs) => {
 
     event.stopPropagation();
 
-    const transform = parent.transform.worldTransform;
+    const transform = parent.worldTransform;
     const inverted = transform.applyInverse(event.global);
 
     setShift(subtractPoint(inverted, args.displayObject));
