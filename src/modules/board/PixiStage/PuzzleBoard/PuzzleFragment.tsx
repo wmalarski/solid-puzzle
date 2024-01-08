@@ -139,6 +139,18 @@ const PuzzleContainer: Component<PuzzleContainerProps> = (props) => {
     return props.shape.fragmentId;
   });
 
+  const isFragmentSelected = createMemo(() => {
+    return fragmentId() === presence.playerSelection();
+  });
+
+  const zIndex = createMemo(() => {
+    return isFragmentSelected() ? 1 : 0;
+  });
+
+  createEffect(() => {
+    fragment.zIndex = zIndex();
+  });
+
   useDragObject({
     displayObject: fragment,
     onDragEnd: () => {
@@ -171,7 +183,7 @@ const PuzzleContainer: Component<PuzzleContainerProps> = (props) => {
         texture={props.texture}
       />
       <PuzzleFragmentLabel container={fragment} label={fragmentId()} />
-      <Show when={presence.playerSelection() === fragmentId()}>
+      <Show when={isFragmentSelected()}>
         <RotationAnchor
           container={fragment}
           rotation={props.state.rotation}
