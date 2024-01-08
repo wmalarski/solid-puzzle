@@ -69,7 +69,6 @@ export const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
 
     graphics.fill({ matrix, texture: props.texture });
 
-    // graphics.endFill();
     // graphics.pivot.set(graphics.width / 2, graphics.height / 2);
   });
 
@@ -83,7 +82,7 @@ export const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
   });
 
   createEffect(() => {
-    // graphics.rotation = props.state.isLocked ? 0 : props.state.rotation;
+    graphics.rotation = props.state.isLocked ? 0 : props.state.rotation;
   });
 
   return null;

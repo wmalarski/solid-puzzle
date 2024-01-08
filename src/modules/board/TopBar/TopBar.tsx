@@ -35,7 +35,7 @@ const Avatars: Component = () => {
 
 type TopBarProps = {
   board: BoardModel;
-  boardAccess?: BoardAccess;
+  boardAccess: BoardAccess;
 };
 
 export const TopBar: Component<TopBarProps> = (props) => {

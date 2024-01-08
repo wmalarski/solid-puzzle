@@ -10,7 +10,7 @@ import {
 import type { BoardAccess } from "~/server/share/db";
 
 type BoardQueryProps = {
-  boardAccess?: BoardAccess;
+  boardAccess: BoardAccess;
   boardId: string;
 };
 
@@ -35,7 +35,8 @@ export const route = {
     try {
       await selectProtectedBoardLoader({ id: params.boardId });
     } catch (error) {
-      console.log("error", error);
+      // eslint-disable-next-line no-console
+      console.error("LOAD error", error);
     }
   },
 } satisfies RouteDefinition;
@@ -50,7 +51,11 @@ export default function BoardSection() {
   return (
     <SessionProvider value={() => data()?.session || null}>
       <main class="relative h-screen w-screen">
-        <BoardQuery boardAccess={data()?.access} boardId={params.boardId} />
+        <Show when={data()?.access}>
+          {(access) => (
+            <BoardQuery boardAccess={access()} boardId={params.boardId} />
+          )}
+        </Show>
       </main>
     </SessionProvider>
   );

@@ -12,6 +12,7 @@ import { useI18n } from "~/contexts/I18nContext";
 import { InfoBar } from "~/modules/common/InfoBar";
 import type { BoardModel } from "~/server/board/types";
 import type { BoardAccess } from "~/server/share/db";
+import { PlayerPresenceProvider } from "../DataProviders/PresenceProvider";
 import { PuzzleStateProvider } from "../DataProviders/PuzzleProvider";
 
 const MenuBar = lazy(() => import("../MenuBar"));
@@ -22,12 +23,11 @@ const PixiStage = clientOnly(() => import("../PixiStage"));
 //   () => import("../DataProviders/RealtimeProvider"),
 // );
 
-type BoardProps = {
+type ClientBoardProps = {
   board: BoardModel;
-  boardAccess?: BoardAccess;
 };
 
-const ClientBoard: Component<BoardProps> = (props) => {
+const ClientBoard: Component<ClientBoardProps> = (props) => {
   const [canvas, setCanvas] = createSignal<HTMLCanvasElement>();
 
   return (
@@ -60,18 +60,23 @@ const ErrorFallback = (err: unknown, reset: VoidFunction) => {
   );
 };
 
+type BoardProps = {
+  board: BoardModel;
+  boardAccess: BoardAccess;
+};
+
 export const Board: Component<BoardProps> = (props) => {
   return (
     <ErrorBoundary fallback={ErrorFallback}>
       <Suspense>
-        {/* <PlayerPresenceProvider> */}
-        <PuzzleStateProvider>
-          <ClientBoard board={props.board} />
-          <TopNavbar board={props.board} boardAccess={props.boardAccess} />
-          <InfoBar />
-          <MenuBar />
-        </PuzzleStateProvider>
-        {/* </PlayerPresenceProvider> */}
+        <PlayerPresenceProvider boardAccess={props.boardAccess}>
+          <PuzzleStateProvider>
+            <ClientBoard board={props.board} />
+            <TopNavbar board={props.board} boardAccess={props.boardAccess} />
+            <InfoBar />
+            <MenuBar />
+          </PuzzleStateProvider>
+        </PlayerPresenceProvider>
         {/* <Suspense>
           <RealtimeProvider boardId={props.board.id} />
         </Suspense> */}

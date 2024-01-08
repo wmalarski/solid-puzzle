@@ -28,9 +28,8 @@ export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
     const x = 0;
     const y = -radius;
 
-    graphics.beginFill("red");
-    graphics.drawCircle(x, y, rotationAnchorRadius);
-    graphics.endFill();
+    graphics.circle(x, y, rotationAnchorRadius).fill({ color: "0xff0000" });
+
     // graphics.pivot.set(props.container.width / 2, props.container.height / 2);
   });
 

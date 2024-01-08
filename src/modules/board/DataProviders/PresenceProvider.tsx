@@ -1,11 +1,14 @@
 import {
   createContext,
+  createEffect,
   createSignal,
+  onCleanup,
   useContext,
   type Component,
   type JSX,
 } from "solid-js";
 import { createStore } from "solid-js/store";
+import type { BoardAccess } from "~/server/share/db";
 
 export type PlayerState = {
   name: string;
@@ -96,6 +99,7 @@ const PlayerPresenceContext = createContext<PlayerPresenceState>({
 });
 
 type PlayerPresenceProviderProps = {
+  boardAccess: BoardAccess;
   children: JSX.Element;
 };
 
@@ -103,6 +107,20 @@ export const PlayerPresenceProvider: Component<PlayerPresenceProviderProps> = (
   props,
 ) => {
   const value = createPlayerPresenceState();
+
+  createEffect(() => {
+    value.join({
+      name: props.boardAccess.username,
+      playerId: props.boardAccess.username,
+      x: 0,
+      y: 0,
+    });
+    onCleanup(() => {
+      value.leave({
+        playerId: props.boardAccess.username,
+      });
+    });
+  });
 
   return (
     <PlayerPresenceContext.Provider value={value}>
