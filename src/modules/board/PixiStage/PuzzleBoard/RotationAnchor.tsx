@@ -21,7 +21,6 @@ export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
 
   const graphics = new Graphics();
   graphics.eventMode = "static";
-  graphics.tint = "blue";
 
   onMount(() => {
     const radius = Math.max(props.container.width, props.container.height) / 2;
@@ -29,8 +28,6 @@ export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
     const y = -radius;
 
     graphics.circle(x, y, rotationAnchorRadius).fill({ color: "0xff0000" });
-
-    // graphics.pivot.set(props.container.width / 2, props.container.height / 2);
   });
 
   createEffect(() => {

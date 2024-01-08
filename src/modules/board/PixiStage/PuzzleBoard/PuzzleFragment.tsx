@@ -7,6 +7,7 @@ import {
   onMount,
   type Component,
 } from "solid-js";
+import { getCenterFromPoints, type Point2D } from "~/utils/geometry";
 import type { PuzzleFragmentShape } from "~/utils/getPuzzleFragments";
 import { usePlayerPresence } from "../../DataProviders/PresenceProvider";
 import { usePuzzleStore } from "../../DataProviders/PuzzleProvider";
@@ -20,9 +21,7 @@ type PuzzleFragmentLabelProps = {
   label: string;
 };
 
-export const PuzzleFragmentLabel: Component<PuzzleFragmentLabelProps> = (
-  props,
-) => {
+const PuzzleFragmentLabel: Component<PuzzleFragmentLabelProps> = (props) => {
   const text = new Text();
 
   createEffect(() => {
@@ -45,6 +44,7 @@ type PuzzleFragmentGraphicsProps = {
   state: FragmentState;
   shape: PuzzleFragmentShape;
   texture: Texture;
+  center: Point2D;
 };
 
 export const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
@@ -56,9 +56,6 @@ export const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
     const matrix = new Matrix(1, 0, 0, 1);
     matrix.translate(-props.shape.min.x, -props.shape.min.y);
 
-    // graphics.beginTextureFill({ matrix, texture: props.texture });
-    // graphics.lineStyle(4, randomHexColor(), 1);
-
     const elements = props.shape.curvePoints;
     const last = elements[elements.length - 1];
 
@@ -69,7 +66,7 @@ export const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
 
     graphics.fill({ matrix, texture: props.texture });
 
-    // graphics.pivot.set(graphics.width / 2, graphics.height / 2);
+    graphics.pivot.set(props.center.x, props.center.y);
   });
 
   onMount(() => {
@@ -102,10 +99,6 @@ const PuzzleContainer: Component<PuzzleContainerProps> = (props) => {
   const fragment = new Container();
 
   onMount(() => {
-    // console.log(
-    //   "PuzzleFragment",
-    //   JSON.stringify({ shape: props.shape, state: props.state }, null, 2)
-    // );
     container.addChild(fragment);
   });
 
@@ -113,14 +106,16 @@ const PuzzleContainer: Component<PuzzleContainerProps> = (props) => {
     container.removeChild(fragment);
   });
 
+  const center = createMemo(() => {
+    return getCenterFromPoints(
+      props.shape.curvePoints.map((point) => point.to),
+    );
+  });
+
   onMount(() => {
-    // fragment.pivot.set(
-    //   fragment.width / 2,
-    //   fragment.height / 2
-    //   // props.shape.max.x - props.shape.min.x,
-    //   // props.shape.max.y - props.shape.min.y
-    // );
-    fragment.pivot.set(fragment.width / 2, fragment.height / 2);
+    const centerValue = center();
+    fragment.pivot.set(-centerValue.x, -centerValue.y);
+
     fragment.x = props.shape.min.x;
     fragment.y = props.shape.min.y;
   });
@@ -181,6 +176,7 @@ const PuzzleContainer: Component<PuzzleContainerProps> = (props) => {
         state={props.state}
         shape={props.shape}
         texture={props.texture}
+        center={center()}
       />
       <PuzzleFragmentLabel container={fragment} label={fragmentId()} />
       <Show when={isFragmentSelected()}>
