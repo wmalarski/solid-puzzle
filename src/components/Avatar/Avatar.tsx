@@ -1,8 +1,8 @@
 import type { VariantProps } from "class-variance-authority";
-import { splitProps, type Component, type JSX } from "solid-js";
+import { splitProps, type Component, type ComponentProps } from "solid-js";
 import { twCva, twCx } from "../utils/twCva";
 
-export type AvatarGroupProps = JSX.IntrinsicElements["div"];
+export type AvatarGroupProps = ComponentProps<"div">;
 
 export const AvatarGroup: Component<AvatarGroupProps> = (props) => {
   return (
@@ -26,7 +26,7 @@ export const avatarClass = twCva("avatar", {
   },
 });
 
-export type AvatarProps = JSX.IntrinsicElements["div"] &
+export type AvatarProps = ComponentProps<"div"> &
   VariantProps<typeof avatarClass>;
 
 export const Avatar: Component<AvatarProps> = (props) => {
@@ -70,7 +70,7 @@ export const avatarContentClass = twCva("", {
   },
 });
 
-export type AvatarContentProps = JSX.IntrinsicElements["div"] &
+export type AvatarContentProps = ComponentProps<"div"> &
   VariantProps<typeof avatarContentClass>;
 
 export const AvatarContent: Component<AvatarContentProps> = (props) => {

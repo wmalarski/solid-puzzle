@@ -1,6 +1,6 @@
 import { useNavigate, useSearchParams } from "@solidjs/router";
 import { createMutation, useQueryClient } from "@tanstack/solid-query";
-import { Show, type Component, type JSX } from "solid-js";
+import { Show, type Component, type ComponentProps } from "solid-js";
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
 import { Card, CardBody, cardTitleClass } from "~/components/Card";
@@ -38,7 +38,7 @@ export const AcceptInviteForm: Component<AcceptInviteFormProps> = (props) => {
     },
   }));
 
-  const onSubmit: JSX.IntrinsicElements["form"]["onSubmit"] = (event) => {
+  const onSubmit: ComponentProps<"form">["onSubmit"] = (event) => {
     event.preventDefault();
 
     const data = new FormData(event.currentTarget);

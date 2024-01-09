@@ -1,6 +1,6 @@
 import { revalidate, useNavigate } from "@solidjs/router";
 import { createMutation } from "@tanstack/solid-query";
-import { Show, type Component, type JSX } from "solid-js";
+import { Show, type Component, type ComponentProps } from "solid-js";
 import { Button, LinkButton } from "~/components/Button";
 import { PuzzleIcon } from "~/components/Icons/PuzzleIcon";
 import { Link } from "~/components/Link";
@@ -24,7 +24,7 @@ const SignOutButton: Component = () => {
     },
   }));
 
-  const onSubmit: JSX.IntrinsicElements["form"]["onSubmit"] = (event) => {
+  const onSubmit: ComponentProps<"form">["onSubmit"] = (event) => {
     event.preventDefault();
 
     mutation.mutate();

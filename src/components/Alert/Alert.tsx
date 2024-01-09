@@ -1,5 +1,5 @@
 import type { VariantProps } from "class-variance-authority";
-import { splitProps, type Component, type JSX } from "solid-js";
+import { splitProps, type Component, type ComponentProps } from "solid-js";
 import { Dynamic } from "solid-js/web";
 import { AlertCircleIcon } from "../Icons/AlertCircleIcon";
 import { CheckCircleIcon } from "../Icons/CheckCircleIcon";
@@ -21,7 +21,7 @@ export const alertClass = twCva("alert justify-start", {
   },
 });
 
-export type AlertProps = JSX.IntrinsicElements["div"] &
+export type AlertProps = ComponentProps<"div"> &
   VariantProps<typeof alertClass>;
 
 export const Alert: Component<AlertProps> = (props) => {

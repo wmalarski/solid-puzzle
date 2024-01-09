@@ -1,5 +1,5 @@
 import type { VariantProps } from "class-variance-authority";
-import { splitProps, type Component, type JSX } from "solid-js";
+import { splitProps, type Component, type ComponentProps } from "solid-js";
 import { twCva } from "../utils/twCva";
 
 export const rangeClass = twCva("range", {
@@ -26,7 +26,7 @@ export const rangeClass = twCva("range", {
   },
 });
 
-export type RangeProps = JSX.IntrinsicElements["input"] &
+export type RangeProps = ComponentProps<"input"> &
   VariantProps<typeof rangeClass>;
 
 export const Range: Component<RangeProps> = (props) => {

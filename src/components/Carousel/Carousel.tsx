@@ -1,5 +1,5 @@
 import type { VariantProps } from "class-variance-authority";
-import { splitProps, type Component, type JSX } from "solid-js";
+import { splitProps, type Component, type ComponentProps } from "solid-js";
 import { twCva, twCx } from "../utils/twCva";
 
 export const carouselClass = twCva("carousel", {
@@ -18,7 +18,7 @@ export const carouselClass = twCva("carousel", {
   },
 });
 
-export type CarouselProps = JSX.IntrinsicElements["div"] &
+export type CarouselProps = ComponentProps<"div"> &
   VariantProps<typeof carouselClass>;
 
 export const Carousel: Component<CarouselProps> = (props) => {
@@ -29,7 +29,7 @@ export const Carousel: Component<CarouselProps> = (props) => {
   );
 };
 
-export type CarouselItemProps = JSX.IntrinsicElements["div"];
+export type CarouselItemProps = ComponentProps<"div">;
 
 export const CarouselItem: Component<CarouselItemProps> = (props) => {
   return <div {...props} class={twCx("carousel-item", props.class)} />;

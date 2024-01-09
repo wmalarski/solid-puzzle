@@ -1,6 +1,6 @@
 import { Toast, toaster } from "@kobalte/core";
 import type { VariantProps } from "class-variance-authority";
-import { splitProps, type Component, type JSX } from "solid-js";
+import { splitProps, type Component, type ComponentProps } from "solid-js";
 import { AlertIcon, alertClass, type AlertIconProps } from "../Alert";
 import { twCx } from "../utils/twCva";
 
@@ -43,9 +43,7 @@ export const ToastRoot: Component<ToastRootProps> = (props) => {
   );
 };
 
-export const ToastContent: Component<JSX.IntrinsicElements["div"]> = (
-  props,
-) => {
+export const ToastContent: Component<ComponentProps<"div">> = (props) => {
   return (
     <div
       {...props}

@@ -2,7 +2,7 @@ import type { VariantProps } from "class-variance-authority";
 import {
   splitProps,
   type Component,
-  type JSX,
+  type ComponentProps,
   type ValidComponent,
 } from "solid-js";
 import { Dynamic, type DynamicProps } from "solid-js/web";
@@ -43,8 +43,7 @@ export const cardClass = twCva("card", {
   },
 });
 
-export type CardProps = JSX.IntrinsicElements["div"] &
-  VariantProps<typeof cardClass>;
+export type CardProps = ComponentProps<"div"> & VariantProps<typeof cardClass>;
 
 export const Card: Component<CardProps> = (props) => {
   const [split, rest] = splitProps(props, ["variant", "size", "color", "bg"]);
@@ -66,7 +65,7 @@ export function CardTitle<T extends ValidComponent>(props: CardTitleProps<T>) {
   );
 }
 
-export type CardBodyProps = JSX.IntrinsicElements["div"];
+export type CardBodyProps = ComponentProps<"div">;
 
 export function CardBody(props: CardBodyProps) {
   return <div {...props} class={twCx("card-body", props.class)} />;
@@ -83,7 +82,7 @@ export const cardActionsClass = twCva("card-actions", {
   },
 });
 
-export type CardActionsProps = JSX.IntrinsicElements["div"] &
+export type CardActionsProps = ComponentProps<"div"> &
   VariantProps<typeof cardActionsClass>;
 
 export const CardActions: Component<CardActionsProps> = (props) => {

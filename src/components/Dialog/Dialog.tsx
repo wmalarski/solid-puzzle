@@ -1,6 +1,6 @@
 import { Dialog } from "@kobalte/core";
 import type { VariantProps } from "class-variance-authority";
-import { splitProps, type Component, type JSX } from "solid-js";
+import { splitProps, type Component, type ComponentProps } from "solid-js";
 import { buttonClass } from "../Button";
 import { twCx } from "../utils/twCva";
 import styles from "./Dialog.module.css";
@@ -48,7 +48,7 @@ export const DialogOverlay: Component<DialogOverlayProps> = (props) => {
   );
 };
 
-export type DialogPositionerProps = JSX.IntrinsicElements["div"];
+export type DialogPositionerProps = ComponentProps<"div">;
 
 export const DialogPositioner: Component<DialogPositionerProps> = (props) => {
   return (
@@ -77,7 +77,7 @@ export const DialogContent: Component<DialogContentProps> = (props) => {
   );
 };
 
-export type DialogHeaderProps = JSX.IntrinsicElements["header"];
+export type DialogHeaderProps = ComponentProps<"header">;
 
 export const DialogHeader: Component<DialogHeaderProps> = (props) => {
   return (

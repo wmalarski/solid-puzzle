@@ -1,5 +1,5 @@
 import type { VariantProps } from "class-variance-authority";
-import { splitProps, type Component, type JSX } from "solid-js";
+import { splitProps, type Component, type ComponentProps } from "solid-js";
 import { twCva } from "../utils/twCva";
 
 export const buttonClass = twCva("btn no-animation flex items-center gap-1", {
@@ -47,7 +47,7 @@ export const buttonClass = twCva("btn no-animation flex items-center gap-1", {
   },
 });
 
-export type ButtonProps = JSX.IntrinsicElements["button"] &
+export type ButtonProps = ComponentProps<"button"> &
   VariantProps<typeof buttonClass>;
 
 export const Button: Component<ButtonProps> = (props) => {
@@ -76,7 +76,7 @@ export const buttonGroupClass = twCva("btn-group", {
   },
 });
 
-export type ButtonGroupProps = JSX.IntrinsicElements["div"] &
+export type ButtonGroupProps = ComponentProps<"div"> &
   VariantProps<typeof buttonGroupClass>;
 
 export const ButtonGroup: Component<ButtonGroupProps> = (props) => {
@@ -87,7 +87,7 @@ export const ButtonGroup: Component<ButtonGroupProps> = (props) => {
   );
 };
 
-export type LinkButtonProps = JSX.IntrinsicElements["a"] &
+export type LinkButtonProps = ComponentProps<"a"> &
   VariantProps<typeof buttonClass>;
 
 export const LinkButton: Component<LinkButtonProps> = (props) => {

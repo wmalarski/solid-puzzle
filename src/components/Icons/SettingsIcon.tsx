@@ -1,6 +1,6 @@
-import type { JSX } from "solid-js";
+import type { ComponentProps } from "solid-js";
 
-export const SettingsIcon = (props: JSX.IntrinsicElements["svg"]) => {
+export const SettingsIcon = (props: ComponentProps<"svg">) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

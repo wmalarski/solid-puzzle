@@ -1,6 +1,6 @@
 import { Popover as KobaltePopover } from "@kobalte/core";
 import type { VariantProps } from "class-variance-authority";
-import { splitProps, type Component, type JSX } from "solid-js";
+import { splitProps, type Component, type ComponentProps } from "solid-js";
 import { buttonClass } from "../Button";
 import { twCx } from "../utils/twCva";
 import styles from "./Popover.module.css";
@@ -56,7 +56,7 @@ export const PopoverArrow: Component<KobaltePopover.PopoverArrowProps> = (
   return <KobaltePopover.Arrow {...props} class={twCx("", props.class)} />;
 };
 
-export type PopoverHeaderProps = JSX.IntrinsicElements["div"];
+export type PopoverHeaderProps = ComponentProps<"div">;
 
 export const PopoverHeader: Component<PopoverHeaderProps> = (props) => {
   return (

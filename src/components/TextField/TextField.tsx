@@ -1,14 +1,14 @@
 import type { VariantProps } from "class-variance-authority";
-import { splitProps, type Component, type JSX } from "solid-js";
+import { splitProps, type Component, type ComponentProps } from "solid-js";
 import { twCva, twCx } from "../utils/twCva";
 
-export type TextFieldRootProps = JSX.IntrinsicElements["fieldset"];
+export type TextFieldRootProps = ComponentProps<"fieldset">;
 
 export const TextFieldRoot: Component<TextFieldRootProps> = (props) => {
   return <fieldset {...props} class={twCx("form-control", props.class)} />;
 };
 
-export type TextFieldLabelProps = JSX.IntrinsicElements["label"];
+export type TextFieldLabelProps = ComponentProps<"label">;
 
 export const TextFieldLabel: Component<TextFieldLabelProps> = (props) => {
   return (
@@ -17,7 +17,7 @@ export const TextFieldLabel: Component<TextFieldLabelProps> = (props) => {
   );
 };
 
-export type TextFieldLabelTextProps = JSX.IntrinsicElements["span"];
+export type TextFieldLabelTextProps = ComponentProps<"span">;
 
 export const TextFieldLabelText: Component<TextFieldLabelTextProps> = (
   props,
@@ -28,7 +28,7 @@ export const TextFieldLabelText: Component<TextFieldLabelTextProps> = (
   );
 };
 
-export type TextFieldDescriptionProps = JSX.IntrinsicElements["span"];
+export type TextFieldDescriptionProps = ComponentProps<"span">;
 
 export const TextFieldDescription: Component<TextFieldDescriptionProps> = (
   props,
@@ -36,7 +36,7 @@ export const TextFieldDescription: Component<TextFieldDescriptionProps> = (
   return <span {...props} class={twCx("label-text-alt pt-2", props.class)} />;
 };
 
-export type TextFieldErrorMessageProps = JSX.IntrinsicElements["span"];
+export type TextFieldErrorMessageProps = ComponentProps<"span">;
 
 export const TextFieldErrorMessage: Component<TextFieldErrorMessageProps> = (
   props,
@@ -75,7 +75,7 @@ export const textFieldInputClass = twCva("input", {
   },
 });
 
-export type TextFieldInputProps = JSX.IntrinsicElements["input"] &
+export type TextFieldInputProps = ComponentProps<"input"> &
   VariantProps<typeof textFieldInputClass>;
 
 export const TextFieldInput: Component<TextFieldInputProps> = (props) => {
@@ -89,7 +89,7 @@ export const TextFieldInput: Component<TextFieldInputProps> = (props) => {
   );
 };
 
-export type TextFieldTextAreaProps = JSX.IntrinsicElements["textarea"] &
+export type TextFieldTextAreaProps = ComponentProps<"textarea"> &
   VariantProps<typeof textFieldInputClass>;
 
 export const TextFieldTextArea: Component<TextFieldTextAreaProps> = (props) => {
