@@ -14,6 +14,7 @@ import {
   usePuzzleStore,
   type FragmentState,
 } from "../../DataProviders/PuzzleProvider";
+import { useBoardTheme } from "../BoardTheme";
 import { usePixiApp } from "../PixiApp";
 import { RotationAnchor } from "./RotationAnchor";
 import { useDragObject } from "./useDragObject";
@@ -41,32 +42,86 @@ const PuzzleFragmentLabel: Component<PuzzleFragmentLabelProps> = (props) => {
   return null;
 };
 
+const drawPuzzleShape = (shape: PuzzleFragmentShape, graphics: Graphics) => {
+  const matrix = new Matrix(1, 0, 0, 1);
+  matrix.translate(-shape.min.x, -shape.min.y);
+
+  const elements = shape.curvePoints;
+  const last = elements[elements.length - 1];
+
+  graphics.moveTo(last.to.x, last.to.y);
+  shape.curvePoints.forEach(({ control, to }) => {
+    graphics.quadraticCurveTo(control.x, control.y, to.x, to.y);
+  });
+
+  return matrix;
+};
+
+type PuzzleBorderGraphicsProps = {
+  center: Point2D;
+  container: Container;
+  shape: PuzzleFragmentShape;
+  state: FragmentState;
+};
+
+const PuzzleBorderGraphics: Component<PuzzleBorderGraphicsProps> = (props) => {
+  const theme = useBoardTheme();
+
+  const graphics = new Graphics();
+
+  onMount(() => {
+    const matrix = drawPuzzleShape(props.shape, graphics);
+
+    graphics.stroke({
+      color: theme.fragmentBorderSelectedColor,
+      matrix,
+      width: 2,
+    });
+
+    graphics.pivot.set(props.center.x, props.center.y);
+  });
+
+  onMount(() => {
+    props.container.addChild(graphics);
+  });
+
+  onCleanup(() => {
+    props.container.removeChild(graphics);
+    graphics.destroy();
+  });
+
+  createEffect(() => {
+    graphics.rotation = props.state.isLocked ? 0 : props.state.rotation;
+  });
+
+  return null;
+};
+
 type PuzzleFragmentGraphicsProps = {
   center: Point2D;
   container: Container;
+  isSelected: boolean;
   shape: PuzzleFragmentShape;
   state: FragmentState;
   texture: Texture;
 };
 
-export const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
+const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
   props,
 ) => {
+  const theme = useBoardTheme();
+
   const graphics = new Graphics();
 
   onMount(() => {
-    const matrix = new Matrix(1, 0, 0, 1);
-    matrix.translate(-props.shape.min.x, -props.shape.min.y);
-
-    const elements = props.shape.curvePoints;
-    const last = elements[elements.length - 1];
-
-    graphics.moveTo(last.to.x, last.to.y);
-    props.shape.curvePoints.forEach(({ control, to }) => {
-      graphics.quadraticCurveTo(control.x, control.y, to.x, to.y);
-    });
+    const matrix = drawPuzzleShape(props.shape, graphics);
 
     graphics.fill({ matrix, texture: props.texture });
+    graphics.stroke({
+      color: theme.fragmentBorderColor,
+      matrix,
+      width: 1,
+    });
 
     graphics.pivot.set(props.center.x, props.center.y);
   });
@@ -178,19 +233,28 @@ const PuzzleContainer: Component<PuzzleContainerProps> = (props) => {
       <PuzzleFragmentGraphics
         center={center()}
         container={fragment}
+        isSelected={isFragmentSelected()}
         shape={props.shape}
         state={props.state}
         texture={props.texture}
       />
       <PuzzleFragmentLabel container={fragment} label={fragmentId()} />
-      <Show when={isFragmentSelected() && !props.state.isLocked}>
-        <RotationAnchor
-          container={fragment}
-          onEnd={onRotationEnd}
-          onRotate={onRotationMove}
-          rotation={props.state.rotation}
-          rotationOffset={rotationOffset}
-        />
+      <Show when={isFragmentSelected()}>
+        <>
+          <PuzzleBorderGraphics
+            center={center()}
+            container={fragment}
+            shape={props.shape}
+            state={props.state}
+          />
+          <RotationAnchor
+            container={fragment}
+            onEnd={onRotationEnd}
+            onRotate={onRotationMove}
+            rotation={props.state.rotation}
+            rotationOffset={rotationOffset}
+          />
+        </>
       </Show>
     </>
   );
