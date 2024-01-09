@@ -40,11 +40,11 @@ const PuzzleFragmentLabel: Component<PuzzleFragmentLabelProps> = (props) => {
 };
 
 type PuzzleFragmentGraphicsProps = {
-  container: Container;
-  state: FragmentState;
-  shape: PuzzleFragmentShape;
-  texture: Texture;
   center: Point2D;
+  container: Container;
+  shape: PuzzleFragmentShape;
+  state: FragmentState;
+  texture: Texture;
 };
 
 export const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
@@ -161,6 +161,8 @@ const PuzzleContainer: Component<PuzzleContainerProps> = (props) => {
     },
   });
 
+  const rotationOffset = Math.random() * 2 * Math.PI;
+
   const onRotationEnd = (rotation: number) => {
     store.setFragmentState({ ...props.state, rotation });
   };
@@ -172,19 +174,20 @@ const PuzzleContainer: Component<PuzzleContainerProps> = (props) => {
   return (
     <>
       <PuzzleFragmentGraphics
-        container={fragment}
-        state={props.state}
-        shape={props.shape}
-        texture={props.texture}
         center={center()}
+        container={fragment}
+        shape={props.shape}
+        state={props.state}
+        texture={props.texture}
       />
       <PuzzleFragmentLabel container={fragment} label={fragmentId()} />
       <Show when={isFragmentSelected()}>
         <RotationAnchor
           container={fragment}
-          rotation={props.state.rotation}
           onEnd={onRotationEnd}
           onRotate={onRotationMove}
+          rotation={props.state.rotation}
+          rotationOffset={rotationOffset}
         />
       </Show>
     </>

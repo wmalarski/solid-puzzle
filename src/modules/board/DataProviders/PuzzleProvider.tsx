@@ -56,7 +56,8 @@ const createPuzzleContext = () => {
       return false;
     }
     const distance = getDistance(fragment, shape.min);
-    const isRightAngle = Math.abs(fragment.rotation) < Math.PI / 32;
+    const isRightAngle =
+      Math.abs(fragment.rotation) % (2 * Math.PI) < Math.PI / 32;
     const isLocked = distance < 20 && isRightAngle;
 
     return isLocked;

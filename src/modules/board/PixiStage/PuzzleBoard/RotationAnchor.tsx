@@ -10,6 +10,7 @@ import { usePixiContainer } from "../PixiApp";
 type RotationAnchorProps = {
   container: Container;
   rotation: number;
+  rotationOffset: number;
   onRotate: (rotation: number) => void;
   onEnd: (rotation: number) => void;
 };
@@ -31,12 +32,12 @@ export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
   });
 
   createEffect(() => {
-    graphics.rotation = props.rotation;
+    graphics.rotation = props.rotation + props.rotationOffset;
   });
 
   const toRotation = (event: FederatedPointerEvent) => {
     const local = props.container.toLocal(event.global);
-    return Math.atan2(local.y, local.x) + Math.PI / 2;
+    return Math.atan2(local.y, local.x) + Math.PI / 2 - props.rotationOffset;
   };
 
   const onDragMove = (event: FederatedPointerEvent) => {
