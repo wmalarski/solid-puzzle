@@ -181,7 +181,7 @@ const PuzzleContainer: Component<PuzzleContainerProps> = (props) => {
         texture={props.texture}
       />
       <PuzzleFragmentLabel container={fragment} label={fragmentId()} />
-      <Show when={isFragmentSelected()}>
+      <Show when={isFragmentSelected() && !props.state.isLocked}>
         <RotationAnchor
           container={fragment}
           onEnd={onRotationEnd}
