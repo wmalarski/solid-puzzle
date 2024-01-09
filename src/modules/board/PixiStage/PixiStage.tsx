@@ -2,8 +2,10 @@ import type { Component } from "solid-js";
 import type { BoardModel } from "~/server/board/types";
 import { TransformContextProvider } from "../TransformContext";
 import { ZoomBar } from "../ZoomBar";
+import { BoardThemeProvider } from "./BoardTheme";
 import { PixiAppProvider } from "./PixiApp";
 import { PuzzleBoard } from "./PuzzleBoard/PuzzleBoard";
+import { MOCK_IMAGE } from "./constants";
 import { usePreventMenu } from "./usePreventMenu";
 import { useStageTransform } from "./useStageTransform";
 
@@ -15,12 +17,7 @@ const Stage: Component<StageProps> = (props) => {
   useStageTransform();
   usePreventMenu();
 
-  return (
-    <PuzzleBoard
-      board={props.board}
-      path="https://res.cloudinary.com/demo/image/upload/brown_sheep.jpg"
-    />
-  );
+  return <PuzzleBoard board={props.board} path={MOCK_IMAGE} />;
 };
 
 type Props = {
@@ -30,11 +27,13 @@ type Props = {
 
 export const PixiStage: Component<Props> = (props) => {
   return (
-    <PixiAppProvider canvas={props.canvas}>
-      <TransformContextProvider>
-        <Stage board={props.board} />
-        <ZoomBar />
-      </TransformContextProvider>
-    </PixiAppProvider>
+    <BoardThemeProvider>
+      <PixiAppProvider canvas={props.canvas}>
+        <TransformContextProvider>
+          <Stage board={props.board} />
+          <ZoomBar />
+        </TransformContextProvider>
+      </PixiAppProvider>
+    </BoardThemeProvider>
   );
 };

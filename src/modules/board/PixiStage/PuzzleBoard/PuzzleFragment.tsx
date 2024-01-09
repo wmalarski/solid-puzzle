@@ -10,9 +10,11 @@ import {
 import { getCenterFromPoints, type Point2D } from "~/utils/geometry";
 import type { PuzzleFragmentShape } from "~/utils/getPuzzleFragments";
 import { usePlayerPresence } from "../../DataProviders/PresenceProvider";
-import { usePuzzleStore } from "../../DataProviders/PuzzleProvider";
+import {
+  usePuzzleStore,
+  type FragmentState,
+} from "../../DataProviders/PuzzleProvider";
 import { usePixiApp } from "../PixiApp";
-import { type FragmentState } from "./PuzzleStore";
 import { RotationAnchor } from "./RotationAnchor";
 import { useDragObject } from "./useDragObject";
 

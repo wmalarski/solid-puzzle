@@ -1,8 +1,8 @@
 import { Graphics, Sprite, type Texture } from "pixi.js";
 import { createEffect, onCleanup, onMount, type Component } from "solid-js";
 import type { PuzzleShapeLine } from "~/utils/getPuzzleFragments";
+import { useBoardTheme } from "../BoardTheme";
 import { usePixiApp } from "../PixiApp";
-import { PREVIEW_STROKE_COLOR } from "../constants";
 
 type PreviewGridProps = {
   lines: PuzzleShapeLine[];
@@ -10,6 +10,7 @@ type PreviewGridProps = {
 
 export const PreviewGrid: Component<PreviewGridProps> = (props) => {
   const app = usePixiApp();
+  const theme = useBoardTheme();
 
   const graphics = new Graphics();
 
@@ -18,7 +19,10 @@ export const PreviewGrid: Component<PreviewGridProps> = (props) => {
       graphics
         .moveTo(line.start.x, line.start.y)
         .quadraticCurveTo(line.center.x, line.center.y, line.end.x, line.end.y)
-        .stroke({ color: PREVIEW_STROKE_COLOR, width: 1 });
+        .stroke({
+          color: theme.previewStrokeColor,
+          width: theme.previewStrokeWidth,
+        });
     });
   });
 
@@ -39,9 +43,10 @@ type PreviewSpriteProps = {
 
 export const PreviewSprite: Component<PreviewSpriteProps> = (props) => {
   const app = usePixiApp();
+  const theme = useBoardTheme();
 
   const sprite = new Sprite();
-  sprite.alpha = 0.2;
+  sprite.alpha = theme.previewSpriteAlpha;
 
   createEffect(() => {
     sprite.texture = props.texture;

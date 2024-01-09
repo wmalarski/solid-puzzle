@@ -5,7 +5,9 @@ import {
   type FederatedPointerEvent,
 } from "pixi.js";
 import { createEffect, onCleanup, onMount, type Component } from "solid-js";
+import { useBoardTheme } from "../BoardTheme";
 import { usePixiApp } from "../PixiApp";
+import { RIGHT_BUTTON } from "../constants";
 
 type RotationAnchorProps = {
   container: Container;
@@ -15,10 +17,9 @@ type RotationAnchorProps = {
   onEnd: (rotation: number) => void;
 };
 
-const rotationAnchorRadius = 10;
-
 export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
   const app = usePixiApp();
+  const theme = useBoardTheme();
 
   const graphics = new Graphics();
   graphics.eventMode = "static";
@@ -28,7 +29,9 @@ export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
     const x = 0;
     const y = -radius;
 
-    graphics.circle(x, y, rotationAnchorRadius).fill({ color: "0xff0000" });
+    graphics
+      .circle(x, y, theme.rotationAnchorRadius)
+      .fill({ color: theme.rotationAnchorColor });
   });
 
   createEffect(() => {
@@ -55,7 +58,7 @@ export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
   };
 
   const onPointerDown = (event: FederatedMouseEvent) => {
-    if (event.button === 2) {
+    if (event.button === RIGHT_BUTTON) {
       return;
     }
 

@@ -12,6 +12,7 @@ import type { BoardModel } from "~/server/board/types";
 import { usePlayerPresence } from "../../DataProviders/PresenceProvider";
 import { usePuzzleStore } from "../../DataProviders/PuzzleProvider";
 import { usePixiApp } from "../PixiApp";
+import { RIGHT_BUTTON } from "../constants";
 import { PreviewGrid, PreviewSprite } from "./PreviewSprite";
 import { PuzzleFragment } from "./PuzzleFragment";
 
@@ -23,7 +24,7 @@ const useStageDeselect = (args: UseStageDeselectArgs) => {
   const app = usePixiApp();
 
   const onPointerDown = (event: FederatedPointerEvent) => {
-    if (event.target === app.stage && event.button !== 2) {
+    if (event.target === app.stage && event.button !== RIGHT_BUTTON) {
       args.onDeselect();
     }
   };
