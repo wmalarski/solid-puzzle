@@ -55,6 +55,8 @@ export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
 
     const rotation = toRotation(event);
     props.onEnd(rotation);
+
+    app.canvas.style.cursor = "default";
   };
 
   const onPointerDown = (event: FederatedMouseEvent) => {
@@ -66,6 +68,8 @@ export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
     app.stage.on("pointermove", onDragMove);
     app.stage.once("pointerup", onDragEnd);
     app.stage.once("pointerupoutside", onDragEnd);
+
+    app.canvas.style.cursor = "grab";
   };
 
   onMount(() => {

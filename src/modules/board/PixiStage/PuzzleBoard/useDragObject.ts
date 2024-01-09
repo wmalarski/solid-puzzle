@@ -5,6 +5,8 @@ import type {
 } from "pixi.js";
 import { createSignal, onCleanup, onMount } from "solid-js";
 import { subtractPoint, type Point2D } from "~/utils/geometry";
+import { usePixiApp } from "../PixiApp";
+import { RIGHT_BUTTON } from "../constants";
 
 type DragConstraintArgs = {
   shift: Point2D;
@@ -24,6 +26,8 @@ const defaultDragConstraint = (args: DragConstraintArgs) => {
 };
 
 export const useDragObject = (args: UseDragObjectArgs) => {
+  const app = usePixiApp();
+
   const [shift, setShift] = createSignal<Point2D>();
 
   const onDragMove = (event: FederatedPointerEvent) => {
@@ -58,12 +62,14 @@ export const useDragObject = (args: UseDragObjectArgs) => {
 
     setShift();
     args.onDragEnd?.(event);
+
+    app.canvas.style.cursor = "default";
   };
 
   const onPointerDown = (event: FederatedMouseEvent) => {
     const parent = args.displayObject.parent;
 
-    if (event.button === 2 || !parent) {
+    if (event.button === RIGHT_BUTTON || !parent) {
       return;
     }
 
@@ -79,6 +85,8 @@ export const useDragObject = (args: UseDragObjectArgs) => {
     parent.once("pointerupoutside", onDragEnd);
 
     args.onDragStart?.(event);
+
+    app.canvas.style.cursor = "grab";
   };
 
   onMount(() => {

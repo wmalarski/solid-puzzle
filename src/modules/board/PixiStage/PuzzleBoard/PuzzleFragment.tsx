@@ -26,6 +26,7 @@ type PuzzleFragmentLabelProps = {
 
 const PuzzleFragmentLabel: Component<PuzzleFragmentLabelProps> = (props) => {
   const text = new Text();
+  text.scale.set(0.5);
 
   createEffect(() => {
     text.text = props.label;
