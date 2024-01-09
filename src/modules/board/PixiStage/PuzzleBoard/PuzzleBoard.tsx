@@ -11,7 +11,7 @@ import {
 import type { BoardModel } from "~/server/board/types";
 import { usePlayerPresence } from "../../DataProviders/PresenceProvider";
 import { usePuzzleStore } from "../../DataProviders/PuzzleProvider";
-import { usePixiContainer } from "../PixiApp";
+import { usePixiApp } from "../PixiApp";
 import { PreviewGrid, PreviewSprite } from "./PreviewSprite";
 import { PuzzleFragment } from "./PuzzleFragment";
 
@@ -20,20 +20,20 @@ type UseStageDeselectArgs = {
 };
 
 const useStageDeselect = (args: UseStageDeselectArgs) => {
-  const container = usePixiContainer();
+  const app = usePixiApp();
 
   const onPointerDown = (event: FederatedPointerEvent) => {
-    if (event.target === container && event.button !== 2) {
+    if (event.target === app.stage && event.button !== 2) {
       args.onDeselect();
     }
   };
 
   onMount(() => {
-    container.on("pointerdown", onPointerDown);
+    app.stage.on("pointerdown", onPointerDown);
   });
 
   onCleanup(() => {
-    container.off("pointerdown", onPointerDown);
+    app.stage.off("pointerdown", onPointerDown);
   });
 };
 

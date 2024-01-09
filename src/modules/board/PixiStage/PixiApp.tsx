@@ -1,4 +1,4 @@
-import { Application, type Container } from "pixi.js";
+import { Application } from "pixi.js";
 import {
   createContext,
   createResource,
@@ -13,14 +13,6 @@ const PixiAppContext = createContext<Application>({} as unknown as Application);
 
 export const usePixiApp = () => {
   return useContext(PixiAppContext);
-};
-
-const PixiContainerContext = createContext<Container>(
-  {} as unknown as Container,
-);
-
-export const usePixiContainer = () => {
-  return useContext(PixiContainerContext);
 };
 
 type Props = {
@@ -64,9 +56,7 @@ export const PixiAppProvider: Component<Props> = (props) => {
 
   return (
     <PixiAppContext.Provider value={app}>
-      <PixiContainerContext.Provider value={app.stage}>
-        {props.children}
-      </PixiContainerContext.Provider>
+      {props.children}
     </PixiAppContext.Provider>
   );
 };

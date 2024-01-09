@@ -1,20 +1,20 @@
 import type { FederatedPointerEvent, FederatedWheelEvent } from "pixi.js";
 import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import { useTransformContext } from "../TransformContext";
-import { usePixiContainer } from "./PixiApp";
+import { usePixiApp } from "./PixiApp";
 
 const useZoom = () => {
-  const container = usePixiContainer();
+  const app = usePixiApp();
   const transform = useTransformContext();
 
   createEffect(() => {
-    container.scale.set(transform.scale(), transform.scale());
-    container.position.set(transform.x(), transform.y());
+    app.stage.scale.set(transform.scale(), transform.scale());
+    app.stage.position.set(transform.x(), transform.y());
   });
 };
 
 const usePane = () => {
-  const container = usePixiContainer();
+  const app = usePixiApp();
   const transform = useTransformContext();
 
   const [startX, setStartX] = createSignal<number>(0);
@@ -31,11 +31,11 @@ const usePane = () => {
   };
 
   onMount(() => {
-    container.on("pointerdown", onPointerDown);
+    app.stage.on("pointerdown", onPointerDown);
   });
 
   onCleanup(() => {
-    container.off("pointerdown", onPointerDown);
+    app.stage.off("pointerdown", onPointerDown);
   });
 
   createEffect(() => {
@@ -51,27 +51,27 @@ const usePane = () => {
     };
 
     const onDragEnd = () => {
-      container.off("pointermove", onPointerMove);
+      app.stage.off("pointermove", onPointerMove);
       setOriginX();
       setOriginY();
     };
 
     onMount(() => {
-      container.on("pointermove", onPointerMove);
-      container.on("pointerup", onDragEnd);
-      container.on("pointerupoutside", onDragEnd);
+      app.stage.on("pointermove", onPointerMove);
+      app.stage.on("pointerup", onDragEnd);
+      app.stage.on("pointerupoutside", onDragEnd);
     });
 
     onCleanup(() => {
-      container.off("pointermove", onPointerMove);
-      container.off("pointerup", onDragEnd);
-      container.off("pointerupoutside", onDragEnd);
+      app.stage.off("pointermove", onPointerMove);
+      app.stage.off("pointerup", onDragEnd);
+      app.stage.off("pointerupoutside", onDragEnd);
     });
   });
 };
 
 const useWheel = () => {
-  const container = usePixiContainer();
+  const app = usePixiApp();
   const transform = useTransformContext();
 
   const onWheel = (event: FederatedWheelEvent) => {
@@ -85,11 +85,11 @@ const useWheel = () => {
   };
 
   onMount(() => {
-    container.on("wheel", onWheel);
+    app.stage.on("wheel", onWheel);
   });
 
   onCleanup(() => {
-    container.off("wheel", onWheel);
+    app.stage.off("wheel", onWheel);
   });
 };
 

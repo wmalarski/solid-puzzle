@@ -1,7 +1,7 @@
 import { Graphics, Sprite, type Texture } from "pixi.js";
 import { createEffect, onCleanup, onMount, type Component } from "solid-js";
 import type { PuzzleShapeLine } from "~/utils/getPuzzleFragments";
-import { usePixiContainer } from "../PixiApp";
+import { usePixiApp } from "../PixiApp";
 import { PREVIEW_STROKE_COLOR } from "../constants";
 
 type PreviewGridProps = {
@@ -9,7 +9,7 @@ type PreviewGridProps = {
 };
 
 export const PreviewGrid: Component<PreviewGridProps> = (props) => {
-  const container = usePixiContainer();
+  const app = usePixiApp();
 
   const graphics = new Graphics();
 
@@ -23,11 +23,11 @@ export const PreviewGrid: Component<PreviewGridProps> = (props) => {
   });
 
   onMount(() => {
-    container.addChild(graphics);
+    app.stage.addChild(graphics);
   });
 
   onCleanup(() => {
-    container.removeChild(graphics);
+    app.stage.removeChild(graphics);
   });
 
   return null;
@@ -38,7 +38,7 @@ type PreviewSpriteProps = {
 };
 
 export const PreviewSprite: Component<PreviewSpriteProps> = (props) => {
-  const container = usePixiContainer();
+  const app = usePixiApp();
 
   const sprite = new Sprite();
   sprite.alpha = 0.2;
@@ -48,11 +48,11 @@ export const PreviewSprite: Component<PreviewSpriteProps> = (props) => {
   });
 
   onMount(() => {
-    container.addChild(sprite);
+    app.stage.addChild(sprite);
   });
 
   onCleanup(() => {
-    container.removeChild(sprite);
+    app.stage.removeChild(sprite);
   });
 
   return null;

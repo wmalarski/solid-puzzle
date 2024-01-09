@@ -11,7 +11,7 @@ import { getCenterFromPoints, type Point2D } from "~/utils/geometry";
 import type { PuzzleFragmentShape } from "~/utils/getPuzzleFragments";
 import { usePlayerPresence } from "../../DataProviders/PresenceProvider";
 import { usePuzzleStore } from "../../DataProviders/PuzzleProvider";
-import { usePixiContainer } from "../PixiApp";
+import { usePixiApp } from "../PixiApp";
 import { type FragmentState } from "./PuzzleStore";
 import { RotationAnchor } from "./RotationAnchor";
 import { useDragObject } from "./useDragObject";
@@ -94,16 +94,16 @@ type PuzzleContainerProps = {
 const PuzzleContainer: Component<PuzzleContainerProps> = (props) => {
   const store = usePuzzleStore();
   const presence = usePlayerPresence();
-  const container = usePixiContainer();
+  const app = usePixiApp();
 
   const fragment = new Container();
 
   onMount(() => {
-    container.addChild(fragment);
+    app.stage.addChild(fragment);
   });
 
   onCleanup(() => {
-    container.removeChild(fragment);
+    app.stage.removeChild(fragment);
   });
 
   const center = createMemo(() => {
