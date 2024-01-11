@@ -1,6 +1,7 @@
 import { revalidate, useNavigate } from "@solidjs/router";
 import { createMutation } from "@tanstack/solid-query";
-import { Show, type Component, type ComponentProps } from "solid-js";
+import { type Component, type ComponentProps, Show } from "solid-js";
+
 import { Button, LinkButton } from "~/components/Button";
 import { PuzzleIcon } from "~/components/Icons/PuzzleIcon";
 import { Link } from "~/components/Link";
@@ -31,8 +32,8 @@ const SignOutButton: Component = () => {
   };
 
   return (
-    <form onSubmit={onSubmit} method="post">
-      <Button size="sm" disabled={mutation.isPending}>
+    <form method="post" onSubmit={onSubmit}>
+      <Button disabled={mutation.isPending} size="sm">
         {t("auth.signOut")}
       </Button>
     </form>
@@ -54,17 +55,17 @@ export const TopNavbar: Component = () => {
       </NavbarStart>
       <NavbarEnd>
         <Show
-          when={session()}
           fallback={
             <>
-              <LinkButton size="sm" variant="ghost" href={paths.signUp}>
+              <LinkButton href={paths.signUp} size="sm" variant="ghost">
                 {t("home.signUp")}
               </LinkButton>
-              <LinkButton size="sm" href={paths.signIn}>
+              <LinkButton href={paths.signIn} size="sm">
                 {t("home.signIn")}
               </LinkButton>
             </>
           }
+          when={session()}
         >
           <Link class="flex text-sm uppercase" hover href={paths.boards}>
             {t("home.boards")}

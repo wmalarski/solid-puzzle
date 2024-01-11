@@ -1,4 +1,5 @@
-import { Show, type Component } from "solid-js";
+import { type Component, Show } from "solid-js";
+
 import {
   TextFieldInput,
   TextFieldLabel,
@@ -6,6 +7,7 @@ import {
   TextFieldRoot,
 } from "~/components/TextField";
 import { useI18n } from "~/contexts/I18nContext";
+
 import { ImageGrid } from "../ImageGrid";
 
 type ConfigFieldsProps = {
@@ -62,8 +64,8 @@ export const ConfigFields: Component<ConfigFieldsProps> = (props) => {
           variant="bordered"
         />
       </TextFieldRoot>
-      <Show when={props.image} fallback={<ImageGrid hasDefault name="image" />}>
-        {(image) => <input type="hidden" name="image" value={image()} />}
+      <Show fallback={<ImageGrid hasDefault name="image" />} when={props.image}>
+        {(image) => <input name="image" type="hidden" value={image()} />}
       </Show>
     </div>
   );

@@ -1,5 +1,7 @@
 import type { VariantProps } from "class-variance-authority";
-import { splitProps, type Component, type ComponentProps } from "solid-js";
+
+import { type Component, type ComponentProps, splitProps } from "solid-js";
+
 import { twCva } from "../utils/twCva";
 
 export const linkClass = twCva("link", {

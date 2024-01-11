@@ -1,5 +1,6 @@
 import type { Session } from "lucia";
-import { createContext, useContext, type Component, type JSX } from "solid-js";
+
+import { type Component, type JSX, createContext, useContext } from "solid-js";
 
 const SessionContext = createContext<() => Session | null>(() => null);
 

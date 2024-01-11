@@ -1,11 +1,13 @@
 import type { VariantProps } from "class-variance-authority";
+
 import {
-  splitProps,
   type Component,
   type ComponentProps,
   type ValidComponent,
+  splitProps,
 } from "solid-js";
 import { Dynamic, type DynamicProps } from "solid-js/web";
+
 import { twCva, twCx } from "../utils/twCva";
 
 export const cardClass = twCva("card", {
@@ -59,8 +61,8 @@ export function CardTitle<T extends ValidComponent>(props: CardTitleProps<T>) {
   return (
     <Dynamic
       {...props}
-      component={props.component}
       class={cardTitleClass({ class: props.class })}
+      component={props.component}
     />
   );
 }

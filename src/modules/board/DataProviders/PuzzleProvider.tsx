@@ -1,17 +1,19 @@
 import {
+  type Component,
+  type JSX,
   createContext,
   createSignal,
   useContext,
-  type Component,
-  type JSX,
 } from "solid-js";
 import { createStore, produce } from "solid-js/store";
+
 import type { BoardModel } from "~/server/board/types";
+
 import { getDistance } from "~/utils/geometry";
 import {
-  getPuzzleFragments,
   type PuzzleConfig,
   type PuzzleFragmentShape,
+  getPuzzleFragments,
 } from "~/utils/getPuzzleFragments";
 
 export type FragmentState = {
@@ -33,8 +35,8 @@ type SetFragmentStateArgs = {
 
 type InitFragmentsArgs = {
   board: BoardModel;
-  width: number;
   height: number;
+  width: number;
 };
 
 const createPuzzleContext = () => {

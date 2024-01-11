@@ -1,7 +1,9 @@
+import type { RequestEvent } from "solid-js/web";
+
 import { deleteCookie, getCookie, setCookie } from "@solidjs/start/server";
 import jwt from "jsonwebtoken";
-import type { RequestEvent } from "solid-js/web";
-import { array, object, safeParseAsync, string, type Output } from "valibot";
+import { type Output, array, object, safeParseAsync, string } from "valibot";
+
 import type { ServerEnv } from "../env";
 
 const options = (env: ServerEnv) => {
@@ -64,13 +66,13 @@ export const getBoardsAccess = (
 };
 
 type HasBoardAccessArgs = {
-  event: RequestEvent;
   boardId: string;
+  event: RequestEvent;
 };
 
 export const hasBoardAccess = async ({
-  event,
   boardId,
+  event,
 }: HasBoardAccessArgs): Promise<BoardAccess | undefined> => {
   const boardAccesses = await getBoardsAccess(event);
 

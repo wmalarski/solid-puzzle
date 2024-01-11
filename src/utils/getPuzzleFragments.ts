@@ -1,9 +1,9 @@
 import {
+  type Point2D,
   getCenterFromPoints,
   getMinMaxFromPoints,
   scaleBy,
   subtractPoint,
-  type Point2D,
 } from "~/utils/geometry";
 
 type GetRandomInRangeArgs = {
@@ -179,7 +179,7 @@ export const getPuzzleFragments = ({
   width,
 }: GetPuzzleFragmentsArgs) => {
   const scale = { x: width, y: height };
-  const { verticalLines, horizontalLines } = scaleConfigUp({ config, scale });
+  const { horizontalLines, verticalLines } = scaleConfigUp({ config, scale });
   const lines = [...horizontalLines, ...verticalLines].flat();
   const rotation = [...config.rotation];
 

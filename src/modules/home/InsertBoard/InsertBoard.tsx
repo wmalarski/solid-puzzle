@@ -1,4 +1,5 @@
 import { type Component } from "solid-js";
+
 import { cardTitleClass } from "~/components/Card";
 import { useI18n } from "~/contexts/I18nContext";
 import { CreateBoardForm } from "~/modules/createBoard/CreateBoardForm";

@@ -1,16 +1,17 @@
 import {
+  type Component,
+  type JSX,
   createContext,
   createSignal,
   useContext,
-  type Component,
-  type JSX,
 } from "solid-js";
+
 import type { Point2D } from "~/utils/geometry";
 
 type TransformState = {
+  scale: number;
   x: number;
   y: number;
-  scale: number;
 };
 
 const scaleBy = 1.1;
@@ -20,7 +21,7 @@ const getNewZoomState = (
   point: Point2D,
   old: TransformState,
 ): TransformState => {
-  const { x: stageX, y: stageY, scale: stageScale } = old;
+  const { scale: stageScale, x: stageX, y: stageY } = old;
   const mouseX = point.x / stageScale - stageX / stageScale;
   const mouseY = point.y / stageScale - stageY / stageScale;
   const newStageX = -(mouseX - point.x / newScale) * newScale;

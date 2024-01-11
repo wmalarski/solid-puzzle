@@ -1,14 +1,16 @@
 import { cache } from "@solidjs/router";
 import {
-  queryOptions,
   type InvalidateQueryFilters,
+  queryOptions,
 } from "@tanstack/solid-query";
+
+import type { BoardModel } from "./types";
+
 import {
   selectBoardServerLoader,
   selectBoardsServerLoader,
   selectProtectedBoardServerLoader,
 } from "./rpc";
-import type { BoardModel } from "./types";
 
 const SELECT_BOARD_CACHE_NAME = "board";
 const SELECT_PROTECTED_BOARD_CACHE_NAME = "protected-board";

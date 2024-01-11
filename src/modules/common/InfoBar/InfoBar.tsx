@@ -1,4 +1,5 @@
 import type { Component } from "solid-js";
+
 import { InfoIcon } from "~/components/Icons/InfoIcon";
 import { XIcon } from "~/components/Icons/XIcon";
 import {
@@ -19,7 +20,7 @@ const InfoPopover: Component = () => {
 
   return (
     <PopoverRoot>
-      <PopoverTrigger variant="ghost" size="sm">
+      <PopoverTrigger size="sm" variant="ghost">
         <InfoIcon />
       </PopoverTrigger>
       <PopoverPortal>

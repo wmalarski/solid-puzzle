@@ -1,6 +1,8 @@
+import type { Component } from "solid-js";
+
 import { revalidate, useNavigate } from "@solidjs/router";
 import { createMutation } from "@tanstack/solid-query";
-import type { Component } from "solid-js";
+
 import {
   DropdownMenuArrow,
   DropdownMenuContent,

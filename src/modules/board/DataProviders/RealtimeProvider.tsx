@@ -1,5 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-import { createEffect, onCleanup, type Component } from "solid-js";
+import { type Component, createEffect, onCleanup } from "solid-js";
 import { object, parse, string } from "valibot";
 
 const createSupabaseClient = () => {

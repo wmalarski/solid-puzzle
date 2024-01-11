@@ -1,5 +1,6 @@
 import { cache } from "@solidjs/router";
 import { queryOptions } from "@tanstack/solid-query";
+
 import { generateBoardInviteServerLoader } from "./rpc";
 
 const BOARD_INVITE_CACHE_NAME = "invite";

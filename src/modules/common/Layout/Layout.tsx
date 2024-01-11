@@ -1,4 +1,5 @@
 import type { Component, JSX } from "solid-js";
+
 import { PuzzleIcon } from "~/components/Icons/PuzzleIcon";
 import { Link } from "~/components/Link";
 import { useI18n } from "~/contexts/I18nContext";

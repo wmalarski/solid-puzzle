@@ -1,5 +1,8 @@
 import { createQuery } from "@tanstack/solid-query";
-import { ErrorBoundary, For, Show, Suspense, type Component } from "solid-js";
+import { type Component, ErrorBoundary, For, Show, Suspense } from "solid-js";
+
+import type { BoardModel } from "~/server/board/types";
+
 import { LinkButton } from "~/components/Button";
 import { Card, CardActions, CardBody, CardTitle } from "~/components/Card";
 import { useI18n } from "~/contexts/I18nContext";
@@ -7,7 +10,6 @@ import {
   SELECT_BOARDS_DEFAULT_LIMIT,
   selectBoardsQueryOptions,
 } from "~/server/board/client";
-import type { BoardModel } from "~/server/board/types";
 import { paths } from "~/utils/paths";
 
 type BoardItemProps = {
@@ -18,18 +20,18 @@ const BoardItem: Component<BoardItemProps> = (props) => {
   const { t } = useI18n();
 
   return (
-    <Card variant="bordered" size="compact" bg="base-300">
+    <Card bg="base-300" size="compact" variant="bordered">
       <Show when={props.board.media}>
         {(src) => (
           <figure>
-            <img src={src()} alt="board" />
+            <img alt="board" src={src()} />
           </figure>
         )}
       </Show>
       <CardBody>
         <CardTitle component="h3">{props.board.name}</CardTitle>
         <CardActions justify="end">
-          <LinkButton size="sm" href={paths.board(props.board.id)}>
+          <LinkButton href={paths.board(props.board.id)} size="sm">
             {t("list.go")}
           </LinkButton>
         </CardActions>
@@ -63,12 +65,12 @@ export default function BoardsList() {
       <ErrorBoundary fallback={<BoardsListError />}>
         <Suspense fallback={<BoardsListLoading />}>
           <Show
+            fallback={<BoardsListEmpty />}
             when={
               boardQuery.status === "success" &&
               boardQuery.data &&
               boardQuery.data.length > 0
             }
-            fallback={<BoardsListEmpty />}
           >
             <For each={boardQuery.data}>
               {(board) => <BoardItem board={board} />}

@@ -3,22 +3,25 @@ import type {
   FederatedMouseEvent,
   FederatedPointerEvent,
 } from "pixi.js";
+
 import { createSignal, onCleanup, onMount } from "solid-js";
-import { subtractPoint, type Point2D } from "~/utils/geometry";
+
+import { type Point2D, subtractPoint } from "~/utils/geometry";
+
 import { usePixiApp } from "../PixiApp";
 import { RIGHT_BUTTON } from "../constants";
 
 type DragConstraintArgs = {
-  shift: Point2D;
   eventPosition: Point2D;
+  shift: Point2D;
 };
 
 type UseDragObjectArgs = {
+  displayObject: Container;
   dragConstraint?: (args: DragConstraintArgs) => Point2D;
   onDragEnd?: (event: FederatedMouseEvent) => void;
   onDragMove?: (event: FederatedMouseEvent) => void;
   onDragStart?: (event: FederatedMouseEvent) => void;
-  displayObject: Container;
 };
 
 const defaultDragConstraint = (args: DragConstraintArgs) => {

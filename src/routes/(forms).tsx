@@ -1,4 +1,5 @@
 import type { RouteSectionProps } from "@solidjs/router";
+
 import { FormLayout, PageFooter, PageTitle } from "~/modules/common/Layout";
 
 export default function FormsLayout(props: RouteSectionProps) {

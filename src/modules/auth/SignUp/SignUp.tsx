@@ -1,6 +1,7 @@
 import { revalidate, useNavigate } from "@solidjs/router";
 import { createMutation } from "@tanstack/solid-query";
-import { Show, type Component, type ComponentProps } from "solid-js";
+import { type Component, type ComponentProps, Show } from "solid-js";
+
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
 import { Card, CardBody, cardTitleClass } from "~/components/Card";
@@ -38,12 +39,12 @@ export const SignUp: Component = () => {
   };
 
   return (
-    <Card variant="bordered" class="w-full max-w-md">
+    <Card class="w-full max-w-md" variant="bordered">
       <CardBody>
         <header class="flex items-center justify-between gap-2">
           <h2 class={cardTitleClass()}>{t("signUp.title")}</h2>
         </header>
-        <form onSubmit={onSubmit} class="flex flex-col gap-4" method="post">
+        <form class="flex flex-col gap-4" method="post" onSubmit={onSubmit}>
           <Show when={mutation.error}>
             <Alert variant="error">
               <AlertIcon variant="error" />
@@ -59,8 +60,8 @@ export const SignUp: Component = () => {
             <TextFieldInput
               id="username"
               name="username"
-              variant="bordered"
               placeholder={t("auth.username.placeholder")}
+              variant="bordered"
             />
           </TextFieldRoot>
           <TextFieldRoot>
@@ -72,9 +73,9 @@ export const SignUp: Component = () => {
             <TextFieldInput
               id="password"
               name="password"
+              placeholder={t("auth.password.placeholder")}
               type="password"
               variant="bordered"
-              placeholder={t("auth.password.placeholder")}
             />
           </TextFieldRoot>
           <Button

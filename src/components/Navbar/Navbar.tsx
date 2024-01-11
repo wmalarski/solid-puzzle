@@ -1,4 +1,5 @@
 import type { Component, ComponentProps } from "solid-js";
+
 import { twCx } from "../utils/twCva";
 
 export type NavbarProps = ComponentProps<"nav">;

@@ -1,18 +1,19 @@
 import {
+  type Component,
+  type JSX,
   createContext,
   createEffect,
   createSignal,
   onCleanup,
   useContext,
-  type Component,
-  type JSX,
 } from "solid-js";
 import { createStore, produce } from "solid-js/store";
+
 import type { BoardAccess } from "~/server/share/db";
 
 export type PlayerState = {
   name: string;
-  selectedId: string | null;
+  selectedId: null | string;
   x: number;
   y: number;
 };
@@ -38,14 +39,14 @@ type SetCursorArgs = {
 
 type SetSelectionArgs = {
   playerId: string;
-  selectedId: string | null;
+  selectedId: null | string;
 };
 
 const createPlayerPresenceState = () => {
   const [currentPlayer, setCurrentPlayer] = createSignal<string>();
   const [players, setPlayers] = createStore<PlayersState>({});
 
-  const join = ({ playerId, x, y, name }: JoinArgs) => {
+  const join = ({ name, playerId, x, y }: JoinArgs) => {
     setCurrentPlayer(playerId);
     setPlayers(
       produce((state) => {
@@ -85,7 +86,7 @@ const createPlayerPresenceState = () => {
     );
   };
 
-  const setPlayerSelection = (selectedId: string | null) => {
+  const setPlayerSelection = (selectedId: null | string) => {
     const player = currentPlayer();
     if (player) {
       setPlayers(

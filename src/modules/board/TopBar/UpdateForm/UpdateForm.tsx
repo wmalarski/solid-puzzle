@@ -1,5 +1,6 @@
 import { createMutation, useQueryClient } from "@tanstack/solid-query";
-import { Show, type Component, type ComponentProps } from "solid-js";
+import { type Component, type ComponentProps, Show } from "solid-js";
+
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
 import { useI18n } from "~/contexts/I18nContext";
@@ -36,14 +37,14 @@ export const UpdateForm: Component<UpdateFormProps> = (props) => {
   };
 
   return (
-    <form onSubmit={onSubmit} class="flex flex-col gap-4" method="post">
+    <form class="flex flex-col gap-4" method="post" onSubmit={onSubmit}>
       <Show when={mutation.data && mutation.data.count < 1}>
         <Alert variant="error">
           <AlertIcon variant="error" />
           Error
         </Alert>
       </Show>
-      <input name="id" value={props.boardId} type="hidden" />
+      <input name="id" type="hidden" value={props.boardId} />
       <ConfigFields />
       <Button
         disabled={mutation.isPending}

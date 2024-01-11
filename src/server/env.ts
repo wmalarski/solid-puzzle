@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
 import type { FetchEvent } from "@solidjs/start/server/types";
-import { object, optional, safeParseAsync, string, type Input } from "valibot";
+
+import { type Input, object, optional, safeParseAsync, string } from "valibot";
 
 if (typeof window !== "undefined") {
   throw new Error("SERVER ON CLIENT!");

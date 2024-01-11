@@ -1,6 +1,8 @@
 import { Graphics, Sprite, type Texture } from "pixi.js";
-import { createEffect, onCleanup, onMount, type Component } from "solid-js";
+import { type Component, createEffect, onCleanup, onMount } from "solid-js";
+
 import type { PuzzleShapeLine } from "~/utils/getPuzzleFragments";
+
 import { useBoardTheme } from "../BoardTheme";
 import { usePixiApp } from "../PixiApp";
 

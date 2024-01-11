@@ -1,20 +1,21 @@
 import {
-  Graphics,
   type Container,
   type FederatedMouseEvent,
   type FederatedPointerEvent,
+  Graphics,
 } from "pixi.js";
-import { createEffect, onCleanup, onMount, type Component } from "solid-js";
+import { type Component, createEffect, onCleanup, onMount } from "solid-js";
+
 import { useBoardTheme } from "../BoardTheme";
 import { usePixiApp } from "../PixiApp";
 import { RIGHT_BUTTON } from "../constants";
 
 type RotationAnchorProps = {
   container: Container;
+  onEnd: (rotation: number) => void;
+  onRotate: (rotation: number) => void;
   rotation: number;
   rotationOffset: number;
-  onRotate: (rotation: number) => void;
-  onEnd: (rotation: number) => void;
 };
 
 export const RotationAnchor: Component<RotationAnchorProps> = (props) => {

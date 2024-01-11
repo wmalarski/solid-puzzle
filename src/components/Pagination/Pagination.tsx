@@ -1,5 +1,7 @@
 import type { VariantProps } from "class-variance-authority";
-import { splitProps, type Component, type ComponentProps } from "solid-js";
+
+import { type Component, type ComponentProps, splitProps } from "solid-js";
+
 import { buttonClass } from "../Button";
 import { ArrowLeftIcon } from "../Icons/ArrowLeftIcon";
 import { ArrowRightIcon } from "../Icons/ArrowRightIcon";
@@ -11,9 +13,9 @@ export const Pagination: Component<ComponentProps<"nav">> = (props) => {
 
   return (
     <nav
-      role="navigation"
       aria-label="pagination"
       class={twCx("mx-auto flex w-full justify-center", props.class)}
+      role="navigation"
       {...rest}
     />
   );

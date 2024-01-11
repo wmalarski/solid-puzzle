@@ -1,6 +1,8 @@
 import type { VariantProps } from "class-variance-authority";
-import { splitProps, type Component, type ComponentProps } from "solid-js";
+
+import { type Component, type ComponentProps, splitProps } from "solid-js";
 import { Dynamic } from "solid-js/web";
+
 import { AlertCircleIcon } from "../Icons/AlertCircleIcon";
 import { CheckCircleIcon } from "../Icons/CheckCircleIcon";
 import { InfoIcon } from "../Icons/InfoIcon";
@@ -49,6 +51,6 @@ export const AlertIcon: Component<AlertIconProps> = (props) => {
     return alertIconMap[props.variant];
   };
   return (
-    <Dynamic component={component()} class="h-6 w-6 shrink-0 stroke-current" />
+    <Dynamic class="h-6 w-6 shrink-0 stroke-current" component={component()} />
   );
 };

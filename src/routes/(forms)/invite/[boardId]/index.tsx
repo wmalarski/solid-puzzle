@@ -1,5 +1,6 @@
-import { createAsync, useParams, type RouteDefinition } from "@solidjs/router";
+import { type RouteDefinition, createAsync, useParams } from "@solidjs/router";
 import { Show } from "solid-js";
+
 import { AcceptInviteForm } from "~/modules/invite/AcceptInviteForm";
 import { selectBoardLoader } from "~/server/board/client";
 

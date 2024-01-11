@@ -11,6 +11,7 @@
     "plugin:promise/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:solid/typescript",
+    "plugin:perfectionist/recommended-natural",
     "plugin:tailwindcss/recommended",
     "plugin:prettier/recommended"
   ],
@@ -27,7 +28,7 @@
   },
   "plugins": [
     "solid",
-    "sort-keys-fix"
+    "perfectionist"
   ],
   "rules": {
     "no-await-in-loop": "error",
@@ -36,7 +37,6 @@
     "no-self-compare": "error",
     "no-use-before-define": "error",
     "curly": "error",
-    "sort-keys": "error",
     "eqeqeq": [
       "error",
       "smart"
@@ -51,7 +51,6 @@
     "prefer-arrow-callback": "error",
     "prefer-const": "error",
     "require-await": "error",
-    "sort-keys-fix/sort-keys-fix": "warn",
     "@typescript-eslint/array-type": "error",
     "@typescript-eslint/consistent-type-imports": "error",
     "@typescript-eslint/consistent-type-definitions": [

@@ -1,12 +1,12 @@
 import { flatten, resolveTemplate, translator } from "@solid-primitives/i18n";
 import {
+  type Accessor,
+  type Component,
+  type ParentProps,
   createContext,
   createMemo,
   createSignal,
   useContext,
-  type Accessor,
-  type Component,
-  type ParentProps,
 } from "solid-js";
 
 const en_dict = {

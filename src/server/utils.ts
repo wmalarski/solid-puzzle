@@ -1,6 +1,7 @@
 import { redirect } from "@solidjs/router";
 import { getRequestEvent } from "solid-js/web";
-import { coerce, integer, minValue, number, type Issues } from "valibot";
+import { type Issues, coerce, integer, minValue, number } from "valibot";
+
 import { paths } from "~/utils/paths";
 
 export const getRequestEventOrThrow = () => {

@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
+import type { FetchEvent } from "@solidjs/start/server/types";
+
 import { BetterSqlite3Adapter } from "@lucia-auth/adapter-sqlite";
 import {
+  type H3EventContext,
   appendHeader,
   getCookie,
   getHeader,
-  type H3EventContext,
 } from "@solidjs/start/server";
-import type { FetchEvent } from "@solidjs/start/server/types";
-import { Lucia, verifyRequestOrigin, type Session, type User } from "lucia";
+import { Lucia, type Session, type User, verifyRequestOrigin } from "lucia";
 
 export const getLucia = (context: H3EventContext) => {
   const adapter = new BetterSqlite3Adapter(context.instance, {
@@ -76,7 +77,7 @@ declare module "lucia" {
 
 declare module "vinxi/server" {
   interface H3EventContext {
-    user: User | null;
     session: Session | null;
+    user: User | null;
   }
 }

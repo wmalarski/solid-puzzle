@@ -1,4 +1,5 @@
 import { type Component } from "solid-js";
+
 import {
   DialogCloseButton,
   DialogContent,
@@ -13,6 +14,7 @@ import {
 import { SettingsIcon } from "~/components/Icons/SettingsIcon";
 import { XIcon } from "~/components/Icons/XIcon";
 import { useI18n } from "~/contexts/I18nContext";
+
 import { DeleteBoard } from "../DeleteDialog";
 import { UpdateForm } from "../UpdateForm";
 

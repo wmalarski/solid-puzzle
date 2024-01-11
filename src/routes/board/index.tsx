@@ -1,5 +1,6 @@
-import { createAsync, type RouteDefinition } from "@solidjs/router";
+import { type RouteDefinition, createAsync } from "@solidjs/router";
 import { Show } from "solid-js";
+
 import { SessionProvider } from "~/contexts/SessionContext";
 import { PageLayout } from "~/modules/common/Layout";
 import { TopNavbar } from "~/modules/common/TopNavbar";

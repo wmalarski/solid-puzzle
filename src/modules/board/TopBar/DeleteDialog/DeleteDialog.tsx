@@ -1,11 +1,12 @@
 import { useNavigate } from "@solidjs/router";
 import { createMutation, useQueryClient } from "@tanstack/solid-query";
 import {
-  Show,
-  createSignal,
   type Component,
   type ComponentProps,
+  Show,
+  createSignal,
 } from "solid-js";
+
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
 import { cardTitleClass } from "~/components/Card";
@@ -57,15 +58,15 @@ const DeleteBoardForm: Component<DeleteBoardFormProps> = (props) => {
   };
 
   return (
-    <form onSubmit={onSubmit} class="flex flex-col gap-4" method="post">
+    <form class="flex flex-col gap-4" method="post" onSubmit={onSubmit}>
       <Show when={mutation.error}>
         <Alert variant="error">
           <AlertIcon variant="error" />
           Error
         </Alert>
       </Show>
-      <input type="hidden" name="id" value={props.boardId} />
-      <Button variant="ghost" onClick={props.onCancelClick} type="button">
+      <input name="id" type="hidden" value={props.boardId} />
+      <Button onClick={props.onCancelClick} type="button" variant="ghost">
         {t("board.settings.delete.cancel")}
       </Button>
       <Button
@@ -93,7 +94,7 @@ const FormDialog: Component<FormDialogProps> = (props) => {
   };
 
   return (
-    <DialogRoot open={isOpen()} onOpenChange={setIsOpen}>
+    <DialogRoot onOpenChange={setIsOpen} open={isOpen()}>
       <DialogTrigger>
         <TrashIcon />
         {t("board.settings.delete.button")}

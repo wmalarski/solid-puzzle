@@ -1,14 +1,16 @@
 import { Assets, type FederatedPointerEvent, type Texture } from "pixi.js";
 import {
+  type Component,
   For,
   Show,
   createEffect,
   createResource,
   onCleanup,
   onMount,
-  type Component,
 } from "solid-js";
+
 import type { BoardModel } from "~/server/board/types";
+
 import { usePlayerPresence } from "../../DataProviders/PresenceProvider";
 import { usePuzzleStore } from "../../DataProviders/PuzzleProvider";
 import { usePixiApp } from "../PixiApp";
@@ -54,7 +56,7 @@ const Board: Component<BoardProps> = (props) => {
 
   return (
     <For each={store.config().fragments}>
-      {(shape) => <PuzzleFragment texture={props.texture} shape={shape} />}
+      {(shape) => <PuzzleFragment shape={shape} texture={props.texture} />}
     </For>
   );
 };

@@ -1,17 +1,20 @@
 import { clientOnly } from "@solidjs/start";
 import {
+  type Component,
   ErrorBoundary,
   Show,
   Suspense,
   createSignal,
   lazy,
   onMount,
-  type Component,
 } from "solid-js";
-import { useI18n } from "~/contexts/I18nContext";
-import { InfoBar } from "~/modules/common/InfoBar";
+
 import type { BoardModel } from "~/server/board/types";
 import type { BoardAccess } from "~/server/share/db";
+
+import { useI18n } from "~/contexts/I18nContext";
+import { InfoBar } from "~/modules/common/InfoBar";
+
 import { PlayerPresenceProvider } from "../DataProviders/PresenceProvider";
 import { PuzzleStateProvider } from "../DataProviders/PuzzleProvider";
 
@@ -32,7 +35,7 @@ const ClientBoard: Component<ClientBoardProps> = (props) => {
 
   return (
     <>
-      <canvas ref={setCanvas} class="h-full w-full bg-base-100" />
+      <canvas class="h-full w-full bg-base-100" ref={setCanvas} />
       <Show when={canvas()}>
         {(canvas) => (
           <Suspense>

@@ -1,13 +1,15 @@
-import { createAsync, useParams, type RouteDefinition } from "@solidjs/router";
+import { type RouteDefinition, createAsync, useParams } from "@solidjs/router";
 import { createQuery } from "@tanstack/solid-query";
-import { Show, Suspense, type Component } from "solid-js";
+import { type Component, Show, Suspense } from "solid-js";
+
+import type { BoardAccess } from "~/server/share/db";
+
 import { SessionProvider } from "~/contexts/SessionContext";
 import { Board } from "~/modules/board/Board";
 import {
   selectBoardQueryOptions,
   selectProtectedBoardLoader,
 } from "~/server/board/client";
-import type { BoardAccess } from "~/server/share/db";
 
 type BoardQueryProps = {
   boardAccess: BoardAccess;

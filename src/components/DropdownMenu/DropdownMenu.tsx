@@ -1,6 +1,8 @@
-import { DropdownMenu as KobalteDropdownMenu } from "@kobalte/core";
 import type { VariantProps } from "class-variance-authority";
-import { createSignal, onMount, splitProps, type Component } from "solid-js";
+
+import { DropdownMenu as KobalteDropdownMenu } from "@kobalte/core";
+import { type Component, createSignal, onMount, splitProps } from "solid-js";
+
 import { buttonClass } from "../Button";
 import { twCva, twCx } from "../utils/twCva";
 import styles from "./DropdownMenu.module.css";
@@ -37,8 +39,8 @@ export const dropdownMenuIconClass = twCva("rotate-0 duration-200", {
   variants: {
     rotation: {
       0: "",
-      180: "ui-expanded:rotate-180",
       90: "ui-expanded:rotate-90",
+      180: "ui-expanded:rotate-180",
     },
   },
 });
@@ -76,8 +78,8 @@ export const DropdownMenuContent: Component<
   return (
     <KobalteDropdownMenu.Content
       {...props}
-      ref={setRef}
       class={dropdownMenuContentClass({ class: props.class })}
+      ref={setRef}
     />
   );
 };

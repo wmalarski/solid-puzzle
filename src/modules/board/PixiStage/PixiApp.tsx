@@ -1,12 +1,12 @@
 import { Application } from "pixi.js";
 import {
+  type Component,
+  type JSX,
   createContext,
   createResource,
   onCleanup,
   onMount,
   useContext,
-  type Component,
-  type JSX,
 } from "solid-js";
 
 const PixiAppContext = createContext<Application>({} as unknown as Application);

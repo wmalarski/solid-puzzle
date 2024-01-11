@@ -1,5 +1,8 @@
 import { createQuery } from "@tanstack/solid-query";
-import { Show, Suspense, createMemo, type Component } from "solid-js";
+import { type Component, Show, Suspense, createMemo } from "solid-js";
+
+import type { BoardModel } from "~/server/board/types";
+
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
 import { ShareIcon } from "~/components/Icons/ShareIcon";
@@ -21,7 +24,6 @@ import {
   TextFieldRoot,
 } from "~/components/TextField";
 import { useI18n } from "~/contexts/I18nContext";
-import type { BoardModel } from "~/server/board/types";
 import { generateBoardInviteQueryOptions } from "~/server/share/client";
 import { paths } from "~/utils/paths";
 import { buildSearchParams } from "~/utils/searchParams";
@@ -52,7 +54,7 @@ const ShareForm: Component<ShareFormProps> = (props) => {
 
   return (
     <form class="flex flex-col gap-4" method="post">
-      <input type="hidden" name="boardId" value={props.board.id} />
+      <input name="boardId" type="hidden" value={props.board.id} />
       <Show when={inviteQuery.error}>
         {(error) => (
           <Alert variant="error">
@@ -69,8 +71,8 @@ const ShareForm: Component<ShareFormProps> = (props) => {
           id="token"
           placeholder={t("board.share.loading")}
           readOnly
-          variant="bordered"
           value={value()}
+          variant="bordered"
         />
       </TextFieldRoot>
       <Button
@@ -101,7 +103,7 @@ export const SharePopover: Component<SharePopoverProps> = (props) => {
 
   return (
     <PopoverRoot>
-      <PopoverTrigger size="sm" aria-label={t("board.share.title")}>
+      <PopoverTrigger aria-label={t("board.share.title")} size="sm">
         <ShareIcon />
       </PopoverTrigger>
       <PopoverPortal>

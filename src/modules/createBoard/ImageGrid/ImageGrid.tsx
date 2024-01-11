@@ -1,4 +1,5 @@
-import { For, createSignal, type Component } from "solid-js";
+import { type Component, For, createSignal } from "solid-js";
+
 import { twCx } from "~/components/utils/twCva";
 import { getImages } from "~/utils/images";
 
@@ -30,7 +31,7 @@ export const ImageGrid: Component<ImageGridProps> = (props) => {
               onClick={onButtonClick(image)}
               type="button"
             >
-              <img src={image} alt={""} />
+              <img alt={""} src={image} />
             </button>
           )}
         </For>

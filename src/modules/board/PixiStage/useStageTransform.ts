@@ -1,5 +1,7 @@
 import type { FederatedPointerEvent, FederatedWheelEvent } from "pixi.js";
+
 import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
+
 import { useTransformContext } from "../TransformContext";
 import { usePixiApp } from "./PixiApp";
 

@@ -1,18 +1,21 @@
 import { Container, Graphics, Matrix, Text, type Texture } from "pixi.js";
 import {
+  type Component,
   Show,
   createEffect,
   createMemo,
   onCleanup,
   onMount,
-  type Component,
 } from "solid-js";
-import { getCenterFromPoints, type Point2D } from "~/utils/geometry";
+
 import type { PuzzleFragmentShape } from "~/utils/getPuzzleFragments";
+
+import { type Point2D, getCenterFromPoints } from "~/utils/geometry";
+
 import { usePlayerPresence } from "../../DataProviders/PresenceProvider";
 import {
-  usePuzzleStore,
   type FragmentState,
+  usePuzzleStore,
 } from "../../DataProviders/PuzzleProvider";
 import { useBoardTheme } from "../BoardTheme";
 import { usePixiApp } from "../PixiApp";
@@ -262,8 +265,8 @@ const PuzzleContainer: Component<PuzzleContainerProps> = (props) => {
 };
 
 type PuzzleFragmentProps = {
-  texture: Texture;
   shape: PuzzleFragmentShape;
+  texture: Texture;
 };
 
 export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
@@ -278,8 +281,8 @@ export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
       {(state) => (
         <PuzzleContainer
           shape={props.shape}
-          texture={props.texture}
           state={state()}
+          texture={props.texture}
         />
       )}
     </Show>

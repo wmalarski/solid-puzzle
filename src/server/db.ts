@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
 import type { FetchEvent } from "@solidjs/start/server/types";
+import type { RequestEvent } from "solid-js/web";
+
 import Database from "better-sqlite3";
 import { drizzle } from "drizzle-orm/better-sqlite3";
-import type { RequestEvent } from "solid-js/web";
+
 import { user } from "~/server/auth/schema";
 import { board } from "~/server/board/schema";
 

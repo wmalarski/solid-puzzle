@@ -1,6 +1,8 @@
-import { Tooltip } from "@kobalte/core";
 import type { VariantProps } from "class-variance-authority";
-import { splitProps, type Component } from "solid-js";
+
+import { Tooltip } from "@kobalte/core";
+import { type Component, splitProps } from "solid-js";
+
 import { buttonClass } from "../Button";
 import { twCx } from "../utils/twCva";
 import styles from "./Tooltip.module.css";

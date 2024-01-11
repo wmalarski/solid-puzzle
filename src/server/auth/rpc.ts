@@ -4,6 +4,7 @@ import { decode } from "decode-formdata";
 import { generateId } from "lucia";
 import { Argon2id } from "oslo/password";
 import { maxLength, minLength, object, safeParseAsync, string } from "valibot";
+
 import { getRequestEventOrThrow, rpcParseIssueError } from "../utils";
 import { insertUser, selectUserByUsername } from "./db";
 import { getLucia } from "./lucia";

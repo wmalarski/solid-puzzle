@@ -1,7 +1,9 @@
-import { Toast, toaster } from "@kobalte/core";
 import type { VariantProps } from "class-variance-authority";
-import { splitProps, type Component, type ComponentProps } from "solid-js";
-import { AlertIcon, alertClass, type AlertIconProps } from "../Alert";
+
+import { Toast, toaster } from "@kobalte/core";
+import { type Component, type ComponentProps, splitProps } from "solid-js";
+
+import { AlertIcon, type AlertIconProps, alertClass } from "../Alert";
 import { twCx } from "../utils/twCva";
 
 const ToastRegion = Toast.Region;
@@ -113,9 +115,9 @@ export const ToastProvider: Component = () => {
 };
 
 type ShowToastArgs = {
-  variant: AlertIconProps["variant"];
-  title: string;
   description: string;
+  title: string;
+  variant: AlertIconProps["variant"];
 };
 
 export const showToast = ({ description, title, variant }: ShowToastArgs) => {
