@@ -9,6 +9,7 @@ netlify
 wrangler.toml
 wrangler2.toml
 .env
+.vinxi
 
 # dependencies
 /node_modules
