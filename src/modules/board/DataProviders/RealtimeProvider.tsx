@@ -1,26 +1,16 @@
-import { createClient } from "@supabase/supabase-js";
 import { type Component, createEffect, onCleanup } from "solid-js";
-import { object, parse, string } from "valibot";
 
-const createSupabaseClient = () => {
-  const schema = object({ key: string(), url: string() });
-  const parsed = parse(schema, {
-    key: import.meta.env.VITE_SUPABASE_ANON_KEY,
-    url: import.meta.env.VITE_SUPABASE_URL,
-  });
-
-  return createClient(parsed.url, parsed.key);
-};
+import { useSupabase } from "~/contexts/SupabaseContext";
 
 type Props = {
   boardId: string;
 };
 
-const RealtimeProvider: Component<Props> = (props) => {
-  const supabase = createSupabaseClient();
+export const RealtimeProvider: Component<Props> = (props) => {
+  const supabase = useSupabase();
 
   createEffect(() => {
-    const channel = supabase.channel(props.boardId);
+    const channel = supabase().channel(props.boardId);
 
     const subscription = channel
       .on("presence", { event: "sync" }, () => {
@@ -65,5 +55,3 @@ const RealtimeProvider: Component<Props> = (props) => {
 
   return null;
 };
-
-export default RealtimeProvider;
