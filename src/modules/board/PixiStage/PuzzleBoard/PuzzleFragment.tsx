@@ -207,7 +207,7 @@ const PuzzleContainer: Component<PuzzleContainerProps> = (props) => {
   useDragObject({
     displayObject: fragment,
     onDragEnd: () => {
-      store.setFragmentState({
+      store.setFragmentStateWithLockCheck({
         fragmentId: props.shape.fragmentId,
         rotation: props.state.rotation,
         x: fragment.x,
@@ -222,7 +222,7 @@ const PuzzleContainer: Component<PuzzleContainerProps> = (props) => {
   const rotationOffset = Math.random() * 2 * Math.PI;
 
   const onRotationEnd = (rotation: number) => {
-    store.setFragmentState({ ...props.state, rotation });
+    store.setFragmentStateWithLockCheck({ ...props.state, rotation });
   };
 
   const onRotationMove = (rotation: number) => {

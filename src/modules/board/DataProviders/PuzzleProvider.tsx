@@ -5,7 +5,7 @@ import {
   type Component,
   type JSX,
 } from "solid-js";
-import { createStore } from "solid-js/store";
+import { createStore, produce } from "solid-js/store";
 import type { BoardModel } from "~/server/board/types";
 import { getDistance } from "~/utils/geometry";
 import {
@@ -88,15 +88,40 @@ const createPuzzleContext = () => {
   };
 
   const setFragmentState = (fragment: SetFragmentStateArgs) => {
-    const isLocked = isLockedInPlace(fragment);
-
-    setFragments(fragment.fragmentId, "isLocked", isLocked);
-    setFragments(fragment.fragmentId, "rotation", fragment.rotation);
-    setFragments(fragment.fragmentId, "x", fragment.x);
-    setFragments(fragment.fragmentId, "y", fragment.y);
+    setFragments(
+      produce((state) => {
+        const currentFragment = state[fragment.fragmentId];
+        if (currentFragment) {
+          currentFragment.rotation = fragment.rotation;
+          currentFragment.x = fragment.x;
+          currentFragment.y = fragment.y;
+        }
+      }),
+    );
   };
 
-  return { config, fragments, initFragments, setFragmentState, shapes };
+  const setFragmentStateWithLockCheck = (fragment: SetFragmentStateArgs) => {
+    setFragments(
+      produce((state) => {
+        const currentFragment = state[fragment.fragmentId];
+        if (currentFragment) {
+          currentFragment.rotation = fragment.rotation;
+          currentFragment.x = fragment.x;
+          currentFragment.y = fragment.y;
+          currentFragment.isLocked = isLockedInPlace(fragment);
+        }
+      }),
+    );
+  };
+
+  return {
+    config,
+    fragments,
+    initFragments,
+    setFragmentState,
+    setFragmentStateWithLockCheck,
+    shapes,
+  };
 };
 
 type PuzzleContextState = ReturnType<typeof createPuzzleContext>;
@@ -106,6 +131,7 @@ const PuzzleStateContext = createContext<PuzzleContextState>({
   fragments: {},
   initFragments: () => void 0,
   setFragmentState: () => void 0,
+  setFragmentStateWithLockCheck: () => void 0,
   shapes: () => new Map(),
 });
 
