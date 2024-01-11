@@ -7,7 +7,7 @@ import {
   type Component,
   type JSX,
 } from "solid-js";
-import { createStore } from "solid-js/store";
+import { createStore, produce } from "solid-js/store";
 import type { BoardAccess } from "~/server/share/db";
 
 export type PlayerState = {
@@ -47,26 +47,55 @@ const createPlayerPresenceState = () => {
 
   const join = ({ playerId, x, y, name }: JoinArgs) => {
     setCurrentPlayer(playerId);
-    setPlayers(playerId, { name, selectedId: null, x, y });
+    setPlayers(
+      produce((state) => {
+        state[playerId] = { name, selectedId: null, x, y };
+      }),
+    );
   };
 
   const leave = ({ playerId }: LeaveArgs) => {
-    setPlayers(playerId, undefined);
+    setPlayers(
+      produce((state) => {
+        state[playerId] = undefined;
+      }),
+    );
   };
 
   const setCursor = ({ playerId, x, y }: SetCursorArgs) => {
-    setPlayers(playerId, "x", x);
-    setPlayers(playerId, "y", y);
+    setPlayers(
+      produce((state) => {
+        const currentPlayer = state[playerId];
+        if (currentPlayer) {
+          currentPlayer.x = x;
+          currentPlayer.y = y;
+        }
+      }),
+    );
   };
 
   const setSelection = ({ playerId, selectedId }: SetSelectionArgs) => {
-    setPlayers(playerId, "selectedId", selectedId);
+    setPlayers(
+      produce((state) => {
+        const currentPlayer = state[playerId];
+        if (currentPlayer) {
+          currentPlayer.selectedId = selectedId;
+        }
+      }),
+    );
   };
 
   const setPlayerSelection = (selectedId: string | null) => {
     const player = currentPlayer();
     if (player) {
-      setPlayers(player, "selectedId", selectedId);
+      setPlayers(
+        produce((state) => {
+          const currentPlayer = state[player];
+          if (currentPlayer) {
+            currentPlayer.selectedId = selectedId;
+          }
+        }),
+      );
     }
   };
 
