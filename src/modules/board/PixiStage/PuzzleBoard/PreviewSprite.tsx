@@ -1,8 +1,14 @@
-import { Graphics, Sprite, type Texture } from "pixi.js";
+import {
+  type FederatedPointerEvent,
+  Graphics,
+  Sprite,
+  type Texture,
+} from "pixi.js";
 import { type Component, createEffect, onCleanup, onMount } from "solid-js";
 
 import type { PuzzleShapeLine } from "~/utils/getPuzzleFragments";
 
+import { usePlayerPresence } from "../../DataProviders/PresenceProvider";
 import { useBoardTheme } from "../BoardTheme";
 import { usePixiApp } from "../PixiApp";
 
@@ -46,6 +52,7 @@ type PreviewSpriteProps = {
 export const PreviewSprite: Component<PreviewSpriteProps> = (props) => {
   const app = usePixiApp();
   const theme = useBoardTheme();
+  const presence = usePlayerPresence();
 
   const sprite = new Sprite();
   sprite.alpha = theme.previewSpriteAlpha;
@@ -60,6 +67,21 @@ export const PreviewSprite: Component<PreviewSpriteProps> = (props) => {
 
   onCleanup(() => {
     app.stage.removeChild(sprite);
+  });
+
+  const onPointerDown = (event: FederatedPointerEvent) => {
+    if (event.target === sprite) {
+      presence.setPlayerSelection(null);
+    }
+    presence.setPlayerSelection(null);
+  };
+
+  onMount(() => {
+    sprite.on("pointerdown", onPointerDown);
+  });
+
+  onCleanup(() => {
+    sprite.off("pointerdown", onPointerDown);
   });
 
   return null;

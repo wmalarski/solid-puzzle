@@ -18,16 +18,13 @@ import { RIGHT_BUTTON } from "../constants";
 import { PreviewGrid, PreviewSprite } from "./PreviewSprite";
 import { PuzzleFragment } from "./PuzzleFragment";
 
-type UseStageDeselectArgs = {
-  onDeselect: VoidFunction;
-};
-
-const useStageDeselect = (args: UseStageDeselectArgs) => {
+const useStageDeselect = () => {
   const app = usePixiApp();
+  const presence = usePlayerPresence();
 
   const onPointerDown = (event: FederatedPointerEvent) => {
     if (event.target === app.stage && event.button !== RIGHT_BUTTON) {
-      args.onDeselect();
+      presence.setPlayerSelection(null);
     }
   };
 
@@ -46,13 +43,8 @@ type BoardProps = {
 
 const Board: Component<BoardProps> = (props) => {
   const store = usePuzzleStore();
-  const presence = usePlayerPresence();
 
-  useStageDeselect({
-    onDeselect: () => {
-      presence.setPlayerSelection(null);
-    },
-  });
+  useStageDeselect();
 
   return (
     <For each={store.config().fragments}>
