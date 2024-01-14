@@ -1,8 +1,10 @@
+import { nanoid } from "nanoid";
 import {
   type Component,
   type JSX,
   createContext,
   createEffect,
+  createMemo,
   createSignal,
   onCleanup,
   useContext,
@@ -11,11 +13,13 @@ import { createStore, produce } from "solid-js/store";
 
 import type { BoardAccess } from "~/server/share/db";
 
+import { useSessionContext } from "~/contexts/SessionContext";
 import { randomHexColor } from "~/utils/colors";
 
 export type PlayerState = {
   cursorColor: string;
   name: string;
+  playerId: string;
   selectedId: null | string;
   x: number;
   y: number;
@@ -32,7 +36,7 @@ type JoinArgs = {
 };
 
 type LeaveArgs = {
-  playerId: string;
+  playerIds: string[];
 };
 
 type SetCursorArgs = {
@@ -46,31 +50,61 @@ type SetSelectionArgs = {
   selectedId: null | string;
 };
 
+const cursorColor = randomHexColor();
+const defaultPlayerId = nanoid();
+
+const placeholderCurrentPlayer: PlayerState = {
+  cursorColor,
+  name: defaultPlayerId,
+  playerId: defaultPlayerId,
+  selectedId: null,
+  x: 0,
+  y: 0,
+};
+
 const createPlayerPresenceState = () => {
-  const [currentPlayer, setCurrentPlayer] = createSignal<string>();
+  const [currentPlayerId, setCurrentPlayerId] = createSignal<string>();
   const [players, setPlayers] = createStore<PlayersState>({});
 
   const join = ({ cursorColor, name, playerId, x, y }: JoinArgs) => {
-    setCurrentPlayer(playerId);
+    setCurrentPlayerId(playerId);
     setPlayers(
       produce((state) => {
-        state[playerId] = { cursorColor, name, selectedId: null, x, y };
+        state[playerId] = {
+          cursorColor,
+          name,
+          playerId,
+          selectedId: null,
+          x,
+          y,
+        };
       }),
     );
   };
 
-  const joinRemote = ({ cursorColor, name, playerId, x, y }: JoinArgs) => {
+  const joinRemote = (presences: JoinArgs[]) => {
     setPlayers(
       produce((state) => {
-        state[playerId] = { cursorColor, name, selectedId: null, x, y };
+        presences.forEach(({ cursorColor, name, playerId, x, y }) => {
+          state[playerId] = {
+            cursorColor,
+            name,
+            playerId,
+            selectedId: null,
+            x,
+            y,
+          };
+        });
       }),
     );
   };
 
-  const leave = ({ playerId }: LeaveArgs) => {
+  const leave = ({ playerIds }: LeaveArgs) => {
     setPlayers(
       produce((state) => {
-        state[playerId] = undefined;
+        playerIds.forEach((playerId) => {
+          state[playerId] = undefined;
+        });
       }),
     );
   };
@@ -78,10 +112,10 @@ const createPlayerPresenceState = () => {
   const setCursor = ({ playerId, x, y }: SetCursorArgs) => {
     setPlayers(
       produce((state) => {
-        const currentPlayer = state[playerId];
-        if (currentPlayer) {
-          currentPlayer.x = x;
-          currentPlayer.y = y;
+        const player = state[playerId];
+        if (player) {
+          player.x = x;
+          player.y = y;
         }
       }),
     );
@@ -90,39 +124,40 @@ const createPlayerPresenceState = () => {
   const setSelection = ({ playerId, selectedId }: SetSelectionArgs) => {
     setPlayers(
       produce((state) => {
-        const currentPlayer = state[playerId];
-        if (currentPlayer) {
-          currentPlayer.selectedId = selectedId;
+        const player = state[playerId];
+        if (player) {
+          player.selectedId = selectedId;
         }
       }),
     );
   };
 
   const setPlayerSelection = (selectedId: null | string) => {
-    const player = currentPlayer();
-    if (player) {
+    const playerId = currentPlayerId();
+    if (playerId) {
       setPlayers(
         produce((state) => {
-          const currentPlayer = state[player];
-          if (currentPlayer) {
-            currentPlayer.selectedId = selectedId;
+          const player = state[playerId];
+          if (player) {
+            player.selectedId = selectedId;
           }
         }),
       );
     }
   };
 
-  const playerSelection = () => {
-    const player = currentPlayer();
-    return player ? players[player]?.selectedId : null;
-  };
+  const currentPlayer = createMemo(() => {
+    const playerId = currentPlayerId();
+    return playerId
+      ? players[playerId] || placeholderCurrentPlayer
+      : placeholderCurrentPlayer;
+  });
 
   return {
     currentPlayer,
     join,
     joinRemote,
     leave,
-    playerSelection,
     players,
     setCursor,
     setPlayerSelection,
@@ -133,11 +168,10 @@ const createPlayerPresenceState = () => {
 type PlayerPresenceState = ReturnType<typeof createPlayerPresenceState>;
 
 const PlayerPresenceContext = createContext<PlayerPresenceState>({
-  currentPlayer: () => "",
+  currentPlayer: () => placeholderCurrentPlayer,
   join: () => void 0,
   joinRemote: () => void 0,
   leave: () => void 0,
-  playerSelection: () => null,
   players: {},
   setCursor: () => void 0,
   setPlayerSelection: () => void 0,
@@ -152,22 +186,23 @@ type PlayerPresenceProviderProps = {
 export const PlayerPresenceProvider: Component<PlayerPresenceProviderProps> = (
   props,
 ) => {
-  const randomHex = randomHexColor();
-
   const value = createPlayerPresenceState();
 
+  const session = useSessionContext();
+
   createEffect(() => {
+    const playerId = session()?.userId || defaultPlayerId;
+
     value.join({
-      cursorColor: randomHex,
+      cursorColor,
       name: props.boardAccess.username,
-      playerId: props.boardAccess.username,
+      playerId,
       x: 0,
       y: 0,
     });
+
     onCleanup(() => {
-      value.leave({
-        playerId: props.boardAccess.username,
-      });
+      value.leave({ playerIds: [playerId] });
     });
   });
 
