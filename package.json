@@ -37,14 +37,14 @@
     "eslint-plugin-solid": "0.13.1",
     "eslint-plugin-tailwindcss": "3.13.1",
     "postcss": "8.4.33",
-    "prettier": "3.2.1",
+    "prettier": "3.2.2",
     "tailwindcss": "3.4.1",
     "tsx": "4.7.0",
     "typescript": "5.3.3",
     "vite": "4.5.1"
   },
   "dependencies": {
-    "@kobalte/core": "0.11.2",
+    "@kobalte/core": "0.12.0",
     "@kobalte/tailwindcss": "0.9.0",
     "@lucia-auth/adapter-sqlite": "3.0.0-beta.12",
     "@solid-primitives/i18n": "2.0.0",
@@ -68,7 +68,7 @@
     "solid-js": "1.8.11",
     "tailwind-merge": "2.2.0",
     "valibot": "^0.25.0",
-    "vinxi": "^0.1.2"
+    "vinxi": "^0.1.4"
   },
   "engines": {
     "node": ">=18"
