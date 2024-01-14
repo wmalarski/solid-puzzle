@@ -12,11 +12,11 @@ import type { PuzzleFragmentShape } from "~/utils/getPuzzleFragments";
 
 import { type Point2D, getCenterFromPoints } from "~/utils/geometry";
 
-import { usePlayerPresence } from "../../DataProviders/PresenceProvider";
 import {
   type FragmentState,
   usePuzzleStore,
 } from "../../DataProviders/PuzzleProvider";
+import { usePlayerSelection } from "../../DataProviders/SelectionProvider";
 import { useBoardTheme } from "../BoardTheme";
 import { usePixiApp } from "../PixiApp";
 import { RotationAnchor } from "./RotationAnchor";
@@ -154,7 +154,7 @@ type PuzzleContainerProps = {
 
 const PuzzleContainer: Component<PuzzleContainerProps> = (props) => {
   const store = usePuzzleStore();
-  const presence = usePlayerPresence();
+  const selection = usePlayerSelection();
   const app = usePixiApp();
 
   const fragment = new Container();
@@ -196,7 +196,7 @@ const PuzzleContainer: Component<PuzzleContainerProps> = (props) => {
   });
 
   const isFragmentSelected = createMemo(() => {
-    return fragmentId() === presence.playerSelection();
+    return fragmentId() === selection.selectedId();
   });
 
   const zIndex = createMemo(() => {
@@ -218,7 +218,7 @@ const PuzzleContainer: Component<PuzzleContainerProps> = (props) => {
       });
     },
     onDragStart: () => {
-      presence.setPlayerSelection(fragmentId());
+      selection.select(fragmentId());
     },
   });
 

@@ -8,7 +8,7 @@ import { type Component, createEffect, onCleanup, onMount } from "solid-js";
 
 import type { PuzzleShapeLine } from "~/utils/getPuzzleFragments";
 
-import { usePlayerPresence } from "../../DataProviders/PresenceProvider";
+import { usePlayerSelection } from "../../DataProviders/SelectionProvider";
 import { useBoardTheme } from "../BoardTheme";
 import { usePixiApp } from "../PixiApp";
 
@@ -52,7 +52,7 @@ type PreviewSpriteProps = {
 export const PreviewSprite: Component<PreviewSpriteProps> = (props) => {
   const app = usePixiApp();
   const theme = useBoardTheme();
-  const presence = usePlayerPresence();
+  const selection = usePlayerSelection();
 
   const sprite = new Sprite();
   sprite.alpha = theme.previewSpriteAlpha;
@@ -71,9 +71,9 @@ export const PreviewSprite: Component<PreviewSpriteProps> = (props) => {
 
   const onPointerDown = (event: FederatedPointerEvent) => {
     if (event.target === sprite) {
-      presence.setPlayerSelection(null);
+      selection.select(null);
     }
-    presence.setPlayerSelection(null);
+    selection.select(null);
   };
 
   onMount(() => {

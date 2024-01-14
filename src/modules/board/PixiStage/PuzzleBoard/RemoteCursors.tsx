@@ -10,23 +10,26 @@ import {
 } from "solid-js";
 
 import {
-  type PlayerState,
-  usePlayerPresence,
-} from "../../DataProviders/PresenceProvider";
+  type PlayerCursorState,
+  usePlayerCursors,
+} from "../../DataProviders/CursorProvider";
+import { usePlayerPresence } from "../../DataProviders/PresenceProvider";
 import { usePixiApp } from "../PixiApp";
 
 type RotationAnchorProps = {
-  state: PlayerState;
+  playerId: string;
+  state: PlayerCursorState;
 };
 
 const RemoteCursor: Component<RotationAnchorProps> = (props) => {
   const app = usePixiApp();
-  // const theme = useBoardTheme();
+  const presence = usePlayerPresence();
 
   const graphics = new Graphics();
 
   onMount(() => {
-    graphics.circle(0, 0, 10).fill({ color: props.state.cursorColor });
+    const color = presence.players[props.playerId]?.color;
+    graphics.circle(0, 0, 10).fill({ color });
   });
 
   createEffect(() => {
@@ -54,19 +57,17 @@ const RemoteCursor: Component<RotationAnchorProps> = (props) => {
 };
 
 export const RemoteCursors: Component = () => {
-  const presence = usePlayerPresence();
+  const cursors = usePlayerCursors();
 
   const playerIds = createMemo(() => {
-    return Object.keys(presence.players).filter(
-      (playerId) => playerId !== presence.currentPlayer(),
-    );
+    return Object.keys(cursors.cursors);
   });
 
   return (
     <For each={playerIds()}>
       {(playerId) => (
-        <Show when={presence.players[playerId]}>
-          {(state) => <RemoteCursor state={state()} />}
+        <Show when={cursors.cursors[playerId]}>
+          {(state) => <RemoteCursor playerId={playerId} state={state()} />}
         </Show>
       )}
     </For>

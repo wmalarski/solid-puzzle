@@ -69,8 +69,9 @@ const createPlayerSelectionState = (boardAccess: () => BoardAccess) => {
     });
   });
 
-  const send = (selectionId: null | string) => {
+  const select = (selectionId: null | string) => {
     sender()(selectionId);
+    setSelectedId(selectionId);
   };
 
   const leave = (playerIds: string[]) => {
@@ -85,11 +86,9 @@ const createPlayerSelectionState = (boardAccess: () => BoardAccess) => {
 
   return {
     leave,
+    select,
     selectedId,
     selection,
-    send,
-    setSelectedId,
-    setSelection,
   };
 };
 
@@ -99,11 +98,9 @@ type PlayerSelectionContextState = ReturnType<
 
 const PlayerSelectionContext = createContext<PlayerSelectionContextState>({
   leave: () => void 0,
+  select: () => void 0,
   selectedId: () => null,
   selection: {},
-  send: () => void 0,
-  setSelectedId: () => void 0,
-  setSelection: () => void 0,
 });
 
 type PlayerSelectionProviderProps = {

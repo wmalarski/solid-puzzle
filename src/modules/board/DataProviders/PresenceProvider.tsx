@@ -22,7 +22,7 @@ import { useSupabase } from "~/contexts/SupabaseContext";
 import { randomHexColor } from "~/utils/colors";
 
 export type PlayerState = {
-  cursorColor: string;
+  color: string;
   name: string;
   playerId: string;
 };
@@ -31,11 +31,11 @@ type PlayersState = Record<string, PlayerState | undefined>;
 
 const PRESENCE_CHANNEL_NAME = "rooms";
 
-const cursorColor = randomHexColor();
+const defaultColor = randomHexColor();
 const defaultPlayerId = nanoid();
 
 const placeholderCurrentPlayer: PlayerState = {
-  cursorColor,
+  color: defaultColor,
   name: defaultPlayerId,
   playerId: defaultPlayerId,
 };
@@ -47,7 +47,7 @@ const createPlayerPresenceState = (boardAccess: () => BoardAccess) => {
 
   const currentPlayer = createMemo(() => {
     return {
-      cursorColor,
+      color: defaultColor,
       name: boardAccess().username,
       playerId: session()?.userId || defaultPlayerId,
     };
@@ -80,7 +80,7 @@ const createPlayerPresenceState = (boardAccess: () => BoardAccess) => {
             produce((state) => {
               newPresences.forEach((presence) => {
                 state[presence.playerId] = {
-                  cursorColor: presence.cursorColor,
+                  color: presence.color,
                   name: presence.name,
                   playerId: presence.playerId,
                 };

@@ -131,6 +131,6 @@ export const PlayerCursorProvider: Component<PlayerCursorProviderProps> = (
   );
 };
 
-export const usePlayerCursorsContext = () => {
+export const usePlayerCursors = () => {
   return useContext(PlayerCursorContext);
 };

@@ -11,8 +11,8 @@ import {
 
 import type { BoardModel } from "~/server/board/types";
 
-import { usePlayerPresence } from "../../DataProviders/PresenceProvider";
 import { usePuzzleStore } from "../../DataProviders/PuzzleProvider";
+import { usePlayerSelection } from "../../DataProviders/SelectionProvider";
 import { usePixiApp } from "../PixiApp";
 import { RIGHT_BUTTON } from "../constants";
 import { PreviewGrid, PreviewSprite } from "./PreviewSprite";
@@ -21,11 +21,11 @@ import { RemoteCursors } from "./RemoteCursors";
 
 const useStageDeselect = () => {
   const app = usePixiApp();
-  const presence = usePlayerPresence();
+  const selection = usePlayerSelection();
 
   const onPointerDown = (event: FederatedPointerEvent) => {
     if (event.target === app.stage && event.button !== RIGHT_BUTTON) {
-      presence.setPlayerSelection(null);
+      selection.select(null);
     }
   };
 
