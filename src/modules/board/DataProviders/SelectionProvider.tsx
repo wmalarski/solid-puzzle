@@ -17,12 +17,16 @@ import type { BoardAccess } from "~/server/share/db";
 
 import { useSupabase } from "~/contexts/SupabaseContext";
 
+import { usePlayerPresence } from "./PresenceProvider";
+
 type PlayerSelectionState = Record<string, null | string | undefined>;
 
 const SELECTION_CHANNEL_NAME = "rooms:selections";
 const SELECTION_EVENT_NAME = "rooms:selection";
 
 const createPlayerSelectionState = (boardAccess: () => BoardAccess) => {
+  const presence = usePlayerPresence();
+
   const [selectedId, setSelectedId] = createSignal<null | string>(null);
 
   const [selection, setSelection] = createStore<PlayerSelectionState>({});
@@ -58,6 +62,7 @@ const createPlayerSelectionState = (boardAccess: () => BoardAccess) => {
         setSender(() => (selectionId) => {
           channel.send({
             event: SELECTION_EVENT_NAME,
+            playerId: presence.currentPlayer().playerId,
             selectionId,
             type: REALTIME_LISTEN_TYPES.BROADCAST,
           });

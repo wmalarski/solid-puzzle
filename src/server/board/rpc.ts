@@ -1,5 +1,6 @@
 "use server";
 import { decode } from "decode-formdata";
+import { nanoid } from "nanoid";
 import {
   coerce,
   maxValue,
@@ -137,11 +138,15 @@ export async function selectProtectedBoardServerLoader(
     return { access, board, session };
   }
 
-  if (board.ownerId !== user?.id) {
-    throw new Error("No access to board");
-  }
+  // if (board.ownerId !== user?.id) {
+  //   throw new Error("No access to board");
+  // }
 
-  const ownerAccess = { boardId: parsed.output.id, username: user.username };
+  const ownerAccess = {
+    boardId: parsed.output.id,
+    username: user?.username || nanoid(),
+  };
+
   return { access: ownerAccess, board, session };
 }
 
