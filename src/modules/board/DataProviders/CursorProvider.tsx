@@ -18,7 +18,6 @@ import type { BoardAccess } from "~/server/share/db";
 import { useSupabase } from "~/contexts/SupabaseContext";
 
 export type PlayerCursorState = {
-  playerId: string;
   x: number;
   y: number;
 };
@@ -59,7 +58,12 @@ const createPlayerCursorState = (boardAccess: () => BoardAccess) => {
               if (player) {
                 player.x = payload.x;
                 player.y = payload.y;
+                return;
               }
+              state[payload.playerId] = {
+                x: payload.x,
+                y: payload.y,
+              };
             }),
           );
         },
@@ -89,20 +93,6 @@ const createPlayerCursorState = (boardAccess: () => BoardAccess) => {
     sender()(args);
   };
 
-  const join = (playerIds: string[]) => {
-    setCursors(
-      produce((state) => {
-        playerIds.forEach((playerId) => {
-          state[playerId] = {
-            playerId,
-            x: 0,
-            y: 0,
-          };
-        });
-      }),
-    );
-  };
-
   const leave = (playerIds: string[]) => {
     setCursors(
       produce((state) => {
@@ -113,14 +103,13 @@ const createPlayerCursorState = (boardAccess: () => BoardAccess) => {
     );
   };
 
-  return { cursors, join, leave, send };
+  return { cursors, leave, send };
 };
 
 type PlayerCursorContextState = ReturnType<typeof createPlayerCursorState>;
 
 const PlayerCursorContext = createContext<PlayerCursorContextState>({
   cursors: {},
-  join: () => void 0,
   leave: () => void 0,
   send: () => void 0,
 });
