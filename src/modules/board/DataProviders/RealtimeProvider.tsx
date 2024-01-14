@@ -15,20 +15,13 @@ type Props = {
   boardAccess: BoardAccess;
 };
 
-const CHANNEL_NAME = "rooms";
+const PRESENCE_CHANNEL_NAME = "rooms";
+const CURSOR_CHANNEL_NAME = "rooms:cursors";
 
 export const RealtimeProvider: Component<Props> = (props) => {
   const supabase = useSupabase();
 
   const presence = usePlayerPresence();
-
-  const channel = createMemo(() => {
-    const boardId = props.boardAccess.boardId;
-
-    return supabase().channel(CHANNEL_NAME, {
-      config: { presence: { key: boardId } },
-    });
-  });
 
   const currentPlayerId = createMemo(() => {
     return presence.currentPlayer().playerId;
@@ -49,7 +42,7 @@ export const RealtimeProvider: Component<Props> = (props) => {
 
     const boardId = props.boardAccess.boardId;
 
-    const channel = supabase().channel(CHANNEL_NAME, {
+    const channel = supabase().channel(PRESENCE_CHANNEL_NAME, {
       config: { presence: { key: boardId } },
     });
 
