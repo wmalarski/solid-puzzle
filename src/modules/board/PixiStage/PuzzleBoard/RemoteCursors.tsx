@@ -26,24 +26,18 @@ const RemoteCursor: Component<RotationAnchorProps> = (props) => {
   const presence = usePlayerPresence();
 
   const graphics = new Graphics();
+  graphics.zIndex = 2;
 
   onMount(() => {
     const color = presence.players[props.playerId]?.color;
-
-    console.log("COLOR", color);
-
-    graphics.circle(0, 0, 10).fill({ color: 0xffff00 });
+    graphics.circle(0, 0, 10).fill({ color });
   });
 
   createEffect(() => {
-    console.log("X", props.state.x);
-
     graphics.x = props.state.x;
   });
 
   createEffect(() => {
-    console.log("Y", props.state.y);
-
     graphics.y = props.state.y;
   });
 
@@ -68,7 +62,10 @@ const usePlayerCursor = () => {
   const cursors = usePlayerCursors();
 
   const onPointerMove = (event: FederatedPointerEvent) => {
-    cursors.send({ x: event.pageX, y: event.pageY });
+    const transform = app.stage.worldTransform;
+    const inverted = transform.applyInverse(event.global);
+
+    cursors.send({ x: inverted.x, y: inverted.y });
   };
 
   onMount(() => {
