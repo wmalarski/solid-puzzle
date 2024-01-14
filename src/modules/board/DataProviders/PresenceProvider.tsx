@@ -4,9 +4,7 @@ import {
   type JSX,
   createContext,
   createEffect,
-  createMemo,
   createSignal,
-  onCleanup,
   useContext,
 } from "solid-js";
 import { createStore, produce } from "solid-js/store";
@@ -21,8 +19,6 @@ export type PlayerState = {
   name: string;
   playerId: string;
   selectedId: null | string;
-  x: number;
-  y: number;
 };
 
 type PlayersState = Record<string, PlayerState | undefined>;
@@ -31,18 +27,6 @@ type JoinArgs = {
   cursorColor: string;
   name: string;
   playerId: string;
-  x: number;
-  y: number;
-};
-
-type LeaveArgs = {
-  playerIds: string[];
-};
-
-type SetCursorArgs = {
-  playerId: string;
-  x: number;
-  y: number;
 };
 
 type SetSelectionArgs = {
@@ -58,65 +42,40 @@ const placeholderCurrentPlayer: PlayerState = {
   name: defaultPlayerId,
   playerId: defaultPlayerId,
   selectedId: null,
-  x: 0,
-  y: 0,
 };
 
 const createPlayerPresenceState = () => {
-  const [currentPlayerId, setCurrentPlayerId] = createSignal<string>();
+  const [currentPlayer, setCurrentPlayer] = createSignal<PlayerState>(
+    placeholderCurrentPlayer,
+  );
+
   const [players, setPlayers] = createStore<PlayersState>({});
 
-  const join = ({ cursorColor, name, playerId, x, y }: JoinArgs) => {
-    setCurrentPlayerId(playerId);
-    setPlayers(
-      produce((state) => {
-        state[playerId] = {
-          cursorColor,
-          name,
-          playerId,
-          selectedId: null,
-          x,
-          y,
-        };
-      }),
-    );
+  const join = ({ cursorColor, name, playerId }: JoinArgs) => {
+    setCurrentPlayer({
+      cursorColor,
+      name,
+      playerId,
+      selectedId: null,
+    });
   };
 
   const joinRemote = (presences: JoinArgs[]) => {
     setPlayers(
       produce((state) => {
-        presences.forEach(({ cursorColor, name, playerId, x, y }) => {
-          state[playerId] = {
-            cursorColor,
-            name,
-            playerId,
-            selectedId: null,
-            x,
-            y,
-          };
+        presences.forEach(({ cursorColor, name, playerId }) => {
+          state[playerId] = { cursorColor, name, playerId, selectedId: null };
         });
       }),
     );
   };
 
-  const leave = ({ playerIds }: LeaveArgs) => {
+  const leave = (playerIds: string[]) => {
     setPlayers(
       produce((state) => {
         playerIds.forEach((playerId) => {
           state[playerId] = undefined;
         });
-      }),
-    );
-  };
-
-  const setCursor = ({ playerId, x, y }: SetCursorArgs) => {
-    setPlayers(
-      produce((state) => {
-        const player = state[playerId];
-        if (player) {
-          player.x = x;
-          player.y = y;
-        }
       }),
     );
   };
@@ -133,25 +92,8 @@ const createPlayerPresenceState = () => {
   };
 
   const setPlayerSelection = (selectedId: null | string) => {
-    const playerId = currentPlayerId();
-    if (playerId) {
-      setPlayers(
-        produce((state) => {
-          const player = state[playerId];
-          if (player) {
-            player.selectedId = selectedId;
-          }
-        }),
-      );
-    }
+    setCurrentPlayer((current) => ({ ...current, selectedId }));
   };
-
-  const currentPlayer = createMemo(() => {
-    const playerId = currentPlayerId();
-    return playerId
-      ? players[playerId] || placeholderCurrentPlayer
-      : placeholderCurrentPlayer;
-  });
 
   return {
     currentPlayer,
@@ -159,7 +101,6 @@ const createPlayerPresenceState = () => {
     joinRemote,
     leave,
     players,
-    setCursor,
     setPlayerSelection,
     setSelection,
   };
@@ -173,7 +114,6 @@ const PlayerPresenceContext = createContext<PlayerPresenceState>({
   joinRemote: () => void 0,
   leave: () => void 0,
   players: {},
-  setCursor: () => void 0,
   setPlayerSelection: () => void 0,
   setSelection: () => void 0,
 });
@@ -191,18 +131,10 @@ export const PlayerPresenceProvider: Component<PlayerPresenceProviderProps> = (
   const session = useSessionContext();
 
   createEffect(() => {
-    const playerId = session()?.userId || defaultPlayerId;
-
     value.join({
       cursorColor,
       name: props.boardAccess.username,
-      playerId,
-      x: 0,
-      y: 0,
-    });
-
-    onCleanup(() => {
-      value.leave({ playerIds: [playerId] });
+      playerId: session()?.userId || defaultPlayerId,
     });
   });
 
