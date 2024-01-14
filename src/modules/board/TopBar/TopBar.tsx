@@ -1,4 +1,4 @@
-import { type Component, Show } from "solid-js";
+import { type Component, For, Show, createMemo } from "solid-js";
 
 import type { BoardModel } from "~/server/board/types";
 import type { BoardAccess } from "~/server/share/db";
@@ -6,32 +6,43 @@ import type { BoardAccess } from "~/server/share/db";
 import { Avatar, AvatarContent, AvatarGroup } from "~/components/Avatar";
 import { useSessionContext } from "~/contexts/SessionContext";
 
+import {
+  type PlayerState,
+  usePlayerPresence,
+} from "../DataProviders/PresenceProvider";
 import { SettingsDialog } from "./SettingsDialog";
 import { SharePopover } from "./SharePopover";
 
+type PlayerAvatarProps = {
+  state: PlayerState;
+};
+
+const PlayerAvatar: Component<PlayerAvatarProps> = (props) => {
+  return (
+    <Avatar>
+      <AvatarContent placeholder ring="secondary" size="xs">
+        <span>{props.state.name}</span>
+      </AvatarContent>
+    </Avatar>
+  );
+};
+
 const Avatars: Component = () => {
+  const presence = usePlayerPresence();
+
+  const playerIds = createMemo(() => {
+    return Object.keys(presence.players);
+  });
+
   return (
     <AvatarGroup>
-      <Avatar>
-        <AvatarContent placeholder ring="secondary" size="xs">
-          <span>A</span>
-        </AvatarContent>
-      </Avatar>
-      <Avatar>
-        <AvatarContent placeholder ring="primary" size="xs">
-          <span>B</span>
-        </AvatarContent>
-      </Avatar>
-      <Avatar>
-        <AvatarContent placeholder ring="accent" size="xs">
-          <span>C</span>
-        </AvatarContent>
-      </Avatar>
-      <Avatar placeholder>
-        <AvatarContent placeholder size="xs">
-          <span>+99</span>
-        </AvatarContent>
-      </Avatar>
+      <For each={playerIds()}>
+        {(playerId) => (
+          <Show when={presence.players[playerId]}>
+            {(state) => <PlayerAvatar state={state()} />}
+          </Show>
+        )}
+      </For>
     </AvatarGroup>
   );
 };
