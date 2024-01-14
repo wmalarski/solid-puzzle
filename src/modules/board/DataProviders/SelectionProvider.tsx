@@ -41,6 +41,7 @@ const createPlayerSelectionState = (boardAccess: () => BoardAccess) => {
   onMount(() => {
     const channelName = `${SELECTION_CHANNEL_NAME}:${boardAccess().boardId}`;
     const channel = supabase().channel(channelName);
+    const playerId = presence.currentPlayer().playerId;
 
     channel
       .on(
@@ -62,7 +63,7 @@ const createPlayerSelectionState = (boardAccess: () => BoardAccess) => {
         setSender(() => (selectionId) => {
           channel.send({
             event: SELECTION_EVENT_NAME,
-            playerId: presence.currentPlayer().playerId,
+            playerId,
             selectionId,
             type: REALTIME_LISTEN_TYPES.BROADCAST,
           });

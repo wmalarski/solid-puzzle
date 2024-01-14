@@ -1,4 +1,4 @@
-import { Graphics } from "pixi.js";
+import { type FederatedPointerEvent, Graphics } from "pixi.js";
 import {
   type Component,
   For,
@@ -29,14 +29,21 @@ const RemoteCursor: Component<RotationAnchorProps> = (props) => {
 
   onMount(() => {
     const color = presence.players[props.playerId]?.color;
-    graphics.circle(0, 0, 10).fill({ color });
+
+    console.log("COLOR", color);
+
+    graphics.circle(0, 0, 10).fill({ color: 0xffff00 });
   });
 
   createEffect(() => {
+    console.log("X", props.state.x);
+
     graphics.x = props.state.x;
   });
 
   createEffect(() => {
+    console.log("Y", props.state.y);
+
     graphics.y = props.state.y;
   });
 
@@ -56,8 +63,27 @@ const RemoteCursor: Component<RotationAnchorProps> = (props) => {
   return null;
 };
 
+const usePlayerCursor = () => {
+  const app = usePixiApp();
+  const cursors = usePlayerCursors();
+
+  const onPointerMove = (event: FederatedPointerEvent) => {
+    cursors.send({ x: event.pageX, y: event.pageY });
+  };
+
+  onMount(() => {
+    app.stage.on("pointermove", onPointerMove);
+  });
+
+  onCleanup(() => {
+    app.stage.off("pointermove", onPointerMove);
+  });
+};
+
 export const RemoteCursors: Component = () => {
   const cursors = usePlayerCursors();
+
+  usePlayerCursor();
 
   const playerIds = createMemo(() => {
     return Object.keys(cursors.cursors);

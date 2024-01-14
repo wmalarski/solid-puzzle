@@ -17,6 +17,8 @@ import type { BoardAccess } from "~/server/share/db";
 
 import { useSupabase } from "~/contexts/SupabaseContext";
 
+import { usePlayerPresence } from "./PresenceProvider";
+
 export type PlayerCursorState = {
   x: number;
   y: number;
@@ -24,21 +26,17 @@ export type PlayerCursorState = {
 
 type PlayersCursorState = Record<string, PlayerCursorState | undefined>;
 
-type SetCursorArgs = {
-  playerId: string;
-  x: number;
-  y: number;
-};
-
 const CURSOR_CHANNEL_NAME = "rooms:cursors";
 const CURSOR_EVENT_NAME = "rooms:cursor";
 
 const createPlayerCursorState = (boardAccess: () => BoardAccess) => {
+  const presence = usePlayerPresence();
+
   const [cursors, setCursors] = createStore<PlayersCursorState>({});
 
   const [sender, setSender] = createSignal(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    (_args: SetCursorArgs) => void 0,
+    (_args: PlayerCursorState) => void 0,
   );
 
   const supabase = useSupabase();
@@ -46,6 +44,7 @@ const createPlayerCursorState = (boardAccess: () => BoardAccess) => {
   onMount(() => {
     const channelName = `${CURSOR_CHANNEL_NAME}:${boardAccess().boardId}`;
     const channel = supabase().channel(channelName);
+    const playerId = presence.currentPlayer().playerId;
 
     channel
       .on(
@@ -73,13 +72,12 @@ const createPlayerCursorState = (boardAccess: () => BoardAccess) => {
           return;
         }
 
-        setSender(() => ({ playerId, x, y }) => {
+        setSender(() => (update) => {
           channel.send({
             event: CURSOR_EVENT_NAME,
             playerId,
             type: REALTIME_LISTEN_TYPES.BROADCAST,
-            x,
-            y,
+            ...update,
           });
         });
       });
@@ -89,7 +87,7 @@ const createPlayerCursorState = (boardAccess: () => BoardAccess) => {
     });
   });
 
-  const send = (args: SetCursorArgs) => {
+  const send = (args: PlayerCursorState) => {
     sender()(args);
   };
 
