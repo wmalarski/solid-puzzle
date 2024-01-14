@@ -11,7 +11,10 @@ import { createStore, produce } from "solid-js/store";
 
 import type { BoardAccess } from "~/server/share/db";
 
+import { randomHexColor } from "~/utils/colors";
+
 export type PlayerState = {
+  cursorColor: string;
   name: string;
   selectedId: null | string;
   x: number;
@@ -21,6 +24,7 @@ export type PlayerState = {
 type PlayersState = Record<string, PlayerState | undefined>;
 
 type JoinArgs = {
+  cursorColor: string;
   name: string;
   playerId: string;
   x: number;
@@ -46,11 +50,19 @@ const createPlayerPresenceState = () => {
   const [currentPlayer, setCurrentPlayer] = createSignal<string>();
   const [players, setPlayers] = createStore<PlayersState>({});
 
-  const join = ({ name, playerId, x, y }: JoinArgs) => {
+  const join = ({ cursorColor, name, playerId, x, y }: JoinArgs) => {
     setCurrentPlayer(playerId);
     setPlayers(
       produce((state) => {
-        state[playerId] = { name, selectedId: null, x, y };
+        state[playerId] = { cursorColor, name, selectedId: null, x, y };
+      }),
+    );
+  };
+
+  const joinRemote = ({ cursorColor, name, playerId, x, y }: JoinArgs) => {
+    setPlayers(
+      produce((state) => {
+        state[playerId] = { cursorColor, name, selectedId: null, x, y };
       }),
     );
   };
@@ -106,7 +118,9 @@ const createPlayerPresenceState = () => {
   };
 
   return {
+    currentPlayer,
     join,
+    joinRemote,
     leave,
     playerSelection,
     players,
@@ -119,7 +133,9 @@ const createPlayerPresenceState = () => {
 type PlayerPresenceState = ReturnType<typeof createPlayerPresenceState>;
 
 const PlayerPresenceContext = createContext<PlayerPresenceState>({
+  currentPlayer: () => "",
   join: () => void 0,
+  joinRemote: () => void 0,
   leave: () => void 0,
   playerSelection: () => null,
   players: {},
@@ -136,10 +152,13 @@ type PlayerPresenceProviderProps = {
 export const PlayerPresenceProvider: Component<PlayerPresenceProviderProps> = (
   props,
 ) => {
+  const randomHex = randomHexColor();
+
   const value = createPlayerPresenceState();
 
   createEffect(() => {
     value.join({
+      cursorColor: randomHex,
       name: props.boardAccess.username,
       playerId: props.boardAccess.username,
       x: 0,

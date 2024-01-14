@@ -77,7 +77,7 @@ export const Board: Component<BoardProps> = (props) => {
               <TopNavbar board={props.board} boardAccess={props.boardAccess} />
               <InfoBar />
               <MenuBar />
-              <RealtimeProvider boardId={props.board.id} />
+              <RealtimeProvider boardAccess={props.boardAccess} />
             </PuzzleStateProvider>
           </PlayerPresenceProvider>
         </SupabaseProvider>

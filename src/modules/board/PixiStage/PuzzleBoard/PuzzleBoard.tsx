@@ -17,6 +17,7 @@ import { usePixiApp } from "../PixiApp";
 import { RIGHT_BUTTON } from "../constants";
 import { PreviewGrid, PreviewSprite } from "./PreviewSprite";
 import { PuzzleFragment } from "./PuzzleFragment";
+import { RemoteCursors } from "./RemoteCursors";
 
 const useStageDeselect = () => {
   const app = usePixiApp();
@@ -74,6 +75,7 @@ const Provider: Component<ProviderProps> = (props) => {
       <PreviewSprite texture={props.texture} />
       <PreviewGrid lines={store.config().lines} />
       <Board texture={props.texture} />
+      <RemoteCursors />
     </>
   );
 };

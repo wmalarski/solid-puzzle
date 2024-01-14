@@ -1,20 +1,38 @@
-import { type Component, createEffect, onCleanup } from "solid-js";
+import { nanoid } from "nanoid";
+import { type Component, createEffect, createMemo, onCleanup } from "solid-js";
 
+import type { BoardAccess } from "~/server/share/db";
+
+import { useSessionContext } from "~/contexts/SessionContext";
 import { useSupabase } from "~/contexts/SupabaseContext";
 
 type Props = {
-  boardId: string;
+  boardAccess: BoardAccess;
 };
+
+const defaultUserId = nanoid();
 
 export const RealtimeProvider: Component<Props> = (props) => {
   const supabase = useSupabase();
 
-  createEffect(() => {
-    const channel = supabase().channel(props.boardId);
+  const session = useSessionContext();
 
-    const subscription = channel
+  const channel = createMemo(() => {
+    const boardId = props.boardAccess.boardId;
+
+    return supabase().channel("Room", {
+      config: { presence: { key: boardId } },
+    });
+  });
+
+  createEffect(() => {
+    const userId = session()?.userId || defaultUserId;
+    const userName = props.boardAccess.username;
+    const realtimeChannel = channel();
+
+    const subscription = channel()
       .on("presence", { event: "sync" }, () => {
-        const newState = channel.presenceState();
+        const newState = realtimeChannel.presenceState();
         console.log("sync", newState);
       })
       .on(
@@ -31,21 +49,24 @@ export const RealtimeProvider: Component<Props> = (props) => {
           console.log("leave", { currentPresences, event, key, leftPresences });
         },
       )
-      .subscribe(async (status) => {
+      .subscribe(async (status, err) => {
         if (status === "SUBSCRIBED") {
-          const presenceTrackStatus = await channel.track({
+          const presenceTrackStatus = await realtimeChannel.track({
+            name: userName,
             online_at: new Date().toISOString(),
-            user: "user-1",
+            user: userId,
           });
           console.log(presenceTrackStatus);
+          return;
         }
-      });
+        console.log(status, err);
+      }, 50000);
 
     onCleanup(() => {
       subscription.unsubscribe();
 
       const untrackPresence = async () => {
-        const presenceUntrackStatus = await channel.untrack();
+        const presenceUntrackStatus = await realtimeChannel.untrack();
         console.log(presenceUntrackStatus);
       };
 
