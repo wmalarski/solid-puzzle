@@ -16,9 +16,10 @@ import { useI18n } from "~/contexts/I18nContext";
 import { SupabaseProvider } from "~/contexts/SupabaseContext";
 import { InfoBar } from "~/modules/common/InfoBar";
 
+import { PlayerCursorProvider } from "../DataProviders/CursorProvider";
 import { PlayerPresenceProvider } from "../DataProviders/PresenceProvider";
 import { PuzzleStateProvider } from "../DataProviders/PuzzleProvider";
-import { RealtimeProvider } from "../DataProviders/RealtimeProvider";
+import { PlayerSelectionProvider } from "../DataProviders/SelectionProvider";
 
 const MenuBar = lazy(() => import("../MenuBar"));
 const TopNavbar = lazy(() => import("../TopBar"));
@@ -72,13 +73,19 @@ export const Board: Component<BoardProps> = (props) => {
       <Suspense>
         <SupabaseProvider>
           <PlayerPresenceProvider boardAccess={props.boardAccess}>
-            <PuzzleStateProvider>
-              <ClientBoard board={props.board} />
-              <TopNavbar board={props.board} boardAccess={props.boardAccess} />
-              <InfoBar />
-              <MenuBar />
-              <RealtimeProvider boardAccess={props.boardAccess} />
-            </PuzzleStateProvider>
+            <PlayerSelectionProvider boardAccess={props.boardAccess}>
+              <PlayerCursorProvider boardAccess={props.boardAccess}>
+                <PuzzleStateProvider>
+                  <ClientBoard board={props.board} />
+                  <TopNavbar
+                    board={props.board}
+                    boardAccess={props.boardAccess}
+                  />
+                  <InfoBar />
+                  <MenuBar />
+                </PuzzleStateProvider>
+              </PlayerCursorProvider>
+            </PlayerSelectionProvider>
           </PlayerPresenceProvider>
         </SupabaseProvider>
       </Suspense>

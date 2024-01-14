@@ -1,10 +1,16 @@
+import {
+  REALTIME_LISTEN_TYPES,
+  REALTIME_PRESENCE_LISTEN_EVENTS,
+  REALTIME_SUBSCRIBE_STATES,
+} from "@supabase/supabase-js";
 import { nanoid } from "nanoid";
 import {
   type Component,
   type JSX,
   createContext,
-  createEffect,
-  createSignal,
+  createMemo,
+  onCleanup,
+  onMount,
   useContext,
 } from "solid-js";
 import { createStore, produce } from "solid-js/store";
@@ -12,27 +18,18 @@ import { createStore, produce } from "solid-js/store";
 import type { BoardAccess } from "~/server/share/db";
 
 import { useSessionContext } from "~/contexts/SessionContext";
+import { useSupabase } from "~/contexts/SupabaseContext";
 import { randomHexColor } from "~/utils/colors";
 
 export type PlayerState = {
   cursorColor: string;
   name: string;
   playerId: string;
-  selectedId: null | string;
 };
 
 type PlayersState = Record<string, PlayerState | undefined>;
 
-type JoinArgs = {
-  cursorColor: string;
-  name: string;
-  playerId: string;
-};
-
-type SetSelectionArgs = {
-  playerId: string;
-  selectedId: null | string;
-};
+const PRESENCE_CHANNEL_NAME = "rooms";
 
 const cursorColor = randomHexColor();
 const defaultPlayerId = nanoid();
@@ -41,81 +38,99 @@ const placeholderCurrentPlayer: PlayerState = {
   cursorColor,
   name: defaultPlayerId,
   playerId: defaultPlayerId,
-  selectedId: null,
 };
 
-const createPlayerPresenceState = () => {
-  const [currentPlayer, setCurrentPlayer] = createSignal<PlayerState>(
-    placeholderCurrentPlayer,
-  );
-
+const createPlayerPresenceState = (boardAccess: () => BoardAccess) => {
   const [players, setPlayers] = createStore<PlayersState>({});
 
-  const join = ({ cursorColor, name, playerId }: JoinArgs) => {
-    setCurrentPlayer({
+  const session = useSessionContext();
+
+  const currentPlayer = createMemo(() => {
+    return {
       cursorColor,
-      name,
-      playerId,
-      selectedId: null,
+      name: boardAccess().username,
+      playerId: session()?.userId || defaultPlayerId,
+    };
+  });
+
+  const supabase = useSupabase();
+
+  onMount(() => {
+    const player = currentPlayer();
+
+    const channel = supabase().channel(PRESENCE_CHANNEL_NAME, {
+      config: { presence: { key: boardAccess().boardId } },
     });
-  };
 
-  const joinRemote = (presences: JoinArgs[]) => {
-    setPlayers(
-      produce((state) => {
-        presences.forEach(({ cursorColor, name, playerId }) => {
-          state[playerId] = { cursorColor, name, playerId, selectedId: null };
-        });
-      }),
-    );
-  };
-
-  const leave = (playerIds: string[]) => {
-    setPlayers(
-      produce((state) => {
-        playerIds.forEach((playerId) => {
-          state[playerId] = undefined;
-        });
-      }),
-    );
-  };
-
-  const setSelection = ({ playerId, selectedId }: SetSelectionArgs) => {
-    setPlayers(
-      produce((state) => {
-        const player = state[playerId];
-        if (player) {
-          player.selectedId = selectedId;
+    const subscription = channel
+      .on(
+        REALTIME_LISTEN_TYPES.PRESENCE,
+        { event: REALTIME_PRESENCE_LISTEN_EVENTS.SYNC },
+        () => {
+          const newState = channel.presenceState();
+          // eslint-disable-next-line no-console
+          console.log("PRESENCE_sync", newState);
+        },
+      )
+      .on(
+        REALTIME_LISTEN_TYPES.PRESENCE,
+        { event: REALTIME_PRESENCE_LISTEN_EVENTS.JOIN },
+        ({ newPresences }) => {
+          setPlayers(
+            produce((state) => {
+              newPresences.forEach((presence) => {
+                state[presence.playerId] = {
+                  cursorColor: presence.cursorColor,
+                  name: presence.name,
+                  playerId: presence.playerId,
+                };
+              });
+            }),
+          );
+        },
+      )
+      .on(
+        REALTIME_LISTEN_TYPES.PRESENCE,
+        { event: REALTIME_PRESENCE_LISTEN_EVENTS.LEAVE },
+        ({ leftPresences }) => {
+          setPlayers(
+            produce((state) => {
+              leftPresences.forEach((presence) => {
+                state[presence.playerId] = undefined;
+              });
+            }),
+          );
+        },
+      )
+      .subscribe(async (status, err) => {
+        if (status !== REALTIME_SUBSCRIBE_STATES.SUBSCRIBED) {
+          // eslint-disable-next-line no-console
+          console.error(status, err);
+          return;
         }
-      }),
-    );
-  };
 
-  const setPlayerSelection = (selectedId: null | string) => {
-    setCurrentPlayer((current) => ({ ...current, selectedId }));
-  };
+        await channel.track(player);
+      });
 
-  return {
-    currentPlayer,
-    join,
-    joinRemote,
-    leave,
-    players,
-    setPlayerSelection,
-    setSelection,
-  };
+    onCleanup(() => {
+      const untrackPresence = async () => {
+        await subscription.unsubscribe();
+        await channel.untrack();
+        await supabase().removeChannel(channel);
+      };
+
+      untrackPresence();
+    });
+  });
+
+  return { currentPlayer, players };
 };
 
 type PlayerPresenceState = ReturnType<typeof createPlayerPresenceState>;
 
 const PlayerPresenceContext = createContext<PlayerPresenceState>({
   currentPlayer: () => placeholderCurrentPlayer,
-  join: () => void 0,
-  joinRemote: () => void 0,
-  leave: () => void 0,
   players: {},
-  setPlayerSelection: () => void 0,
-  setSelection: () => void 0,
 });
 
 type PlayerPresenceProviderProps = {
@@ -126,17 +141,7 @@ type PlayerPresenceProviderProps = {
 export const PlayerPresenceProvider: Component<PlayerPresenceProviderProps> = (
   props,
 ) => {
-  const value = createPlayerPresenceState();
-
-  const session = useSessionContext();
-
-  createEffect(() => {
-    value.join({
-      cursorColor,
-      name: props.boardAccess.username,
-      playerId: session()?.userId || defaultPlayerId,
-    });
-  });
+  const value = createPlayerPresenceState(() => props.boardAccess);
 
   return (
     <PlayerPresenceContext.Provider value={value}>
