@@ -6,9 +6,9 @@ import {
   type Component,
   type JSX,
   createContext,
+  createEffect,
   createSignal,
   onCleanup,
-  onMount,
   useContext,
 } from "solid-js";
 import { createStore, produce } from "solid-js/store";
@@ -117,7 +117,6 @@ const createPuzzleContext = (boardAccess: () => BoardAccess) => {
   };
 
   const setFragmentState = (update: SetFragmentStateArgs) => {
-    sender()(update);
     setFragments(
       produce((state) => {
         const fragment = state[update.fragmentId];
@@ -131,6 +130,7 @@ const createPuzzleContext = (boardAccess: () => BoardAccess) => {
   };
 
   const setFragmentStateWithLockCheck = (update: SetFragmentStateArgs) => {
+    sender()(update);
     setFragments(
       produce((state) => {
         const fragment = state[update.fragmentId];
@@ -147,7 +147,7 @@ const createPuzzleContext = (boardAccess: () => BoardAccess) => {
     );
   };
 
-  onMount(() => {
+  createEffect(() => {
     const channelName = `${PUZZLE_CHANNEL_NAME}:${boardAccess().boardId}`;
     const channel = supabase().channel(channelName);
     const playerId = presence.currentPlayer().playerId;
@@ -194,10 +194,15 @@ const createPuzzleContext = (boardAccess: () => BoardAccess) => {
     });
   });
 
+  const sendFragmentState = (update: SetFragmentStateArgs) => {
+    sender()(update);
+  };
+
   return {
     config,
     fragments,
     initFragments,
+    sendFragmentState,
     setFragmentState,
     setFragmentStateWithLockCheck,
     shapes,
@@ -210,6 +215,7 @@ const PuzzleStateContext = createContext<PuzzleContextState>({
   config: () => ({ fragments: [], lines: [] }),
   fragments: {},
   initFragments: () => void 0,
+  sendFragmentState: () => void 0,
   setFragmentState: () => void 0,
   setFragmentStateWithLockCheck: () => void 0,
   shapes: () => new Map(),

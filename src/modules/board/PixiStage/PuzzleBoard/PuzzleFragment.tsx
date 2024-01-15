@@ -182,6 +182,14 @@ const PuzzleContainer: Component<PuzzleContainerProps> = (props) => {
   });
 
   createEffect(() => {
+    fragment.x = props.state.x;
+  });
+
+  createEffect(() => {
+    fragment.y = props.state.y;
+  });
+
+  createEffect(() => {
     if (!props.state.isLocked) {
       fragment.eventMode = "static";
       return;
@@ -217,6 +225,14 @@ const PuzzleContainer: Component<PuzzleContainerProps> = (props) => {
         y: fragment.y,
       });
     },
+    onDragMove: () => {
+      store.sendFragmentState({
+        fragmentId: props.shape.fragmentId,
+        rotation: props.state.rotation,
+        x: fragment.x,
+        y: fragment.y,
+      });
+    },
     onDragStart: () => {
       selection.select(fragmentId());
     },
@@ -225,11 +241,14 @@ const PuzzleContainer: Component<PuzzleContainerProps> = (props) => {
   const rotationOffset = Math.random() * 2 * Math.PI;
 
   const onRotationEnd = (rotation: number) => {
-    store.setFragmentStateWithLockCheck({ ...props.state, rotation });
+    const change = { ...props.state, rotation };
+    store.setFragmentStateWithLockCheck(change);
   };
 
   const onRotationMove = (rotation: number) => {
-    store.setFragmentState({ ...props.state, rotation });
+    const change = { ...props.state, rotation };
+    store.sendFragmentState(change);
+    store.setFragmentState(change);
   };
 
   return (
