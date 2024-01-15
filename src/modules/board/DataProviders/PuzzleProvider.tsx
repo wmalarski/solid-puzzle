@@ -1,20 +1,30 @@
 import {
+  REALTIME_LISTEN_TYPES,
+  REALTIME_SUBSCRIBE_STATES,
+} from "@supabase/supabase-js";
+import {
   type Component,
   type JSX,
   createContext,
   createSignal,
+  onCleanup,
+  onMount,
   useContext,
 } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 
 import type { BoardModel } from "~/server/board/types";
+import type { BoardAccess } from "~/server/share/db";
 
+import { useSupabase } from "~/contexts/SupabaseContext";
 import { getDistance } from "~/utils/geometry";
 import {
   type PuzzleConfig,
   type PuzzleFragmentShape,
   getPuzzleFragments,
 } from "~/utils/getPuzzleFragments";
+
+import { usePlayerPresence } from "./PresenceProvider";
 
 export type FragmentState = {
   fragmentId: string;
@@ -39,7 +49,31 @@ type InitFragmentsArgs = {
   width: number;
 };
 
-const createPuzzleContext = () => {
+const PUZZLE_CHANNEL_NAME = "rooms:puzzle";
+const PUZZLE_EVENT_NAME = "rooms:puzzle";
+
+type IsLockedInPlaceArgs = {
+  fragment: SetFragmentStateArgs;
+  shapes: ReadonlyMap<string, PuzzleFragmentShape>;
+};
+
+const isLockedInPlace = ({ fragment, shapes }: IsLockedInPlaceArgs) => {
+  const shape = shapes.get(fragment.fragmentId);
+
+  if (!fragment || !shape) {
+    return false;
+  }
+  const distance = getDistance(fragment, shape.min);
+  const isRightAngle =
+    Math.abs(fragment.rotation) % (2 * Math.PI) < Math.PI / 32;
+  const isLocked = distance < 20 && isRightAngle;
+
+  return isLocked;
+};
+
+const createPuzzleContext = (boardAccess: () => BoardAccess) => {
+  const presence = usePlayerPresence();
+
   const [fragments, setFragments] = createStore<PuzzleState>({});
 
   const [shapes, setShapes] = createSignal<
@@ -51,19 +85,12 @@ const createPuzzleContext = () => {
     lines: [],
   });
 
-  const isLockedInPlace = (fragment: SetFragmentStateArgs) => {
-    const shape = shapes().get(fragment.fragmentId);
+  const [sender, setSender] = createSignal(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    (_args: SetFragmentStateArgs) => void 0,
+  );
 
-    if (!fragment || !shape) {
-      return false;
-    }
-    const distance = getDistance(fragment, shape.min);
-    const isRightAngle =
-      Math.abs(fragment.rotation) % (2 * Math.PI) < Math.PI / 32;
-    const isLocked = distance < 20 && isRightAngle;
-
-    return isLocked;
-  };
+  const supabase = useSupabase();
 
   const initFragments = ({ board, height, width }: InitFragmentsArgs) => {
     const shapesMap = new Map<string, PuzzleFragmentShape>();
@@ -89,32 +116,83 @@ const createPuzzleContext = () => {
     setShapes(shapesMap);
   };
 
-  const setFragmentState = (fragment: SetFragmentStateArgs) => {
+  const setFragmentState = (update: SetFragmentStateArgs) => {
+    sender()(update);
     setFragments(
       produce((state) => {
-        const currentFragment = state[fragment.fragmentId];
-        if (currentFragment) {
-          currentFragment.rotation = fragment.rotation;
-          currentFragment.x = fragment.x;
-          currentFragment.y = fragment.y;
+        const fragment = state[update.fragmentId];
+        if (fragment) {
+          fragment.rotation = update.rotation;
+          fragment.x = update.x;
+          fragment.y = update.y;
         }
       }),
     );
   };
 
-  const setFragmentStateWithLockCheck = (fragment: SetFragmentStateArgs) => {
+  const setFragmentStateWithLockCheck = (update: SetFragmentStateArgs) => {
     setFragments(
       produce((state) => {
-        const currentFragment = state[fragment.fragmentId];
-        if (currentFragment) {
-          currentFragment.rotation = fragment.rotation;
-          currentFragment.x = fragment.x;
-          currentFragment.y = fragment.y;
-          currentFragment.isLocked = isLockedInPlace(fragment);
+        const fragment = state[update.fragmentId];
+        if (fragment) {
+          fragment.rotation = update.rotation;
+          fragment.x = update.x;
+          fragment.y = update.y;
+          fragment.isLocked = isLockedInPlace({
+            fragment: update,
+            shapes: shapes(),
+          });
         }
       }),
     );
   };
+
+  onMount(() => {
+    const channelName = `${PUZZLE_CHANNEL_NAME}:${boardAccess().boardId}`;
+    const channel = supabase().channel(channelName);
+    const playerId = presence.currentPlayer().playerId;
+    const puzzleShapes = shapes();
+
+    channel
+      .on(
+        REALTIME_LISTEN_TYPES.BROADCAST,
+        { event: PUZZLE_EVENT_NAME },
+        (payload) => {
+          setFragments(
+            produce((state) => {
+              const fragment = state[payload.fragmentId];
+              if (fragment) {
+                fragment.rotation = payload.rotation;
+                fragment.x = payload.x;
+                fragment.y = payload.y;
+                fragment.isLocked = isLockedInPlace({
+                  fragment,
+                  shapes: puzzleShapes,
+                });
+              }
+            }),
+          );
+        },
+      )
+      .subscribe((status) => {
+        if (status !== REALTIME_SUBSCRIBE_STATES.SUBSCRIBED) {
+          return;
+        }
+
+        setSender(() => (update) => {
+          channel.send({
+            event: PUZZLE_EVENT_NAME,
+            playerId,
+            type: REALTIME_LISTEN_TYPES.BROADCAST,
+            ...update,
+          });
+        });
+      });
+
+    onCleanup(() => {
+      supabase().removeChannel(channel);
+    });
+  });
 
   return {
     config,
@@ -138,13 +216,14 @@ const PuzzleStateContext = createContext<PuzzleContextState>({
 });
 
 type PuzzleStateProviderProps = {
+  boardAccess: BoardAccess;
   children: JSX.Element;
 };
 
 export const PuzzleStateProvider: Component<PuzzleStateProviderProps> = (
   props,
 ) => {
-  const value = createPuzzleContext();
+  const value = createPuzzleContext(() => props.boardAccess);
 
   return (
     <PuzzleStateContext.Provider value={value}>
