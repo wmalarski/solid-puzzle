@@ -1,4 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
+import { createBrowserClient } from "@supabase/ssr";
 import {
   type Component,
   type JSX,
@@ -15,7 +15,7 @@ const createSupabaseClient = () => {
     url: import.meta.env.VITE_SUPABASE_URL,
   });
 
-  const client = createClient(parsed.url, parsed.key);
+  const client = createBrowserClient(parsed.url, parsed.key);
 
   return client;
 };

@@ -12,6 +12,8 @@ const getEnvSchema = () => {
     DATABASE_URL: string(),
     NODE_ENV: optional(string(), "production"),
     SESSION_SECRET: string(),
+    SUPABASE_ANON_KEY: string(),
+    SUPABASE_URL: string(),
   });
 };
 
@@ -24,6 +26,8 @@ export const serverEnvMiddleware = async (event: FetchEvent) => {
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: import.meta.env.MODE,
     SESSION_SECRET: process.env.SESSION_SECRET,
+    SUPABASE_ANON_KEY: import.meta.env.VITE_SUPABASE_ANON_KEY,
+    SUPABASE_URL: import.meta.env.VITE_SUPABASE_URL,
   });
 
   if (parsed.success) {
