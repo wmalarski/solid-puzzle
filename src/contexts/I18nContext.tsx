@@ -11,15 +11,15 @@ import {
 
 const en_dict = {
   auth: {
+    email: {
+      label: "Username",
+      placeholder: "Username",
+    },
     password: {
       label: "Password",
       placeholder: "Password",
     },
     signOut: "Sign Out",
-    username: {
-      label: "Username",
-      placeholder: "Username",
-    },
   },
   board: {
     error: {

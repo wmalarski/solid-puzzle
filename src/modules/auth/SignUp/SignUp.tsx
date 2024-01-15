@@ -52,15 +52,14 @@ export const SignUp: Component = () => {
             </Alert>
           </Show>
           <TextFieldRoot>
-            <TextFieldLabel for="username">
-              <TextFieldLabelText>
-                {t("auth.username.label")}
-              </TextFieldLabelText>
+            <TextFieldLabel for="email">
+              <TextFieldLabelText>{t("auth.email.label")}</TextFieldLabelText>
             </TextFieldLabel>
             <TextFieldInput
-              id="username"
-              name="username"
-              placeholder={t("auth.username.placeholder")}
+              id="email"
+              name="email"
+              placeholder={t("auth.email.placeholder")}
+              type="email"
               variant="bordered"
             />
           </TextFieldRoot>

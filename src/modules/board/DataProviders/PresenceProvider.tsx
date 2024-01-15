@@ -49,7 +49,7 @@ const createPlayerPresenceState = (boardAccess: () => BoardAccess) => {
     return {
       color: defaultColor,
       name: boardAccess().username,
-      playerId: session()?.userId || defaultPlayerId,
+      playerId: session()?.user.id || defaultPlayerId,
     };
   });
 

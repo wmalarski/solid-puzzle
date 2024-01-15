@@ -1,5 +1,5 @@
 import type { H3EventContext } from "@solidjs/start/server";
-import type { Session, User } from "lucia";
+import type { Session, User } from "@supabase/supabase-js";
 import type { RequestEvent } from "solid-js/web";
 
 import { redirect } from "@solidjs/router";
@@ -22,8 +22,8 @@ export type WithProtectedH3EventContext<T> = T & {
 export const getProtectedRequestContext = (
   event: RequestEvent,
 ): ProtectedH3EventContext => {
-  const session = event.context.session;
-  const user = event.context.user;
+  const session = event.context.supabaseSession;
+  const user = event.context.supabaseSession?.user;
 
   if (!session || !user) {
     throw redirect(paths.notFound);
