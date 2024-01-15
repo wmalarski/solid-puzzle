@@ -5,8 +5,10 @@ import type { Session, SupabaseClient } from "@supabase/supabase-js";
 import { deleteCookie, getCookie, setCookie } from "@solidjs/start/server";
 import { createServerClient } from "@supabase/ssr";
 
+import type { Database } from "./types";
+
 export const supabaseMiddleware = async (event: FetchEvent) => {
-  const supabase = createServerClient(
+  const supabase = createServerClient<Database>(
     event.context.env.SUPABASE_URL,
     event.context.env.SUPABASE_ANON_KEY,
     {
@@ -31,7 +33,7 @@ export const supabaseMiddleware = async (event: FetchEvent) => {
 
 declare module "vinxi/server" {
   interface H3EventContext {
-    supabase: SupabaseClient;
+    supabase: SupabaseClient<Database>;
     supabaseSession: Session | null;
   }
 }

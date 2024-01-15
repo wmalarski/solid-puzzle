@@ -1,6 +1,5 @@
 "use server";
 import { decode } from "decode-formdata";
-import { nanoid } from "nanoid";
 import {
   coerce,
   maxValue,
@@ -11,20 +10,13 @@ import {
   string,
 } from "valibot";
 
-import { getProtectedRequestContext } from "../context";
-import { hasBoardAccess } from "../share/db";
+import { generateCurves } from "~/utils/getPuzzleFragments";
+
 import {
   boardDimension,
   getRequestEventOrThrow,
   rpcParseIssueError,
 } from "../utils";
-import {
-  deleteBoard,
-  insertBoard,
-  selectBoard,
-  selectBoards,
-  updateBoard,
-} from "./db";
 
 export async function insertBoardServerAction(form: FormData) {
   const event = getRequestEventOrThrow();
@@ -43,9 +35,16 @@ export async function insertBoardServerAction(form: FormData) {
     throw rpcParseIssueError(parsed.issues);
   }
 
-  const ctx = getProtectedRequestContext(event);
+  const config = generateCurves({
+    columns: parsed.output.columns,
+    rows: parsed.output.rows,
+  });
 
-  return insertBoard({ ...parsed.output, ctx });
+  return event.context.supabase.from("rooms").insert({
+    config,
+    media: parsed.output.image,
+    name: parsed.output.name,
+  });
 }
 
 export async function updateBoardServerAction(form: FormData) {
@@ -66,11 +65,17 @@ export async function updateBoardServerAction(form: FormData) {
     throw rpcParseIssueError(parsed.issues);
   }
 
-  const ctx = getProtectedRequestContext(event);
+  const config = generateCurves({
+    columns: parsed.output.columns,
+    rows: parsed.output.rows,
+  });
 
-  const count = updateBoard({ ...parsed.output, ctx });
-
-  return { count };
+  return event.context.supabase.from("rooms").update({
+    config,
+    id: parsed.output.id,
+    media: parsed.output.image,
+    name: parsed.output.name,
+  });
 }
 
 export async function deleteBoardServerAction(form: FormData) {
@@ -82,11 +87,10 @@ export async function deleteBoardServerAction(form: FormData) {
     throw rpcParseIssueError(parsed.issues);
   }
 
-  const ctx = getProtectedRequestContext(event);
-
-  deleteBoard({ ...parsed.output, ctx });
-
-  return { success: true };
+  return event.context.supabase
+    .from("rooms")
+    .delete()
+    .eq("id", parsed.output.id);
 }
 
 type SelectBoardServerLoaderArgs = {
@@ -104,50 +108,11 @@ export async function selectBoardServerLoader(
     throw rpcParseIssueError(parsed.issues);
   }
 
-  const board = selectBoard({ ...parsed.output, ctx: event.context });
-
-  if (!board) {
-    throw new Error("Board not found");
-  }
-
-  return board;
-}
-
-export async function selectProtectedBoardServerLoader(
-  args: SelectBoardServerLoaderArgs,
-) {
-  const event = getRequestEventOrThrow();
-
-  const parsed = await safeParseAsync(object({ id: string() }), args);
-
-  if (!parsed.success) {
-    throw rpcParseIssueError(parsed.issues);
-  }
-
-  const board = selectBoard({ ...parsed.output, ctx: event.context });
-
-  if (!board) {
-    throw new Error("Board not found");
-  }
-
-  const access = await hasBoardAccess({ boardId: parsed.output.id, event });
-  const user = event.context.user;
-  const session = event.context.session;
-
-  if (access) {
-    return { access, board, session };
-  }
-
-  // if (board.ownerId !== user?.id) {
-  //   throw new Error("No access to board");
-  // }
-
-  const ownerAccess = {
-    boardId: parsed.output.id,
-    username: user?.username || nanoid(),
-  };
-
-  return { access: ownerAccess, board, session };
+  return event.context.supabase
+    .from("rooms")
+    .select()
+    .eq("id", parsed.output.id)
+    .single();
 }
 
 type SelectBoardsServerLoaderArgs = {
@@ -172,7 +137,8 @@ export async function selectBoardsServerLoader(
     throw rpcParseIssueError(parsed.issues);
   }
 
-  const ctx = getProtectedRequestContext(event);
-
-  return selectBoards({ ...parsed.output, ctx });
+  return event.context.supabase
+    .from("rooms")
+    .select("id,name,media,owner_id,created_at")
+    .range(parsed.output.offset, parsed.output.offset + parsed.output.limit);
 }

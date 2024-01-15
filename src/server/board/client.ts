@@ -6,11 +6,7 @@ import {
 
 import type { BoardModel } from "./types";
 
-import {
-  selectBoardServerLoader,
-  selectBoardsServerLoader,
-  selectProtectedBoardServerLoader,
-} from "./rpc";
+import { selectBoardServerLoader, selectBoardsServerLoader } from "./rpc";
 
 const SELECT_BOARD_CACHE_NAME = "board";
 const SELECT_PROTECTED_BOARD_CACHE_NAME = "protected-board";
