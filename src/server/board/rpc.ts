@@ -1,14 +1,6 @@
 "use server";
 import { decode } from "decode-formdata";
-import {
-  coerce,
-  maxValue,
-  minLength,
-  number,
-  object,
-  safeParseAsync,
-  string,
-} from "valibot";
+import { minLength, object, safeParseAsync, string } from "valibot";
 
 import { generateCurves } from "~/utils/getPuzzleFragments";
 
@@ -91,54 +83,4 @@ export async function deleteBoardServerAction(form: FormData) {
     .from("rooms")
     .delete()
     .eq("id", parsed.output.id);
-}
-
-type SelectBoardServerLoaderArgs = {
-  id: string;
-};
-
-export async function selectBoardServerLoader(
-  args: SelectBoardServerLoaderArgs,
-) {
-  const event = getRequestEventOrThrow();
-
-  const parsed = await safeParseAsync(object({ id: string() }), args);
-
-  if (!parsed.success) {
-    throw rpcParseIssueError(parsed.issues);
-  }
-
-  return event.context.supabase
-    .from("rooms")
-    .select()
-    .eq("id", parsed.output.id)
-    .single();
-}
-
-type SelectBoardsServerLoaderArgs = {
-  limit: number;
-  offset: number;
-};
-
-export async function selectBoardsServerLoader(
-  args: SelectBoardsServerLoaderArgs,
-) {
-  const event = getRequestEventOrThrow();
-
-  const parsed = await safeParseAsync(
-    object({
-      limit: coerce(number([maxValue(20)]), Number),
-      offset: coerce(number(), Number),
-    }),
-    args,
-  );
-
-  if (!parsed.success) {
-    throw rpcParseIssueError(parsed.issues);
-  }
-
-  return event.context.supabase
-    .from("rooms")
-    .select("id,name,media,owner_id,created_at")
-    .range(parsed.output.offset, parsed.output.offset + parsed.output.limit);
 }

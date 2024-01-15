@@ -1,9 +1,7 @@
-import { createQuery } from "@tanstack/solid-query";
-import { type Component, Show, Suspense, createMemo } from "solid-js";
+import { type Component, Suspense, createMemo } from "solid-js";
 
 import type { BoardModel } from "~/server/board/types";
 
-import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
 import { ShareIcon } from "~/components/Icons/ShareIcon";
 import { XIcon } from "~/components/Icons/XIcon";
@@ -24,7 +22,6 @@ import {
   TextFieldRoot,
 } from "~/components/TextField";
 import { useI18n } from "~/contexts/I18nContext";
-import { generateBoardInviteQueryOptions } from "~/server/share/client";
 import { paths } from "~/utils/paths";
 import { buildSearchParams } from "~/utils/searchParams";
 
@@ -35,16 +32,8 @@ type ShareFormProps = {
 const ShareForm: Component<ShareFormProps> = (props) => {
   const { t } = useI18n();
 
-  const inviteQuery = createQuery(() =>
-    generateBoardInviteQueryOptions({ id: props.board.id })(),
-  );
-
   const value = createMemo(() => {
-    if (inviteQuery.status !== "success") {
-      return;
-    }
-
-    const search = buildSearchParams({ token: inviteQuery.data.token });
+    const search = buildSearchParams({});
     return `${window.location.origin}${paths.invite(props.board.id)}?${search}`;
   });
 
@@ -55,14 +44,6 @@ const ShareForm: Component<ShareFormProps> = (props) => {
   return (
     <form class="flex flex-col gap-4" method="post">
       <input name="boardId" type="hidden" value={props.board.id} />
-      <Show when={inviteQuery.error}>
-        {(error) => (
-          <Alert variant="error">
-            <AlertIcon variant="error" />
-            {error().message}
-          </Alert>
-        )}
-      </Show>
       <TextFieldRoot>
         <TextFieldLabel for="token">
           <TextFieldLabelText>{t("board.share.link")}</TextFieldLabelText>
@@ -75,21 +56,10 @@ const ShareForm: Component<ShareFormProps> = (props) => {
           variant="bordered"
         />
       </TextFieldRoot>
-      <Button
-        disabled={inviteQuery.isPending}
-        isLoading={inviteQuery.isPending}
-        onClick={onCopyToClipboard}
-        type="button"
-      >
+      <Button onClick={onCopyToClipboard} type="button">
         {t("board.share.copy")}
       </Button>
-      <Button
-        disabled={inviteQuery.isPending}
-        isLoading={inviteQuery.isPending}
-        type="submit"
-      >
-        {t("board.share.regenerate")}
-      </Button>
+      <Button type="submit">{t("board.share.regenerate")}</Button>
     </form>
   );
 };

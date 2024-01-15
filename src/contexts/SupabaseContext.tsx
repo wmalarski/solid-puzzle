@@ -8,6 +8,8 @@ import {
 } from "solid-js";
 import { object, parse, string } from "valibot";
 
+import type { Database } from "~/types/supabase";
+
 const createSupabaseClient = () => {
   const schema = object({ key: string(), url: string() });
   const parsed = parse(schema, {
@@ -15,7 +17,7 @@ const createSupabaseClient = () => {
     url: import.meta.env.VITE_SUPABASE_URL,
   });
 
-  const client = createBrowserClient(parsed.url, parsed.key);
+  const client = createBrowserClient<Database>(parsed.url, parsed.key);
 
   return client;
 };

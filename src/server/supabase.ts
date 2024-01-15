@@ -5,7 +5,7 @@ import type { Session, SupabaseClient } from "@supabase/supabase-js";
 import { deleteCookie, getCookie, setCookie } from "@solidjs/start/server";
 import { createServerClient } from "@supabase/ssr";
 
-import type { Database } from "./types";
+import type { Database } from "../types/supabase";
 
 export const supabaseMiddleware = async (event: FetchEvent) => {
   const supabase = createServerClient<Database>(
