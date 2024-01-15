@@ -5,8 +5,8 @@ import { type Component, type ComponentProps, Show } from "solid-js";
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
 import { useI18n } from "~/contexts/I18nContext";
-import { invalidateSelectBoardsQueries } from "~/server/board/client";
 import { insertBoardServerAction } from "~/server/board/rpc";
+import { invalidateSelectBoardsQueries } from "~/services/board";
 import { paths } from "~/utils/paths";
 
 import { ConfigFields } from "../ConfigFields";
@@ -21,7 +21,7 @@ export const CreateBoardForm: Component = () => {
   const mutation = createMutation(() => ({
     mutationFn: insertBoardServerAction,
     onSuccess(board) {
-      navigate(paths.board(board));
+      navigate(paths.board(board.id));
 
       queryClient.invalidateQueries(invalidateSelectBoardsQueries());
     },

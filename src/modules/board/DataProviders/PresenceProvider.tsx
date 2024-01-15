@@ -15,7 +15,7 @@ import {
 } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 
-import type { BoardAccess } from "~/server/share/db";
+import type { BoardAccess } from "~/services/access";
 
 import { useSessionContext } from "~/contexts/SessionContext";
 import { useSupabase } from "~/contexts/SupabaseContext";
@@ -48,7 +48,7 @@ const createPlayerPresenceState = (boardAccess: () => BoardAccess) => {
   const currentPlayer = createMemo(() => {
     return {
       color: defaultColor,
-      name: boardAccess().username,
+      name: boardAccess().userName,
       playerId: session()?.user.id || defaultPlayerId,
     };
   });

@@ -32,11 +32,21 @@ export async function insertBoardServerAction(form: FormData) {
     rows: parsed.output.rows,
   });
 
-  return event.context.supabase.from("rooms").insert({
-    config,
-    media: parsed.output.image,
-    name: parsed.output.name,
-  });
+  const response = await event.context.supabase
+    .from("rooms")
+    .insert({
+      config,
+      media: parsed.output.image,
+      name: parsed.output.name,
+    })
+    .select()
+    .single();
+
+  if (response.error) {
+    throw response.error;
+  }
+
+  return response.data;
 }
 
 export async function updateBoardServerAction(form: FormData) {
@@ -62,12 +72,18 @@ export async function updateBoardServerAction(form: FormData) {
     rows: parsed.output.rows,
   });
 
-  return event.context.supabase.from("rooms").update({
+  const response = await event.context.supabase.from("rooms").update({
     config,
     id: parsed.output.id,
     media: parsed.output.image,
     name: parsed.output.name,
   });
+
+  if (response.error) {
+    throw response.error;
+  }
+
+  return response.data;
 }
 
 export async function deleteBoardServerAction(form: FormData) {
@@ -79,8 +95,14 @@ export async function deleteBoardServerAction(form: FormData) {
     throw rpcParseIssueError(parsed.issues);
   }
 
-  return event.context.supabase
+  const response = await event.context.supabase
     .from("rooms")
     .delete()
     .eq("id", parsed.output.id);
+
+  if (response.error) {
+    throw response.error;
+  }
+
+  return response.data;
 }

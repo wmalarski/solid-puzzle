@@ -1,15 +1,16 @@
+import { createWritableMemo } from "@solid-primitives/memo";
 import { type RouteDefinition, createAsync, useParams } from "@solidjs/router";
 import { createQuery } from "@tanstack/solid-query";
 import { type Component, Show, Suspense } from "solid-js";
 
-import type { BoardAccess } from "~/server/share/db";
+import type { BoardAccess } from "~/services/access";
 
 import { SessionProvider } from "~/contexts/SessionContext";
 import { Board } from "~/modules/board/Board";
-import {
-  selectBoardQueryOptions,
-  selectProtectedBoardLoader,
-} from "~/server/board/client";
+import { AcceptInviteForm } from "~/modules/invite/AcceptInviteForm";
+import { getSessionLoader } from "~/server/auth/client";
+import { selectBoardQueryOptions } from "~/services/board";
+import { randomHexColor } from "~/utils/colors";
 
 type BoardQueryProps = {
   boardAccess: BoardAccess;
@@ -33,27 +34,37 @@ const BoardQuery: Component<BoardQueryProps> = (props) => {
 };
 
 export const route = {
-  load: async ({ params }) => {
-    try {
-      await selectProtectedBoardLoader({ id: params.boardId });
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error("LOAD error", error);
-    }
+  load: async () => {
+    await getSessionLoader();
   },
 } satisfies RouteDefinition;
 
 export default function BoardSection() {
   const params = useParams();
 
-  const data = createAsync(() =>
-    selectProtectedBoardLoader({ id: params.boardId }),
-  );
+  const session = createAsync(() => getSessionLoader());
+
+  const [access, setAccess] = createWritableMemo<BoardAccess | null>(() => {
+    const user = session()?.user;
+    return user
+      ? {
+          boardId: params.boardId,
+          playerColor: randomHexColor(),
+          playerId: user.id,
+          userName: user.email || user.id,
+        }
+      : null;
+  });
 
   return (
-    <SessionProvider value={() => data()?.session || null}>
+    <SessionProvider value={() => session() || null}>
       <main class="relative h-screen w-screen">
-        <Show when={data()?.access}>
+        <Show
+          fallback={
+            <AcceptInviteForm boardId={params.boardId} onSubmit={setAccess} />
+          }
+          when={access()}
+        >
           {(access) => (
             <BoardQuery boardAccess={access()} boardId={params.boardId} />
           )}

@@ -1,7 +1,7 @@
 import { type Component, For, Show, createMemo } from "solid-js";
 
+import type { BoardAccess } from "~/services/access";
 import type { BoardModel } from "~/types/models";
-import type { BoardAccess } from "~/server/share/db";
 
 import { Avatar, AvatarContent, AvatarGroup } from "~/components/Avatar";
 import { useSessionContext } from "~/contexts/SessionContext";
@@ -60,7 +60,7 @@ export const TopBar: Component<TopBarProps> = (props) => {
       <div class="flex flex-col pl-4">
         <div class="flex items-center gap-2">
           <h1 class="font-bold">{props.board.name}</h1>
-          <Show when={props.board.ownerId === session()?.userId}>
+          <Show when={props.board.owner_id === session()?.user.id}>
             <SettingsDialog boardId={props.board.id} />
           </Show>
           <SharePopover board={props.board} />

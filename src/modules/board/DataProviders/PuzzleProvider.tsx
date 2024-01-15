@@ -13,8 +13,8 @@ import {
 } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 
+import type { BoardAccess } from "~/services/access";
 import type { BoardModel } from "~/types/models";
-import type { BoardAccess } from "~/server/share/db";
 
 import { useSupabase } from "~/contexts/SupabaseContext";
 import { getDistance } from "~/utils/geometry";
@@ -96,7 +96,7 @@ const createPuzzleContext = (boardAccess: () => BoardAccess) => {
     const shapesMap = new Map<string, PuzzleFragmentShape>();
     const init: PuzzleState = {};
 
-    const config = JSON.parse(board.config);
+    const config = JSON.parse(String(board.config));
 
     const shapes = getPuzzleFragments({ config, height, width });
 

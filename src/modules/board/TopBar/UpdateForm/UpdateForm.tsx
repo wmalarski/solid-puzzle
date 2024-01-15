@@ -5,11 +5,11 @@ import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
 import { useI18n } from "~/contexts/I18nContext";
 import { ConfigFields } from "~/modules/createBoard/ConfigFields";
+import { updateBoardServerAction } from "~/server/board/rpc";
 import {
   invalidateSelectBoardQuery,
   invalidateSelectBoardsQueries,
-} from "~/server/board/client";
-import { updateBoardServerAction } from "~/server/board/rpc";
+} from "~/services/board";
 
 type UpdateFormProps = {
   boardId: string;
@@ -38,7 +38,7 @@ export const UpdateForm: Component<UpdateFormProps> = (props) => {
 
   return (
     <form class="flex flex-col gap-4" method="post" onSubmit={onSubmit}>
-      <Show when={mutation.data && mutation.data.count < 1}>
+      <Show when={mutation.error}>
         <Alert variant="error">
           <AlertIcon variant="error" />
           Error

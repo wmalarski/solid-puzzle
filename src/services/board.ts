@@ -17,8 +17,18 @@ export const selectBoardQueryOptions = ({
   const supabase = useSupabase();
 
   return queryOptions(() => ({
-    queryFn: () => {
-      return supabase().from("rooms").select().eq("id", id).single();
+    queryFn: async () => {
+      const result = await supabase()
+        .from("rooms")
+        .select()
+        .eq("id", id)
+        .single();
+
+      if (result.error) {
+        throw result.error;
+      }
+
+      return result.data;
     },
     queryKey: ["selectBoard", id] as const,
     refetchOnMount: false,
@@ -34,23 +44,30 @@ export const invalidateSelectBoardQuery = (
 };
 
 type SelectBoardsQueryOptionsArgs = {
-  limit: number;
+  limit?: number;
   offset: number;
 };
 
-export const selectBoardsQueryOptions = (
-  args: SelectBoardsQueryOptionsArgs,
-) => {
+export const selectBoardsQueryOptions = ({
+  limit = SELECT_BOARDS_DEFAULT_LIMIT,
+  offset,
+}: SelectBoardsQueryOptionsArgs) => {
   const supabase = useSupabase();
 
   return queryOptions(() => ({
-    queryFn: () => {
-      return supabase()
+    queryFn: async () => {
+      const result = await supabase()
         .from("rooms")
         .select("id,name,media,owner_id,created_at")
-        .range(args.offset, args.offset + args.limit);
+        .range(offset, offset + limit);
+
+      if (result.error) {
+        throw result.error;
+      }
+
+      return result.data;
     },
-    queryKey: ["selectBoards", args] as const,
+    queryKey: ["selectBoards", { limit, offset }] as const,
   }));
 };
 

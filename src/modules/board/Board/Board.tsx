@@ -9,11 +9,10 @@ import {
   onMount,
 } from "solid-js";
 
+import type { BoardAccess } from "~/services/access";
 import type { BoardModel } from "~/types/models";
-import type { BoardAccess } from "~/server/share/db";
 
 import { useI18n } from "~/contexts/I18nContext";
-import { SupabaseProvider } from "~/contexts/SupabaseContext";
 import { InfoBar } from "~/modules/common/InfoBar";
 
 import { PlayerCursorProvider } from "../DataProviders/CursorProvider";
@@ -71,23 +70,21 @@ export const Board: Component<BoardProps> = (props) => {
   return (
     <ErrorBoundary fallback={ErrorFallback}>
       <Suspense>
-        <SupabaseProvider>
-          <PlayerPresenceProvider boardAccess={props.boardAccess}>
-            <PlayerSelectionProvider boardAccess={props.boardAccess}>
-              <PlayerCursorProvider boardAccess={props.boardAccess}>
-                <PuzzleStateProvider boardAccess={props.boardAccess}>
-                  <ClientBoard board={props.board} />
-                  <TopNavbar
-                    board={props.board}
-                    boardAccess={props.boardAccess}
-                  />
-                  <InfoBar />
-                  <MenuBar />
-                </PuzzleStateProvider>
-              </PlayerCursorProvider>
-            </PlayerSelectionProvider>
-          </PlayerPresenceProvider>
-        </SupabaseProvider>
+        <PlayerPresenceProvider boardAccess={props.boardAccess}>
+          <PlayerSelectionProvider boardAccess={props.boardAccess}>
+            <PlayerCursorProvider boardAccess={props.boardAccess}>
+              <PuzzleStateProvider boardAccess={props.boardAccess}>
+                <ClientBoard board={props.board} />
+                <TopNavbar
+                  board={props.board}
+                  boardAccess={props.boardAccess}
+                />
+                <InfoBar />
+                <MenuBar />
+              </PuzzleStateProvider>
+            </PlayerCursorProvider>
+          </PlayerSelectionProvider>
+        </PlayerPresenceProvider>
       </Suspense>
     </ErrorBoundary>
   );

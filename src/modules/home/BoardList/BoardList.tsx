@@ -6,14 +6,11 @@ import type { BoardModel } from "~/types/models";
 import { LinkButton } from "~/components/Button";
 import { Card, CardActions, CardBody, CardTitle } from "~/components/Card";
 import { useI18n } from "~/contexts/I18nContext";
-import {
-  SELECT_BOARDS_DEFAULT_LIMIT,
-  selectBoardsQueryOptions,
-} from "~/server/board/client";
+import { selectBoardsQueryOptions } from "~/services/board";
 import { paths } from "~/utils/paths";
 
 type BoardItemProps = {
-  board: BoardModel;
+  board: Omit<BoardModel, "config">;
 };
 
 const BoardItem: Component<BoardItemProps> = (props) => {
@@ -54,10 +51,7 @@ const BoardsListEmpty: Component = () => {
 
 export default function BoardsList() {
   const boardQuery = createQuery(() =>
-    selectBoardsQueryOptions({
-      limit: SELECT_BOARDS_DEFAULT_LIMIT,
-      offset: 0,
-    })(),
+    selectBoardsQueryOptions({ offset: 0 })(),
   );
 
   return (

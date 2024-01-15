@@ -1,7 +1,8 @@
 import { useSearchParams } from "@solidjs/router";
+import { nanoid } from "nanoid";
 import { type Component, type ComponentProps } from "solid-js";
 
-import type { BoardModel } from "~/types/models";
+import type { BoardAccess } from "~/services/access";
 
 import { Button } from "~/components/Button";
 import { Card, CardBody, cardTitleClass } from "~/components/Card";
@@ -12,10 +13,15 @@ import {
   TextFieldRoot,
 } from "~/components/TextField";
 import { useI18n } from "~/contexts/I18nContext";
+import { randomHexColor } from "~/utils/colors";
 
 type AcceptInviteFormProps = {
-  board: BoardModel;
+  boardId: string;
+  onSubmit: (access: BoardAccess) => void;
 };
+
+const defaultPlayerId = nanoid();
+const defaultPlayerColor = randomHexColor();
 
 export const AcceptInviteForm: Component<AcceptInviteFormProps> = (props) => {
   const { t } = useI18n();
@@ -25,18 +31,21 @@ export const AcceptInviteForm: Component<AcceptInviteFormProps> = (props) => {
   const onSubmit: ComponentProps<"form">["onSubmit"] = (event) => {
     event.preventDefault();
 
-    // const data = new FormData(event.currentTarget);
+    const data = new FormData(event.currentTarget);
 
-    // mutation.mutate(data);
+    props.onSubmit({
+      boardId: props.boardId,
+      playerColor: defaultPlayerColor,
+      playerId: defaultPlayerId,
+      userName: String(data.get("name")),
+    });
   };
 
   return (
     <Card class="w-full max-w-md" variant="bordered">
       <CardBody>
         <header class="flex items-center justify-between gap-2">
-          <h2 class={cardTitleClass()}>
-            {t("invite.title", { name: props.board.name })}
-          </h2>
+          <h2 class={cardTitleClass()}>{t("invite.title")}</h2>
         </header>
         <form class="flex flex-col gap-4" method="post" onSubmit={onSubmit}>
           <input name="token" type="hidden" value={searchParams.token} />
