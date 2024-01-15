@@ -1,6 +1,6 @@
 import { type Component, For, Show, createMemo } from "solid-js";
 
-import type { BoardModel } from "~/server/board/types";
+import type { BoardModel } from "~/types/models";
 import type { BoardAccess } from "~/server/share/db";
 
 import { Avatar, AvatarContent, AvatarGroup } from "~/components/Avatar";

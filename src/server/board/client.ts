@@ -4,7 +4,7 @@ import {
   queryOptions,
 } from "@tanstack/solid-query";
 
-import type { BoardModel } from "./types";
+import type { BoardModel } from "../../types/models";
 
 import { selectBoardServerLoader, selectBoardsServerLoader } from "./rpc";
 

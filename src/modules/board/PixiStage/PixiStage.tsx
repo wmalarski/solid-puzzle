@@ -1,6 +1,6 @@
 import type { Component } from "solid-js";
 
-import type { BoardModel } from "~/server/board/types";
+import type { BoardModel } from "~/types/models";
 
 import { TransformContextProvider } from "../TransformContext";
 import { ZoomBar } from "../ZoomBar";

@@ -9,7 +9,7 @@ import {
   onMount,
 } from "solid-js";
 
-import type { BoardModel } from "~/server/board/types";
+import type { BoardModel } from "~/types/models";
 
 import { usePuzzleStore } from "../../DataProviders/PuzzleProvider";
 import { usePlayerSelection } from "../../DataProviders/SelectionProvider";

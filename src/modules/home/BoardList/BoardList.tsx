@@ -1,7 +1,7 @@
 import { createQuery } from "@tanstack/solid-query";
 import { type Component, ErrorBoundary, For, Show, Suspense } from "solid-js";
 
-import type { BoardModel } from "~/server/board/types";
+import type { BoardModel } from "~/types/models";
 
 import { LinkButton } from "~/components/Button";
 import { Card, CardActions, CardBody, CardTitle } from "~/components/Card";

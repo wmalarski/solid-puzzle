@@ -1,6 +1,6 @@
 import { type Component, Suspense, createMemo } from "solid-js";
 
-import type { BoardModel } from "~/server/board/types";
+import type { BoardModel } from "~/types/models";
 
 import { Button } from "~/components/Button";
 import { ShareIcon } from "~/components/Icons/ShareIcon";

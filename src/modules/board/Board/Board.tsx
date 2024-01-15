@@ -9,7 +9,7 @@ import {
   onMount,
 } from "solid-js";
 
-import type { BoardModel } from "~/server/board/types";
+import type { BoardModel } from "~/types/models";
 import type { BoardAccess } from "~/server/share/db";
 
 import { useI18n } from "~/contexts/I18nContext";

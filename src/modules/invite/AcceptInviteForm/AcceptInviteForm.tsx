@@ -1,7 +1,7 @@
 import { useSearchParams } from "@solidjs/router";
 import { type Component, type ComponentProps } from "solid-js";
 
-import type { BoardModel } from "~/server/board/types";
+import type { BoardModel } from "~/types/models";
 
 import { Button } from "~/components/Button";
 import { Card, CardBody, cardTitleClass } from "~/components/Card";

@@ -13,7 +13,7 @@ import {
 } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 
-import type { BoardModel } from "~/server/board/types";
+import type { BoardModel } from "~/types/models";
 import type { BoardAccess } from "~/server/share/db";
 
 import { useSupabase } from "~/contexts/SupabaseContext";
