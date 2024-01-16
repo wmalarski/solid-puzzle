@@ -19,7 +19,22 @@ const en_dict = {
       label: "Password",
       placeholder: "Password",
     },
+    signIn: {
+      button: "Sign In",
+      signUp: "Sign Up",
+      title: "Sign In",
+    },
     signOut: "Sign Out",
+    signUp: {
+      button: "Sign Up",
+      signIn: "Sign In",
+      title: "Sign Up",
+    },
+    signUpSuccess: {
+      description:
+        "Congratulations! your account has been successfully created",
+      label: "Success",
+    },
   },
   board: {
     error: {
@@ -91,16 +106,6 @@ const en_dict = {
   },
   list: {
     go: "Dalej",
-  },
-  signIn: {
-    button: "Sign In",
-    signUp: "Sign Up",
-    title: "Sign In",
-  },
-  signUp: {
-    button: "Sign Up",
-    signIn: "Sign In",
-    title: "Sign Up",
   },
 };
 

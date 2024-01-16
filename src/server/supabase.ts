@@ -12,6 +12,7 @@ export const supabaseMiddleware = async (event: FetchEvent) => {
     event.context.env.SUPABASE_URL,
     event.context.env.SUPABASE_ANON_KEY,
     {
+      auth: { flowType: "pkce" },
       cookies: {
         get: (key) => {
           return getCookie(event, key);

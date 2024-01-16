@@ -1,4 +1,6 @@
 "use server";
+import type { RequestEvent } from "solid-js/web";
+
 import { redirect } from "@solidjs/router";
 import { decode } from "decode-formdata";
 import {
@@ -20,6 +22,11 @@ import {
 } from "../utils";
 import { SESSION_CACHE_KEY } from "./cache";
 
+const getRedirectUrl = (event: RequestEvent, path: string) => {
+  const origin = new URL(event.request.url).origin;
+  return origin + path;
+};
+
 export async function signUpServerAction(form: FormData) {
   const event = getRequestEventOrThrow();
 
@@ -35,7 +42,10 @@ export async function signUpServerAction(form: FormData) {
     return rpcParseIssueResult(parsed.issues);
   }
 
-  const result = await event.context.supabase.auth.signUp(parsed.output);
+  const result = await event.context.supabase.auth.signUp({
+    ...parsed.output,
+    options: { emailRedirectTo: getRedirectUrl(event, paths.signUpSuccess) },
+  });
 
   if (result.error) {
     return rpcSupabaseErrorResult(result.error);
@@ -84,6 +94,5 @@ export async function signOutServerAction() {
 
 export async function getSessionServerLoader() {
   const event = getRequestEventOrThrow();
-  console.log("event.context.supabaseSession", event.context.supabaseSession);
   return await Promise.resolve(event.context.supabaseSession);
 }

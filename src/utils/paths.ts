@@ -7,4 +7,5 @@ export const paths = {
   repository: "https://github.com/wmalarski/solid-puzzle",
   signIn: "/sign-in",
   signUp: "/sign-up",
+  signUpSuccess: "/sign-up/success",
 };

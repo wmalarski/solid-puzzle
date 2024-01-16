@@ -7,6 +7,7 @@
     "partykit",
     "partysocket",
     "Pixi",
+    "pkce",
     "pointerupoutside",
     "solidjs",
     "supabase",

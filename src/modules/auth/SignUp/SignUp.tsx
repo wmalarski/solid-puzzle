@@ -25,7 +25,7 @@ export const SignUp: Component = () => {
     <Card class="w-full max-w-md" variant="bordered">
       <CardBody>
         <header class="flex items-center justify-between gap-2">
-          <h2 class={cardTitleClass()}>{t("signUp.title")}</h2>
+          <h2 class={cardTitleClass()}>{t("auth.signUp.title")}</h2>
         </header>
         <form action={signUpAction} class="flex flex-col gap-4" method="post">
           <Show when={submission.result?.success}>
@@ -81,11 +81,11 @@ export const SignUp: Component = () => {
             isLoading={submission.pending}
             type="submit"
           >
-            {t("signUp.button")}
+            {t("auth.signUp.button")}
           </Button>
           <div class="flex justify-center">
             <Link class="text-xs" href={paths.signIn}>
-              {t("signUp.signIn")}
+              {t("auth.signUp.signIn")}
             </Link>
           </div>
         </form>
