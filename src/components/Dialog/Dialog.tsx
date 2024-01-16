@@ -3,7 +3,7 @@ import type { VariantProps } from "class-variance-authority";
 import { Dialog } from "@kobalte/core";
 import { type Component, type ComponentProps, splitProps } from "solid-js";
 
-import { buttonClass } from "../Button";
+import { buttonClass, buttonSplitProps } from "../Button";
 import { twCx } from "../utils/twCva";
 import styles from "./Dialog.module.css";
 
@@ -15,13 +15,7 @@ export type DialogTriggerProps = Dialog.DialogTriggerProps &
   VariantProps<typeof buttonClass>;
 
 export const DialogTrigger: Component<DialogTriggerProps> = (props) => {
-  const [split, rest] = splitProps(props, [
-    "color",
-    "isLoading",
-    "shape",
-    "size",
-    "variant"
-  ]);
+  const [split, rest] = splitProps(props, buttonSplitProps);
 
   return (
     <Dialog.Trigger

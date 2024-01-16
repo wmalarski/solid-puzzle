@@ -3,9 +3,15 @@ import { type Component, For, Show, createMemo } from "solid-js";
 import type { BoardAccess, BoardModel } from "~/types/models";
 
 import { Avatar, AvatarContent, AvatarGroup } from "~/components/Avatar";
-import { Button } from "~/components/Button";
 import { ShareIcon } from "~/components/Icons/ShareIcon";
 import { showToast } from "~/components/Toast";
+import {
+  TooltipArrow,
+  TooltipContent,
+  TooltipPortal,
+  TooltipRoot,
+  TooltipTrigger
+} from "~/components/Tooltip";
 import { useI18n } from "~/contexts/I18nContext";
 import { useSessionContext } from "~/contexts/SessionContext";
 
@@ -36,15 +42,23 @@ export const ShareButton: Component = () => {
   };
 
   return (
-    <Button
-      aria-label={t("board.share.title")}
-      onClick={onShare}
-      shape="circle"
-      size="sm"
-      type="button"
-    >
-      <ShareIcon class="size-6" />
-    </Button>
+    <TooltipRoot>
+      <TooltipTrigger
+        aria-label={t("board.share.title")}
+        onClick={onShare}
+        shape="circle"
+        size="sm"
+        type="button"
+      >
+        <ShareIcon class="size-6" />
+      </TooltipTrigger>
+      <TooltipPortal>
+        <TooltipContent>
+          <TooltipArrow />
+          {t("board.share.title")}
+        </TooltipContent>
+      </TooltipPortal>
+    </TooltipRoot>
   );
 };
 
@@ -102,7 +116,7 @@ export const TopBar: Component<TopBarProps> = (props) => {
 
   return (
     <div class="absolute inset-x-auto right-4 top-4 flex w-min items-center gap-4 rounded-3xl bg-base-300 p-1 shadow-lg">
-      <div class="flex flex-col pl-4">
+      <div class="flex flex-col gap-2 p-1 pl-4">
         <div class="flex items-center gap-2">
           <h1 class="font-bold">{props.board.name}</h1>
           <Show when={props.board.owner_id === session()?.user.id}>

@@ -49,17 +49,19 @@ export const buttonClass = twCva("btn no-animation flex items-center gap-1", {
   }
 });
 
+export const buttonSplitProps = [
+  "color",
+  "isLoading",
+  "shape",
+  "size",
+  "variant"
+] as const;
+
 export type ButtonProps = ComponentProps<"button"> &
   VariantProps<typeof buttonClass>;
 
 export const Button: Component<ButtonProps> = (props) => {
-  const [split, rest] = splitProps(props, [
-    "color",
-    "isLoading",
-    "shape",
-    "size",
-    "variant"
-  ]);
+  const [split, rest] = splitProps(props, buttonSplitProps);
 
   return (
     <button {...rest} class={buttonClass({ class: props.class, ...split })} />
@@ -93,13 +95,7 @@ export type LinkButtonProps = ComponentProps<"a"> &
   VariantProps<typeof buttonClass>;
 
 export const LinkButton: Component<LinkButtonProps> = (props) => {
-  const [split, rest] = splitProps(props, [
-    "color",
-    "isLoading",
-    "shape",
-    "size",
-    "variant"
-  ]);
+  const [split, rest] = splitProps(props, buttonSplitProps);
 
   // eslint-disable-next-line jsx-a11y/anchor-has-content
   return <a {...rest} class={buttonClass({ class: props.class, ...split })} />;

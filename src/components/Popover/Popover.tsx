@@ -3,7 +3,7 @@ import type { VariantProps } from "class-variance-authority";
 import { Popover as KobaltePopover } from "@kobalte/core";
 import { type Component, type ComponentProps, splitProps } from "solid-js";
 
-import { buttonClass } from "../Button";
+import { buttonClass, buttonSplitProps } from "../Button";
 import { twCx } from "../utils/twCva";
 import styles from "./Popover.module.css";
 
@@ -13,13 +13,7 @@ export type PopoverTriggerProps = KobaltePopover.PopoverTriggerProps &
   VariantProps<typeof buttonClass>;
 
 export const PopoverTrigger: Component<PopoverTriggerProps> = (props) => {
-  const [split, rest] = splitProps(props, [
-    "color",
-    "isLoading",
-    "shape",
-    "size",
-    "variant"
-  ]);
+  const [split, rest] = splitProps(props, buttonSplitProps);
 
   return (
     <KobaltePopover.Trigger

@@ -61,6 +61,11 @@ const en_dict = {
     share: {
       copy: "Link copied to your clipboard",
       title: "Share link"
+    },
+    zoom: {
+      reset: "Reset zoom",
+      zoomIn: "Zoom in",
+      zoomOut: "Zoom out"
     }
   },
   createBoard: {

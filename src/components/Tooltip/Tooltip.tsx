@@ -3,7 +3,7 @@ import type { VariantProps } from "class-variance-authority";
 import { Tooltip } from "@kobalte/core";
 import { type Component, splitProps } from "solid-js";
 
-import { buttonClass } from "../Button";
+import { buttonClass, buttonSplitProps } from "../Button";
 import { twCx } from "../utils/twCva";
 import styles from "./Tooltip.module.css";
 
@@ -15,13 +15,7 @@ export type TooltipTriggerProps = Tooltip.TooltipTriggerProps &
   VariantProps<typeof buttonClass>;
 
 export const TooltipTrigger: Component<TooltipTriggerProps> = (props) => {
-  const [split, rest] = splitProps(props, [
-    "color",
-    "isLoading",
-    "shape",
-    "size",
-    "variant"
-  ]);
+  const [split, rest] = splitProps(props, buttonSplitProps);
 
   return (
     <Tooltip.Trigger
@@ -42,7 +36,7 @@ export const TooltipContent: Component<TooltipContentProps> = (props) => {
     <Tooltip.Content
       {...props}
       class={twCx(
-        "z-50 py-1 px-2 rounded-lg text-sm shadow",
+        "z-50 py-1 px-2 rounded-lg text-sm shadow bg-base-300",
         styles.content,
         props.class
       )}

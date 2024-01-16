@@ -1,6 +1,5 @@
 import type { Component } from "solid-js";
 
-import { Button } from "~/components/Button";
 import { MinusIcon } from "~/components/Icons/MinusIcon";
 import { PlusIcon } from "~/components/Icons/PlusIcon";
 import {
@@ -10,10 +9,13 @@ import {
   TooltipRoot,
   TooltipTrigger
 } from "~/components/Tooltip";
+import { useI18n } from "~/contexts/I18nContext";
 
 import { useTransformContext } from "../TransformContext";
 
 export const ZoomBar: Component = () => {
+  const { t } = useI18n();
+
   const transform = useTransformContext();
 
   const center = () => {
@@ -35,28 +37,54 @@ export const ZoomBar: Component = () => {
   return (
     <div class="absolute bottom-4 left-4 flex gap-1 rounded-3xl bg-base-300 p-1 shadow">
       <TooltipRoot>
-        <TooltipTrigger class="tooltip__trigger">Trigger</TooltipTrigger>
+        <TooltipTrigger
+          aria-label={t("board.zoom.zoomIn")}
+          onClick={onZoomInClick}
+          size="sm"
+          variant="ghost"
+        >
+          <PlusIcon />
+        </TooltipTrigger>
         <TooltipPortal>
           <TooltipContent>
             <TooltipArrow />
-            <p>Tooltip content</p>
+            {t("board.zoom.zoomIn")}
           </TooltipContent>
         </TooltipPortal>
       </TooltipRoot>
-      <Button onClick={onZoomInClick} size="sm" variant="ghost">
-        <PlusIcon />
-      </Button>
-      <Button
-        class="tabular-nums"
-        onClick={onZoomResetClick}
-        size="sm"
-        variant="ghost"
-      >
-        {Math.round(transform.scale() * 100)}%
-      </Button>
-      <Button onClick={onZoomOutClick} size="sm" variant="ghost">
-        <MinusIcon />
-      </Button>
+      <TooltipRoot>
+        <TooltipTrigger
+          aria-label={t("board.zoom.reset")}
+          class="tabular-nums"
+          onClick={onZoomResetClick}
+          size="sm"
+          variant="ghost"
+        >
+          {Math.round(transform.scale() * 100)}%
+        </TooltipTrigger>
+        <TooltipPortal>
+          <TooltipContent>
+            <TooltipArrow />
+            {t("board.zoom.reset")}
+          </TooltipContent>
+        </TooltipPortal>
+      </TooltipRoot>
+      <TooltipRoot>
+        <TooltipTrigger
+          aria-label={t("board.zoom.zoomOut")}
+          onClick={onZoomOutClick}
+          size="sm"
+          variant="ghost"
+        >
+          <MinusIcon />
+        </TooltipTrigger>
+        <TooltipPortal>
+          <TooltipContent>
+            <TooltipArrow />
+            {t("board.zoom.zoomOut")}
+          </TooltipContent>
+        </TooltipPortal>
+      </TooltipRoot>
     </div>
   );
 };

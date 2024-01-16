@@ -3,7 +3,7 @@ import type { VariantProps } from "class-variance-authority";
 import { DropdownMenu as KobalteDropdownMenu } from "@kobalte/core";
 import { type Component, createSignal, onMount, splitProps } from "solid-js";
 
-import { buttonClass } from "../Button";
+import { buttonClass, buttonSplitProps } from "../Button";
 import { twCva, twCx } from "../utils/twCva";
 import styles from "./DropdownMenu.module.css";
 
@@ -16,13 +16,7 @@ export type DropdownMenuTriggerProps =
 export const DropdownMenuTrigger: Component<DropdownMenuTriggerProps> = (
   props
 ) => {
-  const [split, rest] = splitProps(props, [
-    "color",
-    "isLoading",
-    "shape",
-    "size",
-    "variant"
-  ]);
+  const [split, rest] = splitProps(props, buttonSplitProps);
 
   return (
     <KobalteDropdownMenu.Trigger

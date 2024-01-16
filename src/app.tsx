@@ -32,7 +32,7 @@ export default function App() {
                   <ToastProvider />
                 </Suspense>
               </MetaProvider>
-              <SolidQueryDevtools />
+              <SolidQueryDevtools buttonPosition="bottom-left" />
             </QueryClientProvider>
           </I18nContextProvider>
         </SupabaseProvider>

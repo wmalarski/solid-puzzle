@@ -16,7 +16,7 @@ import { Card, CardBody, cardTitleClass } from "~/components/Card";
 import { XCircleIcon } from "~/components/Icons/XCircleIcon";
 import { Link } from "~/components/Link";
 import { useI18n } from "~/contexts/I18nContext";
-import { InfoBar } from "~/modules/common/InfoBar";
+import { InfoBar } from "~/modules/board/InfoBar";
 import { paths } from "~/utils/paths";
 
 import { PlayerCursorProvider } from "../DataProviders/CursorProvider";
