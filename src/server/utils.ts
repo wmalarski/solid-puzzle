@@ -21,3 +21,35 @@ export const boardDimension = () => {
 export const rpcParseIssueError = (issues: Issues) => {
   return new Error(issues[0].message);
 };
+
+type RpcResult = {
+  error?: string;
+  errors?: Record<string, string>;
+  success: boolean;
+};
+
+export const rpcParseIssueResult = (issues: Issues): RpcResult => {
+  console.log(
+    issues.map((issue) => [
+      issue.path?.map((item) => item.key).join(".") || "global",
+      issue.message,
+    ]),
+  );
+  return {
+    errors: Object.fromEntries(
+      issues.map((issue) => [
+        issue.path?.map((item) => item.key).join(".") || "global",
+        issue.message,
+      ]),
+    ),
+    success: false,
+  };
+};
+
+export const rpcSuccessResult = (): RpcResult => {
+  return { success: true };
+};
+
+export const rpcSupabaseErrorResult = (error: Error): RpcResult => {
+  return { error: error.message, success: false };
+};

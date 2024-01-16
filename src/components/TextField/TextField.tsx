@@ -44,7 +44,7 @@ export const TextFieldErrorMessage: Component<TextFieldErrorMessageProps> = (
   props,
 ) => {
   return (
-    <span {...props} class={twCx("text-sm text-error-content", props.class)} />
+    <span {...props} class={twCx("text-sm text-error pt-2", props.class)} />
   );
 };
 

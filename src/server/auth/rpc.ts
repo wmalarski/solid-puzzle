@@ -9,7 +9,13 @@ import {
   string,
 } from "valibot";
 
-import { getRequestEventOrThrow, rpcParseIssueError } from "../utils";
+import {
+  getRequestEventOrThrow,
+  rpcParseIssueError,
+  rpcParseIssueResult,
+  rpcSuccessResult,
+  rpcSupabaseErrorResult,
+} from "../utils";
 
 export async function signUpServerAction(form: FormData) {
   const event = getRequestEventOrThrow();
@@ -22,17 +28,21 @@ export async function signUpServerAction(form: FormData) {
     decode(form),
   );
 
+  console.log("parsed", parsed);
+
   if (!parsed.success) {
-    throw rpcParseIssueError(parsed.issues);
+    return rpcParseIssueResult(parsed.issues);
   }
 
   const result = await event.context.supabase.auth.signUp(parsed.output);
 
+  console.log("parsed", result);
+
   if (result.error) {
-    throw result.error;
+    return rpcSupabaseErrorResult(result.error);
   }
 
-  return { success: true };
+  return rpcSuccessResult();
 }
 
 export async function signInServerAction(form: FormData) {
@@ -75,5 +85,6 @@ export async function signOutServerAction() {
 
 export async function getSessionServerLoader() {
   const event = getRequestEventOrThrow();
+  console.log("event.context.supabaseSession", event.context.supabaseSession);
   return await Promise.resolve(event.context.supabaseSession);
 }

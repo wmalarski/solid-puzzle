@@ -1,42 +1,43 @@
-import { revalidate, useNavigate } from "@solidjs/router";
-import { createMutation } from "@tanstack/solid-query";
-import { type Component, type ComponentProps, Show } from "solid-js";
+import { useSubmission } from "@solidjs/router";
+import { type Component, Show } from "solid-js";
 
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
 import { Card, CardBody, cardTitleClass } from "~/components/Card";
 import { Link } from "~/components/Link";
 import {
+  TextFieldErrorMessage,
   TextFieldInput,
   TextFieldLabel,
   TextFieldLabelText,
   TextFieldRoot,
 } from "~/components/TextField";
 import { useI18n } from "~/contexts/I18nContext";
-import { SESSION_CACHE_NAME } from "~/server/auth/client";
-import { signUpServerAction } from "~/server/auth/rpc";
+import { signUpAction } from "~/server/auth/client";
 import { paths } from "~/utils/paths";
 
 export const SignUp: Component = () => {
   const { t } = useI18n();
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  const mutation = createMutation(() => ({
-    mutationFn: signUpServerAction,
-    async onSuccess() {
-      await revalidate(SESSION_CACHE_NAME);
-      navigate(paths.home);
-    },
-  }));
+  const submission = useSubmission(signUpAction);
 
-  const onSubmit: ComponentProps<"form">["onSubmit"] = (event) => {
-    event.preventDefault();
+  // const mutation = createMutation(() => ({
+  //   mutationFn: signUpServerAction,
+  //   async onSuccess() {
+  //     await revalidate(SESSION_CACHE_NAME);
+  //     navigate(paths.home);
+  //   },
+  // }));
 
-    const data = new FormData(event.currentTarget);
+  // const onSubmit: ComponentProps<"form">["onSubmit"] = (event) => {
+  //   event.preventDefault();
 
-    mutation.mutate(data);
-  };
+  //   const data = new FormData(event.currentTarget);
+
+  //   mutation.mutate(data);
+  // };
 
   return (
     <Card class="w-full max-w-md" variant="bordered">
@@ -44,11 +45,17 @@ export const SignUp: Component = () => {
         <header class="flex items-center justify-between gap-2">
           <h2 class={cardTitleClass()}>{t("signUp.title")}</h2>
         </header>
-        <form class="flex flex-col gap-4" method="post" onSubmit={onSubmit}>
-          <Show when={mutation.error}>
+        <form action={signUpAction} class="flex flex-col gap-4" method="post">
+          <Show when={submission.result?.success}>
+            <Alert variant="success">
+              <AlertIcon variant="success" />
+              Success
+            </Alert>
+          </Show>
+          <Show when={submission.result?.error}>
             <Alert variant="error">
               <AlertIcon variant="error" />
-              {mutation.error?.message}
+              {submission.result?.error}
             </Alert>
           </Show>
           <TextFieldRoot>
@@ -62,6 +69,11 @@ export const SignUp: Component = () => {
               type="email"
               variant="bordered"
             />
+            <Show when={submission.result?.errors?.email}>
+              <TextFieldErrorMessage>
+                {submission.result?.errors?.email}
+              </TextFieldErrorMessage>
+            </Show>
           </TextFieldRoot>
           <TextFieldRoot>
             <TextFieldLabel for="password">
@@ -76,10 +88,15 @@ export const SignUp: Component = () => {
               type="password"
               variant="bordered"
             />
+            <Show when={submission.result?.errors?.password}>
+              <TextFieldErrorMessage>
+                {submission.result?.errors?.password}
+              </TextFieldErrorMessage>
+            </Show>
           </TextFieldRoot>
           <Button
-            disabled={mutation.isPending}
-            isLoading={mutation.isPending}
+            disabled={submission.pending}
+            isLoading={submission.pending}
             type="submit"
           >
             {t("signUp.button")}

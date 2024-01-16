@@ -23,6 +23,7 @@ export default function Home() {
         <Show when={session()}>
           <InsertBoard />
         </Show>
+        <pre>{JSON.stringify(session(), null, 2)}</pre>
       </PageLayout>
     </SessionProvider>
   );
