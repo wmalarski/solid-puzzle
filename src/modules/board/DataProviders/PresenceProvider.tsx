@@ -102,14 +102,11 @@ const createPlayerPresenceState = (boardAccess: () => BoardAccess) => {
           );
         },
       )
-      .subscribe(async (status, err) => {
-        if (status !== REALTIME_SUBSCRIBE_STATES.SUBSCRIBED) {
+      .subscribe(async (status) => {
+        if (status === REALTIME_SUBSCRIBE_STATES.SUBSCRIBED) {
           // eslint-disable-next-line no-console
-          console.error(status, err);
-          return;
+          await channel.track(player);
         }
-
-        await channel.track(player);
       });
 
     onCleanup(() => {

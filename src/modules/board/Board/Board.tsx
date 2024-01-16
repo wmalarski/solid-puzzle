@@ -12,8 +12,13 @@ import {
 import type { BoardAccess } from "~/services/access";
 import type { BoardModel } from "~/types/models";
 
+import { Button } from "~/components/Button";
+import { Card, CardBody, cardTitleClass } from "~/components/Card";
+import { XCircleIcon } from "~/components/Icons/XCircleIcon";
+import { Link } from "~/components/Link";
 import { useI18n } from "~/contexts/I18nContext";
 import { InfoBar } from "~/modules/common/InfoBar";
+import { paths } from "~/utils/paths";
 
 import { PlayerCursorProvider } from "../DataProviders/CursorProvider";
 import { PlayerPresenceProvider } from "../DataProviders/PresenceProvider";
@@ -54,9 +59,21 @@ const ErrorFallback = (err: unknown, reset: VoidFunction) => {
   });
 
   return (
-    <div>
-      <pre>{JSON.stringify(err, null, 2)}</pre>
-      <button onClick={reset}>{t("board.error.reload")}</button>
+    <div class="flex w-full justify-center pt-10">
+      <Card class="w-full max-w-md" variant="bordered">
+        <CardBody class="items-center">
+          <XCircleIcon class="h-10 w-10 text-error" />
+          <header class="flex items-center justify-between gap-2 text-error">
+            <h2 class={cardTitleClass()}>{t("board.error.title")}</h2>
+          </header>
+          <span class="text-center">
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+            {t("board.error.description", { message: (err as any)?.message })}
+          </span>
+          <Button onClick={reset}>{t("board.error.reload")}</Button>
+          <Link href={paths.home}>{t("board.error.home")}</Link>
+        </CardBody>
+      </Card>
     </div>
   );
 };

@@ -20,6 +20,7 @@ import { useSupabase } from "~/contexts/SupabaseContext";
 import { getDistance } from "~/utils/geometry";
 import {
   type PuzzleConfig,
+  type PuzzleCurveConfig,
   type PuzzleFragmentShape,
   getPuzzleFragments,
 } from "~/utils/getPuzzleFragments";
@@ -96,9 +97,11 @@ const createPuzzleContext = (boardAccess: () => BoardAccess) => {
     const shapesMap = new Map<string, PuzzleFragmentShape>();
     const init: PuzzleState = {};
 
-    const config = JSON.parse(String(board.config));
-
-    const shapes = getPuzzleFragments({ config, height, width });
+    const shapes = getPuzzleFragments({
+      config: board.config as PuzzleCurveConfig,
+      height,
+      width,
+    });
 
     shapes.fragments.forEach((shape) => {
       shapesMap.set(shape.fragmentId, shape);

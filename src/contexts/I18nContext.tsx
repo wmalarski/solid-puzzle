@@ -38,7 +38,10 @@ const en_dict = {
   },
   board: {
     error: {
+      description: "Something went wrong: {{message}}",
+      home: "Home",
       reload: "Reload",
+      title: "Puzzle error",
     },
     home: "Home",
     menu: "Menu",
