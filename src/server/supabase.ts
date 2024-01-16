@@ -28,6 +28,7 @@ export const supabaseMiddleware = async (event: FetchEvent) => {
 
   const result = await supabase.auth.getSession();
 
+  event.context.supabase = supabase;
   event.context.supabaseSession = result.data.session;
 };
 
