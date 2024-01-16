@@ -1,4 +1,4 @@
-import { type Component, Show } from "solid-js";
+import { type Component } from "solid-js";
 
 import {
   TextFieldInput,
@@ -10,8 +10,15 @@ import { useI18n } from "~/contexts/I18nContext";
 
 import { ImageGrid } from "../ImageGrid";
 
+export type BoardConfigFields = {
+  columns: number;
+  image: string;
+  name: string;
+  rows: number;
+};
+
 type ConfigFieldsProps = {
-  image?: string;
+  initialValues?: BoardConfigFields | null;
 };
 
 export const ConfigFields: Component<ConfigFieldsProps> = (props) => {
@@ -27,6 +34,7 @@ export const ConfigFields: Component<ConfigFieldsProps> = (props) => {
           id="name"
           name="name"
           placeholder={t("createBoard.name.placeholder")}
+          value={props.initialValues?.name}
           variant="bordered"
         />
       </TextFieldRoot>
@@ -44,7 +52,7 @@ export const ConfigFields: Component<ConfigFieldsProps> = (props) => {
           placeholder={t("createBoard.columns.placeholder")}
           step={1}
           type="number"
-          value={10}
+          value={props.initialValues?.columns || 10}
           variant="bordered"
         />
       </TextFieldRoot>
@@ -60,13 +68,11 @@ export const ConfigFields: Component<ConfigFieldsProps> = (props) => {
           placeholder={t("createBoard.rows.placeholder")}
           step={1}
           type="number"
-          value={10}
+          value={props.initialValues?.rows || 10}
           variant="bordered"
         />
       </TextFieldRoot>
-      <Show fallback={<ImageGrid hasDefault name="image" />} when={props.image}>
-        {(image) => <input name="image" type="hidden" value={image()} />}
-      </Show>
+      <ImageGrid hasDefault name="image" />
     </div>
   );
 };

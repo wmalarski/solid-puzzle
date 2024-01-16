@@ -1,5 +1,4 @@
 import { type RouteDefinition, createAsync } from "@solidjs/router";
-import { Show } from "solid-js";
 
 import { SessionProvider } from "~/contexts/SessionContext";
 import { PageLayout } from "~/modules/common/Layout";
@@ -20,10 +19,7 @@ export default function Home() {
     <SessionProvider value={() => session() || null}>
       <PageLayout>
         <TopNavbar />
-        <Show when={session()}>
-          <InsertBoard />
-        </Show>
-        <pre>{JSON.stringify(session(), null, 2)}</pre>
+        <InsertBoard />
       </PageLayout>
     </SessionProvider>
   );

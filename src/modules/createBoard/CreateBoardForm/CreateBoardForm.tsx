@@ -1,18 +1,36 @@
+import { makePersisted } from "@solid-primitives/storage";
 import { useNavigate } from "@solidjs/router";
 import { createMutation, useQueryClient } from "@tanstack/solid-query";
-import { type Component, type ComponentProps, Show } from "solid-js";
+import { decode } from "decode-formdata";
+import {
+  type Component,
+  type ComponentProps,
+  Show,
+  createSignal,
+} from "solid-js";
 
 import { Alert, AlertIcon } from "~/components/Alert";
-import { Button } from "~/components/Button";
+import { Button, LinkButton } from "~/components/Button";
 import { useI18n } from "~/contexts/I18nContext";
+import { useSessionContext } from "~/contexts/SessionContext";
 import { insertBoardServerAction } from "~/server/board/rpc";
 import { invalidateSelectBoardsQueries } from "~/services/board";
 import { paths } from "~/utils/paths";
 
-import { ConfigFields } from "../ConfigFields";
+import { type BoardConfigFields, ConfigFields } from "../ConfigFields";
 
 export const CreateBoardForm: Component = () => {
   const { t } = useI18n();
+
+  const [ref, setRef] = createSignal<HTMLFormElement>();
+
+  const session = useSessionContext();
+
+  const [initial, setInitial] = makePersisted(
+    // eslint-disable-next-line solid/reactivity
+    createSignal<BoardConfigFields | null>(null),
+    { name: "initialValues" },
+  );
 
   const navigate = useNavigate();
 
@@ -35,22 +53,49 @@ export const CreateBoardForm: Component = () => {
     mutation.mutate(data);
   };
 
+  const onUnauthorizedClick = () => {
+    const form = ref();
+    if (!form) {
+      return;
+    }
+
+    const decoded = decode(new FormData(form), {
+      numbers: ["rows", "columns"],
+    });
+
+    setInitial(decoded as BoardConfigFields);
+  };
+
   return (
-    <form class="flex flex-col gap-4" method="post" onSubmit={onSubmit}>
+    <form
+      class="flex flex-col gap-4"
+      method="post"
+      onSubmit={onSubmit}
+      ref={setRef}
+    >
       <Show when={mutation.error}>
         <Alert variant="error">
           <AlertIcon variant="error" />
           {mutation.error?.message}
         </Alert>
       </Show>
-      <ConfigFields />
-      <Button
-        disabled={mutation.isPending}
-        isLoading={mutation.isPending}
-        type="submit"
+      <ConfigFields initialValues={initial()} />
+      <Show
+        fallback={
+          <LinkButton href={paths.signIn} onClick={onUnauthorizedClick}>
+            {t("createBoard.link")}
+          </LinkButton>
+        }
+        when={session()}
       >
-        {t("createBoard.button")}
-      </Button>
+        <Button
+          disabled={mutation.isPending}
+          isLoading={mutation.isPending}
+          type="submit"
+        >
+          {t("createBoard.button")}
+        </Button>
+      </Show>
     </form>
   );
 };

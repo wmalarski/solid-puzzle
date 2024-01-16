@@ -70,6 +70,8 @@ const en_dict = {
       label: "Columns",
       placeholder: "Enter number of columns",
     },
+    image: "Image",
+    link: "Sign In to create board",
     name: {
       label: "Name",
       placeholder: "Enter board name",

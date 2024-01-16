@@ -1,6 +1,7 @@
 import { type Component, For, createSignal } from "solid-js";
 
 import { twCx } from "~/components/utils/twCva";
+import { useI18n } from "~/contexts/I18nContext";
 import { getImages } from "~/utils/images";
 
 type ImageGridProps = {
@@ -9,6 +10,8 @@ type ImageGridProps = {
 };
 
 export const ImageGrid: Component<ImageGridProps> = (props) => {
+  const { t } = useI18n();
+
   const images = getImages();
 
   const [value, setValue] = createSignal(images[0]);
@@ -19,6 +22,7 @@ export const ImageGrid: Component<ImageGridProps> = (props) => {
 
   return (
     <div class="max-h-96">
+      <span class="label-text px-2 py-4">{t("createBoard.image")}</span>
       <input name={props.name} type="hidden" value={value()} />
       <div class="flex h-96 flex-col gap-1 overflow-x-hidden overflow-y-scroll">
         <For each={images}>

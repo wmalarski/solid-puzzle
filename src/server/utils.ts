@@ -29,12 +29,6 @@ type RpcResult = {
 };
 
 export const rpcParseIssueResult = (issues: Issues): RpcResult => {
-  console.log(
-    issues.map((issue) => [
-      issue.path?.map((item) => item.key).join(".") || "global",
-      issue.message,
-    ]),
-  );
   return {
     errors: Object.fromEntries(
       issues.map((issue) => [
