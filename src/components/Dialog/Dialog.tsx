@@ -36,7 +36,7 @@ export const DialogOverlay: Component<DialogOverlayProps> = (props) => {
     <Dialog.Overlay
       {...props}
       class={twCx(
-        "fixed inset-0 z-50 bg-base-content bg-opacity-50",
+        "fixed inset-0 z-50 bg-base-300 bg-opacity-50",
         styles.overlay,
         props.class
       )}

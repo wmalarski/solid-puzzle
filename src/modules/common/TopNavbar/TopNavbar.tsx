@@ -2,6 +2,7 @@ import { useSubmission } from "@solidjs/router";
 import { type Component, Show } from "solid-js";
 
 import { Button, LinkButton } from "~/components/Button";
+import { ExitIcon } from "~/components/Icons/ExitIcon";
 import { PuzzleIcon } from "~/components/Icons/PuzzleIcon";
 import { Link } from "~/components/Link";
 import { Navbar, NavbarEnd, NavbarStart } from "~/components/Navbar";
@@ -18,6 +19,7 @@ const SignOutButton: Component = () => {
   return (
     <form action={signOutAction} method="post">
       <Button disabled={submission.pending} size="sm">
+        <ExitIcon class="size-4" />
         {t("auth.signOut")}
       </Button>
     </form>

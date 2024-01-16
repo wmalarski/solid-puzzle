@@ -8,10 +8,8 @@ import {
   DialogPortal,
   DialogPositioner,
   DialogRoot,
-  DialogTitle,
-  DialogTrigger
+  DialogTitle
 } from "~/components/Dialog";
-import { SettingsIcon } from "~/components/Icons/SettingsIcon";
 import { XIcon } from "~/components/Icons/XIcon";
 import { useI18n } from "~/contexts/I18nContext";
 
@@ -19,21 +17,15 @@ import { UpdateForm } from "../UpdateForm";
 
 type SettingsDialogProps = {
   boardId: string;
+  isOpen: boolean;
+  onIsOpenChange: (isOpen: boolean) => void;
 };
 
 export const SettingsDialog: Component<SettingsDialogProps> = (props) => {
   const { t } = useI18n();
 
   return (
-    <DialogRoot>
-      <DialogTrigger
-        aria-label={t("board.settings.label")}
-        shape="circle"
-        size="sm"
-        variant="ghost"
-      >
-        <SettingsIcon />
-      </DialogTrigger>
+    <DialogRoot onOpenChange={props.onIsOpenChange} open={props.isOpen}>
       <DialogPortal>
         <DialogOverlay />
         <DialogPositioner>

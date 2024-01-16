@@ -96,7 +96,7 @@ export const Board: Component<BoardProps> = (props) => {
                   boardAccess={props.boardAccess}
                 />
                 <InfoBar />
-                <MenuBar boardId={props.boardAccess.boardId} />
+                <MenuBar board={props.board} />
               </PuzzleStateProvider>
             </PlayerCursorProvider>
           </PlayerSelectionProvider>
