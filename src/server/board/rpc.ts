@@ -1,13 +1,17 @@
 "use server";
+import { redirect } from "@solidjs/router";
 import { decode } from "decode-formdata";
 import { minLength, object, safeParseAsync, string } from "valibot";
 
 import { generateCurves } from "~/utils/getPuzzleFragments";
+import { paths } from "~/utils/paths";
 
 import {
   boardDimension,
   getRequestEventOrThrow,
-  rpcParseIssueError,
+  rpcErrorResult,
+  rpcParseIssueResult,
+  rpcSuccessResult,
 } from "../utils";
 
 export async function insertBoardServerAction(form: FormData) {
@@ -24,7 +28,7 @@ export async function insertBoardServerAction(form: FormData) {
   );
 
   if (!parsed.success) {
-    throw rpcParseIssueError(parsed.issues);
+    return rpcParseIssueResult(parsed.issues);
   }
 
   const config = generateCurves({
@@ -32,7 +36,7 @@ export async function insertBoardServerAction(form: FormData) {
     rows: parsed.output.rows,
   });
 
-  const response = await event.context.supabase
+  const result = await event.context.supabase
     .from("rooms")
     .insert({
       config,
@@ -42,11 +46,11 @@ export async function insertBoardServerAction(form: FormData) {
     .select()
     .single();
 
-  if (response.error) {
-    throw response.error;
+  if (result.error) {
+    return rpcErrorResult(result.error);
   }
 
-  return response.data;
+  throw redirect(paths.board(result.data.id));
 }
 
 export async function updateBoardServerAction(form: FormData) {
@@ -64,7 +68,7 @@ export async function updateBoardServerAction(form: FormData) {
   );
 
   if (!parsed.success) {
-    throw rpcParseIssueError(parsed.issues);
+    return rpcParseIssueResult(parsed.issues);
   }
 
   const config = generateCurves({
@@ -72,18 +76,18 @@ export async function updateBoardServerAction(form: FormData) {
     rows: parsed.output.rows,
   });
 
-  const response = await event.context.supabase.from("rooms").update({
+  const result = await event.context.supabase.from("rooms").update({
     config,
     id: parsed.output.id,
     media: parsed.output.image,
     name: parsed.output.name,
   });
 
-  if (response.error) {
-    throw response.error;
+  if (result.error) {
+    return rpcErrorResult(result.error);
   }
 
-  return response.data;
+  return rpcSuccessResult(result.data);
 }
 
 export async function deleteBoardServerAction(form: FormData) {
@@ -92,17 +96,17 @@ export async function deleteBoardServerAction(form: FormData) {
   const parsed = await safeParseAsync(object({ id: string() }), decode(form));
 
   if (!parsed.success) {
-    throw rpcParseIssueError(parsed.issues);
+    return rpcParseIssueResult(parsed.issues);
   }
 
-  const response = await event.context.supabase
+  const result = await event.context.supabase
     .from("rooms")
     .delete()
     .eq("id", parsed.output.id);
 
-  if (response.error) {
-    throw response.error;
+  if (result.error) {
+    return rpcErrorResult(result.error);
   }
 
-  return response.data;
+  throw redirect(paths.home);
 }

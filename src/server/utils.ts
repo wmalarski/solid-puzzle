@@ -22,7 +22,9 @@ export const rpcParseIssueError = (issues: Issues) => {
   return new Error(issues[0].message);
 };
 
-type RpcResult = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type RpcResult<T = any> = {
+  data?: T;
   error?: string;
   errors?: Record<string, string>;
   success: boolean;
@@ -40,10 +42,13 @@ export const rpcParseIssueResult = (issues: Issues): RpcResult => {
   };
 };
 
-export const rpcSuccessResult = (): RpcResult => {
-  return { success: true };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const rpcSuccessResult = <T = any>(data?: T): RpcResult => {
+  return { data, success: true };
 };
 
-export const rpcSupabaseErrorResult = (error: Error): RpcResult => {
+export const rpcErrorResult = <T extends { message: string }>(
+  error: T,
+): RpcResult => {
   return { error: error.message, success: false };
 };

@@ -1,6 +1,7 @@
-import { type Component } from "solid-js";
+import { type Component, Show } from "solid-js";
 
 import {
+  TextFieldErrorMessage,
   TextFieldInput,
   TextFieldLabel,
   TextFieldLabelText,
@@ -18,6 +19,7 @@ export type BoardConfigFields = {
 };
 
 type ConfigFieldsProps = {
+  errors?: Record<string, string>;
   initialValues?: BoardConfigFields | null;
 };
 
@@ -37,6 +39,9 @@ export const ConfigFields: Component<ConfigFieldsProps> = (props) => {
           value={props.initialValues?.name}
           variant="bordered"
         />
+        <Show when={props.errors?.name}>
+          <TextFieldErrorMessage>{props.errors?.name}</TextFieldErrorMessage>
+        </Show>
       </TextFieldRoot>
       <TextFieldRoot>
         <TextFieldLabel for="columns">
@@ -55,6 +60,9 @@ export const ConfigFields: Component<ConfigFieldsProps> = (props) => {
           value={props.initialValues?.columns || 10}
           variant="bordered"
         />
+        <Show when={props.errors?.columns}>
+          <TextFieldErrorMessage>{props.errors?.columns}</TextFieldErrorMessage>
+        </Show>
       </TextFieldRoot>
       <TextFieldRoot>
         <TextFieldLabel for="rows">
@@ -71,8 +79,14 @@ export const ConfigFields: Component<ConfigFieldsProps> = (props) => {
           value={props.initialValues?.rows || 10}
           variant="bordered"
         />
+        <Show when={props.errors?.rows}>
+          <TextFieldErrorMessage>{props.errors?.rows}</TextFieldErrorMessage>
+        </Show>
       </TextFieldRoot>
       <ImageGrid hasDefault name="image" />
+      <Show when={props.errors?.image}>
+        <TextFieldErrorMessage>{props.errors?.image}</TextFieldErrorMessage>
+      </Show>
     </div>
   );
 };

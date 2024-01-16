@@ -14,7 +14,7 @@ import {
 } from "~/components/DropdownMenu";
 import { MenuIcon } from "~/components/Icons/MenuIcon";
 import { useI18n } from "~/contexts/I18nContext";
-import { signOutAction } from "~/server/auth/client";
+import { signOutAction } from "~/services/auth";
 import { paths } from "~/utils/paths";
 
 const SignOutMenuItem: Component = () => {

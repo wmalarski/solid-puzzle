@@ -16,11 +16,11 @@ import { paths } from "~/utils/paths";
 
 import {
   getRequestEventOrThrow,
+  rpcErrorResult,
   rpcParseIssueResult,
   rpcSuccessResult,
-  rpcSupabaseErrorResult,
 } from "../utils";
-import { SESSION_CACHE_KEY } from "./cache";
+import { SESSION_CACHE_KEY } from "./const";
 
 const getRedirectUrl = (event: RequestEvent, path: string) => {
   const origin = new URL(event.request.url).origin;
@@ -48,7 +48,7 @@ export async function signUpServerAction(form: FormData) {
   });
 
   if (result.error) {
-    return rpcSupabaseErrorResult(result.error);
+    return rpcErrorResult(result.error);
   }
 
   return rpcSuccessResult();
@@ -74,7 +74,7 @@ export async function signInServerAction(form: FormData) {
   );
 
   if (result.error) {
-    return rpcSupabaseErrorResult(result.error);
+    return rpcErrorResult(result.error);
   }
 
   throw redirect(paths.home, { revalidate: SESSION_CACHE_KEY });
@@ -86,7 +86,7 @@ export async function signOutServerAction() {
   const result = await event.context.supabase.auth.signOut();
 
   if (result.error) {
-    return rpcSupabaseErrorResult(result.error);
+    return rpcErrorResult(result.error);
   }
 
   throw redirect(paths.signIn, { revalidate: SESSION_CACHE_KEY });

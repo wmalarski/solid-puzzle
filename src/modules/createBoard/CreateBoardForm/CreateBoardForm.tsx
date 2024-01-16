@@ -1,6 +1,6 @@
 import { makePersisted } from "@solid-primitives/storage";
-import { useNavigate } from "@solidjs/router";
-import { createMutation, useQueryClient } from "@tanstack/solid-query";
+import { useAction, useSubmission } from "@solidjs/router";
+import { useQueryClient } from "@tanstack/solid-query";
 import { decode } from "decode-formdata";
 import {
   type Component,
@@ -13,8 +13,10 @@ import { Alert, AlertIcon } from "~/components/Alert";
 import { Button, LinkButton } from "~/components/Button";
 import { useI18n } from "~/contexts/I18nContext";
 import { useSessionContext } from "~/contexts/SessionContext";
-import { insertBoardServerAction } from "~/server/board/rpc";
-import { invalidateSelectBoardsQueries } from "~/services/board";
+import {
+  insertBoardAction,
+  invalidateSelectBoardsQueries,
+} from "~/services/board";
 import { paths } from "~/utils/paths";
 
 import { type BoardConfigFields, ConfigFields } from "../ConfigFields";
@@ -32,25 +34,19 @@ export const CreateBoardForm: Component = () => {
     { name: "initialValues" },
   );
 
-  const navigate = useNavigate();
-
   const queryClient = useQueryClient();
 
-  const mutation = createMutation(() => ({
-    mutationFn: insertBoardServerAction,
-    onSuccess(board) {
-      navigate(paths.board(board.id));
+  const action = useAction(insertBoardAction);
+  const submission = useSubmission(insertBoardAction);
 
-      queryClient.invalidateQueries(invalidateSelectBoardsQueries());
-    },
-  }));
-
-  const onSubmit: ComponentProps<"form">["onSubmit"] = (event) => {
+  const onSubmit: ComponentProps<"form">["onSubmit"] = async (event) => {
     event.preventDefault();
 
     const data = new FormData(event.currentTarget);
 
-    mutation.mutate(data);
+    await action(data);
+
+    await queryClient.invalidateQueries(invalidateSelectBoardsQueries());
   };
 
   const onUnauthorizedClick = () => {
@@ -68,18 +64,22 @@ export const CreateBoardForm: Component = () => {
 
   return (
     <form
+      action={insertBoardAction}
       class="flex flex-col gap-4"
       method="post"
       onSubmit={onSubmit}
       ref={setRef}
     >
-      <Show when={mutation.error}>
+      <Show when={submission.result?.error}>
         <Alert variant="error">
           <AlertIcon variant="error" />
-          {mutation.error?.message}
+          {submission.result?.error}
         </Alert>
       </Show>
-      <ConfigFields initialValues={initial()} />
+      <ConfigFields
+        errors={submission.result?.errors}
+        initialValues={initial()}
+      />
       <Show
         fallback={
           <LinkButton href={paths.signIn} onClick={onUnauthorizedClick}>
@@ -89,8 +89,8 @@ export const CreateBoardForm: Component = () => {
         when={session()}
       >
         <Button
-          disabled={mutation.isPending}
-          isLoading={mutation.isPending}
+          disabled={submission.pending}
+          isLoading={submission.pending}
           type="submit"
         >
           {t("createBoard.button")}

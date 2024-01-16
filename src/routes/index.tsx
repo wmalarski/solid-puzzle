@@ -4,7 +4,7 @@ import { SessionProvider } from "~/contexts/SessionContext";
 import { PageLayout } from "~/modules/common/Layout";
 import { TopNavbar } from "~/modules/common/TopNavbar";
 import { InsertBoard } from "~/modules/home/InsertBoard";
-import { getSessionLoader } from "~/server/auth/client";
+import { getSessionLoader } from "~/services/auth";
 
 export const route = {
   load: async () => {

@@ -12,7 +12,7 @@ import type { BoardAccess } from "~/services/access";
 
 import { SessionProvider, useSessionContext } from "~/contexts/SessionContext";
 import { AcceptInviteForm } from "~/modules/invite/AcceptInviteForm";
-import { getSessionLoader } from "~/server/auth/client";
+import { getSessionLoader } from "~/services/auth";
 import { selectBoardQueryOptions } from "~/services/board";
 import { randomHexColor } from "~/utils/colors";
 import { paths } from "~/utils/paths";

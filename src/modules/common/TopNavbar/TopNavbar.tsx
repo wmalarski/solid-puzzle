@@ -7,7 +7,7 @@ import { Link } from "~/components/Link";
 import { Navbar, NavbarEnd, NavbarStart } from "~/components/Navbar";
 import { useI18n } from "~/contexts/I18nContext";
 import { useSessionContext } from "~/contexts/SessionContext";
-import { signOutAction } from "~/server/auth/client";
+import { signOutAction } from "~/services/auth";
 import { paths } from "~/utils/paths";
 
 const SignOutButton: Component = () => {

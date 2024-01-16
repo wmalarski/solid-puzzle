@@ -1,9 +1,15 @@
+import { action } from "@solidjs/router";
 import {
   type InvalidateQueryFilters,
   queryOptions,
 } from "@tanstack/solid-query";
 
 import { useSupabase } from "~/contexts/SupabaseContext";
+import {
+  deleteBoardServerAction,
+  insertBoardServerAction,
+  updateBoardServerAction,
+} from "~/server/board/rpc";
 
 export const SELECT_BOARDS_DEFAULT_LIMIT = 10;
 
@@ -75,3 +81,18 @@ export const invalidateSelectBoardsQueries = (): InvalidateQueryFilters => {
   const options = selectBoardsQueryOptions({ limit: 0, offset: 0 })();
   return { queryKey: options.queryKey.slice(0, 1) };
 };
+
+export const insertBoardAction = action(
+  insertBoardServerAction,
+  "insertBoardAction",
+);
+
+export const updateBoardAction = action(
+  updateBoardServerAction,
+  "updateBoardAction",
+);
+
+export const deleteBoardAction = action(
+  deleteBoardServerAction,
+  "deleteBoardAction",
+);

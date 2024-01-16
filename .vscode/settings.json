@@ -9,6 +9,7 @@
     "Pixi",
     "pkce",
     "pointerupoutside",
+    "Postgrest",
     "solidjs",
     "supabase",
     "tailwindcss",

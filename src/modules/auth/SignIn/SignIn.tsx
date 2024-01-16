@@ -13,7 +13,7 @@ import {
   TextFieldRoot,
 } from "~/components/TextField";
 import { useI18n } from "~/contexts/I18nContext";
-import { signInAction } from "~/server/auth/client";
+import { signInAction } from "~/services/auth";
 import { paths } from "~/utils/paths";
 
 export const SignIn: Component = () => {
@@ -28,12 +28,6 @@ export const SignIn: Component = () => {
           <h2 class={cardTitleClass()}>{t("auth.signIn.title")}</h2>
         </header>
         <form action={signInAction} class="flex flex-col gap-4" method="post">
-          <Show when={submission.result?.success}>
-            <Alert variant="success">
-              <AlertIcon variant="success" />
-              Success
-            </Alert>
-          </Show>
           <Show when={submission.result?.error}>
             <Alert variant="error">
               <AlertIcon variant="error" />

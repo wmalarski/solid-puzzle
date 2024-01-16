@@ -1,12 +1,12 @@
 import { action, cache } from "@solidjs/router";
 
-import { SESSION_CACHE_KEY } from "./cache";
+import { SESSION_CACHE_KEY } from "../server/auth/const";
 import {
   getSessionServerLoader,
   signInServerAction,
   signOutServerAction,
   signUpServerAction,
-} from "./rpc";
+} from "../server/auth/rpc";
 
 export const getSessionLoader = cache(
   getSessionServerLoader,
