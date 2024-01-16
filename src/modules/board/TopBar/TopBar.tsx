@@ -43,7 +43,7 @@ export const ShareButton: Component = () => {
       size="sm"
       type="button"
     >
-      <ShareIcon class="h-4 w-4" />
+      <ShareIcon class="h-6 w-6" />
     </Button>
   );
 };
@@ -55,8 +55,18 @@ type PlayerAvatarProps = {
 const PlayerAvatar: Component<PlayerAvatarProps> = (props) => {
   return (
     <Avatar>
-      <AvatarContent placeholder ring="secondary" size="xs">
-        <span>{props.state.name}</span>
+      <AvatarContent
+        placeholder
+        ring="secondary"
+        size="xs"
+        style={{
+          "--tw-ring-color": props.state.color,
+          "background-color": props.state.color,
+        }}
+      >
+        <span class="flex h-full w-full items-center justify-center uppercase">
+          {props.state.name.slice(0, 2)}
+        </span>
       </AvatarContent>
     </Avatar>
   );
