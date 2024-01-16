@@ -1,3 +1,4 @@
+import { throttle } from "@solid-primitives/scheduled";
 import {
   REALTIME_LISTEN_TYPES,
   REALTIME_SUBSCRIBE_STATES
@@ -18,6 +19,7 @@ import type { BoardAccess } from "~/types/models";
 import { useSupabase } from "~/contexts/SupabaseContext";
 
 import { usePlayerPresence } from "./PresenceProvider";
+import { REALTIME_THROTTLE_TIME } from "./const";
 
 type PlayerSelectionState = Record<string, null | string | undefined>;
 
@@ -31,7 +33,7 @@ const createPlayerSelectionState = (boardAccess: () => BoardAccess) => {
 
   const [selection, setSelection] = createStore<PlayerSelectionState>({});
 
-  const [sender, setSender] = createSignal(
+  const [sender, setSender] = createSignal<(arg: null | string) => void>(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     (_selectionId: null | string) => void 0
   );
@@ -60,14 +62,16 @@ const createPlayerSelectionState = (boardAccess: () => BoardAccess) => {
           return;
         }
 
-        setSender(() => (selectionId) => {
-          channel.send({
-            event: SELECTION_EVENT_NAME,
-            playerId,
-            selectionId,
-            type: REALTIME_LISTEN_TYPES.BROADCAST
-          });
-        });
+        setSender(() =>
+          throttle((selectionId) => {
+            channel.send({
+              event: SELECTION_EVENT_NAME,
+              playerId,
+              selectionId,
+              type: REALTIME_LISTEN_TYPES.BROADCAST
+            });
+          }, REALTIME_THROTTLE_TIME)
+        );
       });
 
     onCleanup(() => {

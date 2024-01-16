@@ -53,16 +53,18 @@ const DeleteBoardForm: Component<DeleteBoardFormProps> = (props) => {
         </Alert>
       </Show>
       <input name="id" type="hidden" value={props.boardId} />
-      <Button onClick={props.onCancelClick} type="button" variant="ghost">
-        {t("board.settings.delete.cancel")}
-      </Button>
-      <Button
-        disabled={submission.pending}
-        isLoading={submission.pending}
-        type="submit"
-      >
-        {t("board.settings.delete.button")}
-      </Button>
+      <footer class="flex w-full gap-4">
+        <Button onClick={props.onCancelClick} type="button" variant="ghost">
+          {t("board.settings.delete.cancel")}
+        </Button>
+        <Button
+          disabled={submission.pending}
+          isLoading={submission.pending}
+          type="submit"
+        >
+          {t("board.settings.delete.button")}
+        </Button>
+      </footer>
     </form>
   );
 };

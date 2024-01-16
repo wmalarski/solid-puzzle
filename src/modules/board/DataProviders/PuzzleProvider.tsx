@@ -1,3 +1,4 @@
+import { throttle } from "@solid-primitives/scheduled";
 import {
   REALTIME_LISTEN_TYPES,
   REALTIME_SUBSCRIBE_STATES
@@ -85,7 +86,9 @@ const createPuzzleContext = (boardAccess: () => BoardAccess) => {
     lines: []
   });
 
-  const [sender, setSender] = createSignal(
+  const [sender, setSender] = createSignal<
+    (args: SetFragmentStateArgs) => void
+  >(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     (_args: SetFragmentStateArgs) => void 0
   );
@@ -131,8 +134,12 @@ const createPuzzleContext = (boardAccess: () => BoardAccess) => {
     );
   };
 
-  const setFragmentStateWithLockCheck = (update: SetFragmentStateArgs) => {
+  const sendFragmentState = (update: SetFragmentStateArgs) => {
     sender()(update);
+  };
+
+  const setFragmentStateWithLockCheck = (update: SetFragmentStateArgs) => {
+    sendFragmentState(update);
     setFragments(
       produce((state) => {
         const fragment = state[update.fragmentId];
@@ -181,24 +188,22 @@ const createPuzzleContext = (boardAccess: () => BoardAccess) => {
           return;
         }
 
-        setSender(() => (update) => {
-          channel.send({
-            event: PUZZLE_EVENT_NAME,
-            playerId,
-            type: REALTIME_LISTEN_TYPES.BROADCAST,
-            ...update
-          });
-        });
+        setSender(() =>
+          throttle((update: SetFragmentStateArgs) => {
+            channel.send({
+              event: PUZZLE_EVENT_NAME,
+              playerId,
+              type: REALTIME_LISTEN_TYPES.BROADCAST,
+              ...update
+            });
+          })
+        );
       });
 
     onCleanup(() => {
       supabase().removeChannel(channel);
     });
   });
-
-  const sendFragmentState = (update: SetFragmentStateArgs) => {
-    sender()(update);
-  };
 
   return {
     config,

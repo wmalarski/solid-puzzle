@@ -1,3 +1,4 @@
+import { throttle } from "@solid-primitives/scheduled";
 import {
   REALTIME_LISTEN_TYPES,
   REALTIME_SUBSCRIBE_STATES
@@ -18,6 +19,7 @@ import type { BoardAccess } from "~/types/models";
 import { useSupabase } from "~/contexts/SupabaseContext";
 
 import { usePlayerPresence } from "./PresenceProvider";
+import { REALTIME_THROTTLE_TIME } from "./const";
 
 export type PlayerCursorState = {
   x: number;
@@ -34,7 +36,7 @@ const createPlayerCursorState = (boardAccess: () => BoardAccess) => {
 
   const [cursors, setCursors] = createStore<PlayersCursorState>({});
 
-  const [sender, setSender] = createSignal(
+  const [sender, setSender] = createSignal<(args: PlayerCursorState) => void>(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     (_args: PlayerCursorState) => void 0
   );
@@ -72,14 +74,16 @@ const createPlayerCursorState = (boardAccess: () => BoardAccess) => {
           return;
         }
 
-        setSender(() => (update) => {
-          channel.send({
-            event: CURSOR_EVENT_NAME,
-            playerId,
-            type: REALTIME_LISTEN_TYPES.BROADCAST,
-            ...update
-          });
-        });
+        setSender(() =>
+          throttle((update: PlayerCursorState) => {
+            channel.send({
+              event: CURSOR_EVENT_NAME,
+              playerId,
+              type: REALTIME_LISTEN_TYPES.BROADCAST,
+              ...update
+            });
+          }, REALTIME_THROTTLE_TIME)
+        );
       });
 
     onCleanup(() => {
