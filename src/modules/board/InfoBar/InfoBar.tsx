@@ -22,7 +22,7 @@ const InfoPopover: Component = () => {
 
   return (
     <PopoverRoot>
-      <PopoverTrigger size="sm" variant="ghost">
+      <PopoverTrigger shape="circle" size="sm" variant="ghost">
         <InfoIcon />
       </PopoverTrigger>
       <PopoverPortal>

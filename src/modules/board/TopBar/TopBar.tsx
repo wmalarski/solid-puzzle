@@ -46,6 +46,7 @@ export const ShareButton: Component = () => {
       <TooltipTrigger
         aria-label={t("board.share.title")}
         onClick={onShare}
+        shape="circle"
         size="sm"
         type="button"
         variant="ghost"

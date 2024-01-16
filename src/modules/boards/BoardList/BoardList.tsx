@@ -55,7 +55,7 @@ export const BoardsList = () => {
   );
 
   return (
-    <section class="flex gap-1">
+    <section class="flex flex-wrap gap-3">
       <ErrorBoundary fallback={<BoardsListError />}>
         <Suspense fallback={<BoardsListLoading />}>
           <Show

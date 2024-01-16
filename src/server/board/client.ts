@@ -4,6 +4,7 @@ import {
   queryOptions
 } from "@tanstack/solid-query";
 
+import { useSessionContext } from "~/contexts/SessionContext";
 import { useSupabase } from "~/contexts/SupabaseContext";
 import {
   BOARDS_ACCESS_CACHE_KEY,
@@ -67,12 +68,18 @@ export const selectBoardsQueryOptions = ({
 }: SelectBoardsQueryOptionsArgs) => {
   const supabase = useSupabase();
 
+  const session = useSessionContext();
+
   return queryOptions(() => ({
     queryFn: async () => {
-      const result = await supabase()
+      const query = supabase()
         .from("rooms")
-        .select("id,name,media,owner_id,created_at")
-        .range(offset, offset + limit);
+        .select("id,name,media,owner_id,created_at");
+
+      const userId = session()?.user.id;
+      const withUser = userId ? query.eq("owner_id", userId) : query;
+
+      const result = await withUser.range(offset, offset + limit);
 
       if (result.error) {
         throw result.error;

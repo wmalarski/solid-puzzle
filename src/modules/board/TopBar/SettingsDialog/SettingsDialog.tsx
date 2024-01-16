@@ -15,7 +15,6 @@ import { SettingsIcon } from "~/components/Icons/SettingsIcon";
 import { XIcon } from "~/components/Icons/XIcon";
 import { useI18n } from "~/contexts/I18nContext";
 
-import { DeleteBoard } from "../DeleteDialog";
 import { UpdateForm } from "../UpdateForm";
 
 type SettingsDialogProps = {
@@ -27,7 +26,12 @@ export const SettingsDialog: Component<SettingsDialogProps> = (props) => {
 
   return (
     <DialogRoot>
-      <DialogTrigger aria-label={t("board.settings.label")} size="sm">
+      <DialogTrigger
+        aria-label={t("board.settings.label")}
+        shape="circle"
+        size="sm"
+        variant="ghost"
+      >
         <SettingsIcon />
       </DialogTrigger>
       <DialogPortal>
@@ -41,7 +45,6 @@ export const SettingsDialog: Component<SettingsDialogProps> = (props) => {
               </DialogCloseButton>
             </DialogHeader>
             <UpdateForm boardId={props.boardId} />
-            <DeleteBoard boardId={props.boardId} />
           </DialogContent>
         </DialogPositioner>
       </DialogPortal>

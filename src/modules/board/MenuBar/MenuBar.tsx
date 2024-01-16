@@ -1,5 +1,5 @@
 import { useAction, useNavigate, useSubmission } from "@solidjs/router";
-import { type Component, Show } from "solid-js";
+import { type Component, Show, createSignal } from "solid-js";
 
 import { LinkButton } from "~/components/Button";
 import {
@@ -14,10 +14,13 @@ import {
 } from "~/components/DropdownMenu";
 import { HomeIcon } from "~/components/Icons/HomeIcon";
 import { MenuIcon } from "~/components/Icons/MenuIcon";
+import { TrashIcon } from "~/components/Icons/TrashIcon";
 import { useI18n } from "~/contexts/I18nContext";
 import { useSessionContext } from "~/contexts/SessionContext";
 import { signOutAction } from "~/server/auth/client";
 import { paths } from "~/utils/paths";
+
+import { DeleteBoardDialog } from "./DeleteDialog";
 
 const SignOutMenuItem: Component = () => {
   const { t } = useI18n();
@@ -37,43 +40,82 @@ const SignOutMenuItem: Component = () => {
   );
 };
 
-const Menu: Component = () => {
+type MenuProps = {
+  boardId: string;
+};
+
+const Menu: Component<MenuProps> = (props) => {
   const { t } = useI18n();
 
   const navigate = useNavigate();
+
+  const [isDeleteOpen, setIsDeleteOpen] = createSignal(false);
 
   const onHomePageClick = () => {
     navigate(paths.home);
   };
 
+  const onSettingsClick = () => {
+    //
+  };
+
+  const onDeleteClick = () => {
+    setIsDeleteOpen(true);
+  };
+
   return (
-    <DropdownMenuRoot>
-      <DropdownMenuTrigger
-        aria-label={t("board.menu")}
-        size="sm"
-        variant="ghost"
-      >
-        <DropdownMenuIcon>
-          <MenuIcon />
-        </DropdownMenuIcon>
-      </DropdownMenuTrigger>
-      <DropdownMenuPortal>
-        <DropdownMenuContent>
-          <DropdownMenuArrow />
-          <DropdownMenuItem onSelect={onHomePageClick}>
-            <DropdownMenuItemLabel>{t("board.home")}</DropdownMenuItemLabel>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <DropdownMenuItemLabel>{t("board.newGame")}</DropdownMenuItemLabel>
-          </DropdownMenuItem>
-          <SignOutMenuItem />
-        </DropdownMenuContent>
-      </DropdownMenuPortal>
-    </DropdownMenuRoot>
+    <>
+      <DeleteBoardDialog
+        boardId={props.boardId}
+        isOpen={isDeleteOpen()}
+        onIsOpenChange={setIsDeleteOpen}
+      />
+      <DropdownMenuRoot>
+        <DropdownMenuTrigger
+          aria-label={t("board.menu")}
+          shape="circle"
+          size="sm"
+          variant="ghost"
+        >
+          <DropdownMenuIcon>
+            <MenuIcon />
+          </DropdownMenuIcon>
+        </DropdownMenuTrigger>
+        <DropdownMenuPortal>
+          <DropdownMenuContent>
+            <DropdownMenuArrow />
+            <DropdownMenuItem onSelect={onHomePageClick}>
+              <DropdownMenuItemLabel>{t("board.home")}</DropdownMenuItemLabel>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <DropdownMenuItemLabel>
+                {t("board.newGame")}
+              </DropdownMenuItemLabel>
+            </DropdownMenuItem>
+            <DropdownMenuItem onSelect={onSettingsClick}>
+              <DropdownMenuItemLabel>
+                {t("board.settings.label")}
+              </DropdownMenuItemLabel>
+            </DropdownMenuItem>
+            <DropdownMenuItem onSelect={onDeleteClick}>
+              <DropdownMenuItemLabel>
+                <TrashIcon class="size-4" />
+                {t("board.settings.delete.button")}
+              </DropdownMenuItemLabel>
+            </DropdownMenuItem>
+            <SignOutMenuItem />
+          </DropdownMenuContent>
+        </DropdownMenuPortal>
+      </DropdownMenuRoot>
+    </>
   );
 };
 
-export const MenuBar: Component = () => {
+type MenuBarProps = {
+  boardId: string;
+};
+
+export const MenuBar: Component<MenuBarProps> = (props) => {
   const { t } = useI18n();
 
   const session = useSessionContext();
@@ -85,6 +127,7 @@ export const MenuBar: Component = () => {
           <LinkButton
             aria-label={t("board.home")}
             href={paths.home}
+            shape="square"
             size="sm"
             variant="ghost"
           >
@@ -93,7 +136,7 @@ export const MenuBar: Component = () => {
         }
         when={session()}
       >
-        <Menu />
+        <Menu boardId={props.boardId} />
       </Show>
     </div>
   );

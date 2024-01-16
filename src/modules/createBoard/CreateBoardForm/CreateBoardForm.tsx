@@ -29,11 +29,8 @@ export const CreateBoardForm: Component<CreateBoardFormProps> = (props) => {
 
   const onSubmit: ComponentProps<"form">["onSubmit"] = async (event) => {
     event.preventDefault();
-
-    const data = new FormData(event.currentTarget);
-
     try {
-      await action(data);
+      await action(new FormData(event.currentTarget));
       await queryClient.invalidateQueries(invalidateSelectBoardsQueries());
     } catch {
       // handled by useSubmission

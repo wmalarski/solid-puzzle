@@ -40,6 +40,7 @@ export const ZoomBar: Component = () => {
         <TooltipTrigger
           aria-label={t("board.zoom.zoomIn")}
           onClick={onZoomInClick}
+          shape="circle"
           size="sm"
           variant="ghost"
         >
@@ -57,6 +58,7 @@ export const ZoomBar: Component = () => {
           aria-label={t("board.zoom.reset")}
           class="tabular-nums"
           onClick={onZoomResetClick}
+          shape="circle"
           size="sm"
           variant="ghost"
         >
@@ -73,6 +75,7 @@ export const ZoomBar: Component = () => {
         <TooltipTrigger
           aria-label={t("board.zoom.zoomOut")}
           onClick={onZoomOutClick}
+          shape="circle"
           size="sm"
           variant="ghost"
         >

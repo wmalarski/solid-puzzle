@@ -64,18 +64,19 @@ const BoardQuery: Component<BoardQueryProps> = (props) => {
 
   return (
     <Switch>
-      <Match when={boardQuery.data}>
-        {(data) => (
-          <Show fallback={<AcceptInviteForm board={data()} />} when={access()}>
-            {(access) => (
-              <Suspense>
-                <Board board={data()} boardAccess={access()} />
-              </Suspense>
-            )}
-          </Show>
-        )}
+      <Match when={boardQuery.status === "success"}>
+        <Show
+          fallback={<AcceptInviteForm board={boardQuery.data!} />}
+          when={access()}
+        >
+          {(access) => (
+            <Suspense>
+              <Board board={boardQuery.data!} boardAccess={access()} />
+            </Suspense>
+          )}
+        </Show>
       </Match>
-      <Match when={boardQuery.error}>
+      <Match when={boardQuery.status === "error"}>
         <Navigate href={paths.notFound} />
       </Match>
       <Match when={boardQuery.status === "pending"}>
