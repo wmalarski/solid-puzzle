@@ -1,38 +1,26 @@
-import { makePersisted } from "@solid-primitives/storage";
 import { useAction, useSubmission } from "@solidjs/router";
 import { useQueryClient } from "@tanstack/solid-query";
-import { decode } from "decode-formdata";
-import {
-  type Component,
-  type ComponentProps,
-  Show,
-  createSignal,
-} from "solid-js";
+import { type Component, type ComponentProps, Show } from "solid-js";
 
 import { Alert, AlertIcon } from "~/components/Alert";
-import { Button, LinkButton } from "~/components/Button";
+import { Button } from "~/components/Button";
 import { useI18n } from "~/contexts/I18nContext";
 import { useSessionContext } from "~/contexts/SessionContext";
 import {
   insertBoardAction,
   invalidateSelectBoardsQueries,
 } from "~/services/board";
-import { paths } from "~/utils/paths";
 
 import { type BoardConfigFields, ConfigFields } from "../ConfigFields";
 
-export const CreateBoardForm: Component = () => {
+type CreateBoardFormProps = {
+  initialValues?: BoardConfigFields | null;
+};
+
+export const CreateBoardForm: Component<CreateBoardFormProps> = (props) => {
   const { t } = useI18n();
 
-  const [ref, setRef] = createSignal<HTMLFormElement>();
-
   const session = useSessionContext();
-
-  const [initial, setInitial] = makePersisted(
-    // eslint-disable-next-line solid/reactivity
-    createSignal<BoardConfigFields | null>(null),
-    { name: "initialValues" },
-  );
 
   const queryClient = useQueryClient();
 
@@ -44,22 +32,12 @@ export const CreateBoardForm: Component = () => {
 
     const data = new FormData(event.currentTarget);
 
-    await action(data);
-
-    await queryClient.invalidateQueries(invalidateSelectBoardsQueries());
-  };
-
-  const onUnauthorizedClick = () => {
-    const form = ref();
-    if (!form) {
-      return;
+    try {
+      await action(data);
+      await queryClient.invalidateQueries(invalidateSelectBoardsQueries());
+    } catch {
+      // handled by useSubmission
     }
-
-    const decoded = decode(new FormData(form), {
-      numbers: ["rows", "columns"],
-    });
-
-    setInitial(decoded as BoardConfigFields);
   };
 
   return (
@@ -68,7 +46,6 @@ export const CreateBoardForm: Component = () => {
       class="flex flex-col gap-4"
       method="post"
       onSubmit={onSubmit}
-      ref={setRef}
     >
       <Show when={submission.result?.error}>
         <Alert variant="error">
@@ -78,24 +55,17 @@ export const CreateBoardForm: Component = () => {
       </Show>
       <ConfigFields
         errors={submission.result?.errors}
-        initialValues={initial()}
+        initialValues={props.initialValues}
       />
-      <Show
-        fallback={
-          <LinkButton href={paths.signIn} onClick={onUnauthorizedClick}>
-            {t("createBoard.link")}
-          </LinkButton>
-        }
-        when={session()}
+      <Button
+        disabled={submission.pending}
+        isLoading={submission.pending}
+        type="submit"
       >
-        <Button
-          disabled={submission.pending}
-          isLoading={submission.pending}
-          type="submit"
-        >
+        <Show fallback={t("createBoard.link")} when={session()}>
           {t("createBoard.button")}
-        </Button>
-      </Show>
+        </Show>
+      </Button>
     </form>
   );
 };

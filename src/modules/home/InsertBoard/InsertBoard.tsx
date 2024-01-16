@@ -1,10 +1,16 @@
 import { type Component } from "solid-js";
 
+import type { BoardConfigFields } from "~/modules/createBoard/ConfigFields";
+
 import { cardTitleClass } from "~/components/Card";
 import { useI18n } from "~/contexts/I18nContext";
 import { CreateBoardForm } from "~/modules/createBoard/CreateBoardForm";
 
-export const InsertBoard: Component = () => {
+type InsertBoardProps = {
+  initialValues?: BoardConfigFields | null;
+};
+
+export const InsertBoard: Component<InsertBoardProps> = (props) => {
   const { t } = useI18n();
 
   return (
@@ -12,7 +18,7 @@ export const InsertBoard: Component = () => {
       <header class="flex items-center justify-between gap-2">
         <h2 class={cardTitleClass()}>{t("createBoard.title")}</h2>
       </header>
-      <CreateBoardForm />
+      <CreateBoardForm initialValues={props.initialValues} />
     </section>
   );
 };

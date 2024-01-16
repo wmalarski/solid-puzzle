@@ -1,8 +1,12 @@
+import type { setCookie } from "@solidjs/start/server";
+
 import { redirect } from "@solidjs/router";
 import { getRequestEvent } from "solid-js/web";
 import { type Issues, coerce, integer, minValue, number } from "valibot";
 
 import { paths } from "~/utils/paths";
+
+export type CookieSerializeOptions = Parameters<typeof setCookie>[3];
 
 export const getRequestEventOrThrow = () => {
   const event = getRequestEvent();

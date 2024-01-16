@@ -1,12 +1,14 @@
-import { action } from "@solidjs/router";
+import { action, cache } from "@solidjs/router";
 import {
   type InvalidateQueryFilters,
   queryOptions,
 } from "@tanstack/solid-query";
 
 import { useSupabase } from "~/contexts/SupabaseContext";
+import { INSERT_BOARD_ARGS_CACHE_KEY } from "~/server/board/const";
 import {
   deleteBoardServerAction,
+  getInsertBoardArgsServerLoader,
   insertBoardServerAction,
   updateBoardServerAction,
 } from "~/server/board/rpc";
@@ -95,4 +97,9 @@ export const updateBoardAction = action(
 export const deleteBoardAction = action(
   deleteBoardServerAction,
   "deleteBoardAction",
+);
+
+export const getInsertBoardArgsLoader = cache(
+  getInsertBoardArgsServerLoader,
+  INSERT_BOARD_ARGS_CACHE_KEY,
 );
