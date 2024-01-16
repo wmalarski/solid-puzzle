@@ -59,11 +59,7 @@ const en_dict = {
       },
     },
     share: {
-      button: "Share link",
-      copy: "Copy to clipboard",
-      link: "Link",
-      loading: "Loading",
-      regenerate: "Regenerate",
+      copy: "Link copied to your clipboard",
       title: "Share link",
     },
   },

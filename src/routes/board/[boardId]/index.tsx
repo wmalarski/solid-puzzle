@@ -4,6 +4,7 @@ import {
   createAsync,
   useParams,
 } from "@solidjs/router";
+import { clientOnly } from "@solidjs/start";
 import { createQuery } from "@tanstack/solid-query";
 import {
   type Component,
@@ -12,7 +13,6 @@ import {
   Suspense,
   Switch,
   createMemo,
-  lazy,
 } from "solid-js";
 
 import type { BoardAccess } from "~/types/models";
@@ -27,7 +27,7 @@ import {
 import { randomHexColor } from "~/utils/colors";
 import { paths } from "~/utils/paths";
 
-const Board = lazy(() => import("~/modules/board/Board"));
+const Board = clientOnly(() => import("~/modules/board/Board"));
 
 type BoardQueryProps = {
   boardAccess?: BoardAccess | null;

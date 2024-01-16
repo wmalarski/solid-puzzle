@@ -3,6 +3,10 @@ import { type Component, For, Show, createMemo } from "solid-js";
 import type { BoardAccess, BoardModel } from "~/types/models";
 
 import { Avatar, AvatarContent, AvatarGroup } from "~/components/Avatar";
+import { Button } from "~/components/Button";
+import { ShareIcon } from "~/components/Icons/ShareIcon";
+import { showToast } from "~/components/Toast";
+import { useI18n } from "~/contexts/I18nContext";
 import { useSessionContext } from "~/contexts/SessionContext";
 
 import {
@@ -10,7 +14,39 @@ import {
   usePlayerPresence,
 } from "../DataProviders/PresenceProvider";
 import { SettingsDialog } from "./SettingsDialog";
-import { SharePopover } from "./SharePopover";
+
+export const ShareButton: Component = () => {
+  const { t } = useI18n();
+
+  const onShare = () => {
+    const url = location.href;
+
+    if (typeof navigator.share !== "undefined") {
+      navigator.share({ url });
+      return;
+    }
+
+    navigator.clipboard.writeText(url);
+
+    showToast({
+      description: t("board.share.title"),
+      title: t("board.share.copy"),
+      variant: "success",
+    });
+  };
+
+  return (
+    <Button
+      aria-label={t("board.share.title")}
+      onClick={onShare}
+      shape="circle"
+      size="sm"
+      type="button"
+    >
+      <ShareIcon class="h-4 w-4" />
+    </Button>
+  );
+};
 
 type PlayerAvatarProps = {
   state: PlayerState;
@@ -62,7 +98,7 @@ export const TopBar: Component<TopBarProps> = (props) => {
           <Show when={props.board.owner_id === session()?.user.id}>
             <SettingsDialog boardId={props.board.id} />
           </Show>
-          <SharePopover board={props.board} />
+          <ShareButton />
         </div>
         <h2 class="text-sm">{props.board.media}</h2>
       </div>
