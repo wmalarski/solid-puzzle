@@ -1,8 +1,16 @@
-import type { setCookie } from "@solidjs/start/server";
-
 import { redirect } from "@solidjs/router";
-import { getRequestEvent } from "solid-js/web";
-import { type Issues, coerce, integer, minValue, number } from "valibot";
+import { getCookie, type setCookie } from "@solidjs/start/server";
+import { type RequestEvent, getRequestEvent } from "solid-js/web";
+import {
+  type BaseSchema,
+  type BaseSchemaAsync,
+  type Issues,
+  coerce,
+  integer,
+  minValue,
+  number,
+  safeParseAsync,
+} from "valibot";
 
 import { paths } from "~/utils/paths";
 
@@ -55,4 +63,31 @@ export const rpcErrorResult = <T extends { message: string }>(
   error: T,
 ): RpcResult => {
   return { error: error.message, success: false };
+};
+
+export const getParsedCookie = async <
+  TSchema extends BaseSchema | BaseSchemaAsync,
+>(
+  event: RequestEvent,
+  name: string,
+  schema: TSchema,
+) => {
+  const cookie = getCookie(event, name);
+
+  if (!cookie) {
+    return null;
+  }
+
+  try {
+    const parsed = JSON.parse(cookie);
+    const result = await safeParseAsync(schema, parsed);
+
+    if (!result.success) {
+      return null;
+    }
+
+    return result.output;
+  } catch {
+    return null;
+  }
 };

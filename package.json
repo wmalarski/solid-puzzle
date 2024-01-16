@@ -39,8 +39,6 @@
     "@kobalte/core": "0.12.0",
     "@kobalte/tailwindcss": "0.9.0",
     "@solid-primitives/i18n": "2.0.0",
-    "@solid-primitives/memo": "^1.3.5",
-    "@solid-primitives/storage": "^2.1.1",
     "@solidjs/meta": "0.29.3",
     "@solidjs/router": "0.10.9",
     "@solidjs/start": "0.4.9",

@@ -1,4 +1,3 @@
-import { createWritableMemo } from "@solid-primitives/memo";
 import {
   Navigate,
   type RouteDefinition,
@@ -6,20 +5,32 @@ import {
   useParams,
 } from "@solidjs/router";
 import { createQuery } from "@tanstack/solid-query";
-import { type Component, Match, Show, Suspense, Switch, lazy } from "solid-js";
+import {
+  type Component,
+  Match,
+  Show,
+  Suspense,
+  Switch,
+  createMemo,
+  lazy,
+} from "solid-js";
 
 import type { BoardAccess } from "~/services/access";
 
 import { SessionProvider, useSessionContext } from "~/contexts/SessionContext";
-import { AcceptInviteForm } from "~/modules/invite/AcceptInviteForm";
+import { AcceptInviteForm } from "~/modules/board/AcceptInviteForm";
 import { getSessionLoader } from "~/services/auth";
-import { selectBoardQueryOptions } from "~/services/board";
+import {
+  getBoardAccessLoader,
+  selectBoardQueryOptions,
+} from "~/services/board";
 import { randomHexColor } from "~/utils/colors";
 import { paths } from "~/utils/paths";
 
 const Board = lazy(() => import("~/modules/board/Board"));
 
 type BoardQueryProps = {
+  boardAccess?: BoardAccess | null;
   boardId: string;
 };
 
@@ -32,54 +43,54 @@ const BoardQuery: Component<BoardQueryProps> = (props) => {
     })(),
   );
 
-  const [access, setAccess] = createWritableMemo<BoardAccess | null>(() => {
+  const access = createMemo<BoardAccess | null>(() => {
+    const cookieAccess = props.boardAccess;
+    if (cookieAccess) {
+      return cookieAccess;
+    }
+
     const user = session()?.user;
-    return user
-      ? {
-          boardId: props.boardId,
-          playerColor: randomHexColor(),
-          playerId: user.id,
-          userName: user.email || user.id,
-        }
-      : null;
+    if (!user) {
+      return null;
+    }
+
+    return {
+      boardId: props.boardId,
+      playerColor: randomHexColor(),
+      playerId: user.id,
+      userName: user.email || user.id,
+    };
   });
 
   return (
-    <Suspense>
-      <Switch fallback={<span>Fallback</span>}>
-        <Match when={boardQuery.data}>
-          {(data) => (
-            <Show
-              fallback={
-                <AcceptInviteForm
-                  boardId={props.boardId}
-                  onSubmit={setAccess}
-                />
-              }
-              when={access()}
-            >
-              {(access) => (
-                <Suspense>
-                  <Board board={data()} boardAccess={access()} />
-                </Suspense>
-              )}
-            </Show>
-          )}
-        </Match>
-        <Match when={boardQuery.error}>
-          <Navigate href={paths.notFound} />
-        </Match>
-        <Match when={boardQuery.status === "pending"}>
-          <pre>Loading</pre>
-        </Match>
-      </Switch>
-    </Suspense>
+    <Switch>
+      <Match when={boardQuery.data}>
+        {(data) => (
+          <Show fallback={<AcceptInviteForm board={data()} />} when={access()}>
+            {(access) => (
+              <Suspense>
+                <Board board={data()} boardAccess={access()} />
+              </Suspense>
+            )}
+          </Show>
+        )}
+      </Match>
+      <Match when={boardQuery.error}>
+        <Navigate href={paths.notFound} />
+      </Match>
+      <Match when={boardQuery.status === "pending"}>
+        <pre>Loading</pre>
+      </Match>
+    </Switch>
   );
 };
 
 export const route = {
-  load: async () => {
-    await getSessionLoader();
+  load: async ({ params }) => {
+    await Promise.all([
+      getSessionLoader(),
+      getBoardAccessLoader(params.boardId),
+    ]);
   },
 } satisfies RouteDefinition;
 
@@ -88,10 +99,12 @@ export default function BoardSection() {
 
   const session = createAsync(() => getSessionLoader());
 
+  const boardAccess = createAsync(() => getBoardAccessLoader(params.boardId));
+
   return (
     <SessionProvider value={() => session() || null}>
       <main class="relative h-screen w-screen">
-        <BoardQuery boardId={params.boardId} />
+        <BoardQuery boardAccess={boardAccess()} boardId={params.boardId} />
       </main>
     </SessionProvider>
   );

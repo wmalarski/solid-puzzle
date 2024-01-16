@@ -14,12 +14,6 @@ dependencies:
   '@solid-primitives/i18n':
     specifier: 2.0.0
     version: 2.0.0(solid-js@1.8.11)
-  '@solid-primitives/memo':
-    specifier: ^1.3.5
-    version: 1.3.5(solid-js@1.8.11)
-  '@solid-primitives/storage':
-    specifier: ^2.1.1
-    version: 2.1.1(solid-js@1.8.11)
   '@solidjs/meta':
     specifier: 0.29.3
     version: 0.29.3(solid-js@1.8.11)
@@ -1606,16 +1600,6 @@ packages:
       solid-js: 1.8.11
     dev: false
 
-  /@solid-primitives/memo@1.3.5(solid-js@1.8.11):
-    resolution: {integrity: sha512-fTtyM3rBDrgFbz4xoQnMNzbBR4GzoaYeZHj5RRxceBU9QDz7u6HE8+5mbxd6pJ+SuntjI5aYiAtwuyI8gG3rhA==}
-    peerDependencies:
-      solid-js: ^1.6.12
-    dependencies:
-      '@solid-primitives/scheduled': 1.4.1(solid-js@1.8.11)
-      '@solid-primitives/utils': 6.2.1(solid-js@1.8.11)
-      solid-js: 1.8.11
-    dev: false
-
   /@solid-primitives/props@3.1.8(solid-js@1.8.11):
     resolution: {integrity: sha512-38ERNFhl87emUDPRlYvCmlbvEcK2mOJB38SU22YS2QXFDK7TQf/7P46XZacs7oODc/fckhfZTitht71FMEDe2g==}
     peerDependencies:
@@ -1643,31 +1627,10 @@ packages:
       solid-js: 1.8.11
     dev: false
 
-  /@solid-primitives/scheduled@1.4.1(solid-js@1.8.11):
-    resolution: {integrity: sha512-OLcNXwYpX7HUOEqNPcmR31dkyI1E2imkMDBRlqsGT0ZhJV1L2g0TEREpo4nm/kUhh8LVQzkfnxS+GONx9kh90A==}
-    peerDependencies:
-      solid-js: ^1.6.12
-    dependencies:
-      solid-js: 1.8.11
-    dev: false
-
   /@solid-primitives/static-store@0.0.5(solid-js@1.8.11):
     resolution: {integrity: sha512-ssQ+s/wrlFAEE4Zw8GV499yBfvWx7SMm+ZVc11wvao4T5xg9VfXCL9Oa+x4h+vPMvSV/Knv5LrsLiUa+wlJUXQ==}
     peerDependencies:
       solid-js: ^1.6.12
-    dependencies:
-      '@solid-primitives/utils': 6.2.1(solid-js@1.8.11)
-      solid-js: 1.8.11
-    dev: false
-
-  /@solid-primitives/storage@2.1.1(solid-js@1.8.11):
-    resolution: {integrity: sha512-GDbELt4Xjp0ySsHZ+RHzup0YIl1epHz8A2SVQYNRZPgkIEJk0Fyrt2vW6Etym2yUruTt8yT3d8106LVb71KIWg==}
-    peerDependencies:
-      solid-js: ^1.6.12
-      solid-start: '>=0.2.26'
-    peerDependenciesMeta:
-      solid-start:
-        optional: true
     dependencies:
       '@solid-primitives/utils': 6.2.1(solid-js@1.8.11)
       solid-js: 1.8.11

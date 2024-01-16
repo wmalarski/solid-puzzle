@@ -5,11 +5,16 @@ import {
 } from "@tanstack/solid-query";
 
 import { useSupabase } from "~/contexts/SupabaseContext";
-import { INSERT_BOARD_ARGS_CACHE_KEY } from "~/server/board/const";
+import {
+  BOARDS_ACCESS_CACHE_KEY,
+  INSERT_BOARD_ARGS_CACHE_KEY,
+} from "~/server/board/const";
 import {
   deleteBoardServerAction,
+  getBoardAccessServerLoader,
   getInsertBoardArgsServerLoader,
   insertBoardServerAction,
+  setBoardAccessServerAction,
   updateBoardServerAction,
 } from "~/server/board/rpc";
 
@@ -102,4 +107,14 @@ export const deleteBoardAction = action(
 export const getInsertBoardArgsLoader = cache(
   getInsertBoardArgsServerLoader,
   INSERT_BOARD_ARGS_CACHE_KEY,
+);
+
+export const setBoardAccessAction = action(
+  setBoardAccessServerAction,
+  "setBoardAccessAction",
+);
+
+export const getBoardAccessLoader = cache(
+  getBoardAccessServerLoader,
+  BOARDS_ACCESS_CACHE_KEY,
 );
