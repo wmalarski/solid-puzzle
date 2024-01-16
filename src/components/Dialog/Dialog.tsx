@@ -20,7 +20,7 @@ export const DialogTrigger: Component<DialogTriggerProps> = (props) => {
     "isLoading",
     "shape",
     "size",
-    "variant",
+    "variant"
   ]);
 
   return (
@@ -44,7 +44,7 @@ export const DialogOverlay: Component<DialogOverlayProps> = (props) => {
       class={twCx(
         "fixed inset-0 z-50 bg-base-content bg-opacity-50",
         styles.overlay,
-        props.class,
+        props.class
       )}
     />
   );
@@ -58,7 +58,7 @@ export const DialogPositioner: Component<DialogPositionerProps> = (props) => {
       {...props}
       class={twCx(
         "fixed inset-0 z-50 flex items-center justify-center",
-        props.class,
+        props.class
       )}
     />
   );
@@ -73,7 +73,7 @@ export const DialogContent: Component<DialogContentProps> = (props) => {
       class={twCx(
         "z-50 max-w-lg bg-base-100 shadow-xl p-8 rounded-2xl",
         styles.content,
-        props.class,
+        props.class
       )}
     />
   );

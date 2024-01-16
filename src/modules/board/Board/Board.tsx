@@ -6,7 +6,7 @@ import {
   Suspense,
   createSignal,
   lazy,
-  onMount,
+  onMount
 } from "solid-js";
 
 import type { BoardAccess, BoardModel } from "~/types/models";
@@ -37,7 +37,7 @@ const ClientBoard: Component<ClientBoardProps> = (props) => {
 
   return (
     <>
-      <canvas class="h-full w-full bg-base-100" ref={setCanvas} />
+      <canvas class="size-full bg-base-100" ref={setCanvas} />
       <Show when={canvas()}>
         {(canvas) => (
           <Suspense>
@@ -61,7 +61,7 @@ const ErrorFallback = (err: unknown, reset: VoidFunction) => {
     <div class="flex w-full justify-center pt-10">
       <Card class="w-full max-w-md" variant="bordered">
         <CardBody class="items-center">
-          <XCircleIcon class="h-10 w-10 text-error" />
+          <XCircleIcon class="size-10 text-error" />
           <header class="flex items-center justify-between gap-2 text-error">
             <h2 class={cardTitleClass()}>{t("board.error.title")}</h2>
           </header>

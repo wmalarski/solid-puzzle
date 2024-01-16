@@ -7,7 +7,7 @@ import { twCva } from "../utils/twCva";
 export const rangeClass = twCva("range", {
   defaultVariants: {
     color: null,
-    size: null,
+    size: null
   },
   variants: {
     color: {
@@ -17,15 +17,15 @@ export const rangeClass = twCva("range", {
       primary: "range-primary",
       secondary: "range-secondary",
       success: "range-success",
-      warning: "range-warning",
+      warning: "range-warning"
     },
     size: {
       lg: "range-lg",
       md: "range-md",
       sm: "range-sm",
-      xs: "range-xs",
-    },
-  },
+      xs: "range-xs"
+    }
+  }
 });
 
 export type RangeProps = ComponentProps<"input"> &

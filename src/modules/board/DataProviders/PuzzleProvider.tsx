@@ -1,6 +1,6 @@
 import {
   REALTIME_LISTEN_TYPES,
-  REALTIME_SUBSCRIBE_STATES,
+  REALTIME_SUBSCRIBE_STATES
 } from "@supabase/supabase-js";
 import {
   type Component,
@@ -9,7 +9,7 @@ import {
   createEffect,
   createSignal,
   onCleanup,
-  useContext,
+  useContext
 } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 
@@ -21,7 +21,7 @@ import {
   type PuzzleConfig,
   type PuzzleCurveConfig,
   type PuzzleFragmentShape,
-  getPuzzleFragments,
+  getPuzzleFragments
 } from "~/utils/getPuzzleFragments";
 
 import { usePlayerPresence } from "./PresenceProvider";
@@ -82,12 +82,12 @@ const createPuzzleContext = (boardAccess: () => BoardAccess) => {
 
   const [config, setConfig] = createSignal<PuzzleConfig>({
     fragments: [],
-    lines: [],
+    lines: []
   });
 
   const [sender, setSender] = createSignal(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    (_args: SetFragmentStateArgs) => void 0,
+    (_args: SetFragmentStateArgs) => void 0
   );
 
   const supabase = useSupabase();
@@ -99,7 +99,7 @@ const createPuzzleContext = (boardAccess: () => BoardAccess) => {
     const shapes = getPuzzleFragments({
       config: board.config as PuzzleCurveConfig,
       height,
-      width,
+      width
     });
 
     shapes.fragments.forEach((shape) => {
@@ -109,7 +109,7 @@ const createPuzzleContext = (boardAccess: () => BoardAccess) => {
         isLocked: false,
         rotation: shape.initialRotation,
         x: shape.center.x,
-        y: shape.center.y,
+        y: shape.center.y
       };
     });
 
@@ -127,7 +127,7 @@ const createPuzzleContext = (boardAccess: () => BoardAccess) => {
           fragment.x = update.x;
           fragment.y = update.y;
         }
-      }),
+      })
     );
   };
 
@@ -142,10 +142,10 @@ const createPuzzleContext = (boardAccess: () => BoardAccess) => {
           fragment.y = update.y;
           fragment.isLocked = isLockedInPlace({
             fragment: update,
-            shapes: shapes(),
+            shapes: shapes()
           });
         }
-      }),
+      })
     );
   };
 
@@ -169,12 +169,12 @@ const createPuzzleContext = (boardAccess: () => BoardAccess) => {
                 fragment.y = payload.y;
                 fragment.isLocked = isLockedInPlace({
                   fragment,
-                  shapes: puzzleShapes,
+                  shapes: puzzleShapes
                 });
               }
-            }),
+            })
           );
-        },
+        }
       )
       .subscribe((status) => {
         if (status !== REALTIME_SUBSCRIBE_STATES.SUBSCRIBED) {
@@ -186,7 +186,7 @@ const createPuzzleContext = (boardAccess: () => BoardAccess) => {
             event: PUZZLE_EVENT_NAME,
             playerId,
             type: REALTIME_LISTEN_TYPES.BROADCAST,
-            ...update,
+            ...update
           });
         });
       });
@@ -207,7 +207,7 @@ const createPuzzleContext = (boardAccess: () => BoardAccess) => {
     sendFragmentState,
     setFragmentState,
     setFragmentStateWithLockCheck,
-    shapes,
+    shapes
   };
 };
 
@@ -220,7 +220,7 @@ const PuzzleStateContext = createContext<PuzzleContextState>({
   sendFragmentState: () => void 0,
   setFragmentState: () => void 0,
   setFragmentStateWithLockCheck: () => void 0,
-  shapes: () => new Map(),
+  shapes: () => new Map()
 });
 
 type PuzzleStateProviderProps = {
@@ -229,7 +229,7 @@ type PuzzleStateProviderProps = {
 };
 
 export const PuzzleStateProvider: Component<PuzzleStateProviderProps> = (
-  props,
+  props
 ) => {
   const value = createPuzzleContext(() => props.boardAccess);
 

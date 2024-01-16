@@ -1,13 +1,13 @@
 import { action, cache } from "@solidjs/router";
 import {
   type InvalidateQueryFilters,
-  queryOptions,
+  queryOptions
 } from "@tanstack/solid-query";
 
 import { useSupabase } from "~/contexts/SupabaseContext";
 import {
   BOARDS_ACCESS_CACHE_KEY,
-  INSERT_BOARD_ARGS_CACHE_KEY,
+  INSERT_BOARD_ARGS_CACHE_KEY
 } from "~/server/board/const";
 import {
   deleteBoardServerAction,
@@ -15,7 +15,7 @@ import {
   getInsertBoardArgsServerLoader,
   insertBoardServerAction,
   setBoardAccessServerAction,
-  updateBoardServerAction,
+  updateBoardServerAction
 } from "~/server/board/rpc";
 
 export const SELECT_BOARDS_DEFAULT_LIMIT = 10;
@@ -25,7 +25,7 @@ type SelectBoardQueryOptionsArgs = {
 };
 
 export const selectBoardQueryOptions = ({
-  id,
+  id
 }: SelectBoardQueryOptionsArgs) => {
   const supabase = useSupabase();
 
@@ -45,12 +45,12 @@ export const selectBoardQueryOptions = ({
     },
     queryKey: ["selectBoard", id] as const,
     refetchOnMount: false,
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: false
   }));
 };
 
 export const invalidateSelectBoardQuery = (
-  boardId: string,
+  boardId: string
 ): InvalidateQueryFilters => {
   const options = selectBoardQueryOptions({ id: boardId })();
   return { queryKey: options.queryKey };
@@ -63,7 +63,7 @@ type SelectBoardsQueryOptionsArgs = {
 
 export const selectBoardsQueryOptions = ({
   limit = SELECT_BOARDS_DEFAULT_LIMIT,
-  offset,
+  offset
 }: SelectBoardsQueryOptionsArgs) => {
   const supabase = useSupabase();
 
@@ -80,7 +80,7 @@ export const selectBoardsQueryOptions = ({
 
       return result.data;
     },
-    queryKey: ["selectBoards", { limit, offset }] as const,
+    queryKey: ["selectBoards", { limit, offset }] as const
   }));
 };
 
@@ -91,30 +91,30 @@ export const invalidateSelectBoardsQueries = (): InvalidateQueryFilters => {
 
 export const insertBoardAction = action(
   insertBoardServerAction,
-  "insertBoardAction",
+  "insertBoardAction"
 );
 
 export const updateBoardAction = action(
   updateBoardServerAction,
-  "updateBoardAction",
+  "updateBoardAction"
 );
 
 export const deleteBoardAction = action(
   deleteBoardServerAction,
-  "deleteBoardAction",
+  "deleteBoardAction"
 );
 
 export const getInsertBoardArgsLoader = cache(
   getInsertBoardArgsServerLoader,
-  INSERT_BOARD_ARGS_CACHE_KEY,
+  INSERT_BOARD_ARGS_CACHE_KEY
 );
 
 export const setBoardAccessAction = action(
   setBoardAccessServerAction,
-  "setBoardAccessAction",
+  "setBoardAccessAction"
 );
 
 export const getBoardAccessLoader = cache(
   getBoardAccessServerLoader,
-  BOARDS_ACCESS_CACHE_KEY,
+  BOARDS_ACCESS_CACHE_KEY
 );

@@ -12,7 +12,7 @@ export const SignUpSuccess: Component = () => {
   return (
     <Card class="w-full max-w-md" variant="bordered">
       <CardBody class="items-center">
-        <CheckCircleIcon class="h-10 w-10 text-success" />
+        <CheckCircleIcon class="size-10 text-success" />
         <header class="flex items-center justify-between gap-2 text-success">
           <h2 class={cardTitleClass()}>{t("auth.signUpSuccess.label")}</h2>
         </header>

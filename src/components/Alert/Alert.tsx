@@ -11,16 +11,16 @@ import { twCva } from "../utils/twCva";
 
 export const alertClass = twCva("alert justify-start", {
   defaultVariants: {
-    variant: null,
+    variant: null
   },
   variants: {
     variant: {
       error: "alert-error",
       info: "alert-info",
       success: "alert-success",
-      warning: "alert-warning",
-    },
-  },
+      warning: "alert-warning"
+    }
+  }
 });
 
 export type AlertProps = ComponentProps<"div"> &
@@ -39,7 +39,7 @@ const alertIconMap: Record<
   error: XCircleIcon,
   info: InfoIcon,
   success: CheckCircleIcon,
-  warning: AlertCircleIcon,
+  warning: AlertCircleIcon
 };
 
 export type AlertIconProps = {
@@ -51,6 +51,6 @@ export const AlertIcon: Component<AlertIconProps> = (props) => {
     return alertIconMap[props.variant];
   };
   return (
-    <Dynamic class="h-6 w-6 shrink-0 stroke-current" component={component()} />
+    <Dynamic class="size-6 shrink-0 stroke-current" component={component()} />
   );
 };

@@ -5,7 +5,7 @@ import {
   createEffect,
   createMemo,
   onCleanup,
-  onMount,
+  onMount
 } from "solid-js";
 
 import type { PuzzleFragmentShape } from "~/utils/getPuzzleFragments";
@@ -14,7 +14,7 @@ import { type Point2D, getCenterFromPoints } from "~/utils/geometry";
 
 import {
   type FragmentState,
-  usePuzzleStore,
+  usePuzzleStore
 } from "../../DataProviders/PuzzleProvider";
 import { usePlayerSelection } from "../../DataProviders/SelectionProvider";
 import { useBoardTheme } from "../BoardTheme";
@@ -79,7 +79,7 @@ const PuzzleBorderGraphics: Component<PuzzleBorderGraphicsProps> = (props) => {
     graphics.stroke({
       color: theme.fragmentBorderSelectedColor,
       matrix,
-      width: 2,
+      width: 2
     });
 
     graphics.pivot.set(props.center.x, props.center.y);
@@ -111,7 +111,7 @@ type PuzzleFragmentGraphicsProps = {
 };
 
 const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
-  props,
+  props
 ) => {
   const theme = useBoardTheme();
 
@@ -124,7 +124,7 @@ const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
     graphics.stroke({
       color: theme.fragmentBorderColor,
       matrix,
-      width: 1,
+      width: 1
     });
 
     graphics.pivot.set(props.center.x, props.center.y);
@@ -169,7 +169,7 @@ const PuzzleContainer: Component<PuzzleContainerProps> = (props) => {
 
   const center = createMemo(() => {
     return getCenterFromPoints(
-      props.shape.curvePoints.map((point) => point.to),
+      props.shape.curvePoints.map((point) => point.to)
     );
   });
 
@@ -222,7 +222,7 @@ const PuzzleContainer: Component<PuzzleContainerProps> = (props) => {
         fragmentId: props.shape.fragmentId,
         rotation: props.state.rotation,
         x: fragment.x,
-        y: fragment.y,
+        y: fragment.y
       });
     },
     onDragMove: () => {
@@ -230,12 +230,12 @@ const PuzzleContainer: Component<PuzzleContainerProps> = (props) => {
         fragmentId: props.shape.fragmentId,
         rotation: props.state.rotation,
         x: fragment.x,
-        y: fragment.y,
+        y: fragment.y
       });
     },
     onDragStart: () => {
       selection.select(fragmentId());
-    },
+    }
   });
 
   const rotationOffset = Math.random() * 2 * Math.PI;

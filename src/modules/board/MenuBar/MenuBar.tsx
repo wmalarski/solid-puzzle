@@ -10,7 +10,7 @@ import {
   DropdownMenuItemLabel,
   DropdownMenuPortal,
   DropdownMenuRoot,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from "~/components/DropdownMenu";
 import { MenuIcon } from "~/components/Icons/MenuIcon";
 import { useI18n } from "~/contexts/I18nContext";

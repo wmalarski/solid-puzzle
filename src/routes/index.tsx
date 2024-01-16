@@ -10,7 +10,7 @@ import { getInsertBoardArgsLoader } from "~/server/board/client";
 export const route = {
   load: async () => {
     await Promise.all([getSessionLoader(), getInsertBoardArgsLoader()]);
-  },
+  }
 } satisfies RouteDefinition;
 
 export default function Home() {

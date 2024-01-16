@@ -4,7 +4,7 @@ import {
   type JSX,
   createContext,
   createMemo,
-  useContext,
+  useContext
 } from "solid-js";
 import { object, parse, string } from "valibot";
 
@@ -14,7 +14,7 @@ const createSupabaseClient = () => {
   const schema = object({ key: string(), url: string() });
   const parsed = parse(schema, {
     key: import.meta.env.VITE_SUPABASE_ANON_KEY,
-    url: import.meta.env.VITE_SUPABASE_URL,
+    url: import.meta.env.VITE_SUPABASE_URL
   });
 
   const client = createBrowserClient<Database>(parsed.url, parsed.key);
@@ -25,7 +25,7 @@ const createSupabaseClient = () => {
 type SupabaseContextState = typeof createSupabaseClient;
 
 const SupabaseContext = createContext<SupabaseContextState>(
-  () => null as unknown as ReturnType<SupabaseContextState>,
+  () => null as unknown as ReturnType<SupabaseContextState>
 );
 
 type Props = {

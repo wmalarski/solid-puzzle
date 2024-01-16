@@ -11,18 +11,18 @@ import { useSessionContext } from "~/contexts/SessionContext";
 
 import {
   type PlayerState,
-  usePlayerPresence,
+  usePlayerPresence
 } from "../DataProviders/PresenceProvider";
 import { SettingsDialog } from "./SettingsDialog";
 
 export const ShareButton: Component = () => {
   const { t } = useI18n();
 
-  const onShare = () => {
+  const onShare = async () => {
     const url = location.href;
 
     if (typeof navigator.share !== "undefined") {
-      navigator.share({ url });
+      await navigator.share({ url });
       return;
     }
 
@@ -31,7 +31,7 @@ export const ShareButton: Component = () => {
     showToast({
       description: t("board.share.title"),
       title: t("board.share.copy"),
-      variant: "success",
+      variant: "success"
     });
   };
 
@@ -43,7 +43,7 @@ export const ShareButton: Component = () => {
       size="sm"
       type="button"
     >
-      <ShareIcon class="h-6 w-6" />
+      <ShareIcon class="size-6" />
     </Button>
   );
 };
@@ -61,10 +61,10 @@ const PlayerAvatar: Component<PlayerAvatarProps> = (props) => {
         size="xs"
         style={{
           "--tw-ring-color": props.state.color,
-          "background-color": props.state.color,
+          "background-color": props.state.color
         }}
       >
-        <span class="flex h-full w-full items-center justify-center uppercase">
+        <span class="flex size-full items-center justify-center uppercase">
           {props.state.name.slice(0, 2)}
         </span>
       </AvatarContent>

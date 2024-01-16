@@ -22,7 +22,7 @@ export const TextFieldLabel: Component<TextFieldLabelProps> = (props) => {
 export type TextFieldLabelTextProps = ComponentProps<"span">;
 
 export const TextFieldLabelText: Component<TextFieldLabelTextProps> = (
-  props,
+  props
 ) => {
   return (
     // eslint-disable-next-line jsx-a11y/label-has-associated-control
@@ -33,7 +33,7 @@ export const TextFieldLabelText: Component<TextFieldLabelTextProps> = (
 export type TextFieldDescriptionProps = ComponentProps<"span">;
 
 export const TextFieldDescription: Component<TextFieldDescriptionProps> = (
-  props,
+  props
 ) => {
   return <span {...props} class={twCx("label-text-alt pt-2", props.class)} />;
 };
@@ -41,7 +41,7 @@ export const TextFieldDescription: Component<TextFieldDescriptionProps> = (
 export type TextFieldErrorMessageProps = ComponentProps<"span">;
 
 export const TextFieldErrorMessage: Component<TextFieldErrorMessageProps> = (
-  props,
+  props
 ) => {
   return (
     <span {...props} class={twCx("text-sm text-error pt-2", props.class)} />
@@ -52,7 +52,7 @@ export const textFieldInputClass = twCva("input", {
   defaultVariants: {
     color: null,
     size: "md",
-    variant: null,
+    variant: null
   },
   variants: {
     color: {
@@ -62,19 +62,19 @@ export const textFieldInputClass = twCva("input", {
       primary: "input-primary",
       secondary: "input-secondary",
       success: "input-success",
-      warning: "input-warning",
+      warning: "input-warning"
     },
     size: {
       lg: "input-lg",
       md: "input-md",
       sm: "input-sm",
-      xs: "input-xs",
+      xs: "input-xs"
     },
     variant: {
       bordered: "input-bordered",
-      ghost: "input-ghost",
-    },
-  },
+      ghost: "input-ghost"
+    }
+  }
 });
 
 export type TextFieldInputProps = ComponentProps<"input"> &

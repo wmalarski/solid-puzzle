@@ -5,11 +5,11 @@ import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
 import { useI18n } from "~/contexts/I18nContext";
 import { ConfigFields } from "~/modules/createBoard/ConfigFields";
-import { updateBoardServerAction } from "~/server/board/rpc";
 import {
   invalidateSelectBoardQuery,
-  invalidateSelectBoardsQueries,
+  invalidateSelectBoardsQueries
 } from "~/server/board/client";
+import { updateBoardServerAction } from "~/server/board/rpc";
 
 type UpdateFormProps = {
   boardId: string;
@@ -25,7 +25,7 @@ export const UpdateForm: Component<UpdateFormProps> = (props) => {
     onSuccess() {
       queryClient.invalidateQueries(invalidateSelectBoardQuery(props.boardId));
       queryClient.invalidateQueries(invalidateSelectBoardsQueries());
-    },
+    }
   }));
 
   const onSubmit: ComponentProps<"form">["onSubmit"] = (event) => {

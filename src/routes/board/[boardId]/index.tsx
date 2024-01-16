@@ -2,7 +2,7 @@ import {
   Navigate,
   type RouteDefinition,
   createAsync,
-  useParams,
+  useParams
 } from "@solidjs/router";
 import { clientOnly } from "@solidjs/start";
 import { createQuery } from "@tanstack/solid-query";
@@ -12,7 +12,7 @@ import {
   Show,
   Suspense,
   Switch,
-  createMemo,
+  createMemo
 } from "solid-js";
 
 import type { BoardAccess } from "~/types/models";
@@ -22,7 +22,7 @@ import { AcceptInviteForm } from "~/modules/board/AcceptInviteForm";
 import { getSessionLoader } from "~/server/auth/client";
 import {
   getBoardAccessLoader,
-  selectBoardQueryOptions,
+  selectBoardQueryOptions
 } from "~/server/board/client";
 import { randomHexColor } from "~/utils/colors";
 import { paths } from "~/utils/paths";
@@ -39,8 +39,8 @@ const BoardQuery: Component<BoardQueryProps> = (props) => {
 
   const boardQuery = createQuery(() =>
     selectBoardQueryOptions({
-      id: props.boardId,
-    })(),
+      id: props.boardId
+    })()
   );
 
   const access = createMemo<BoardAccess | null>(() => {
@@ -58,7 +58,7 @@ const BoardQuery: Component<BoardQueryProps> = (props) => {
       boardId: props.boardId,
       playerColor: randomHexColor(),
       playerId: user.id,
-      userName: user.email || user.id,
+      userName: user.email || user.id
     };
   });
 
@@ -89,9 +89,9 @@ export const route = {
   load: async ({ params }) => {
     await Promise.all([
       getSessionLoader(),
-      getBoardAccessLoader(params.boardId),
+      getBoardAccessLoader(params.boardId)
     ]);
-  },
+  }
 } satisfies RouteDefinition;
 
 export default function BoardSection() {
@@ -103,7 +103,7 @@ export default function BoardSection() {
 
   return (
     <SessionProvider value={() => session() || null}>
-      <main class="relative h-screen w-screen">
+      <main class="size-screen relative">
         <BoardQuery boardAccess={boardAccess()} boardId={params.boardId} />
       </main>
     </SessionProvider>

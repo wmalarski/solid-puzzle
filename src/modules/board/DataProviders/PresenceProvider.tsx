@@ -1,7 +1,7 @@
 import {
   REALTIME_LISTEN_TYPES,
   REALTIME_PRESENCE_LISTEN_EVENTS,
-  REALTIME_SUBSCRIBE_STATES,
+  REALTIME_SUBSCRIBE_STATES
 } from "@supabase/supabase-js";
 import { nanoid } from "nanoid";
 import {
@@ -11,7 +11,7 @@ import {
   createMemo,
   onCleanup,
   onMount,
-  useContext,
+  useContext
 } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 
@@ -37,7 +37,7 @@ const defaultPlayerId = nanoid();
 const placeholderCurrentPlayer: PlayerState = {
   color: defaultColor,
   name: defaultPlayerId,
-  playerId: defaultPlayerId,
+  playerId: defaultPlayerId
 };
 
 const createPlayerPresenceState = (boardAccess: () => BoardAccess) => {
@@ -49,7 +49,7 @@ const createPlayerPresenceState = (boardAccess: () => BoardAccess) => {
     return {
       color: defaultColor,
       name: boardAccess().userName,
-      playerId: session()?.user.id || defaultPlayerId,
+      playerId: session()?.user.id || defaultPlayerId
     };
   });
 
@@ -59,7 +59,7 @@ const createPlayerPresenceState = (boardAccess: () => BoardAccess) => {
     const player = currentPlayer();
 
     const channel = supabase().channel(PRESENCE_CHANNEL_NAME, {
-      config: { presence: { key: boardAccess().boardId } },
+      config: { presence: { key: boardAccess().boardId } }
     });
 
     const subscription = channel
@@ -70,7 +70,7 @@ const createPlayerPresenceState = (boardAccess: () => BoardAccess) => {
           const newState = channel.presenceState();
           // eslint-disable-next-line no-console
           console.log("PRESENCE_sync", newState);
-        },
+        }
       )
       .on(
         REALTIME_LISTEN_TYPES.PRESENCE,
@@ -82,12 +82,12 @@ const createPlayerPresenceState = (boardAccess: () => BoardAccess) => {
                 state[presence.playerId] = {
                   color: presence.color,
                   name: presence.name,
-                  playerId: presence.playerId,
+                  playerId: presence.playerId
                 };
               });
-            }),
+            })
           );
-        },
+        }
       )
       .on(
         REALTIME_LISTEN_TYPES.PRESENCE,
@@ -98,9 +98,9 @@ const createPlayerPresenceState = (boardAccess: () => BoardAccess) => {
               leftPresences.forEach((presence) => {
                 state[presence.playerId] = undefined;
               });
-            }),
+            })
           );
-        },
+        }
       )
       .subscribe(async (status) => {
         if (status === REALTIME_SUBSCRIBE_STATES.SUBSCRIBED) {
@@ -127,7 +127,7 @@ type PlayerPresenceState = ReturnType<typeof createPlayerPresenceState>;
 
 const PlayerPresenceContext = createContext<PlayerPresenceState>({
   currentPlayer: () => placeholderCurrentPlayer,
-  players: {},
+  players: {}
 });
 
 type PlayerPresenceProviderProps = {
@@ -136,7 +136,7 @@ type PlayerPresenceProviderProps = {
 };
 
 export const PlayerPresenceProvider: Component<PlayerPresenceProviderProps> = (
-  props,
+  props
 ) => {
   const value = createPlayerPresenceState(() => props.boardAccess);
 

@@ -6,42 +6,42 @@ import {
   createContext,
   createMemo,
   createSignal,
-  useContext,
+  useContext
 } from "solid-js";
 
 const en_dict = {
   auth: {
     email: {
       label: "Username",
-      placeholder: "Username",
+      placeholder: "Username"
     },
     password: {
       label: "Password",
-      placeholder: "Password",
+      placeholder: "Password"
     },
     signIn: {
       button: "Sign In",
       signUp: "Sign Up",
-      title: "Sign In",
+      title: "Sign In"
     },
     signOut: "Sign Out",
     signUp: {
       button: "Sign Up",
       signIn: "Sign In",
-      title: "Sign Up",
+      title: "Sign Up"
     },
     signUpSuccess: {
       description:
         "Congratulations! your account has been successfully created",
-      label: "Success",
-    },
+      label: "Success"
+    }
   },
   board: {
     error: {
       description: "Something went wrong: {{message}}",
       home: "Home",
       reload: "Reload",
-      title: "Puzzle error",
+      title: "Puzzle error"
     },
     home: "Home",
     menu: "Menu",
@@ -50,39 +50,39 @@ const en_dict = {
       delete: {
         button: "Delete",
         cancel: "Cancel",
-        title: "Delete board",
+        title: "Delete board"
       },
       label: "Settings",
       title: "Board settings",
       update: {
-        button: "Save",
-      },
+        button: "Save"
+      }
     },
     share: {
       copy: "Link copied to your clipboard",
-      title: "Share link",
-    },
+      title: "Share link"
+    }
   },
   createBoard: {
     button: "Save",
     columns: {
       label: "Columns",
-      placeholder: "Enter number of columns",
+      placeholder: "Enter number of columns"
     },
     image: "Image",
     link: "Sign In to create board",
     name: {
       label: "Name",
-      placeholder: "Enter board name",
+      placeholder: "Enter board name"
     },
     rows: {
       label: "Rows",
-      placeholder: "Enter number of rows",
+      placeholder: "Enter number of rows"
     },
-    title: "Create board",
+    title: "Create board"
   },
   footer: {
-    madeBy: "Made by wmalarski",
+    madeBy: "Made by wmalarski"
   },
   home: {
     addBoard: "Add board",
@@ -91,23 +91,23 @@ const en_dict = {
     signIn: "Sign In",
     signUp: "Sign Up",
     solve: "Solve",
-    title: "Puzzle",
+    title: "Puzzle"
   },
   info: {
     madeBy: "Made by wmalarski",
-    title: "Solid Puzzle",
+    title: "Solid Puzzle"
   },
   invite: {
     button: "Accept",
     title: "Invitation to {{name}}",
     username: {
       label: "Name",
-      placeholder: "Your name",
-    },
+      placeholder: "Your name"
+    }
   },
   list: {
-    go: "Dalej",
-  },
+    go: "Dalej"
+  }
 };
 
 export type Locale = "en";
@@ -138,7 +138,7 @@ export const I18nContext = createContext<I18nContextValue>({
   setLocale: () => void 0,
   t: () => {
     throw new Error("Not implemented");
-  },
+  }
 });
 
 export const I18nContextProvider: Component<ParentProps> = (props) => {

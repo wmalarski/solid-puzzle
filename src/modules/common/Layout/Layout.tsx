@@ -10,7 +10,7 @@ export const PageTitle: Component = () => {
 
   return (
     <h1 class="max-6-xs my-16 flex items-center text-center text-4xl uppercase sm:text-6xl">
-      <PuzzleIcon class="h-12 w-12" />
+      <PuzzleIcon class="size-12" />
       <Link hover href={paths.home}>
         {t("home.title")}
       </Link>

@@ -6,7 +6,7 @@ import {
   createResource,
   onCleanup,
   onMount,
-  useContext,
+  useContext
 } from "solid-js";
 
 const PixiAppContext = createContext<Application>({} as unknown as Application);
@@ -29,13 +29,13 @@ export const PixiAppProvider: Component<Props> = (props) => {
       canvas: props.canvas,
       eventMode: "static",
       height: window.innerHeight,
-      width: window.innerWidth,
+      width: window.innerWidth
     });
 
     app.stage.hitArea = {
       contains() {
         return true;
-      },
+      }
     };
 
     app.renderer.resize(window.innerWidth, window.innerHeight);

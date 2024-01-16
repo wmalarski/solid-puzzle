@@ -4,7 +4,7 @@ import {
   type Component,
   type ComponentProps,
   type ValidComponent,
-  splitProps,
+  splitProps
 } from "solid-js";
 import { Dynamic, type DynamicProps } from "solid-js/web";
 
@@ -15,13 +15,13 @@ export const cardClass = twCva("card", {
     bg: null,
     color: null,
     size: null,
-    variant: null,
+    variant: null
   },
   variants: {
     bg: {
       "base-100": "bg-base-100",
       "base-200": "bg-base-200",
-      "base-300": "bg-base-300",
+      "base-300": "bg-base-300"
     },
     color: {
       accent: "border-l-8 border-l-accent",
@@ -32,17 +32,17 @@ export const cardClass = twCva("card", {
       primary: "border-l-8 border-l-primary",
       secondary: "border-l-8 border-l-secondary",
       success: "border-l-8 border-l-success",
-      warning: "border-l-8 border-l-warning",
+      warning: "border-l-8 border-l-warning"
     },
     size: {
       compact: "card-compact",
       normal: "card-normal",
-      side: "card-side",
+      side: "card-side"
     },
     variant: {
-      bordered: "card-bordered",
-    },
-  },
+      bordered: "card-bordered"
+    }
+  }
 });
 
 export type CardProps = ComponentProps<"div"> & VariantProps<typeof cardClass>;
@@ -75,13 +75,13 @@ export function CardBody(props: CardBodyProps) {
 
 export const cardActionsClass = twCva("card-actions", {
   defaultVariants: {
-    justify: null,
+    justify: null
   },
   variants: {
     justify: {
-      end: "justify-end",
-    },
-  },
+      end: "justify-end"
+    }
+  }
 });
 
 export type CardActionsProps = ComponentProps<"div"> &

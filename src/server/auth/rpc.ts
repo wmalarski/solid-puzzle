@@ -9,7 +9,7 @@ import {
   minLength,
   object,
   safeParseAsync,
-  string,
+  string
 } from "valibot";
 
 import { paths } from "~/utils/paths";
@@ -18,7 +18,7 @@ import {
   getRequestEventOrThrow,
   rpcErrorResult,
   rpcParseIssueResult,
-  rpcSuccessResult,
+  rpcSuccessResult
 } from "../utils";
 import { SESSION_CACHE_KEY } from "./const";
 
@@ -33,9 +33,9 @@ export async function signUpServerAction(form: FormData) {
   const parsed = await safeParseAsync(
     object({
       email: string([email()]),
-      password: string([minLength(6), maxLength(20)]),
+      password: string([minLength(6), maxLength(20)])
     }),
-    decode(form),
+    decode(form)
   );
 
   if (!parsed.success) {
@@ -44,7 +44,7 @@ export async function signUpServerAction(form: FormData) {
 
   const result = await event.context.supabase.auth.signUp({
     ...parsed.output,
-    options: { emailRedirectTo: getRedirectUrl(event, paths.signUpSuccess) },
+    options: { emailRedirectTo: getRedirectUrl(event, paths.signUpSuccess) }
   });
 
   if (result.error) {
@@ -60,9 +60,9 @@ export async function signInServerAction(form: FormData) {
   const parsed = await safeParseAsync(
     object({
       email: string([email()]),
-      password: string([minLength(3)]),
+      password: string([minLength(3)])
     }),
-    decode(form),
+    decode(form)
   );
 
   if (!parsed.success) {
@@ -70,7 +70,7 @@ export async function signInServerAction(form: FormData) {
   }
 
   const result = await event.context.supabase.auth.signInWithPassword(
-    parsed.output,
+    parsed.output
   );
 
   if (result.error) {

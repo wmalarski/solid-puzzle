@@ -2,7 +2,7 @@ import {
   type FederatedPointerEvent,
   Graphics,
   Sprite,
-  type Texture,
+  type Texture
 } from "pixi.js";
 import { type Component, createEffect, onCleanup, onMount } from "solid-js";
 
@@ -29,7 +29,7 @@ export const PreviewGrid: Component<PreviewGridProps> = (props) => {
         .quadraticCurveTo(line.center.x, line.center.y, line.end.x, line.end.y)
         .stroke({
           color: theme.previewStrokeColor,
-          width: theme.previewStrokeWidth,
+          width: theme.previewStrokeWidth
         });
     });
   });

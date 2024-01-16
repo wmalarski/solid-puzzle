@@ -3,7 +3,7 @@ import {
   getCenterFromPoints,
   getMinMaxFromPoints,
   scaleBy,
-  subtractPoint,
+  subtractPoint
 } from "~/utils/geometry";
 
 type GetRandomInRangeArgs = {
@@ -31,7 +31,7 @@ type GetRandomGridPointFactoryArgs = {
 
 const getRandomGridPointFactory = ({
   columns,
-  rows,
+  rows
 }: GetRandomGridPointFactoryArgs) => {
   const columnWidth = 1 / columns;
   const rowHeight = 1 / rows;
@@ -43,7 +43,7 @@ const getRandomGridPointFactory = ({
     columnIndex,
     rowIndex,
     xCenter,
-    yCenter,
+    yCenter
   }: GetRandomGridPointArgs) => {
     const isBorderRow = rowIndex === 0 || rowIndex === rows;
     const isBorderColumn = columnIndex === 0 || columnIndex === columns;
@@ -55,7 +55,7 @@ const getRandomGridPointFactory = ({
       : getRandomInRange({
           center: xCenter ?? xColumnCenter,
           max: 1,
-          radius: xRadius,
+          radius: xRadius
         });
 
     const y = isBorderRow
@@ -63,7 +63,7 @@ const getRandomGridPointFactory = ({
       : getRandomInRange({
           center: yCenter ?? yColumnCenter,
           max: 1,
-          radius: yRadius,
+          radius: yRadius
         });
 
     return { x, y };
@@ -89,8 +89,8 @@ export const generateCurves = ({ columns, rows }: GenerateCurvesArgs) => {
 
   const points = Array.from({ length: rows + 1 }, (_, rowIndex) =>
     Array.from({ length: columns + 1 }, (_, columnIndex) =>
-      getRandomGridPoint({ columnIndex, rowIndex }),
-    ),
+      getRandomGridPoint({ columnIndex, rowIndex })
+    )
   );
 
   const horizontalLines = Array.from({ length: rows + 1 }, (_, rowIndex) =>
@@ -102,10 +102,10 @@ export const generateCurves = ({ columns, rows }: GenerateCurvesArgs) => {
         columnIndex,
         rowIndex,
         xCenter: center.x,
-        yCenter: center.y,
+        yCenter: center.y
       });
       return { center: random, end, start };
-    }),
+    })
   );
 
   const verticalLines = Array.from({ length: rows }, (_, rowIndex) =>
@@ -117,15 +117,15 @@ export const generateCurves = ({ columns, rows }: GenerateCurvesArgs) => {
         columnIndex,
         rowIndex,
         xCenter: center.x,
-        yCenter: center.y,
+        yCenter: center.y
       });
       return { center: random, end, start };
-    }),
+    })
   );
 
   const rotation = Array.from(
     { length: rows * columns },
-    () => 2 * Math.random() * Math.PI,
+    () => 2 * Math.random() * Math.PI
   );
 
   return { horizontalLines, rotation, version: "1", verticalLines };
@@ -143,7 +143,7 @@ const scaleCurveUp = ({ curve, scale }: ScaleCurveUpArgs): PuzzleCurve => {
   return {
     center: scaleBy(curve.center, scale),
     end: scaleBy(curve.end, scale),
-    start: scaleBy(curve.start, scale),
+    start: scaleBy(curve.start, scale)
   };
 };
 
@@ -154,16 +154,16 @@ type ScaleConfigUpArgs = {
 
 const scaleConfigUp = ({
   config,
-  scale,
+  scale
 }: ScaleConfigUpArgs): PuzzleCurveConfig => {
   return {
     ...config,
     horizontalLines: config.horizontalLines.map((lines) =>
-      lines.map((curve) => scaleCurveUp({ curve, scale })),
+      lines.map((curve) => scaleCurveUp({ curve, scale }))
     ),
     verticalLines: config.verticalLines.map((lines) =>
-      lines.map((curve) => scaleCurveUp({ curve, scale })),
-    ),
+      lines.map((curve) => scaleCurveUp({ curve, scale }))
+    )
   };
 };
 
@@ -176,7 +176,7 @@ type GetPuzzleFragmentsArgs = {
 export const getPuzzleFragments = ({
   config,
   height,
-  width,
+  width
 }: GetPuzzleFragmentsArgs) => {
   const scale = { x: width, y: height };
   const { horizontalLines, verticalLines } = scaleConfigUp({ config, scale });
@@ -197,19 +197,19 @@ export const getPuzzleFragments = ({
         { control: left.center, to: left.end },
         { control: bottom.center, to: bottom.end },
         { control: right.center, to: right.start },
-        { control: top.center, to: top.start },
+        { control: top.center, to: top.start }
       ];
 
       const points = absoluteCurvePoints.flatMap((curve) => [
         curve.control,
-        curve.to,
+        curve.to
       ]);
       const { max, min } = getMinMaxFromPoints(points);
       const center = getCenterFromPoints([max, min]);
 
       const curvePoints = absoluteCurvePoints.map((curve) => ({
         control: subtractPoint(curve.control, min),
-        to: subtractPoint(curve.to, min),
+        to: subtractPoint(curve.to, min)
       }));
 
       const initialRotation = rotation.pop() || 0;
@@ -220,9 +220,9 @@ export const getPuzzleFragments = ({
         fragmentId: getFragmentId({ columnIndex, rowIndex }),
         initialRotation,
         max,
-        min,
+        min
       };
-    }),
+    })
   ).flat();
 
   return { fragments, lines };

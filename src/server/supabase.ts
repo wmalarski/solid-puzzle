@@ -22,9 +22,9 @@ export const supabaseMiddleware = async (event: FetchEvent) => {
         },
         set: (key, value, options) => {
           setCookie(event, key, value, options);
-        },
-      },
-    },
+        }
+      }
+    }
   );
 
   const result = await supabase.auth.getSession();

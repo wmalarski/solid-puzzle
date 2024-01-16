@@ -5,12 +5,12 @@ import {
   getSessionServerLoader,
   signInServerAction,
   signOutServerAction,
-  signUpServerAction,
+  signUpServerAction
 } from "./rpc";
 
 export const getSessionLoader = cache(
   getSessionServerLoader,
-  SESSION_CACHE_KEY,
+  SESSION_CACHE_KEY
 );
 
 export const signUpAction = action(signUpServerAction, "signUpAction");

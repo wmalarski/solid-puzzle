@@ -14,7 +14,7 @@ import {
   getRequestEventOrThrow,
   rpcErrorResult,
   rpcParseIssueResult,
-  rpcSuccessResult,
+  rpcSuccessResult
 } from "../utils";
 import { BOARDS_ACCESS_CACHE_KEY, INSERT_BOARD_ARGS_CACHE_KEY } from "./const";
 
@@ -23,7 +23,7 @@ const insertBoardSchema = () => {
     columns: boardDimension(),
     image: string(),
     name: string([minLength(3)]),
-    rows: boardDimension(),
+    rows: boardDimension()
   });
 };
 
@@ -31,7 +31,7 @@ const INSERT_BOARD_ARGS_COOKIE_NAME = "InsertBoardArgs";
 const INSERT_BOARD_ARGS_COOKIE_OPTIONS: CookieSerializeOptions = {
   httpOnly: true,
   maxAge: 10000,
-  sameSite: "lax",
+  sameSite: "lax"
 };
 
 export async function insertBoardServerAction(form: FormData) {
@@ -39,7 +39,7 @@ export async function insertBoardServerAction(form: FormData) {
 
   const parsed = await safeParseAsync(
     insertBoardSchema(),
-    decode(form, { numbers: ["rows", "columns"] }),
+    decode(form, { numbers: ["rows", "columns"] })
   );
 
   if (!parsed.success) {
@@ -50,18 +50,18 @@ export async function insertBoardServerAction(form: FormData) {
     event,
     INSERT_BOARD_ARGS_COOKIE_NAME,
     JSON.stringify(parsed.output),
-    INSERT_BOARD_ARGS_COOKIE_OPTIONS,
+    INSERT_BOARD_ARGS_COOKIE_OPTIONS
   );
 
   if (!event.context.supabaseSession) {
     throw redirect(paths.signIn, {
-      revalidate: INSERT_BOARD_ARGS_CACHE_KEY,
+      revalidate: INSERT_BOARD_ARGS_CACHE_KEY
     });
   }
 
   const config = generateCurves({
     columns: parsed.output.columns,
-    rows: parsed.output.rows,
+    rows: parsed.output.rows
   });
 
   const result = await event.context.supabase
@@ -69,7 +69,7 @@ export async function insertBoardServerAction(form: FormData) {
     .insert({
       config,
       media: parsed.output.image,
-      name: parsed.output.name,
+      name: parsed.output.name
     })
     .select()
     .single();
@@ -79,7 +79,7 @@ export async function insertBoardServerAction(form: FormData) {
   }
 
   throw redirect(paths.board(result.data.id), {
-    revalidate: INSERT_BOARD_ARGS_CACHE_KEY,
+    revalidate: INSERT_BOARD_ARGS_CACHE_KEY
   });
 }
 
@@ -92,9 +92,9 @@ export async function updateBoardServerAction(form: FormData) {
       id: string(),
       image: string(),
       name: string([minLength(3)]),
-      rows: boardDimension(),
+      rows: boardDimension()
     }),
-    decode(form, { numbers: ["rows", "columns"] }),
+    decode(form, { numbers: ["rows", "columns"] })
   );
 
   if (!parsed.success) {
@@ -103,14 +103,14 @@ export async function updateBoardServerAction(form: FormData) {
 
   const config = generateCurves({
     columns: parsed.output.columns,
-    rows: parsed.output.rows,
+    rows: parsed.output.rows
   });
 
   const result = await event.context.supabase.from("rooms").update({
     config,
     id: parsed.output.id,
     media: parsed.output.image,
-    name: parsed.output.name,
+    name: parsed.output.name
   });
 
   if (result.error) {
@@ -146,7 +146,7 @@ export function getInsertBoardArgsServerLoader() {
   return getParsedCookie(
     event,
     INSERT_BOARD_ARGS_COOKIE_NAME,
-    insertBoardSchema(),
+    insertBoardSchema()
   );
 }
 
@@ -155,7 +155,7 @@ const boardAccessSchema = () => {
     boardId: string(),
     playerColor: string(),
     playerId: string(),
-    userName: string(),
+    userName: string()
   });
 };
 
@@ -166,7 +166,7 @@ const getBoardAccessCookieName = (boardId: string) => {
 const BOARD_ACCESS_COOKIE_OPTIONS: CookieSerializeOptions = {
   httpOnly: true,
   maxAge: 1000000,
-  sameSite: "lax",
+  sameSite: "lax"
 };
 
 export async function setBoardAccessServerAction(form: FormData) {
@@ -182,11 +182,11 @@ export async function setBoardAccessServerAction(form: FormData) {
     event,
     getBoardAccessCookieName(parsed.output.boardId),
     JSON.stringify(parsed.output),
-    BOARD_ACCESS_COOKIE_OPTIONS,
+    BOARD_ACCESS_COOKIE_OPTIONS
   );
 
   throw redirect(paths.board(parsed.output.boardId), {
-    revalidate: [BOARDS_ACCESS_CACHE_KEY],
+    revalidate: [BOARDS_ACCESS_CACHE_KEY]
   });
 }
 
@@ -195,6 +195,6 @@ export function getBoardAccessServerLoader(boardId: string) {
   return getParsedCookie(
     event,
     getBoardAccessCookieName(boardId),
-    boardAccessSchema(),
+    boardAccessSchema()
   );
 }

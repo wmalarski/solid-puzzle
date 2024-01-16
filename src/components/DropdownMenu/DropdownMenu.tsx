@@ -14,14 +14,14 @@ export type DropdownMenuTriggerProps =
     VariantProps<typeof buttonClass>;
 
 export const DropdownMenuTrigger: Component<DropdownMenuTriggerProps> = (
-  props,
+  props
 ) => {
   const [split, rest] = splitProps(props, [
     "color",
     "isLoading",
     "shape",
     "size",
-    "variant",
+    "variant"
   ]);
 
   return (
@@ -34,15 +34,15 @@ export const DropdownMenuTrigger: Component<DropdownMenuTriggerProps> = (
 
 export const dropdownMenuIconClass = twCva("rotate-0 duration-200", {
   defaultVariants: {
-    rotation: 0,
+    rotation: 0
   },
   variants: {
     rotation: {
       0: "",
       90: "ui-expanded:rotate-90",
-      180: "ui-expanded:rotate-180",
-    },
-  },
+      180: "ui-expanded:rotate-180"
+    }
+  }
 });
 
 export type DropdownMenuIconProps = KobalteDropdownMenu.DropdownMenuIconProps &
@@ -63,7 +63,7 @@ export const DropdownMenuPortal = KobalteDropdownMenu.Portal;
 
 export const dropdownMenuContentClass = twCva([
   "min-w-[220px] p-1 bg-base-100 rounded-2xl shadow outline-none",
-  styles.content,
+  styles.content
 ]);
 
 export const DropdownMenuContent: Component<
@@ -123,12 +123,12 @@ export const DropdownMenuSub = KobalteDropdownMenu.Sub;
 export const dropdownMenuItemClass = twCva([
   "relative flex h-4 select-none items-center pl-2 pr-6 text-base leading-none rounded-2xl outline-none",
   "ui-disabled:opacity-50 ui-disabled:pointer-events-none",
-  "ui-highlighted:outline-none ui-highlighted:bg-base-200",
+  "ui-highlighted:outline-none ui-highlighted:bg-base-200"
 ]);
 
 export const dropdownMenuSubTriggerClass = twCva([
   dropdownMenuItemClass,
-  "ui-expanded:bg-base-100 ui-expanded:text-accent-content",
+  "ui-expanded:bg-base-100 ui-expanded:text-accent-content"
 ]);
 
 export const DropdownMenuSubTrigger: Component<
@@ -172,7 +172,7 @@ export const DropdownMenuItemLabel: Component<
       {...props}
       class={twCx(
         "text-sm overflow-ellipsis flex gap-2 items-center",
-        props.class,
+        props.class
       )}
     />
   );
@@ -197,7 +197,7 @@ export const DropdownMenuItemIndicator: Component<
       {...props}
       class={twCx(
         "absolute left-0 h-4 w-4 inline-flex items-center justify-center",
-        props.class,
+        props.class
       )}
     />
   );

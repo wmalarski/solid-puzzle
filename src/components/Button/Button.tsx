@@ -10,7 +10,7 @@ export const buttonClass = twCva("btn no-animation flex items-center gap-1", {
     isLoading: false,
     shape: null,
     size: "md",
-    variant: null,
+    variant: null
   },
   variants: {
     color: {
@@ -20,23 +20,23 @@ export const buttonClass = twCva("btn no-animation flex items-center gap-1", {
       primary: "btn-primary",
       secondary: "btn-secondary",
       success: "btn-success",
-      warning: "btn-warning",
+      warning: "btn-warning"
     },
     isLoading: {
       false: "",
-      true: "loading",
+      true: "loading"
     },
     shape: {
       block: "btn-block",
       circle: "btn-circle",
       square: "btn-square",
-      wide: "btn-wide",
+      wide: "btn-wide"
     },
     size: {
       lg: "btn-lg",
       md: "btn-md",
       sm: "btn-sm",
-      xs: "btn-xs",
+      xs: "btn-xs"
     },
     variant: {
       active: "btn-active",
@@ -44,9 +44,9 @@ export const buttonClass = twCva("btn no-animation flex items-center gap-1", {
       ghost: "btn-ghost",
       glass: "glass",
       link: "btn-link",
-      outline: "btn-outline",
-    },
-  },
+      outline: "btn-outline"
+    }
+  }
 });
 
 export type ButtonProps = ComponentProps<"button"> &
@@ -58,7 +58,7 @@ export const Button: Component<ButtonProps> = (props) => {
     "isLoading",
     "shape",
     "size",
-    "variant",
+    "variant"
   ]);
 
   return (
@@ -68,14 +68,14 @@ export const Button: Component<ButtonProps> = (props) => {
 
 export const buttonGroupClass = twCva("btn-group", {
   defaultVariants: {
-    direction: null,
+    direction: null
   },
   variants: {
     direction: {
       horizontal: "btn-group-horizontal",
-      vertical: "btn-group-vertical",
-    },
-  },
+      vertical: "btn-group-vertical"
+    }
+  }
 });
 
 export type ButtonGroupProps = ComponentProps<"div"> &
@@ -98,7 +98,7 @@ export const LinkButton: Component<LinkButtonProps> = (props) => {
     "isLoading",
     "shape",
     "size",
-    "variant",
+    "variant"
   ]);
 
   // eslint-disable-next-line jsx-a11y/anchor-has-content

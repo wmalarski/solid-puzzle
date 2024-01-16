@@ -2,7 +2,7 @@ import {
   type Container,
   type FederatedMouseEvent,
   type FederatedPointerEvent,
-  Graphics,
+  Graphics
 } from "pixi.js";
 import { type Component, createEffect, onCleanup, onMount } from "solid-js";
 

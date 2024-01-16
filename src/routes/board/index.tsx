@@ -10,7 +10,7 @@ import { getSessionLoader } from "~/server/auth/client";
 export const route = {
   load: async () => {
     await getSessionLoader();
-  },
+  }
 } satisfies RouteDefinition;
 
 export default function Home() {

@@ -51,7 +51,7 @@ const BoardsListEmpty: Component = () => {
 
 export default function BoardsList() {
   const boardQuery = createQuery(() =>
-    selectBoardsQueryOptions({ offset: 0 })(),
+    selectBoardsQueryOptions({ offset: 0 })()
   );
 
   return (

@@ -6,7 +6,7 @@ import {
   createEffect,
   createResource,
   onCleanup,
-  onMount,
+  onMount
 } from "solid-js";
 
 import type { BoardModel } from "~/types/models";
@@ -66,7 +66,7 @@ const Provider: Component<ProviderProps> = (props) => {
     store.initFragments({
       board: props.board,
       height: props.texture.height,
-      width: props.texture.width,
+      width: props.texture.width
     });
   });
 

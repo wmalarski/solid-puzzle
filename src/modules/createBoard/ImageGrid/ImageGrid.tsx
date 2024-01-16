@@ -30,7 +30,7 @@ export const ImageGrid: Component<ImageGridProps> = (props) => {
             <button
               class={twCx(
                 "flex rounded border-2 border-base-300 p-2 items-center justify-center",
-                value() === image ? "border-accent bg-base-300" : null,
+                value() === image ? "border-accent bg-base-300" : null
               )}
               onClick={onButtonClick(image)}
               type="button"

@@ -9,7 +9,7 @@ import {
   integer,
   minValue,
   number,
-  safeParseAsync,
+  safeParseAsync
 } from "valibot";
 
 import { paths } from "~/utils/paths";
@@ -47,10 +47,10 @@ export const rpcParseIssueResult = (issues: Issues): RpcResult => {
     errors: Object.fromEntries(
       issues.map((issue) => [
         issue.path?.map((item) => item.key).join(".") || "global",
-        issue.message,
-      ]),
+        issue.message
+      ])
     ),
-    success: false,
+    success: false
   };
 };
 
@@ -60,17 +60,17 @@ export const rpcSuccessResult = <T = any>(data?: T): RpcResult => {
 };
 
 export const rpcErrorResult = <T extends { message: string }>(
-  error: T,
+  error: T
 ): RpcResult => {
   return { error: error.message, success: false };
 };
 
 export const getParsedCookie = async <
-  TSchema extends BaseSchema | BaseSchemaAsync,
+  TSchema extends BaseSchema | BaseSchemaAsync
 >(
   event: RequestEvent,
   name: string,
-  schema: TSchema,
+  schema: TSchema
 ) => {
   const cookie = getCookie(event, name);
 

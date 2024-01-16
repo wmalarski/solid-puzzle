@@ -8,7 +8,7 @@ const createBoardThemeContext = () => {
     previewStrokeColor: 0x777777,
     previewStrokeWidth: 1,
     rotationAnchorColor: 0xaa3333,
-    rotationAnchorRadius: 10,
+    rotationAnchorRadius: 10
   };
 };
 

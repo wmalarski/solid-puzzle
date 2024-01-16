@@ -6,12 +6,12 @@ import {
   createEffect,
   createMemo,
   onCleanup,
-  onMount,
+  onMount
 } from "solid-js";
 
 import {
   type PlayerCursorState,
-  usePlayerCursors,
+  usePlayerCursors
 } from "../../DataProviders/CursorProvider";
 import { usePlayerPresence } from "../../DataProviders/PresenceProvider";
 import { usePixiApp } from "../PixiApp";

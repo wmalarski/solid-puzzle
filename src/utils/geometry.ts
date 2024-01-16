@@ -9,7 +9,7 @@ export const subtractPoint = (point: Point2D, other: Point2D) => {
 
 export const getDistance = (point: Point2D, other: Point2D) => {
   return Math.sqrt(
-    Math.pow(point.x - other.x, 2) + Math.pow(point.y - other.y, 2),
+    Math.pow(point.x - other.x, 2) + Math.pow(point.y - other.y, 2)
   );
 };
 
@@ -22,7 +22,7 @@ export const getMinMaxFromPoints = (points: Point2D[]) => {
   const ySorted = points.sort((a, b) => a.y - b.y);
   return {
     max: { x: xSorted[xSorted.length - 1].x, y: ySorted[ySorted.length - 1].y },
-    min: { x: xSorted[0].x, y: ySorted[0].y },
+    min: { x: xSorted[0].x, y: ySorted[0].y }
   };
 };
 

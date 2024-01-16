@@ -11,7 +11,7 @@ import {
   PopoverPortal,
   PopoverRoot,
   PopoverTitle,
-  PopoverTrigger,
+  PopoverTrigger
 } from "~/components/Popover";
 import { useI18n } from "~/contexts/I18nContext";
 

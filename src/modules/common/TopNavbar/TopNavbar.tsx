@@ -33,7 +33,7 @@ export const TopNavbar: Component = () => {
     <Navbar>
       <NavbarStart>
         <Link class="flex gap-2 text-3xl uppercase" hover href={paths.home}>
-          <PuzzleIcon class="h-8 w-8" />
+          <PuzzleIcon class="size-8" />
           {t("home.title")}
         </Link>
       </NavbarStart>

@@ -4,7 +4,7 @@ import {
   type Component,
   type ComponentProps,
   Show,
-  createSignal,
+  createSignal
 } from "solid-js";
 
 import { Alert, AlertIcon } from "~/components/Alert";
@@ -19,7 +19,7 @@ import {
   DialogPositioner,
   DialogRoot,
   DialogTitle,
-  DialogTrigger,
+  DialogTrigger
 } from "~/components/Dialog";
 import { TrashIcon } from "~/components/Icons/TrashIcon";
 import { XIcon } from "~/components/Icons/XIcon";
@@ -46,7 +46,7 @@ const DeleteBoardForm: Component<DeleteBoardFormProps> = (props) => {
       navigate(paths.home);
 
       queryClient.invalidateQueries(invalidateSelectBoardsQueries());
-    },
+    }
   }));
 
   const onSubmit: ComponentProps<"form">["onSubmit"] = (event) => {

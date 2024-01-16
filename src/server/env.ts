@@ -10,7 +10,7 @@ if (typeof window !== "undefined") {
 const getEnvSchema = () => {
   return object({
     SUPABASE_ANON_KEY: string(),
-    SUPABASE_URL: string(),
+    SUPABASE_URL: string()
   });
 };
 
@@ -21,7 +21,7 @@ export const serverEnvMiddleware = async (event: FetchEvent) => {
 
   const parsed = await safeParseAsync(envSchema, {
     SUPABASE_ANON_KEY: import.meta.env.VITE_SUPABASE_ANON_KEY,
-    SUPABASE_URL: import.meta.env.VITE_SUPABASE_URL,
+    SUPABASE_URL: import.meta.env.VITE_SUPABASE_URL
   });
 
   if (parsed.success) {

@@ -7,17 +7,17 @@ import { twCva, twCx } from "../utils/twCva";
 export const carouselClass = twCva("carousel", {
   defaultVariants: {
     isVertical: null,
-    snap: null,
+    snap: null
   },
   variants: {
     isVertical: {
-      true: "carousel-vertical",
+      true: "carousel-vertical"
     },
     snap: {
       center: "carousel-center",
-      end: "carousel-end",
-    },
-  },
+      end: "carousel-end"
+    }
+  }
 });
 
 export type CarouselProps = ComponentProps<"div"> &

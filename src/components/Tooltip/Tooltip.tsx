@@ -20,7 +20,7 @@ export const TooltipTrigger: Component<TooltipTriggerProps> = (props) => {
     "isLoading",
     "shape",
     "size",
-    "variant",
+    "variant"
   ]);
 
   return (
@@ -44,7 +44,7 @@ export const TooltipContent: Component<TooltipContentProps> = (props) => {
       class={twCx(
         "z-50 py-1 px-2 rounded-lg text-sm shadow",
         styles.content,
-        props.class,
+        props.class
       )}
     />
   );

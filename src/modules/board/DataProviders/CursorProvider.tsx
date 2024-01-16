@@ -1,6 +1,6 @@
 import {
   REALTIME_LISTEN_TYPES,
-  REALTIME_SUBSCRIBE_STATES,
+  REALTIME_SUBSCRIBE_STATES
 } from "@supabase/supabase-js";
 import {
   type Component,
@@ -9,7 +9,7 @@ import {
   createSignal,
   onCleanup,
   onMount,
-  useContext,
+  useContext
 } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 
@@ -36,7 +36,7 @@ const createPlayerCursorState = (boardAccess: () => BoardAccess) => {
 
   const [sender, setSender] = createSignal(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    (_args: PlayerCursorState) => void 0,
+    (_args: PlayerCursorState) => void 0
   );
 
   const supabase = useSupabase();
@@ -61,11 +61,11 @@ const createPlayerCursorState = (boardAccess: () => BoardAccess) => {
               }
               state[payload.playerId] = {
                 x: payload.x,
-                y: payload.y,
+                y: payload.y
               };
-            }),
+            })
           );
-        },
+        }
       )
       .subscribe((status) => {
         if (status !== REALTIME_SUBSCRIBE_STATES.SUBSCRIBED) {
@@ -77,7 +77,7 @@ const createPlayerCursorState = (boardAccess: () => BoardAccess) => {
             event: CURSOR_EVENT_NAME,
             playerId,
             type: REALTIME_LISTEN_TYPES.BROADCAST,
-            ...update,
+            ...update
           });
         });
       });
@@ -97,7 +97,7 @@ const createPlayerCursorState = (boardAccess: () => BoardAccess) => {
         playerIds.forEach((playerId) => {
           state[playerId] = undefined;
         });
-      }),
+      })
     );
   };
 
@@ -109,7 +109,7 @@ type PlayerCursorContextState = ReturnType<typeof createPlayerCursorState>;
 const PlayerCursorContext = createContext<PlayerCursorContextState>({
   cursors: {},
   leave: () => void 0,
-  send: () => void 0,
+  send: () => void 0
 });
 
 type PlayerCursorProviderProps = {
@@ -118,7 +118,7 @@ type PlayerCursorProviderProps = {
 };
 
 export const PlayerCursorProvider: Component<PlayerCursorProviderProps> = (
-  props,
+  props
 ) => {
   const value = createPlayerCursorState(() => props.boardAccess);
 

@@ -1,6 +1,6 @@
 import {
   REALTIME_LISTEN_TYPES,
-  REALTIME_SUBSCRIBE_STATES,
+  REALTIME_SUBSCRIBE_STATES
 } from "@supabase/supabase-js";
 import {
   type Component,
@@ -9,7 +9,7 @@ import {
   createSignal,
   onCleanup,
   onMount,
-  useContext,
+  useContext
 } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 
@@ -33,7 +33,7 @@ const createPlayerSelectionState = (boardAccess: () => BoardAccess) => {
 
   const [sender, setSender] = createSignal(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    (_selectionId: null | string) => void 0,
+    (_selectionId: null | string) => void 0
   );
 
   const supabase = useSupabase();
@@ -51,9 +51,9 @@ const createPlayerSelectionState = (boardAccess: () => BoardAccess) => {
           setSelection(
             produce((state) => {
               state[payload.playerId] = payload.selectionId;
-            }),
+            })
           );
-        },
+        }
       )
       .subscribe((status) => {
         if (status !== REALTIME_SUBSCRIBE_STATES.SUBSCRIBED) {
@@ -65,7 +65,7 @@ const createPlayerSelectionState = (boardAccess: () => BoardAccess) => {
             event: SELECTION_EVENT_NAME,
             playerId,
             selectionId,
-            type: REALTIME_LISTEN_TYPES.BROADCAST,
+            type: REALTIME_LISTEN_TYPES.BROADCAST
           });
         });
       });
@@ -86,7 +86,7 @@ const createPlayerSelectionState = (boardAccess: () => BoardAccess) => {
         playerIds.forEach((playerId) => {
           state[playerId] = undefined;
         });
-      }),
+      })
     );
   };
 
@@ -94,7 +94,7 @@ const createPlayerSelectionState = (boardAccess: () => BoardAccess) => {
     leave,
     select,
     selectedId,
-    selection,
+    selection
   };
 };
 
@@ -106,7 +106,7 @@ const PlayerSelectionContext = createContext<PlayerSelectionContextState>({
   leave: () => void 0,
   select: () => void 0,
   selectedId: () => null,
-  selection: {},
+  selection: {}
 });
 
 type PlayerSelectionProviderProps = {

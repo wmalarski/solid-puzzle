@@ -13,8 +13,8 @@ import { Head } from "./modules/common/Head";
 
 const ToastProvider = lazy(() =>
   import("~/components/Toast").then((module) => ({
-    default: module.ToastProvider,
-  })),
+    default: module.ToastProvider
+  }))
 );
 
 export default function App() {

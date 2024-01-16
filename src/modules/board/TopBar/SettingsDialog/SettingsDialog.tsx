@@ -9,7 +9,7 @@ import {
   DialogPositioner,
   DialogRoot,
   DialogTitle,
-  DialogTrigger,
+  DialogTrigger
 } from "~/components/Dialog";
 import { SettingsIcon } from "~/components/Icons/SettingsIcon";
 import { XIcon } from "~/components/Icons/XIcon";

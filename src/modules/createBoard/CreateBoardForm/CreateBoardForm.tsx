@@ -8,7 +8,7 @@ import { useI18n } from "~/contexts/I18nContext";
 import { useSessionContext } from "~/contexts/SessionContext";
 import {
   insertBoardAction,
-  invalidateSelectBoardsQueries,
+  invalidateSelectBoardsQueries
 } from "~/server/board/client";
 
 import { type BoardConfigFields, ConfigFields } from "../ConfigFields";

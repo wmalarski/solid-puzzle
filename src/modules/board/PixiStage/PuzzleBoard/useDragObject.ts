@@ -1,7 +1,7 @@
 import type {
   Container,
   FederatedMouseEvent,
-  FederatedPointerEvent,
+  FederatedPointerEvent
 } from "pixi.js";
 
 import { createSignal, onCleanup, onMount } from "solid-js";
@@ -44,7 +44,7 @@ export const useDragObject = (args: UseDragObjectArgs) => {
     const dragConstraint = args.dragConstraint || defaultDragConstraint;
     const afterConstraint = dragConstraint({
       eventPosition: local,
-      shift: point,
+      shift: point
     });
 
     args.displayObject.position.set(afterConstraint.x, afterConstraint.y);

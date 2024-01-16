@@ -21,30 +21,18 @@
       "jsx": true
     },
     "ecmaVersion": 12,
-    "project": [
-      "tsconfig.json"
-    ],
+    "project": ["tsconfig.json"],
     "sourceType": "module"
   },
-  "plugins": [
-    "solid",
-    "perfectionist"
-  ],
+  "plugins": ["solid", "perfectionist"],
   "rules": {
     "no-await-in-loop": "error",
     "no-constant-binary-expression": "error",
-    "no-duplicate-imports": "error",
     "no-self-compare": "error",
     "no-use-before-define": "error",
     "curly": "error",
-    "eqeqeq": [
-      "error",
-      "smart"
-    ],
-    "max-params": [
-      "error",
-      3
-    ],
+    "eqeqeq": ["error", "smart"],
+    "max-params": ["error", 3],
     "no-console": "warn",
     "no-lonely-if": "error",
     "no-unneeded-ternary": "error",
@@ -53,35 +41,10 @@
     "require-await": "error",
     "@typescript-eslint/array-type": "error",
     "@typescript-eslint/consistent-type-imports": "error",
-    "@typescript-eslint/consistent-type-definitions": [
-      "error",
-      "type"
-    ],
-    "@typescript-eslint/naming-convention": [
-      "error",
-      {
-        "selector": "variable",
-        "types": [
-          "boolean"
-        ],
-        "format": [
-          "PascalCase"
-        ],
-        "prefix": [
-          "is",
-          "should",
-          "has",
-          "can",
-          "did",
-          "will"
-        ]
-      }
-    ],
+    "@typescript-eslint/consistent-type-definitions": ["error", "type"],
     "@typescript-eslint/no-unused-expressions": [
       "error",
-      {
-        "enforceForJSX": true
-      }
+      { "enforceForJSX": true }
     ],
     "prettier/prettier": ["error", { "endOfLine": "auto" }],
     "tailwindcss/no-custom-classname": "off",

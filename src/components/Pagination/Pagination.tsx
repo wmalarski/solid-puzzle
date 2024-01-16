@@ -55,9 +55,9 @@ export const PaginationLink: Component<PaginationLinkProps> = (props) => {
           buttonClass({
             shape: "square",
             size: props.size,
-            variant: props.isActive ? "outline" : "ghost",
+            variant: props.isActive ? "outline" : "ghost"
           }),
-          props.class,
+          props.class
         )}
         {...rest}
       />
@@ -73,7 +73,7 @@ export const PaginationPrevious: typeof PaginationLink = (props) => {
       class={twCx("gap-1 pl-2.5", props.class)}
       {...rest}
     >
-      <ArrowLeftIcon class="h-4 w-4" />
+      <ArrowLeftIcon class="size-4" />
       <span>Previous</span>
     </PaginationLink>
   );
@@ -88,13 +88,13 @@ export const PaginationNext: typeof PaginationLink = (props) => {
       {...rest}
     >
       <span>Next</span>
-      <ArrowRightIcon class="h-4 w-4" />
+      <ArrowRightIcon class="size-4" />
     </PaginationLink>
   );
 };
 
 export const PaginationEllipsis: Component<ComponentProps<"span">> = (
-  props,
+  props
 ) => {
   const [, rest] = splitProps(props, ["class"]);
   return (
@@ -103,7 +103,7 @@ export const PaginationEllipsis: Component<ComponentProps<"span">> = (
       class={twCx("flex h-9 w-9 items-center justify-center", props.class)}
       {...rest}
     >
-      <DotsHorizontalIcon class="h-4 w-4" />
+      <DotsHorizontalIcon class="size-4" />
       <span class="sr-only">More pages</span>
     </span>
   );
