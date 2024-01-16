@@ -1,7 +1,7 @@
-import type { Component } from "solid-js";
-
 import { useAction, useNavigate, useSubmission } from "@solidjs/router";
+import { type Component, Show } from "solid-js";
 
+import { LinkButton } from "~/components/Button";
 import {
   DropdownMenuArrow,
   DropdownMenuContent,
@@ -12,8 +12,10 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger
 } from "~/components/DropdownMenu";
+import { HomeIcon } from "~/components/Icons/HomeIcon";
 import { MenuIcon } from "~/components/Icons/MenuIcon";
 import { useI18n } from "~/contexts/I18nContext";
+import { useSessionContext } from "~/contexts/SessionContext";
 import { signOutAction } from "~/server/auth/client";
 import { paths } from "~/utils/paths";
 
@@ -72,9 +74,27 @@ const Menu: Component = () => {
 };
 
 export const MenuBar: Component = () => {
+  const { t } = useI18n();
+
+  const session = useSessionContext();
+
   return (
     <div class="absolute left-4 top-4 rounded-3xl bg-base-300 p-1 shadow">
-      <Menu />
+      <Show
+        fallback={
+          <LinkButton
+            aria-label={t("board.home")}
+            href={paths.home}
+            size="sm"
+            variant="ghost"
+          >
+            <HomeIcon class="size-5" />
+          </LinkButton>
+        }
+        when={session()}
+      >
+        <Menu />
+      </Show>
     </div>
   );
 };
