@@ -9,7 +9,7 @@ import { useSessionContext } from "~/contexts/SessionContext";
 import {
   insertBoardAction,
   invalidateSelectBoardsQueries,
-} from "~/services/board";
+} from "~/server/board/client";
 
 import { type BoardConfigFields, ConfigFields } from "../ConfigFields";
 

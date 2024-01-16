@@ -24,8 +24,8 @@ import {
 import { TrashIcon } from "~/components/Icons/TrashIcon";
 import { XIcon } from "~/components/Icons/XIcon";
 import { useI18n } from "~/contexts/I18nContext";
+import { invalidateSelectBoardsQueries } from "~/server/board/client";
 import { deleteBoardServerAction } from "~/server/board/rpc";
-import { invalidateSelectBoardsQueries } from "~/services/board";
 import { paths } from "~/utils/paths";
 
 type DeleteBoardFormProps = {

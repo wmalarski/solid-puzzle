@@ -9,7 +9,7 @@ import { updateBoardServerAction } from "~/server/board/rpc";
 import {
   invalidateSelectBoardQuery,
   invalidateSelectBoardsQueries,
-} from "~/services/board";
+} from "~/server/board/client";
 
 type UpdateFormProps = {
   boardId: string;

@@ -13,8 +13,7 @@ import {
 } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 
-import type { BoardAccess } from "~/services/access";
-import type { BoardModel } from "~/types/models";
+import type { BoardAccess, BoardModel } from "~/types/models";
 
 import { useSupabase } from "~/contexts/SupabaseContext";
 import { getDistance } from "~/utils/geometry";

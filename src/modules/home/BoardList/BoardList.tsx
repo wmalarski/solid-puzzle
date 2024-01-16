@@ -6,7 +6,7 @@ import type { BoardModel } from "~/types/models";
 import { LinkButton } from "~/components/Button";
 import { Card, CardActions, CardBody, CardTitle } from "~/components/Card";
 import { useI18n } from "~/contexts/I18nContext";
-import { selectBoardsQueryOptions } from "~/services/board";
+import { selectBoardsQueryOptions } from "~/server/board/client";
 import { paths } from "~/utils/paths";
 
 type BoardItemProps = {

@@ -13,7 +13,7 @@ import {
   TextFieldRoot,
 } from "~/components/TextField";
 import { useI18n } from "~/contexts/I18nContext";
-import { signUpAction } from "~/services/auth";
+import { signUpAction } from "~/server/auth/client";
 import { paths } from "~/utils/paths";
 
 export const SignUp: Component = () => {

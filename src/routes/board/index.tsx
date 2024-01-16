@@ -5,7 +5,7 @@ import { SessionProvider } from "~/contexts/SessionContext";
 import { PageLayout } from "~/modules/common/Layout";
 import { TopNavbar } from "~/modules/common/TopNavbar";
 import BoardsList from "~/modules/home/BoardList/BoardList";
-import { getSessionLoader } from "~/services/auth";
+import { getSessionLoader } from "~/server/auth/client";
 
 export const route = {
   load: async () => {
