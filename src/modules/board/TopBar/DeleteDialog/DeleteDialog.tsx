@@ -1,4 +1,4 @@
-import { useNavigate } from "@solidjs/router";
+import { useAction, useNavigate, useSubmission } from "@solidjs/router";
 import { createMutation, useQueryClient } from "@tanstack/solid-query";
 import {
   type Component,
@@ -24,7 +24,10 @@ import {
 import { TrashIcon } from "~/components/Icons/TrashIcon";
 import { XIcon } from "~/components/Icons/XIcon";
 import { useI18n } from "~/contexts/I18nContext";
-import { invalidateSelectBoardsQueries } from "~/server/board/client";
+import {
+  deleteBoardAction,
+  invalidateSelectBoardsQueries
+} from "~/server/board/client";
 import { deleteBoardServerAction } from "~/server/board/rpc";
 import { paths } from "~/utils/paths";
 
@@ -49,16 +52,11 @@ const DeleteBoardForm: Component<DeleteBoardFormProps> = (props) => {
     }
   }));
 
-  const onSubmit: ComponentProps<"form">["onSubmit"] = (event) => {
-    event.preventDefault();
-
-    const data = new FormData(event.currentTarget);
-
-    mutation.mutate(data);
-  };
+  const submission = useSubmission(deleteBoardAction);
+  const action = useAction(deleteBoardAction);
 
   return (
-    <form class="flex flex-col gap-4" method="post" onSubmit={onSubmit}>
+    <form action={deleteBoardAction} class="flex flex-col gap-4" method="post">
       <Show when={mutation.error}>
         <Alert variant="error">
           <AlertIcon variant="error" />
@@ -70,8 +68,8 @@ const DeleteBoardForm: Component<DeleteBoardFormProps> = (props) => {
         {t("board.settings.delete.cancel")}
       </Button>
       <Button
-        disabled={mutation.isPending}
-        isLoading={mutation.isPending}
+        disabled={submission.pending}
+        isLoading={submission.pending}
         type="submit"
       >
         {t("board.settings.delete.button")}
