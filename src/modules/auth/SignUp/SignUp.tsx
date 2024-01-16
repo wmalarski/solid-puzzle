@@ -19,25 +19,7 @@ import { paths } from "~/utils/paths";
 export const SignUp: Component = () => {
   const { t } = useI18n();
 
-  // const navigate = useNavigate();
-
   const submission = useSubmission(signUpAction);
-
-  // const mutation = createMutation(() => ({
-  //   mutationFn: signUpServerAction,
-  //   async onSuccess() {
-  //     await revalidate(SESSION_CACHE_NAME);
-  //     navigate(paths.home);
-  //   },
-  // }));
-
-  // const onSubmit: ComponentProps<"form">["onSubmit"] = (event) => {
-  //   event.preventDefault();
-
-  //   const data = new FormData(event.currentTarget);
-
-  //   mutation.mutate(data);
-  // };
 
   return (
     <Card class="w-full max-w-md" variant="bordered">

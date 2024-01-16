@@ -1,4 +1,5 @@
 "use server";
+import { redirect } from "@solidjs/router";
 import { decode } from "decode-formdata";
 import {
   email,
@@ -9,13 +10,15 @@ import {
   string,
 } from "valibot";
 
+import { paths } from "~/utils/paths";
+
 import {
   getRequestEventOrThrow,
-  rpcParseIssueError,
   rpcParseIssueResult,
   rpcSuccessResult,
   rpcSupabaseErrorResult,
 } from "../utils";
+import { SESSION_CACHE_KEY } from "./cache";
 
 export async function signUpServerAction(form: FormData) {
   const event = getRequestEventOrThrow();
@@ -28,15 +31,11 @@ export async function signUpServerAction(form: FormData) {
     decode(form),
   );
 
-  console.log("parsed", parsed);
-
   if (!parsed.success) {
     return rpcParseIssueResult(parsed.issues);
   }
 
   const result = await event.context.supabase.auth.signUp(parsed.output);
-
-  console.log("parsed", result);
 
   if (result.error) {
     return rpcSupabaseErrorResult(result.error);
@@ -57,7 +56,7 @@ export async function signInServerAction(form: FormData) {
   );
 
   if (!parsed.success) {
-    throw rpcParseIssueError(parsed.issues);
+    return rpcParseIssueResult(parsed.issues);
   }
 
   const result = await event.context.supabase.auth.signInWithPassword(
@@ -65,10 +64,10 @@ export async function signInServerAction(form: FormData) {
   );
 
   if (result.error) {
-    throw result.error;
+    return rpcSupabaseErrorResult(result.error);
   }
 
-  return { success: true };
+  throw redirect(paths.home, { revalidate: SESSION_CACHE_KEY });
 }
 
 export async function signOutServerAction() {
@@ -77,10 +76,10 @@ export async function signOutServerAction() {
   const result = await event.context.supabase.auth.signOut();
 
   if (result.error) {
-    throw result.error;
+    return rpcSupabaseErrorResult(result.error);
   }
 
-  return { success: true };
+  throw redirect(paths.signIn, { revalidate: SESSION_CACHE_KEY });
 }
 
 export async function getSessionServerLoader() {

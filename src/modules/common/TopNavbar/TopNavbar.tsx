@@ -1,6 +1,5 @@
-import { revalidate, useNavigate } from "@solidjs/router";
-import { createMutation } from "@tanstack/solid-query";
-import { type Component, type ComponentProps, Show } from "solid-js";
+import { useSubmission } from "@solidjs/router";
+import { type Component, Show } from "solid-js";
 
 import { Button, LinkButton } from "~/components/Button";
 import { PuzzleIcon } from "~/components/Icons/PuzzleIcon";
@@ -8,32 +7,17 @@ import { Link } from "~/components/Link";
 import { Navbar, NavbarEnd, NavbarStart } from "~/components/Navbar";
 import { useI18n } from "~/contexts/I18nContext";
 import { useSessionContext } from "~/contexts/SessionContext";
-import { SESSION_CACHE_NAME } from "~/server/auth/client";
-import { signOutServerAction } from "~/server/auth/rpc";
+import { signOutAction } from "~/server/auth/client";
 import { paths } from "~/utils/paths";
 
 const SignOutButton: Component = () => {
   const { t } = useI18n();
 
-  const navigate = useNavigate();
-
-  const mutation = createMutation(() => ({
-    mutationFn: signOutServerAction,
-    async onSuccess() {
-      await revalidate(SESSION_CACHE_NAME);
-      navigate(paths.home);
-    },
-  }));
-
-  const onSubmit: ComponentProps<"form">["onSubmit"] = (event) => {
-    event.preventDefault();
-
-    mutation.mutate();
-  };
+  const submission = useSubmission(signOutAction);
 
   return (
-    <form method="post" onSubmit={onSubmit}>
-      <Button disabled={mutation.isPending} size="sm">
+    <form action={signOutAction} method="post">
+      <Button disabled={submission.pending} size="sm">
         {t("auth.signOut")}
       </Button>
     </form>

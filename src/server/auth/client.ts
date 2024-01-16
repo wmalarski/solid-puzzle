@@ -1,12 +1,20 @@
 import { action, cache } from "@solidjs/router";
 
-import { getSessionServerLoader, signUpServerAction } from "./rpc";
-
-export const SESSION_CACHE_NAME = "session";
+import { SESSION_CACHE_KEY } from "./cache";
+import {
+  getSessionServerLoader,
+  signInServerAction,
+  signOutServerAction,
+  signUpServerAction,
+} from "./rpc";
 
 export const getSessionLoader = cache(
   getSessionServerLoader,
-  SESSION_CACHE_NAME,
+  SESSION_CACHE_KEY,
 );
 
-export const signUpAction = action(signUpServerAction, "signUpServerAction");
+export const signUpAction = action(signUpServerAction, "signUpAction");
+
+export const signInAction = action(signInServerAction, "signInAction");
+
+export const signOutAction = action(signOutServerAction, "signOutAction");
