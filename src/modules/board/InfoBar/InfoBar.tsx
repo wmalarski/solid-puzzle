@@ -2,6 +2,7 @@ import type { Component } from "solid-js";
 
 import { InfoIcon } from "~/components/Icons/InfoIcon";
 import { XIcon } from "~/components/Icons/XIcon";
+import { Link } from "~/components/Link";
 import {
   PopoverArrow,
   PopoverCloseButton,
@@ -14,6 +15,7 @@ import {
   PopoverTrigger
 } from "~/components/Popover";
 import { useI18n } from "~/contexts/I18nContext";
+import { paths } from "~/utils/paths";
 
 const InfoPopover: Component = () => {
   const { t } = useI18n();
@@ -32,7 +34,9 @@ const InfoPopover: Component = () => {
               <XIcon />
             </PopoverCloseButton>
           </PopoverHeader>
-          <PopoverDescription>{t("info.madeBy")}</PopoverDescription>
+          <PopoverDescription>
+            <Link href={paths.repository}>{t("info.madeBy")}</Link>
+          </PopoverDescription>
         </PopoverContent>
       </PopoverPortal>
     </PopoverRoot>

@@ -49,7 +49,7 @@ const BoardsListEmpty: Component = () => {
   return <pre>Empty</pre>;
 };
 
-export default function BoardsList() {
+export const BoardsList = () => {
   const boardQuery = createQuery(() =>
     selectBoardsQueryOptions({ offset: 0 })()
   );
@@ -74,4 +74,4 @@ export default function BoardsList() {
       </ErrorBoundary>
     </section>
   );
-}
+};

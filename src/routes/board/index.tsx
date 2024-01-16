@@ -2,9 +2,9 @@ import { type RouteDefinition, createAsync } from "@solidjs/router";
 import { Show } from "solid-js";
 
 import { SessionProvider } from "~/contexts/SessionContext";
+import { BoardsList } from "~/modules/boards/BoardList";
 import { PageLayout } from "~/modules/common/Layout";
 import { TopNavbar } from "~/modules/common/TopNavbar";
-import BoardsList from "~/modules/home/BoardList/BoardList";
 import { getSessionLoader } from "~/server/auth/client";
 
 export const route = {

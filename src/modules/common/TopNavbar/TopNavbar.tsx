@@ -44,16 +44,20 @@ export const TopNavbar: Component = () => {
               <LinkButton href={paths.signUp} size="sm" variant="ghost">
                 {t("home.signUp")}
               </LinkButton>
-              <LinkButton href={paths.signIn} size="sm">
+              <LinkButton href={paths.signIn} size="sm" variant="active">
                 {t("home.signIn")}
               </LinkButton>
             </>
           }
           when={session()}
         >
-          <Link class="flex text-sm uppercase" hover href={paths.boards}>
+          <LinkButton
+            class="flex text-sm uppercase"
+            href={paths.boards}
+            size="sm"
+          >
             {t("home.boards")}
-          </Link>
+          </LinkButton>
           <SignOutButton />
         </Show>
       </NavbarEnd>

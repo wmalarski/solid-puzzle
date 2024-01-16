@@ -3,7 +3,7 @@ import { type RouteDefinition, createAsync } from "@solidjs/router";
 import { SessionProvider } from "~/contexts/SessionContext";
 import { PageLayout } from "~/modules/common/Layout";
 import { TopNavbar } from "~/modules/common/TopNavbar";
-import { InsertBoard } from "~/modules/home/InsertBoard";
+import { InsertBoard } from "~/modules/createBoard/InsertBoard";
 import { getSessionLoader } from "~/server/auth/client";
 import { getInsertBoardArgsLoader } from "~/server/board/client";
 
