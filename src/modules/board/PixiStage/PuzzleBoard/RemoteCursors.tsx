@@ -113,26 +113,23 @@ export const RemoteCursors: Component = () => {
   });
 
   return (
-    <>
-      <For each={playerIds()}>
-        {(playerId) => (
-          <Show when={cursors.cursors[playerId]}>
-            {(state) => (
-              <Show when={presence.players[playerId]}>
-                {(player) => (
-                  <CursorGraphics
-                    color={player().color}
-                    name={player().name}
-                    x={state().x}
-                    y={state().y}
-                  />
-                )}
-              </Show>
-            )}
-          </Show>
-        )}
-      </For>
-      <CursorGraphics color="#ff0000" name="Hello" x={20} y={20} />
-    </>
+    <For each={playerIds()}>
+      {(playerId) => (
+        <Show when={cursors.cursors[playerId]}>
+          {(state) => (
+            <Show when={presence.players[playerId]}>
+              {(player) => (
+                <CursorGraphics
+                  color={player().color}
+                  name={player().name}
+                  x={state().x}
+                  y={state().y}
+                />
+              )}
+            </Show>
+          )}
+        </Show>
+      )}
+    </For>
   );
 };

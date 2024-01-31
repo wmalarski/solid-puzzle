@@ -1,107 +1,120 @@
 export type Json =
-  | { [key: string]: Json | undefined }
-  | Json[]
+  | string
+  | number
   | boolean
   | null
-  | number
-  | string;
+  | { [key: string]: Json | undefined }
+  | Json[]
 
-export type Database = {
+export interface Database {
   public: {
-    CompositeTypes: {
-      [_ in never]: never;
-    };
-    Enums: {
-      [_ in never]: never;
-    };
-    Functions: {
-      [_ in never]: never;
-    };
     Tables: {
       puzzle: {
+        Row: {
+          created_at: string
+          id: number
+          index: number | null
+          is_locked: boolean | null
+          owner_id: string | null
+          room_id: string | null
+          rotation: number | null
+          x: number | null
+          y: number | null
+        }
         Insert: {
-          created_at?: string;
-          id?: number;
-          is_locked?: boolean | null;
-          room_id?: null | string;
-          rotation?: null | number;
-          x?: null | number;
-          y?: null | number;
-        };
+          created_at?: string
+          id?: number
+          index?: number | null
+          is_locked?: boolean | null
+          owner_id?: string | null
+          room_id?: string | null
+          rotation?: number | null
+          x?: number | null
+          y?: number | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          index?: number | null
+          is_locked?: boolean | null
+          owner_id?: string | null
+          room_id?: string | null
+          rotation?: number | null
+          x?: number | null
+          y?: number | null
+        }
         Relationships: [
           {
-            columns: ["room_id"];
-            foreignKeyName: "puzzle_room_id_fkey";
-            isOneToOne: false;
-            referencedColumns: ["id"];
-            referencedRelation: "rooms";
+            foreignKeyName: "puzzle_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "puzzle_room_id_fkey"
+            columns: ["room_id"]
+            isOneToOne: false
+            referencedRelation: "rooms"
+            referencedColumns: ["id"]
           }
-        ];
-        Row: {
-          created_at: string;
-          id: number;
-          is_locked: boolean | null;
-          room_id: null | string;
-          rotation: null | number;
-          x: null | number;
-          y: null | number;
-        };
-        Update: {
-          created_at?: string;
-          id?: number;
-          is_locked?: boolean | null;
-          room_id?: null | string;
-          rotation?: null | number;
-          x?: null | number;
-          y?: null | number;
-        };
-      };
+        ]
+      }
       rooms: {
+        Row: {
+          config: Json
+          created_at: string
+          id: string
+          media: string
+          name: string
+          owner_id: string
+        }
         Insert: {
-          config: Json;
-          created_at?: string;
-          id?: string;
-          media: string;
-          name: string;
-          owner_id?: string;
-        };
+          config: Json
+          created_at?: string
+          id?: string
+          media: string
+          name: string
+          owner_id?: string
+        }
+        Update: {
+          config?: Json
+          created_at?: string
+          id?: string
+          media?: string
+          name?: string
+          owner_id?: string
+        }
         Relationships: [
           {
-            columns: ["owner_id"];
-            foreignKeyName: "rooms_owner_id_fkey";
-            isOneToOne: false;
-            referencedColumns: ["id"];
-            referencedRelation: "users";
+            foreignKeyName: "rooms_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           }
-        ];
-        Row: {
-          config: Json;
-          created_at: string;
-          id: string;
-          media: string;
-          name: string;
-          owner_id: string;
-        };
-        Update: {
-          config?: Json;
-          created_at?: string;
-          id?: string;
-          media?: string;
-          name?: string;
-          owner_id?: string;
-        };
-      };
-    };
+        ]
+      }
+    }
     Views: {
-      [_ in never]: never;
-    };
-  };
-};
+      [_ in never]: never
+    }
+    Functions: {
+      [_ in never]: never
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
+}
 
 export type Tables<
   PublicTableNameOrOptions extends
-    | { schema: keyof Database }
-    | keyof (Database["public"]["Tables"] & Database["public"]["Views"]),
+    | keyof (Database["public"]["Tables"] & Database["public"]["Views"])
+    | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
         Database[PublicTableNameOrOptions["schema"]]["Views"])
@@ -109,71 +122,71 @@ export type Tables<
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
       Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
-      Row: infer R;
+      Row: infer R
     }
     ? R
     : never
   : PublicTableNameOrOptions extends keyof (Database["public"]["Tables"] &
-        Database["public"]["Views"])
-    ? (Database["public"]["Tables"] &
-        Database["public"]["Views"])[PublicTableNameOrOptions] extends {
-        Row: infer R;
-      }
-      ? R
-      : never
-    : never;
+      Database["public"]["Views"])
+  ? (Database["public"]["Tables"] &
+      Database["public"]["Views"])[PublicTableNameOrOptions] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : never
 
 export type TablesInsert<
   PublicTableNameOrOptions extends
-    | { schema: keyof Database }
-    | keyof Database["public"]["Tables"],
+    | keyof Database["public"]["Tables"]
+    | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
     : never = never
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Insert: infer I;
+      Insert: infer I
     }
     ? I
     : never
   : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
-    ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
-        Insert: infer I;
-      }
-      ? I
-      : never
-    : never;
+  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : never
 
 export type TablesUpdate<
   PublicTableNameOrOptions extends
-    | { schema: keyof Database }
-    | keyof Database["public"]["Tables"],
+    | keyof Database["public"]["Tables"]
+    | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
     : never = never
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Update: infer U;
+      Update: infer U
     }
     ? U
     : never
   : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
-    ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
-        Update: infer U;
-      }
-      ? U
-      : never
-    : never;
+  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : never
 
 export type Enums<
   PublicEnumNameOrOptions extends
-    | { schema: keyof Database }
-    | keyof Database["public"]["Enums"],
+    | keyof Database["public"]["Enums"]
+    | { schema: keyof Database },
   EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
     ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
     : never = never
 > = PublicEnumNameOrOptions extends { schema: keyof Database }
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : PublicEnumNameOrOptions extends keyof Database["public"]["Enums"]
-    ? Database["public"]["Enums"][PublicEnumNameOrOptions]
-    : never;
+  ? Database["public"]["Enums"][PublicEnumNameOrOptions]
+  : never

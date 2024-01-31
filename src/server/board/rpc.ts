@@ -1,4 +1,6 @@
 "use server";
+import type { RequestEvent } from "solid-js/web";
+
 import { redirect } from "@solidjs/router";
 import { setCookie } from "@solidjs/start/server";
 import { decode } from "decode-formdata";
@@ -32,6 +34,31 @@ const INSERT_BOARD_ARGS_COOKIE_OPTIONS: CookieSerializeOptions = {
   httpOnly: true,
   maxAge: 10000,
   sameSite: "lax"
+};
+
+type InsertPuzzleFragmentsArgs = {
+  columns: number;
+  event: RequestEvent;
+  roomId: string;
+  rows: number;
+};
+
+const insertPuzzleFragments = ({
+  columns,
+  event,
+  roomId,
+  rows
+}: InsertPuzzleFragmentsArgs) => {
+  return event.context.supabase.from("puzzle").insert(
+    Array.from({ length: columns * rows }, (_, index) => ({
+      index,
+      is_locked: false,
+      room_id: roomId,
+      rotation: 0,
+      x: 0,
+      y: 0
+    }))
+  );
 };
 
 export async function insertBoardServerAction(form: FormData) {
@@ -78,6 +105,13 @@ export async function insertBoardServerAction(form: FormData) {
     return rpcErrorResult(result.error);
   }
 
+  await insertPuzzleFragments({
+    columns: parsed.output.columns,
+    event,
+    roomId: result.data.id,
+    rows: parsed.output.rows
+  });
+
   throw redirect(paths.board(result.data.id), {
     revalidate: INSERT_BOARD_ARGS_CACHE_KEY
   });
@@ -116,6 +150,18 @@ export async function updateBoardServerAction(form: FormData) {
   if (result.error) {
     return rpcErrorResult(result.error);
   }
+
+  await event.context.supabase
+    .from("puzzle")
+    .delete()
+    .eq("room_id", parsed.output.id);
+
+  await insertPuzzleFragments({
+    columns: parsed.output.columns,
+    event,
+    roomId: parsed.output.id,
+    rows: parsed.output.rows
+  });
 
   return rpcSuccessResult(result.data);
 }

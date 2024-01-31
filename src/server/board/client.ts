@@ -96,6 +96,41 @@ export const invalidateSelectBoardsQueries = (): InvalidateQueryFilters => {
   return { queryKey: options.queryKey.slice(0, 1) };
 };
 
+type SelectPuzzleQueryOptionsArgs = {
+  roomId: string;
+};
+
+export const selectPuzzleQueryOptions = ({
+  roomId
+}: SelectPuzzleQueryOptionsArgs) => {
+  const supabase = useSupabase();
+
+  return queryOptions(() => ({
+    queryFn: async () => {
+      const result = await supabase()
+        .from("puzzle")
+        .select()
+        .eq("room_id", roomId);
+
+      if (result.error) {
+        throw result.error;
+      }
+
+      return result.data;
+    },
+    queryKey: ["selectPuzzle", roomId] as const,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false
+  }));
+};
+
+export const invalidateSelectPuzzleQuery = (
+  roomId: string
+): InvalidateQueryFilters => {
+  const options = selectPuzzleQueryOptions({ roomId })();
+  return { queryKey: options.queryKey };
+};
+
 export const insertBoardAction = action(
   insertBoardServerAction,
   "insertBoardAction"
