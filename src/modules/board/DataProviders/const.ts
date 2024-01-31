@@ -1,1 +1,1 @@
-export const REALTIME_THROTTLE_TIME = 1000;
+export const REALTIME_THROTTLE_TIME = 10000;

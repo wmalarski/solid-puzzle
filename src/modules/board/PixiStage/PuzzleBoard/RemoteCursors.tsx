@@ -1,4 +1,4 @@
-import { type FederatedPointerEvent, Graphics } from "pixi.js";
+import { type FederatedPointerEvent, Graphics, Text, TextStyle } from "pixi.js";
 import {
   type Component,
   For,
@@ -9,49 +9,74 @@ import {
   onMount
 } from "solid-js";
 
-import {
-  type PlayerCursorState,
-  usePlayerCursors
-} from "../../DataProviders/CursorProvider";
+import { usePlayerCursors } from "../../DataProviders/CursorProvider";
 import { usePlayerPresence } from "../../DataProviders/PresenceProvider";
+import { useBoardTheme } from "../BoardTheme";
 import { usePixiApp } from "../PixiApp";
 
-type RotationAnchorProps = {
-  playerId: string;
-  state: PlayerCursorState;
+const CURSOR_SIZE = 20;
+const LABEL_PADDING = 5;
+const LABEL_SHIFT = CURSOR_SIZE * 1.2;
+
+type CursorGraphicsProps = {
+  color: string;
+  name: string;
+  x: number;
+  y: number;
 };
 
-const RemoteCursor: Component<RotationAnchorProps> = (props) => {
+const CursorGraphics: Component<CursorGraphicsProps> = (props) => {
   const app = usePixiApp();
-  const presence = usePlayerPresence();
+  const theme = useBoardTheme();
 
-  const graphics = new Graphics();
-  graphics.zIndex = 2;
+  const graphics = new Graphics({ zIndex: 2 });
+
+  const style = new TextStyle({ fontSize: 16 });
+  const text = new Text({ style, zIndex: 3 });
 
   onMount(() => {
-    const color = presence.players[props.playerId]?.color;
-    graphics.circle(0, 0, 10).fill({ color });
+    graphics
+      .moveTo(0, 0)
+      .lineTo(CURSOR_SIZE / 5, CURSOR_SIZE)
+      .lineTo(CURSOR_SIZE / 2.2, CURSOR_SIZE / 1.8)
+      .lineTo(CURSOR_SIZE / 1.1, CURSOR_SIZE / 2)
+      .lineTo(0, 0)
+      .fill({ color: props.color })
+      .stroke({ color: theme.cursorStrokeColor });
+
+    text.text = props.name;
+
+    graphics
+      .rect(
+        LABEL_SHIFT - LABEL_PADDING,
+        LABEL_SHIFT - LABEL_PADDING,
+        text.width + 2 * LABEL_PADDING,
+        text.height + 2 * LABEL_PADDING
+      )
+      .fill({ color: props.color });
   });
 
   createEffect(() => {
-    graphics.x = props.state.x;
+    graphics.x = props.x;
+    text.x = props.x + LABEL_SHIFT;
   });
 
   createEffect(() => {
-    graphics.y = props.state.y;
-  });
-
-  createEffect(() => {
-    graphics.y = props.state.y;
+    graphics.y = props.y;
+    text.y = props.y + LABEL_SHIFT;
   });
 
   onMount(() => {
     app.stage.addChild(graphics);
+    app.stage.addChild(text);
   });
 
   onCleanup(() => {
     app.stage.removeChild(graphics);
+    app.stage.removeChild(text);
+
     graphics.destroy();
+    text.destroy();
   });
 
   return null;
@@ -79,6 +104,7 @@ const usePlayerCursor = () => {
 
 export const RemoteCursors: Component = () => {
   const cursors = usePlayerCursors();
+  const presence = usePlayerPresence();
 
   usePlayerCursor();
 
@@ -87,12 +113,26 @@ export const RemoteCursors: Component = () => {
   });
 
   return (
-    <For each={playerIds()}>
-      {(playerId) => (
-        <Show when={cursors.cursors[playerId]}>
-          {(state) => <RemoteCursor playerId={playerId} state={state()} />}
-        </Show>
-      )}
-    </For>
+    <>
+      <For each={playerIds()}>
+        {(playerId) => (
+          <Show when={cursors.cursors[playerId]}>
+            {(state) => (
+              <Show when={presence.players[playerId]}>
+                {(player) => (
+                  <CursorGraphics
+                    color={player().color}
+                    name={player().name}
+                    x={state().x}
+                    y={state().y}
+                  />
+                )}
+              </Show>
+            )}
+          </Show>
+        )}
+      </For>
+      <CursorGraphics color="#ff0000" name="Hello" x={20} y={20} />
+    </>
   );
 };

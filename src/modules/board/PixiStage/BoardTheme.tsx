@@ -2,6 +2,7 @@ import { type Component, type JSX, createContext, useContext } from "solid-js";
 
 const createBoardThemeContext = () => {
   return {
+    cursorStrokeColor: 0xffffff,
     fragmentBorderColor: 0xaaaaaa,
     fragmentBorderSelectedColor: 0xaaaa33,
     previewSpriteAlpha: 0.4,
