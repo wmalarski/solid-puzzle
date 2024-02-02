@@ -89,11 +89,9 @@ const createPuzzleContext = (boardAccess: () => BoardAccess) => {
     lines: []
   });
 
-  const [sender, setSender] = createSignal<
-    (args: SetFragmentStateArgs) => void
-  >(
+  const [sender, setSender] = createSignal<(args: FragmentState) => void>(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    (_args: SetFragmentStateArgs) => void 0
+    (_args: FragmentState) => void 0
   );
 
   const supabase = useSupabase();
@@ -137,8 +135,13 @@ const createPuzzleContext = (boardAccess: () => BoardAccess) => {
     );
   };
 
-  const sendFragmentState = (update: FragmentState) => {
-    sender()(update);
+  const sendFragmentState = (update: SetFragmentStateArgs) => {
+    const isLocked = isLockedInPlace({
+      fragment: update,
+      shapes: shapes()
+    });
+
+    sender()({ ...update, isLocked });
   };
 
   const setFragmentStateWithLockCheck = (update: SetFragmentStateArgs) => {
@@ -147,7 +150,7 @@ const createPuzzleContext = (boardAccess: () => BoardAccess) => {
       shapes: shapes()
     });
 
-    sendFragmentState({ ...update, isLocked });
+    sender()({ ...update, isLocked });
 
     updateFragment({
       id: update.fragmentId,

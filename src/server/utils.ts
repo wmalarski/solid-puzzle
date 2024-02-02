@@ -14,7 +14,7 @@ import {
 
 import { paths } from "~/utils/paths";
 
-export type CookieSerializeOptions = Parameters<typeof setCookie>[3];
+export type CookieSerializeOptions = Parameters<typeof setCookie>[2];
 
 export const getRequestEventOrThrow = () => {
   const event = getRequestEvent();
