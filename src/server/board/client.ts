@@ -131,6 +131,31 @@ export const invalidateSelectPuzzleQuery = (
   return { queryKey: options.queryKey };
 };
 
+type UpdatePuzzleArgs = {
+  id: string;
+  isLocked: boolean;
+  rotation: number;
+  x: number;
+  y: number;
+};
+
+export const useUpdateFragment = () => {
+  const supabase = useSupabase();
+
+  return async ({ id, isLocked, rotation, x, y }: UpdatePuzzleArgs) => {
+    const result = await supabase()
+      .from("puzzle")
+      .update({ is_locked: isLocked, rotation, x, y })
+      .eq("id", id);
+
+    if (result.error) {
+      throw result.error;
+    }
+
+    return result.data;
+  };
+};
+
 export const insertBoardAction = action(
   insertBoardServerAction,
   "insertBoardAction"

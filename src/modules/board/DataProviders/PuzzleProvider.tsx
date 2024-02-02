@@ -17,6 +17,7 @@ import { createStore, produce } from "solid-js/store";
 import type { BoardAccess, BoardModel } from "~/types/models";
 
 import { useSupabase } from "~/contexts/SupabaseContext";
+import { useUpdateFragment } from "~/server/board/client";
 import { getDistance } from "~/utils/geometry";
 import {
   type PuzzleConfig,
@@ -77,6 +78,8 @@ const createPuzzleContext = (boardAccess: () => BoardAccess) => {
 
   const [fragments, setFragments] = createStore<PuzzleState>({});
 
+  const updateFragment = useUpdateFragment();
+
   const [shapes, setShapes] = createSignal<
     ReadonlyMap<string, PuzzleFragmentShape>
   >(new Map());
@@ -134,12 +137,26 @@ const createPuzzleContext = (boardAccess: () => BoardAccess) => {
     );
   };
 
-  const sendFragmentState = (update: SetFragmentStateArgs) => {
+  const sendFragmentState = (update: FragmentState) => {
     sender()(update);
   };
 
   const setFragmentStateWithLockCheck = (update: SetFragmentStateArgs) => {
-    sendFragmentState(update);
+    const isLocked = isLockedInPlace({
+      fragment: update,
+      shapes: shapes()
+    });
+
+    sendFragmentState({ ...update, isLocked });
+
+    updateFragment({
+      id: update.fragmentId,
+      isLocked,
+      rotation: update.rotation,
+      x: update.x,
+      y: update.y
+    });
+
     setFragments(
       produce((state) => {
         const fragment = state[update.fragmentId];
@@ -147,10 +164,7 @@ const createPuzzleContext = (boardAccess: () => BoardAccess) => {
           fragment.rotation = update.rotation;
           fragment.x = update.x;
           fragment.y = update.y;
-          fragment.isLocked = isLockedInPlace({
-            fragment: update,
-            shapes: shapes()
-          });
+          fragment.isLocked = isLocked;
         }
       })
     );
@@ -160,7 +174,6 @@ const createPuzzleContext = (boardAccess: () => BoardAccess) => {
     const channelName = `${PUZZLE_CHANNEL_NAME}:${boardAccess().boardId}`;
     const channel = supabase().channel(channelName);
     const playerId = presence.currentPlayer().playerId;
-    const puzzleShapes = shapes();
 
     channel
       .on(
@@ -174,10 +187,7 @@ const createPuzzleContext = (boardAccess: () => BoardAccess) => {
                 fragment.rotation = payload.rotation;
                 fragment.x = payload.x;
                 fragment.y = payload.y;
-                fragment.isLocked = isLockedInPlace({
-                  fragment,
-                  shapes: puzzleShapes
-                });
+                fragment.isLocked = payload.isLocked;
               }
             })
           );

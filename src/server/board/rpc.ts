@@ -140,12 +140,14 @@ export const updateBoardServerAction = async (form: FormData) => {
     rows: parsed.output.rows
   });
 
-  const result = await event.context.supabase.from("rooms").update({
-    config,
-    id: parsed.output.id,
-    media: parsed.output.image,
-    name: parsed.output.name
-  });
+  const result = await event.context.supabase
+    .from("rooms")
+    .update({
+      config,
+      media: parsed.output.image,
+      name: parsed.output.name
+    })
+    .eq("id", parsed.output.id);
 
   if (result.error) {
     return rpcErrorResult(result.error);
