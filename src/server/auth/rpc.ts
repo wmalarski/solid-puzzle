@@ -27,7 +27,7 @@ const getRedirectUrl = (event: RequestEvent, path: string) => {
   return origin + path;
 };
 
-export async function signUpServerAction(form: FormData) {
+export const signUpServerAction = async (form: FormData) => {
   const event = getRequestEventOrThrow();
 
   const parsed = await safeParseAsync(
@@ -52,9 +52,9 @@ export async function signUpServerAction(form: FormData) {
   }
 
   return rpcSuccessResult();
-}
+};
 
-export async function signInServerAction(form: FormData) {
+export const signInServerAction = async (form: FormData) => {
   const event = getRequestEventOrThrow();
 
   const parsed = await safeParseAsync(
@@ -78,9 +78,9 @@ export async function signInServerAction(form: FormData) {
   }
 
   throw redirect(paths.home, { revalidate: SESSION_CACHE_KEY });
-}
+};
 
-export async function signOutServerAction() {
+export const signOutServerAction = async () => {
   const event = getRequestEventOrThrow();
 
   const result = await event.context.supabase.auth.signOut();
@@ -90,9 +90,9 @@ export async function signOutServerAction() {
   }
 
   throw redirect(paths.signIn, { revalidate: SESSION_CACHE_KEY });
-}
+};
 
-export async function getSessionServerLoader() {
+export const getSessionServerLoader = async () => {
   const event = getRequestEventOrThrow();
   return await Promise.resolve(event.context.supabaseSession);
-}
+};

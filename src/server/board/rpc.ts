@@ -61,7 +61,7 @@ const insertPuzzleFragments = ({
   );
 };
 
-export async function insertBoardServerAction(form: FormData) {
+export const insertBoardServerAction = async (form: FormData) => {
   const event = getRequestEventOrThrow();
 
   const parsed = await safeParseAsync(
@@ -115,9 +115,9 @@ export async function insertBoardServerAction(form: FormData) {
   throw redirect(paths.board(result.data.id), {
     revalidate: INSERT_BOARD_ARGS_CACHE_KEY
   });
-}
+};
 
-export async function updateBoardServerAction(form: FormData) {
+export const updateBoardServerAction = async (form: FormData) => {
   const event = getRequestEventOrThrow();
 
   const parsed = await safeParseAsync(
@@ -164,9 +164,9 @@ export async function updateBoardServerAction(form: FormData) {
   });
 
   return rpcSuccessResult(result.data);
-}
+};
 
-export async function deleteBoardServerAction(form: FormData) {
+export const deleteBoardServerAction = async (form: FormData) => {
   const event = getRequestEventOrThrow();
 
   const parsed = await safeParseAsync(object({ id: string() }), decode(form));
@@ -185,16 +185,16 @@ export async function deleteBoardServerAction(form: FormData) {
   }
 
   throw redirect(paths.home);
-}
+};
 
-export function getInsertBoardArgsServerLoader() {
+export const getInsertBoardArgsServerLoader = () => {
   const event = getRequestEventOrThrow();
   return getParsedCookie(
     event,
     INSERT_BOARD_ARGS_COOKIE_NAME,
     insertBoardSchema()
   );
-}
+};
 
 const boardAccessSchema = () => {
   return object({
@@ -215,7 +215,7 @@ const BOARD_ACCESS_COOKIE_OPTIONS: CookieSerializeOptions = {
   sameSite: "lax"
 };
 
-export async function setBoardAccessServerAction(form: FormData) {
+export const setBoardAccessServerAction = async (form: FormData) => {
   const event = getRequestEventOrThrow();
 
   const parsed = await safeParseAsync(boardAccessSchema(), decode(form));
@@ -234,13 +234,13 @@ export async function setBoardAccessServerAction(form: FormData) {
   throw redirect(paths.board(parsed.output.boardId), {
     revalidate: [BOARDS_ACCESS_CACHE_KEY]
   });
-}
+};
 
-export function getBoardAccessServerLoader(boardId: string) {
+export const getBoardAccessServerLoader = (boardId: string) => {
   const event = getRequestEventOrThrow();
   return getParsedCookie(
     event,
     getBoardAccessCookieName(boardId),
     boardAccessSchema()
   );
-}
+};
