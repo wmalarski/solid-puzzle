@@ -32,17 +32,20 @@ export const selectBoardQueryOptions = ({
 
   return queryOptions(() => ({
     queryFn: async () => {
-      const result = await supabase()
-        .from("rooms")
-        .select()
-        .eq("id", id)
-        .single();
+      const [board, fragments] = await Promise.all([
+        supabase().from("rooms").select().eq("id", id).single(),
+        supabase().from("puzzle").select().eq("room_id", id)
+      ]);
 
-      if (result.error) {
-        throw result.error;
+      if (board.error) {
+        throw board.error;
       }
 
-      return result.data;
+      if (fragments.error) {
+        throw fragments.error;
+      }
+
+      return { board: board.data, fragments: fragments.data };
     },
     queryKey: ["selectBoard", id] as const,
     refetchOnMount: false,
@@ -96,43 +99,8 @@ export const invalidateSelectBoardsQueries = (): InvalidateQueryFilters => {
   return { queryKey: options.queryKey.slice(0, 1) };
 };
 
-type SelectPuzzleQueryOptionsArgs = {
-  roomId: string;
-};
-
-export const selectPuzzleQueryOptions = ({
-  roomId
-}: SelectPuzzleQueryOptionsArgs) => {
-  const supabase = useSupabase();
-
-  return queryOptions(() => ({
-    queryFn: async () => {
-      const result = await supabase()
-        .from("puzzle")
-        .select()
-        .eq("room_id", roomId);
-
-      if (result.error) {
-        throw result.error;
-      }
-
-      return result.data;
-    },
-    queryKey: ["selectPuzzle", roomId] as const,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false
-  }));
-};
-
-export const invalidateSelectPuzzleQuery = (
-  roomId: string
-): InvalidateQueryFilters => {
-  const options = selectPuzzleQueryOptions({ roomId })();
-  return { queryKey: options.queryKey };
-};
-
-type UpdatePuzzleArgs = {
-  id: string;
+type UpdateFragmentArgs = {
+  fragmentId: string;
   isLocked: boolean;
   rotation: number;
   x: number;
@@ -142,11 +110,17 @@ type UpdatePuzzleArgs = {
 export const useUpdateFragment = () => {
   const supabase = useSupabase();
 
-  return async ({ id, isLocked, rotation, x, y }: UpdatePuzzleArgs) => {
+  return async ({
+    fragmentId,
+    isLocked,
+    rotation,
+    x,
+    y
+  }: UpdateFragmentArgs) => {
     const result = await supabase()
       .from("puzzle")
       .update({ is_locked: isLocked, rotation, x, y })
-      .eq("id", id);
+      .eq("id", fragmentId);
 
     if (result.error) {
       throw result.error;

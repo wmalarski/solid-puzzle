@@ -7,8 +7,7 @@ import { useI18n } from "~/contexts/I18nContext";
 import { ConfigFields } from "~/modules/createBoard/ConfigFields";
 import {
   invalidateSelectBoardQuery,
-  invalidateSelectBoardsQueries,
-  invalidateSelectPuzzleQuery
+  invalidateSelectBoardsQueries
 } from "~/server/board/client";
 import { updateBoardServerAction } from "~/server/board/rpc";
 
@@ -25,7 +24,6 @@ export const UpdateForm: Component<UpdateFormProps> = (props) => {
     mutationFn: updateBoardServerAction,
     onSuccess() {
       queryClient.invalidateQueries(invalidateSelectBoardQuery(props.boardId));
-      queryClient.invalidateQueries(invalidateSelectPuzzleQuery(props.boardId));
       queryClient.invalidateQueries(invalidateSelectBoardsQueries());
     }
   }));

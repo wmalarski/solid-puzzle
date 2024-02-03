@@ -153,7 +153,7 @@ const createPuzzleContext = (boardAccess: () => BoardAccess) => {
     sender()({ ...update, isLocked });
 
     updateFragment({
-      id: update.fragmentId,
+      fragmentId: update.fragmentId,
       isLocked,
       rotation: update.rotation,
       x: update.x,

@@ -9,7 +9,7 @@ import {
   onMount
 } from "solid-js";
 
-import type { BoardAccess, BoardModel } from "~/types/models";
+import type { BoardAccess, BoardModel, FragmentModel } from "~/types/models";
 
 import { Button } from "~/components/Button";
 import { Card, CardBody, cardTitleClass } from "~/components/Card";
@@ -30,6 +30,7 @@ const PixiStage = clientOnly(() => import("../PixiStage"));
 
 type ClientBoardProps = {
   board: BoardModel;
+  fragments: FragmentModel[];
 };
 
 const ClientBoard: Component<ClientBoardProps> = (props) => {
@@ -80,6 +81,7 @@ const ErrorFallback = (err: unknown, reset: VoidFunction) => {
 type BoardProps = {
   board: BoardModel;
   boardAccess: BoardAccess;
+  fragments: FragmentModel[];
 };
 
 export const Board: Component<BoardProps> = (props) => {
@@ -90,7 +92,7 @@ export const Board: Component<BoardProps> = (props) => {
           <PlayerSelectionProvider boardAccess={props.boardAccess}>
             <PlayerCursorProvider boardAccess={props.boardAccess}>
               <PuzzleStateProvider boardAccess={props.boardAccess}>
-                <ClientBoard board={props.board} />
+                <ClientBoard board={props.board} fragments={props.fragments} />
                 <TopNavbar
                   board={props.board}
                   boardAccess={props.boardAccess}

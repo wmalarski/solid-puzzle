@@ -37,23 +37,23 @@ const INSERT_BOARD_ARGS_COOKIE_OPTIONS: CookieSerializeOptions = {
 };
 
 type InsertPuzzleFragmentsArgs = {
+  boardId: string;
   columns: number;
   event: RequestEvent;
-  roomId: string;
   rows: number;
 };
 
 const insertPuzzleFragments = ({
+  boardId,
   columns,
   event,
-  roomId,
   rows
 }: InsertPuzzleFragmentsArgs) => {
   return event.locals.supabase.from("puzzle").insert(
     Array.from({ length: columns * rows }, (_, index) => ({
       index,
       is_locked: false,
-      room_id: roomId,
+      room_id: boardId,
       rotation: 0,
       x: 0,
       y: 0
@@ -106,9 +106,9 @@ export const insertBoardServerAction = async (form: FormData) => {
   }
 
   await insertPuzzleFragments({
+    boardId: result.data.id,
     columns: parsed.output.columns,
     event,
-    roomId: result.data.id,
     rows: parsed.output.rows
   });
 
@@ -159,9 +159,9 @@ export const updateBoardServerAction = async (form: FormData) => {
     .eq("room_id", parsed.output.id);
 
   await insertPuzzleFragments({
+    boardId: parsed.output.id,
     columns: parsed.output.columns,
     event,
-    roomId: parsed.output.id,
     rows: parsed.output.rows
   });
 
