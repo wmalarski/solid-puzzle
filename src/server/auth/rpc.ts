@@ -42,7 +42,7 @@ export const signUpServerAction = async (form: FormData) => {
     return rpcParseIssueResult(parsed.issues);
   }
 
-  const result = await event.context.supabase.auth.signUp({
+  const result = await event.locals.supabase.auth.signUp({
     ...parsed.output,
     options: { emailRedirectTo: getRedirectUrl(event, paths.signUpSuccess) }
   });
@@ -69,7 +69,7 @@ export const signInServerAction = async (form: FormData) => {
     return rpcParseIssueResult(parsed.issues);
   }
 
-  const result = await event.context.supabase.auth.signInWithPassword(
+  const result = await event.locals.supabase.auth.signInWithPassword(
     parsed.output
   );
 
@@ -83,7 +83,7 @@ export const signInServerAction = async (form: FormData) => {
 export const signOutServerAction = async () => {
   const event = getRequestEventOrThrow();
 
-  const result = await event.context.supabase.auth.signOut();
+  const result = await event.locals.supabase.auth.signOut();
 
   if (result.error) {
     return rpcErrorResult(result.error);
@@ -94,5 +94,5 @@ export const signOutServerAction = async () => {
 
 export const getSessionServerLoader = async () => {
   const event = getRequestEventOrThrow();
-  return await Promise.resolve(event.context.supabaseSession);
+  return await Promise.resolve(event.locals.supabaseSession);
 };

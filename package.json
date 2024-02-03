@@ -40,8 +40,8 @@
     "@solid-primitives/i18n": "2.0.1",
     "@solid-primitives/scheduled": "^1.4.2",
     "@solidjs/meta": "0.29.3",
-    "@solidjs/router": "0.11.2",
-    "@solidjs/start": "0.4.11",
+    "@solidjs/router": "0.11.3",
+    "@solidjs/start": "0.5.0",
     "@supabase/ssr": "^0.1.0",
     "@supabase/supabase-js": "^2.39.3",
     "@tanstack/solid-query": "5.18.1",
@@ -53,7 +53,7 @@
     "solid-js": "1.8.12",
     "tailwind-merge": "2.2.1",
     "valibot": "^0.27.1",
-    "vinxi": "^0.1.10"
+    "vinxi": "^0.2.1"
   },
   "engines": {
     "node": ">=18"

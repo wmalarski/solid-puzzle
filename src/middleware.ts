@@ -1,4 +1,4 @@
-import { createMiddleware } from "@solidjs/start/server";
+import { createMiddleware } from "@solidjs/start/middleware";
 
 import { serverEnvMiddleware } from "./server/env";
 import { supabaseMiddleware } from "./server/supabase";

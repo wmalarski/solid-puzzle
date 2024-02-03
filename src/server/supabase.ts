@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
-import type { FetchEvent } from "@solidjs/start/server/types";
+import type { FetchEvent } from "@solidjs/start/server";
 import type { Session, SupabaseClient } from "@supabase/supabase-js";
 
-import { deleteCookie, getCookie, setCookie } from "@solidjs/start/server";
 import { createServerClient } from "@supabase/ssr";
+import { deleteCookie, getCookie, setCookie } from "vinxi/http";
 
 import type { Database } from "../types/supabase";
 
 export const supabaseMiddleware = async (event: FetchEvent) => {
   const supabase = createServerClient<Database>(
-    event.context.env.SUPABASE_URL,
-    event.context.env.SUPABASE_ANON_KEY,
+    event.locals.env.SUPABASE_URL,
+    event.locals.env.SUPABASE_ANON_KEY,
     {
       auth: { flowType: "pkce" },
       cookies: {
@@ -29,12 +29,12 @@ export const supabaseMiddleware = async (event: FetchEvent) => {
 
   const result = await supabase.auth.getSession();
 
-  event.context.supabase = supabase;
-  event.context.supabaseSession = result.data.session;
+  event.locals.supabase = supabase;
+  event.locals.supabaseSession = result.data.session;
 };
 
-declare module "vinxi/server" {
-  interface H3EventContext {
+declare module "@solidjs/start/server" {
+  interface RequestEventLocals {
     supabase: SupabaseClient<Database>;
     supabaseSession: Session | null;
   }

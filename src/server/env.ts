@@ -25,12 +25,12 @@ export const serverEnvMiddleware = async (event: FetchEvent) => {
   });
 
   if (parsed.success) {
-    event.context.env = parsed.output;
+    event.locals.env = parsed.output;
   }
 };
 
-declare module "vinxi/server" {
-  interface H3EventContext {
+declare module "@solidjs/start/server" {
+  interface RequestEventLocals {
     env: ServerEnv;
   }
 }

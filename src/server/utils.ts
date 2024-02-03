@@ -1,5 +1,4 @@
 import { redirect } from "@solidjs/router";
-import { getCookie, type setCookie } from "@solidjs/start/server";
 import { type RequestEvent, getRequestEvent } from "solid-js/web";
 import {
   type BaseSchema,
@@ -11,6 +10,7 @@ import {
   number,
   safeParseAsync
 } from "valibot";
+import { getCookie, type setCookie } from "vinxi/http";
 
 import { paths } from "~/utils/paths";
 

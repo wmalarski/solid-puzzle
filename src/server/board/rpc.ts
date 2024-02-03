@@ -2,9 +2,9 @@
 import type { RequestEvent } from "solid-js/web";
 
 import { redirect } from "@solidjs/router";
-import { setCookie } from "@solidjs/start/server";
 import { decode } from "decode-formdata";
 import { minLength, object, safeParseAsync, string } from "valibot";
+import { setCookie } from "vinxi/http";
 
 import { generateCurves } from "~/utils/getPuzzleFragments";
 import { paths } from "~/utils/paths";
@@ -49,7 +49,7 @@ const insertPuzzleFragments = ({
   roomId,
   rows
 }: InsertPuzzleFragmentsArgs) => {
-  return event.context.supabase.from("puzzle").insert(
+  return event.locals.supabase.from("puzzle").insert(
     Array.from({ length: columns * rows }, (_, index) => ({
       index,
       is_locked: false,
@@ -80,7 +80,7 @@ export const insertBoardServerAction = async (form: FormData) => {
     INSERT_BOARD_ARGS_COOKIE_OPTIONS
   );
 
-  if (!event.context.supabaseSession) {
+  if (!event.locals.supabaseSession) {
     throw redirect(paths.signIn, {
       revalidate: INSERT_BOARD_ARGS_CACHE_KEY
     });
@@ -91,7 +91,7 @@ export const insertBoardServerAction = async (form: FormData) => {
     rows: parsed.output.rows
   });
 
-  const result = await event.context.supabase
+  const result = await event.locals.supabase
     .from("rooms")
     .insert({
       config,
@@ -140,7 +140,7 @@ export const updateBoardServerAction = async (form: FormData) => {
     rows: parsed.output.rows
   });
 
-  const result = await event.context.supabase
+  const result = await event.locals.supabase
     .from("rooms")
     .update({
       config,
@@ -153,7 +153,7 @@ export const updateBoardServerAction = async (form: FormData) => {
     return rpcErrorResult(result.error);
   }
 
-  await event.context.supabase
+  await event.locals.supabase
     .from("puzzle")
     .delete()
     .eq("room_id", parsed.output.id);
@@ -177,7 +177,7 @@ export const deleteBoardServerAction = async (form: FormData) => {
     return rpcParseIssueResult(parsed.issues);
   }
 
-  const result = await event.context.supabase
+  const result = await event.locals.supabase
     .from("rooms")
     .delete()
     .eq("id", parsed.output.id);
