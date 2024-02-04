@@ -14,7 +14,7 @@ import {
 } from "~/components/TextField";
 import { useI18n } from "~/contexts/I18nContext";
 import { FormLayout, PageFooter, PageTitle } from "~/modules/common/Layout";
-import { setBoardAccessAction } from "~/server/board/client";
+import { setBoardAccessAction } from "~/server/access/client";
 import { randomHexColor } from "~/utils/colors";
 
 type AcceptInviteFormProps = {

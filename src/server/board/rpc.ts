@@ -3,7 +3,7 @@ import type { RequestEvent } from "solid-js/web";
 
 import { redirect } from "@solidjs/router";
 import { decode } from "decode-formdata";
-import { minLength, object, safeParseAsync, string } from "valibot";
+import { minLength, number, object, safeParseAsync, string } from "valibot";
 import { setCookie } from "vinxi/http";
 
 import { generateCurves } from "~/utils/getPuzzleFragments";
@@ -18,14 +18,16 @@ import {
   rpcParseIssueResult,
   rpcSuccessResult
 } from "../utils";
-import { BOARDS_ACCESS_CACHE_KEY, INSERT_BOARD_ARGS_CACHE_KEY } from "./const";
+import { INSERT_BOARD_ARGS_CACHE_KEY } from "./const";
 
 const insertBoardSchema = () => {
   return object({
     columns: boardDimension(),
+    height: number(),
     image: string(),
     name: string([minLength(3)]),
-    rows: boardDimension()
+    rows: boardDimension(),
+    width: number()
   });
 };
 
@@ -66,7 +68,7 @@ export const insertBoardServerAction = async (form: FormData) => {
 
   const parsed = await safeParseAsync(
     insertBoardSchema(),
-    decode(form, { numbers: ["rows", "columns"] })
+    decode(form, { numbers: ["rows", "columns", "height", "width"] })
   );
 
   if (!parsed.success) {
@@ -95,8 +97,10 @@ export const insertBoardServerAction = async (form: FormData) => {
     .from("rooms")
     .insert({
       config,
+      height: parsed.output.height,
       media: parsed.output.image,
-      name: parsed.output.name
+      name: parsed.output.name,
+      width: parsed.output.width
     })
     .select()
     .single();
@@ -123,12 +127,14 @@ export const updateBoardServerAction = async (form: FormData) => {
   const parsed = await safeParseAsync(
     object({
       columns: boardDimension(),
+      height: number(),
       id: string(),
       image: string(),
       name: string([minLength(3)]),
-      rows: boardDimension()
+      rows: boardDimension(),
+      width: number()
     }),
-    decode(form, { numbers: ["rows", "columns"] })
+    decode(form, { numbers: ["rows", "columns", "height", "width"] })
   );
 
   if (!parsed.success) {
@@ -195,54 +201,5 @@ export const getInsertBoardArgsServerLoader = () => {
     event,
     INSERT_BOARD_ARGS_COOKIE_NAME,
     insertBoardSchema()
-  );
-};
-
-const boardAccessSchema = () => {
-  return object({
-    boardId: string(),
-    playerColor: string(),
-    playerId: string(),
-    userName: string()
-  });
-};
-
-const getBoardAccessCookieName = (boardId: string) => {
-  return `BoardAccess-${boardId}`;
-};
-
-const BOARD_ACCESS_COOKIE_OPTIONS: CookieSerializeOptions = {
-  httpOnly: true,
-  maxAge: 1000000,
-  sameSite: "lax"
-};
-
-export const setBoardAccessServerAction = async (form: FormData) => {
-  const event = getRequestEventOrThrow();
-
-  const parsed = await safeParseAsync(boardAccessSchema(), decode(form));
-
-  if (!parsed.success) {
-    return rpcParseIssueResult(parsed.issues);
-  }
-
-  setCookie(
-    event,
-    getBoardAccessCookieName(parsed.output.boardId),
-    JSON.stringify(parsed.output),
-    BOARD_ACCESS_COOKIE_OPTIONS
-  );
-
-  throw redirect(paths.board(parsed.output.boardId), {
-    revalidate: [BOARDS_ACCESS_CACHE_KEY]
-  });
-};
-
-export const getBoardAccessServerLoader = (boardId: string) => {
-  const event = getRequestEventOrThrow();
-  return getParsedCookie(
-    event,
-    getBoardAccessCookieName(boardId),
-    boardAccessSchema()
   );
 };

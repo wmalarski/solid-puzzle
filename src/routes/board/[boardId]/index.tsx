@@ -19,11 +19,9 @@ import type { BoardAccess } from "~/types/models";
 
 import { SessionProvider, useSessionContext } from "~/contexts/SessionContext";
 import { AcceptInviteForm } from "~/modules/board/AcceptInviteForm";
+import { getBoardAccessLoader } from "~/server/access/client";
 import { getSessionLoader } from "~/server/auth/client";
-import {
-  getBoardAccessLoader,
-  selectBoardQueryOptions
-} from "~/server/board/client";
+import { selectBoardQueryOptions } from "~/server/board/client";
 import { randomHexColor } from "~/utils/colors";
 import { paths } from "~/utils/paths";
 
