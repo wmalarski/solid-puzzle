@@ -8,19 +8,19 @@ import {
   type JSX,
   createContext,
   createEffect,
+  createMemo,
   createSignal,
   onCleanup,
   useContext
 } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 
-import type { BoardAccess, BoardModel } from "~/types/models";
+import type { BoardModel, FragmentModel } from "~/types/models";
 
 import { useSupabase } from "~/contexts/SupabaseContext";
 import { useUpdateFragment } from "~/server/board/client";
 import { getDistance } from "~/utils/geometry";
 import {
-  type PuzzleConfig,
   type PuzzleCurveConfig,
   type PuzzleFragmentShape,
   getPuzzleFragments
@@ -29,26 +29,20 @@ import {
 import { usePlayerPresence } from "./PresenceProvider";
 
 export type FragmentState = {
-  fragmentId: string;
+  fragmentId: number;
   isLocked: boolean;
   rotation: number;
   x: number;
   y: number;
 };
 
-type PuzzleState = Record<string, FragmentState | undefined>;
+type PuzzleState = Record<number, FragmentState | undefined>;
 
 type SetFragmentStateArgs = {
-  fragmentId: string;
+  fragmentId: number;
   rotation: number;
   x: number;
   y: number;
-};
-
-type InitFragmentsArgs = {
-  board: BoardModel;
-  height: number;
-  width: number;
 };
 
 const PUZZLE_CHANNEL_NAME = "rooms:puzzle";
@@ -56,7 +50,7 @@ const PUZZLE_EVENT_NAME = "rooms:puzzle";
 
 type IsLockedInPlaceArgs = {
   fragment: SetFragmentStateArgs;
-  shapes: ReadonlyMap<string, PuzzleFragmentShape>;
+  shapes: ReadonlyMap<number, PuzzleFragmentShape>;
 };
 
 const isLockedInPlace = ({ fragment, shapes }: IsLockedInPlaceArgs) => {
@@ -73,21 +67,58 @@ const isLockedInPlace = ({ fragment, shapes }: IsLockedInPlaceArgs) => {
   return isLocked;
 };
 
-const createPuzzleContext = (boardAccess: () => BoardAccess) => {
-  const presence = usePlayerPresence();
+type CreatePuzzleContextArgs = {
+  board: BoardModel;
+  fragments: FragmentModel[];
+};
 
-  const [fragments, setFragments] = createStore<PuzzleState>({});
+const createPuzzleContext = (args: CreatePuzzleContextArgs) => {
+  const presence = usePlayerPresence();
 
   const updateFragment = useUpdateFragment();
 
-  const [shapes, setShapes] = createSignal<
-    ReadonlyMap<string, PuzzleFragmentShape>
-  >(new Map());
-
-  const [config, setConfig] = createSignal<PuzzleConfig>({
-    fragments: [],
-    lines: []
+  const config = createMemo(() => {
+    return getPuzzleFragments({
+      config: args.board.config as PuzzleCurveConfig,
+      height: args.board.height,
+      width: args.board.width
+    });
   });
+
+  const shapes = createMemo(() => {
+    const shapesMap = new Map<number, PuzzleFragmentShape>();
+
+    const fragmentsConfig = config().fragments;
+
+    args.fragments.forEach((fragment) => {
+      const shape = fragmentsConfig[fragment.index];
+      shapesMap.set(fragment.id, shape);
+    });
+
+    return shapesMap;
+  });
+
+  const store = createMemo(() => {
+    const init: PuzzleState = {};
+
+    args.fragments.forEach((fragment) => {
+      init[fragment.id] = {
+        fragmentId: fragment.id,
+        isLocked: fragment.is_locked,
+        rotation: fragment.rotation,
+        x: fragment.x,
+        y: fragment.y
+      };
+    });
+
+    const [value, set] = createStore<PuzzleState>(init);
+    return { set, value };
+  });
+
+  // const [config, setConfig] = createSignal<PuzzleConfig>({
+  //   fragments: [],
+  //   lines: []
+  // });
 
   const [sender, setSender] = createSignal<(args: FragmentState) => void>(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -96,34 +127,8 @@ const createPuzzleContext = (boardAccess: () => BoardAccess) => {
 
   const supabase = useSupabase();
 
-  const initFragments = ({ board, height, width }: InitFragmentsArgs) => {
-    const shapesMap = new Map<string, PuzzleFragmentShape>();
-    const init: PuzzleState = {};
-
-    const shapes = getPuzzleFragments({
-      config: board.config as PuzzleCurveConfig,
-      height,
-      width
-    });
-
-    shapes.fragments.forEach((shape) => {
-      shapesMap.set(shape.fragmentId, shape);
-      init[shape.fragmentId] = {
-        fragmentId: shape.fragmentId,
-        isLocked: false,
-        rotation: shape.initialRotation,
-        x: shape.center.x,
-        y: shape.center.y
-      };
-    });
-
-    setConfig(shapes);
-    setFragments(init);
-    setShapes(shapesMap);
-  };
-
   const setFragmentState = (update: SetFragmentStateArgs) => {
-    setFragments(
+    store().set(
       produce((state) => {
         const fragment = state[update.fragmentId];
         if (fragment) {
@@ -160,7 +165,7 @@ const createPuzzleContext = (boardAccess: () => BoardAccess) => {
       y: update.y
     });
 
-    setFragments(
+    store().set(
       produce((state) => {
         const fragment = state[update.fragmentId];
         if (fragment) {
@@ -174,16 +179,17 @@ const createPuzzleContext = (boardAccess: () => BoardAccess) => {
   };
 
   createEffect(() => {
-    const channelName = `${PUZZLE_CHANNEL_NAME}:${boardAccess().boardId}`;
+    const channelName = `${PUZZLE_CHANNEL_NAME}:${args.board.id}`;
     const channel = supabase().channel(channelName);
     const playerId = presence.currentPlayer().playerId;
+    const fragmentsStore = store();
 
     channel
       .on(
         REALTIME_LISTEN_TYPES.BROADCAST,
         { event: PUZZLE_EVENT_NAME },
         (payload) => {
-          setFragments(
+          fragmentsStore.set(
             produce((state) => {
               const fragment = state[payload.fragmentId];
               if (fragment) {
@@ -218,14 +224,16 @@ const createPuzzleContext = (boardAccess: () => BoardAccess) => {
     });
   });
 
+  const fragments = createMemo(() => {
+    return store().value;
+  });
+
   return {
     config,
     fragments,
-    initFragments,
     sendFragmentState,
     setFragmentState,
-    setFragmentStateWithLockCheck,
-    shapes
+    setFragmentStateWithLockCheck
   };
 };
 
@@ -233,23 +241,22 @@ type PuzzleContextState = ReturnType<typeof createPuzzleContext>;
 
 const PuzzleStateContext = createContext<PuzzleContextState>({
   config: () => ({ fragments: [], lines: [] }),
-  fragments: {},
-  initFragments: () => void 0,
+  fragments: () => ({}),
   sendFragmentState: () => void 0,
   setFragmentState: () => void 0,
-  setFragmentStateWithLockCheck: () => void 0,
-  shapes: () => new Map()
+  setFragmentStateWithLockCheck: () => void 0
 });
 
 type PuzzleStateProviderProps = {
-  boardAccess: BoardAccess;
+  board: BoardModel;
   children: JSX.Element;
+  fragments: FragmentModel[];
 };
 
 export const PuzzleStateProvider: Component<PuzzleStateProviderProps> = (
   props
 ) => {
-  const value = createPuzzleContext(() => props.boardAccess);
+  const value = createPuzzleContext(props);
 
   return (
     <PuzzleStateContext.Provider value={value}>

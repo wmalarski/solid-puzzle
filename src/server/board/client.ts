@@ -72,7 +72,7 @@ export const selectBoardsQueryOptions = ({
     queryFn: async () => {
       const query = supabase()
         .from("rooms")
-        .select("id,name,media,owner_id,created_at");
+        .select("id,name,media,owner_id,created_at,width,height");
 
       const userId = session()?.user.id;
       const withUser = userId ? query.eq("owner_id", userId) : query;
@@ -95,7 +95,7 @@ export const invalidateSelectBoardsQueries = (): InvalidateQueryFilters => {
 };
 
 type UpdateFragmentArgs = {
-  fragmentId: string;
+  fragmentId: number;
   isLocked: boolean;
   rotation: number;
   x: number;

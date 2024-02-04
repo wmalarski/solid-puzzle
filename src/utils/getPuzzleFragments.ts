@@ -70,15 +70,6 @@ const getRandomGridPointFactory = ({
   };
 };
 
-type GetFragmentIdArgs = {
-  columnIndex: number;
-  rowIndex: number;
-};
-
-const getFragmentId = ({ columnIndex, rowIndex }: GetFragmentIdArgs) => {
-  return `${rowIndex}-${columnIndex}`;
-};
-
 type GenerateCurvesArgs = {
   columns: number;
   rows: number;
@@ -123,16 +114,32 @@ export const generateCurves = ({ columns, rows }: GenerateCurvesArgs) => {
     })
   );
 
-  const rotation = Array.from(
-    { length: rows * columns },
-    () => 2 * Math.random() * Math.PI
-  );
-
-  return { horizontalLines, rotation, version: "1", verticalLines };
+  return { horizontalLines, version: "1", verticalLines };
 };
 
 export type PuzzleCurveConfig = ReturnType<typeof generateCurves>;
 export type PuzzleCurve = PuzzleCurveConfig["horizontalLines"][0][0];
+
+type GetInitialFragmentStateArgs = {
+  columns: number;
+  height: number;
+  rows: number;
+  width: number;
+};
+
+export const getInitialFragmentState = ({
+  columns,
+  height,
+  rows,
+  width
+}: GetInitialFragmentStateArgs) => {
+  return Array.from({ length: columns * rows }, (_, index) => ({
+    index,
+    rotation: 2 * Math.random() * Math.PI,
+    x: 2 * Math.random() * width - width / 2,
+    y: 2 * Math.random() * height + height / 2
+  }));
+};
 
 type ScaleCurveUpArgs = {
   curve: PuzzleCurve;
@@ -181,13 +188,14 @@ export const getPuzzleFragments = ({
   const scale = { x: width, y: height };
   const { horizontalLines, verticalLines } = scaleConfigUp({ config, scale });
   const lines = [...horizontalLines, ...verticalLines].flat();
-  const rotation = [...config.rotation];
 
   const rows = horizontalLines.length - 1;
   const columns = verticalLines[0].length - 1;
 
   const fragments = Array.from({ length: rows }, (_, rowIndex) =>
     Array.from({ length: columns }, (_, columnIndex) => {
+      const index = rowIndex * rows + columnIndex;
+
       const top = horizontalLines[rowIndex][columnIndex];
       const bottom = horizontalLines[rowIndex + 1][columnIndex];
       const left = verticalLines[rowIndex][columnIndex];
@@ -212,16 +220,7 @@ export const getPuzzleFragments = ({
         to: subtractPoint(curve.to, min)
       }));
 
-      const initialRotation = rotation.pop() || 0;
-
-      return {
-        center,
-        curvePoints,
-        fragmentId: getFragmentId({ columnIndex, rowIndex }),
-        initialRotation,
-        max,
-        min
-      };
+      return { center, curvePoints, index, max, min };
     })
   ).flat();
 

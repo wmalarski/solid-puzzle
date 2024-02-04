@@ -200,7 +200,7 @@ const PuzzleContainer: Component<PuzzleContainerProps> = (props) => {
   });
 
   const fragmentId = createMemo(() => {
-    return props.shape.fragmentId;
+    return props.state.fragmentId;
   });
 
   const isFragmentSelected = createMemo(() => {
@@ -219,7 +219,7 @@ const PuzzleContainer: Component<PuzzleContainerProps> = (props) => {
     displayObject: fragment,
     onDragEnd: () => {
       store.setFragmentStateWithLockCheck({
-        fragmentId: props.shape.fragmentId,
+        fragmentId: props.state.fragmentId,
         rotation: props.state.rotation,
         x: fragment.x,
         y: fragment.y
@@ -227,7 +227,7 @@ const PuzzleContainer: Component<PuzzleContainerProps> = (props) => {
     },
     onDragMove: () => {
       store.sendFragmentState({
-        fragmentId: props.shape.fragmentId,
+        fragmentId: props.state.fragmentId,
         rotation: props.state.rotation,
         x: fragment.x,
         y: fragment.y

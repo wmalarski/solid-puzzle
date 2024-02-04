@@ -22,22 +22,14 @@ export type Database = {
         Insert: {
           created_at?: string;
           id?: number;
-          index?: null | number;
-          is_locked?: boolean | null;
-          owner_id?: null | string;
-          room_id?: null | string;
-          rotation?: null | number;
-          x?: null | number;
-          y?: null | number;
+          index: number;
+          is_locked: boolean;
+          room_id: string;
+          rotation?: number;
+          x?: number;
+          y?: number;
         };
         Relationships: [
-          {
-            columns: ["owner_id"];
-            foreignKeyName: "puzzle_owner_id_fkey";
-            isOneToOne: false;
-            referencedColumns: ["id"];
-            referencedRelation: "users";
-          },
           {
             columns: ["room_id"];
             foreignKeyName: "puzzle_room_id_fkey";
@@ -49,24 +41,22 @@ export type Database = {
         Row: {
           created_at: string;
           id: number;
-          index: null | number;
-          is_locked: boolean | null;
-          owner_id: null | string;
-          room_id: null | string;
-          rotation: null | number;
-          x: null | number;
-          y: null | number;
+          index: number;
+          is_locked: boolean;
+          room_id: string;
+          rotation: number;
+          x: number;
+          y: number;
         };
         Update: {
           created_at?: string;
           id?: number;
-          index?: null | number;
-          is_locked?: boolean | null;
-          owner_id?: null | string;
-          room_id?: null | string;
-          rotation?: null | number;
-          x?: null | number;
-          y?: null | number;
+          index?: number;
+          is_locked?: boolean;
+          room_id?: string;
+          rotation?: number;
+          x?: number;
+          y?: number;
         };
       };
       rooms: {

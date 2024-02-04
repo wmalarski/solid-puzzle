@@ -3,7 +3,6 @@ import {
   type Component,
   For,
   Show,
-  createEffect,
   createResource,
   onCleanup,
   onMount
@@ -61,14 +60,6 @@ type ProviderProps = {
 
 const Provider: Component<ProviderProps> = (props) => {
   const store = usePuzzleStore();
-
-  createEffect(() => {
-    store.initFragments({
-      board: props.board,
-      height: props.texture.height,
-      width: props.texture.width
-    });
-  });
 
   return (
     <>

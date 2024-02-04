@@ -91,7 +91,10 @@ export const Board: Component<BoardProps> = (props) => {
         <PlayerPresenceProvider boardAccess={props.boardAccess}>
           <PlayerSelectionProvider boardAccess={props.boardAccess}>
             <PlayerCursorProvider boardAccess={props.boardAccess}>
-              <PuzzleStateProvider boardAccess={props.boardAccess}>
+              <PuzzleStateProvider
+                board={props.board}
+                fragments={props.fragments}
+              >
                 <ClientBoard board={props.board} fragments={props.fragments} />
                 <TopNavbar
                   board={props.board}

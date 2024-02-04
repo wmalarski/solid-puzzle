@@ -6,7 +6,10 @@ import { decode } from "decode-formdata";
 import { minLength, number, object, safeParseAsync, string } from "valibot";
 import { setCookie } from "vinxi/http";
 
-import { generateCurves } from "~/utils/getPuzzleFragments";
+import {
+  generateCurves,
+  getInitialFragmentState
+} from "~/utils/getPuzzleFragments";
 import { paths } from "~/utils/paths";
 
 import {
@@ -42,25 +45,26 @@ type InsertPuzzleFragmentsArgs = {
   boardId: string;
   columns: number;
   event: RequestEvent;
+  height: number;
   rows: number;
+  width: number;
 };
 
 const insertPuzzleFragments = ({
   boardId,
   columns,
   event,
-  rows
+  height,
+  rows,
+  width
 }: InsertPuzzleFragmentsArgs) => {
-  return event.locals.supabase.from("puzzle").insert(
-    Array.from({ length: columns * rows }, (_, index) => ({
-      index,
-      is_locked: false,
-      room_id: boardId,
-      rotation: 0,
-      x: 0,
-      y: 0
-    }))
-  );
+  return event.locals.supabase
+    .from("puzzle")
+    .insert(
+      getInitialFragmentState({ columns, height, rows, width }).map(
+        (fragment) => ({ ...fragment, is_locked: false, room_id: boardId })
+      )
+    );
 };
 
 export const insertBoardServerAction = async (form: FormData) => {
@@ -88,20 +92,13 @@ export const insertBoardServerAction = async (form: FormData) => {
     });
   }
 
-  const config = generateCurves({
-    columns: parsed.output.columns,
-    rows: parsed.output.rows
-  });
+  const { columns, height, image, name, rows, width } = parsed.output;
+
+  const config = generateCurves({ columns, rows });
 
   const result = await event.locals.supabase
     .from("rooms")
-    .insert({
-      config,
-      height: parsed.output.height,
-      media: parsed.output.image,
-      name: parsed.output.name,
-      width: parsed.output.width
-    })
+    .insert({ config, height, media: image, name, width })
     .select()
     .single();
 
@@ -111,9 +108,11 @@ export const insertBoardServerAction = async (form: FormData) => {
 
   await insertPuzzleFragments({
     boardId: result.data.id,
-    columns: parsed.output.columns,
+    columns,
     event,
-    rows: parsed.output.rows
+    height,
+    rows,
+    width
   });
 
   throw redirect(paths.board(result.data.id), {
@@ -141,17 +140,18 @@ export const updateBoardServerAction = async (form: FormData) => {
     return rpcParseIssueResult(parsed.issues);
   }
 
-  const config = generateCurves({
-    columns: parsed.output.columns,
-    rows: parsed.output.rows
-  });
+  const { columns, height, image, name, rows, width } = parsed.output;
+
+  const config = generateCurves({ columns, rows });
 
   const result = await event.locals.supabase
     .from("rooms")
     .update({
       config,
-      media: parsed.output.image,
-      name: parsed.output.name
+      height,
+      media: image,
+      name: name,
+      width
     })
     .eq("id", parsed.output.id);
 
@@ -166,9 +166,11 @@ export const updateBoardServerAction = async (form: FormData) => {
 
   await insertPuzzleFragments({
     boardId: parsed.output.id,
-    columns: parsed.output.columns,
+    columns,
     event,
-    rows: parsed.output.rows
+    height,
+    rows,
+    width
   });
 
   return rpcSuccessResult(result.data);
