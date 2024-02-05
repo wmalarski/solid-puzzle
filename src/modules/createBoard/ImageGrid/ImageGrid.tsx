@@ -2,40 +2,38 @@ import { type Component, For, createSignal } from "solid-js";
 
 import { twCx } from "~/components/utils/twCva";
 import { useI18n } from "~/contexts/I18nContext";
-import { getImages } from "~/utils/images";
 
-type ImageGridProps = {
-  hasDefault?: boolean;
-  name: string;
-};
+import type { ImageEntry } from "./const";
 
-export const ImageGrid: Component<ImageGridProps> = (props) => {
+import { IMAGES } from "./const";
+
+export const ImageGrid: Component = () => {
   const { t } = useI18n();
 
-  const images = getImages();
+  const [value, setValue] = createSignal(IMAGES[0]);
 
-  const [value, setValue] = createSignal(images[0]);
-
-  const onButtonClick = (image: string) => () => {
+  const onButtonClick = (image: ImageEntry) => () => {
     setValue(image);
   };
 
   return (
     <div class="max-h-96">
       <span class="label-text px-2 py-4">{t("createBoard.image")}</span>
-      <input name={props.name} type="hidden" value={value()} />
+      <input name="image" type="hidden" value={value().path} />
+      <input name="width" type="hidden" value={value().width} />
+      <input name="height" type="hidden" value={value().height} />
       <div class="flex h-96 flex-col gap-1 overflow-x-hidden overflow-y-scroll">
-        <For each={images}>
+        <For each={IMAGES}>
           {(image) => (
             <button
               class={twCx(
                 "flex rounded border-2 border-base-300 p-2 items-center justify-center",
-                value() === image ? "border-accent bg-base-300" : null
+                value().path === image.path ? "border-accent bg-base-300" : null
               )}
               onClick={onButtonClick(image)}
               type="button"
             >
-              <img alt={""} src={image} />
+              <img alt={""} src={image.path} />
             </button>
           )}
         </For>

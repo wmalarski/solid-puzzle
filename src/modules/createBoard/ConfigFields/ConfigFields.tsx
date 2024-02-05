@@ -83,7 +83,7 @@ export const ConfigFields: Component<ConfigFieldsProps> = (props) => {
           <TextFieldErrorMessage>{props.errors?.rows}</TextFieldErrorMessage>
         </Show>
       </TextFieldRoot>
-      <ImageGrid hasDefault name="image" />
+      <ImageGrid />
       <Show when={props.errors?.image}>
         <TextFieldErrorMessage>{props.errors?.image}</TextFieldErrorMessage>
       </Show>
