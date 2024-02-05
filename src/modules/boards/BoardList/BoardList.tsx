@@ -5,7 +5,7 @@ import type { BoardModel } from "~/types/models";
 
 import { LinkButton } from "~/components/Button";
 import { Card, CardActions, CardBody, CardTitle } from "~/components/Card";
-import { ArrowLeftIcon } from "~/components/Icons/ArrowLeftIcon";
+import { ArrowRightIcon } from "~/components/Icons/ArrowRightIcon";
 import { SettingsIcon } from "~/components/Icons/SettingsIcon";
 import { TrashIcon } from "~/components/Icons/TrashIcon";
 import { useI18n } from "~/contexts/I18nContext";
@@ -14,7 +14,6 @@ import { paths } from "~/utils/paths";
 
 import { DeleteBoardUncontrolledDialog } from "../DeleteDialog";
 import { SettingsUncontrolledDialog } from "../SettingsDialog";
-import { ArrowRightIcon } from "~/components/Icons/ArrowRightIcon";
 
 type BoardItemProps = {
   board: Omit<BoardModel, "config">;
@@ -39,10 +38,10 @@ const BoardItem: Component<BoardItemProps> = (props) => {
             <TrashIcon class="size-4" />
             {t("board.settings.delete.button")}
           </DeleteBoardUncontrolledDialog>
-          {/* <SettingsUncontrolledDialog boardId={props.board.id} size="sm">
+          <SettingsUncontrolledDialog boardId={props.board.id} size="sm">
             <SettingsIcon class="size-4" />
-            {t("board.settings.update.button")}
-          </SettingsUncontrolledDialog> */}
+            {t("board.settings.label")}
+          </SettingsUncontrolledDialog>
           <LinkButton href={paths.board(props.board.id)} size="sm">
             <ArrowRightIcon class="size-4" />
             {t("list.go")}

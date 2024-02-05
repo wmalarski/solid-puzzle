@@ -1,6 +1,7 @@
 import { action, cache } from "@solidjs/router";
 import {
   type InvalidateQueryFilters,
+  isServer,
   queryOptions
 } from "@tanstack/solid-query";
 
@@ -69,6 +70,7 @@ export const selectBoardsQueryOptions = ({
   const session = useSessionContext();
 
   return queryOptions(() => ({
+    enabled: !isServer,
     queryFn: async () => {
       const query = supabase()
         .from("rooms")
