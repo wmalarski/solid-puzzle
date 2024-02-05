@@ -24,7 +24,7 @@ import { useDragObject } from "./useDragObject";
 
 type PuzzleFragmentLabelProps = {
   container: Container;
-  label: string;
+  label: number;
 };
 
 const PuzzleFragmentLabel: Component<PuzzleFragmentLabelProps> = (props) => {
@@ -32,7 +32,7 @@ const PuzzleFragmentLabel: Component<PuzzleFragmentLabelProps> = (props) => {
   text.scale.set(0.5);
 
   createEffect(() => {
-    text.text = props.label;
+    text.text = `I:${props.label}`;
   });
 
   onMount(() => {
@@ -146,13 +146,13 @@ const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
   return null;
 };
 
-type PuzzleContainerProps = {
+type PuzzleFragmentProps = {
   shape: PuzzleFragmentShape;
   state: FragmentState;
   texture: Texture;
 };
 
-const PuzzleContainer: Component<PuzzleContainerProps> = (props) => {
+export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
   const store = usePuzzleStore();
   const selection = usePlayerSelection();
   const app = usePixiApp();
@@ -280,30 +280,5 @@ const PuzzleContainer: Component<PuzzleContainerProps> = (props) => {
         </>
       </Show>
     </>
-  );
-};
-
-type PuzzleFragmentProps = {
-  shape: PuzzleFragmentShape;
-  texture: Texture;
-};
-
-export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
-  const store = usePuzzleStore();
-
-  const state = createMemo(() => {
-    return store.fragments[props.shape.fragmentId];
-  });
-
-  return (
-    <Show when={state()}>
-      {(state) => (
-        <PuzzleContainer
-          shape={props.shape}
-          state={state()}
-          texture={props.texture}
-        />
-      )}
-    </Show>
   );
 };

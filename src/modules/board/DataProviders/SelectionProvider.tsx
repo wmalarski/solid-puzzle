@@ -29,13 +29,13 @@ const SELECTION_EVENT_NAME = "rooms:selection";
 const createPlayerSelectionState = (boardAccess: () => BoardAccess) => {
   const presence = usePlayerPresence();
 
-  const [selectedId, setSelectedId] = createSignal<null | string>(null);
+  const [selectedId, setSelectedId] = createSignal<null | number>(null);
 
   const [selection, setSelection] = createStore<PlayerSelectionState>({});
 
-  const [sender, setSender] = createSignal<(arg: null | string) => void>(
+  const [sender, setSender] = createSignal<(arg: null | number) => void>(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    (_selectionId: null | string) => void 0
+    (_selectionId: null | number) => void 0
   );
 
   const supabase = useSupabase();
@@ -79,7 +79,7 @@ const createPlayerSelectionState = (boardAccess: () => BoardAccess) => {
     });
   });
 
-  const select = (selectionId: null | string) => {
+  const select = (selectionId: null | number) => {
     sender()(selectionId);
     setSelectedId(selectionId);
   };

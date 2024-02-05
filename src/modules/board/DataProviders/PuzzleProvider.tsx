@@ -98,6 +98,10 @@ const createPuzzleContext = (args: CreatePuzzleContextArgs) => {
     return shapesMap;
   });
 
+  const fragmentsIds = createMemo(() => {
+    return args.fragments.map((fragment) => fragment.id);
+  });
+
   const store = createMemo(() => {
     const init: PuzzleState = {};
 
@@ -114,11 +118,6 @@ const createPuzzleContext = (args: CreatePuzzleContextArgs) => {
     const [value, set] = createStore<PuzzleState>(init);
     return { set, value };
   });
-
-  // const [config, setConfig] = createSignal<PuzzleConfig>({
-  //   fragments: [],
-  //   lines: []
-  // });
 
   const [sender, setSender] = createSignal<(args: FragmentState) => void>(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -231,9 +230,11 @@ const createPuzzleContext = (args: CreatePuzzleContextArgs) => {
   return {
     config,
     fragments,
+    fragmentsIds,
     sendFragmentState,
     setFragmentState,
-    setFragmentStateWithLockCheck
+    setFragmentStateWithLockCheck,
+    shapes
   };
 };
 
@@ -242,9 +243,11 @@ type PuzzleContextState = ReturnType<typeof createPuzzleContext>;
 const PuzzleStateContext = createContext<PuzzleContextState>({
   config: () => ({ fragments: [], lines: [] }),
   fragments: () => ({}),
+  fragmentsIds: () => [],
   sendFragmentState: () => void 0,
   setFragmentState: () => void 0,
-  setFragmentStateWithLockCheck: () => void 0
+  setFragmentStateWithLockCheck: () => void 0,
+  shapes: () => new Map()
 });
 
 type PuzzleStateProviderProps = {

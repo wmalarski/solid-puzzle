@@ -47,8 +47,22 @@ const Board: Component<BoardProps> = (props) => {
   useStageDeselect();
 
   return (
-    <For each={store.config().fragments}>
-      {(shape) => <PuzzleFragment shape={shape} texture={props.texture} />}
+    <For each={store.fragmentsIds()}>
+      {(fragmentId) => (
+        <Show when={store.shapes().get(fragmentId)}>
+          {(shape) => (
+            <Show when={store.fragments()[fragmentId]}>
+              {(state) => (
+                <PuzzleFragment
+                  shape={shape()}
+                  state={state()}
+                  texture={props.texture}
+                />
+              )}
+            </Show>
+          )}
+        </Show>
+      )}
     </For>
   );
 };
