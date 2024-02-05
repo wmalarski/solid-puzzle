@@ -111,7 +111,7 @@ const en_dict = {
     }
   },
   list: {
-    go: "Dalej"
+    go: "Play"
   }
 };
 

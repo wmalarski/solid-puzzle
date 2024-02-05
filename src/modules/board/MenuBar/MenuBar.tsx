@@ -22,11 +22,10 @@ import { SettingsIcon } from "~/components/Icons/SettingsIcon";
 import { TrashIcon } from "~/components/Icons/TrashIcon";
 import { useI18n } from "~/contexts/I18nContext";
 import { useSessionContext } from "~/contexts/SessionContext";
+import { DeleteBoardControlledDialog } from "~/modules/boards/DeleteDialog";
+import { SettingsControlledDialog } from "~/modules/boards/SettingsDialog";
 import { signOutAction } from "~/server/auth/client";
 import { paths } from "~/utils/paths";
-
-import { DeleteBoardDialog } from "./DeleteDialog";
-import { SettingsDialog } from "./SettingsDialog";
 
 const SignOutMenuItem: Component = () => {
   const { t } = useI18n();
@@ -75,15 +74,20 @@ const Menu: Component<MenuProps> = (props) => {
     setIsDeleteOpen(true);
   };
 
+  const onDeleteSuccess = () => {
+    navigate(paths.boards);
+  };
+
   return (
     <>
-      <DeleteBoardDialog
+      <DeleteBoardControlledDialog
         boardId={props.board.id}
         isOpen={isDeleteOpen()}
         onIsOpenChange={setIsDeleteOpen}
+        onSuccess={onDeleteSuccess}
       />
       <Show when={props.board.owner_id === session()?.user.id}>
-        <SettingsDialog
+        <SettingsControlledDialog
           boardId={props.board.id}
           isOpen={areSettingsOpen()}
           onIsOpenChange={setAreSettingsOpen}

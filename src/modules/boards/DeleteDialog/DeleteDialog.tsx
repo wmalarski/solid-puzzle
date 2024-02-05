@@ -1,6 +1,13 @@
 import { useAction, useSubmission } from "@solidjs/router";
 import { useQueryClient } from "@tanstack/solid-query";
-import { type Component, type ComponentProps, Show } from "solid-js";
+import {
+  type Component,
+  type ComponentProps,
+  Show,
+  splitProps
+} from "solid-js";
+
+import type { DialogTriggerProps } from "~/components/Dialog";
 
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
@@ -12,7 +19,8 @@ import {
   DialogPortal,
   DialogPositioner,
   DialogRoot,
-  DialogTitle
+  DialogTitle,
+  DialogTrigger
 } from "~/components/Dialog";
 import { XIcon } from "~/components/Icons/XIcon";
 import { useI18n } from "~/contexts/I18nContext";
@@ -23,7 +31,7 @@ import {
 
 type DeleteBoardFormProps = {
   boardId: string;
-  onCancelClick: VoidFunction;
+  onSuccess?: VoidFunction;
 };
 
 const DeleteBoardForm: Component<DeleteBoardFormProps> = (props) => {
@@ -39,6 +47,8 @@ const DeleteBoardForm: Component<DeleteBoardFormProps> = (props) => {
     try {
       await action(new FormData(event.currentTarget));
       await queryClient.invalidateQueries(invalidateSelectBoardsQueries());
+
+      props.onSuccess?.();
     } catch {
       // handled by useSubmission
     }
@@ -54,9 +64,9 @@ const DeleteBoardForm: Component<DeleteBoardFormProps> = (props) => {
       </Show>
       <input name="id" type="hidden" value={props.boardId} />
       <footer class="flex w-full gap-4">
-        <Button onClick={props.onCancelClick} type="button" variant="ghost">
+        <DialogCloseButton type="button">
           {t("board.settings.delete.cancel")}
-        </Button>
+        </DialogCloseButton>
         <Button
           disabled={submission.pending}
           isLoading={submission.pending}
@@ -69,38 +79,66 @@ const DeleteBoardForm: Component<DeleteBoardFormProps> = (props) => {
   );
 };
 
-type DeleteBoardDialogProps = {
+type DeleteBoardProps = {
+  boardId: string;
+  onSuccess?: VoidFunction;
+};
+
+const DeleteBoard: Component<DeleteBoardProps> = (props) => {
+  const { t } = useI18n();
+
+  return (
+    <DialogPortal>
+      <DialogOverlay />
+      <DialogPositioner>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t("board.settings.delete.title")}</DialogTitle>
+            <DialogCloseButton>
+              <XIcon />
+            </DialogCloseButton>
+          </DialogHeader>
+          <DeleteBoardForm
+            boardId={props.boardId}
+            onSuccess={props.onSuccess}
+          />
+        </DialogContent>
+      </DialogPositioner>
+    </DialogPortal>
+  );
+};
+
+type DeleteBoardControlledDialogProps = {
   boardId: string;
   isOpen: boolean;
   onIsOpenChange: (isOpen: boolean) => void;
+  onSuccess: VoidFunction;
 };
 
-export const DeleteBoardDialog: Component<DeleteBoardDialogProps> = (props) => {
-  const { t } = useI18n();
-
-  const onCancelClick = () => {
-    props.onIsOpenChange(false);
-  };
-
+export const DeleteBoardControlledDialog: Component<
+  DeleteBoardControlledDialogProps
+> = (props) => {
   return (
     <DialogRoot onOpenChange={props.onIsOpenChange} open={props.isOpen}>
-      <DialogPortal>
-        <DialogOverlay />
-        <DialogPositioner>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>{t("board.settings.delete.title")}</DialogTitle>
-              <DialogCloseButton>
-                <XIcon />
-              </DialogCloseButton>
-            </DialogHeader>
-            <DeleteBoardForm
-              boardId={props.boardId}
-              onCancelClick={onCancelClick}
-            />
-          </DialogContent>
-        </DialogPositioner>
-      </DialogPortal>
+      <DeleteBoard boardId={props.boardId} onSuccess={props.onSuccess} />
+    </DialogRoot>
+  );
+};
+
+type DeleteBoardUncontrolledDialogProps = DialogTriggerProps & {
+  boardId: string;
+  onSuccess?: VoidFunction;
+};
+
+export const DeleteBoardUncontrolledDialog: Component<
+  DeleteBoardUncontrolledDialogProps
+> = (props) => {
+  const [split, rest] = splitProps(props, ["boardId", "onSuccess"]);
+
+  return (
+    <DialogRoot>
+      <DialogTrigger {...rest} />
+      <DeleteBoard boardId={split.boardId} onSuccess={split.onSuccess} />
     </DialogRoot>
   );
 };
