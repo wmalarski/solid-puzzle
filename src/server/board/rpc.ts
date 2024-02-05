@@ -98,7 +98,7 @@ export const insertBoardServerAction = async (form: FormData) => {
 
   const result = await event.locals.supabase
     .from("rooms")
-    .insert({ config, height, media: image, name, width })
+    .insert({ columns, config, height, media: image, name, rows, width })
     .select()
     .single();
 
@@ -147,10 +147,12 @@ export const updateBoardServerAction = async (form: FormData) => {
   const result = await event.locals.supabase
     .from("rooms")
     .update({
+      columns,
       config,
       height,
       media: image,
       name: name,
+      rows,
       width
     })
     .eq("id", parsed.output.id);

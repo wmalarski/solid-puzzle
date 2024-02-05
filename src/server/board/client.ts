@@ -74,7 +74,7 @@ export const selectBoardsQueryOptions = ({
     queryFn: async () => {
       const query = supabase()
         .from("rooms")
-        .select("id,name,media,owner_id,created_at,width,height");
+        .select("id,name,media,owner_id,created_at,width,height,columns,rows");
 
       const userId = session()?.user.id;
       const withUser = userId ? query.eq("owner_id", userId) : query;

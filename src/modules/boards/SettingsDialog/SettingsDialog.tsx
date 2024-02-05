@@ -7,6 +7,7 @@ import {
 } from "solid-js";
 
 import type { DialogTriggerProps } from "~/components/Dialog";
+import type { BoardModelWithoutConfig } from "~/types/models";
 
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
@@ -31,7 +32,7 @@ import {
 import { updateBoardServerAction } from "~/server/board/rpc";
 
 type UpdateFormProps = {
-  boardId: string;
+  board: BoardModelWithoutConfig;
 };
 
 export const UpdateForm: Component<UpdateFormProps> = (props) => {
@@ -42,7 +43,7 @@ export const UpdateForm: Component<UpdateFormProps> = (props) => {
   const mutation = createMutation(() => ({
     mutationFn: updateBoardServerAction,
     onSuccess() {
-      queryClient.invalidateQueries(invalidateSelectBoardQuery(props.boardId));
+      queryClient.invalidateQueries(invalidateSelectBoardQuery(props.board.id));
       queryClient.invalidateQueries(invalidateSelectBoardsQueries());
     }
   }));
@@ -63,8 +64,15 @@ export const UpdateForm: Component<UpdateFormProps> = (props) => {
           Error
         </Alert>
       </Show>
-      <input name="id" type="hidden" value={props.boardId} />
-      <ConfigFields />
+      <input name="id" type="hidden" value={props.board.id} />
+      <ConfigFields
+        initialValues={{
+          columns: props.board.columns,
+          image: props.board.media,
+          name: props.board.name,
+          rows: props.board.rows
+        }}
+      />
       <Button
         disabled={mutation.isPending}
         isLoading={mutation.isPending}
@@ -77,7 +85,7 @@ export const UpdateForm: Component<UpdateFormProps> = (props) => {
 };
 
 type SettingsDialogProps = {
-  boardId: string;
+  board: BoardModelWithoutConfig;
 };
 
 const SettingsDialog: Component<SettingsDialogProps> = (props) => {
@@ -94,7 +102,7 @@ const SettingsDialog: Component<SettingsDialogProps> = (props) => {
               <XIcon />
             </DialogCloseButton>
           </DialogHeader>
-          <UpdateForm boardId={props.boardId} />
+          <UpdateForm board={props.board} />
         </DialogContent>
       </DialogPositioner>
     </DialogPortal>
@@ -102,7 +110,7 @@ const SettingsDialog: Component<SettingsDialogProps> = (props) => {
 };
 
 type SettingsControlledDialogProps = {
-  boardId: string;
+  board: BoardModelWithoutConfig;
   isOpen: boolean;
   onIsOpenChange: (isOpen: boolean) => void;
 };
@@ -112,24 +120,24 @@ export const SettingsControlledDialog: Component<
 > = (props) => {
   return (
     <DialogRoot onOpenChange={props.onIsOpenChange} open={props.isOpen}>
-      <SettingsDialog boardId={props.boardId} />
+      <SettingsDialog board={props.board} />
     </DialogRoot>
   );
 };
 
 type SettingsUncontrolledDialogProps = DialogTriggerProps & {
-  boardId: string;
+  board: BoardModelWithoutConfig;
 };
 
 export const SettingsUncontrolledDialog: Component<
   SettingsUncontrolledDialogProps
 > = (props) => {
-  const [split, rest] = splitProps(props, ["boardId"]);
+  const [split, rest] = splitProps(props, ["board"]);
 
   return (
     <DialogRoot>
       <DialogTrigger {...rest} />
-      <SettingsDialog boardId={split.boardId} />
+      <SettingsDialog board={split.board} />
     </DialogRoot>
   );
 };

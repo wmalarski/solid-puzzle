@@ -61,6 +61,7 @@ export type Database = {
       };
       rooms: {
         Insert: {
+          columns?: number;
           config: Json;
           created_at?: string;
           height: number;
@@ -68,6 +69,7 @@ export type Database = {
           media: string;
           name: string;
           owner_id?: string;
+          rows?: number;
           width: number;
         };
         Relationships: [
@@ -80,6 +82,7 @@ export type Database = {
           }
         ];
         Row: {
+          columns: number;
           config: Json;
           created_at: string;
           height: number;
@@ -87,9 +90,11 @@ export type Database = {
           media: string;
           name: string;
           owner_id: string;
+          rows: number;
           width: number;
         };
         Update: {
+          columns?: number;
           config?: Json;
           created_at?: string;
           height?: number;
@@ -97,6 +102,7 @@ export type Database = {
           media?: string;
           name?: string;
           owner_id?: string;
+          rows?: number;
           width?: number;
         };
       };

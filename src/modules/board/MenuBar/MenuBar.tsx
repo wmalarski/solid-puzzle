@@ -88,7 +88,7 @@ const Menu: Component<MenuProps> = (props) => {
       />
       <Show when={props.board.owner_id === session()?.user.id}>
         <SettingsControlledDialog
-          boardId={props.board.id}
+          board={props.board}
           isOpen={areSettingsOpen()}
           onIsOpenChange={setAreSettingsOpen}
         />

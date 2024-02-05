@@ -1,7 +1,7 @@
 import { createQuery } from "@tanstack/solid-query";
 import { type Component, ErrorBoundary, For, Show, Suspense } from "solid-js";
 
-import type { BoardModel } from "~/types/models";
+import type { BoardModelWithoutConfig } from "~/types/models";
 
 import { LinkButton } from "~/components/Button";
 import { Card, CardActions, CardBody, CardTitle } from "~/components/Card";
@@ -16,7 +16,7 @@ import { DeleteBoardUncontrolledDialog } from "../DeleteDialog";
 import { SettingsUncontrolledDialog } from "../SettingsDialog";
 
 type BoardItemProps = {
-  board: Omit<BoardModel, "config">;
+  board: BoardModelWithoutConfig;
 };
 
 const BoardItem: Component<BoardItemProps> = (props) => {
@@ -34,11 +34,15 @@ const BoardItem: Component<BoardItemProps> = (props) => {
       <CardBody>
         <CardTitle component="h3">{props.board.name}</CardTitle>
         <CardActions justify="end">
-          <DeleteBoardUncontrolledDialog boardId={props.board.id} size="sm">
+          <DeleteBoardUncontrolledDialog
+            boardId={props.board.id}
+            color="error"
+            size="sm"
+          >
             <TrashIcon class="size-4" />
             {t("board.settings.delete.button")}
           </DeleteBoardUncontrolledDialog>
-          <SettingsUncontrolledDialog boardId={props.board.id} size="sm">
+          <SettingsUncontrolledDialog board={props.board} size="sm">
             <SettingsIcon class="size-4" />
             {t("board.settings.label")}
           </SettingsUncontrolledDialog>

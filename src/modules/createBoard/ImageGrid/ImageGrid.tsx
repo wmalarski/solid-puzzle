@@ -7,10 +7,16 @@ import type { ImageEntry } from "./const";
 
 import { IMAGES } from "./const";
 
-export const ImageGrid: Component = () => {
+type ImageGridProps = {
+  initialValue?: string;
+};
+
+export const ImageGrid: Component<ImageGridProps> = (props) => {
   const { t } = useI18n();
 
-  const [value, setValue] = createSignal(IMAGES[0]);
+  const [value, setValue] = createSignal(
+    IMAGES.find((image) => image.path === props.initialValue) || IMAGES[0]
+  );
 
   const onButtonClick = (image: ImageEntry) => () => {
     setValue(image);
