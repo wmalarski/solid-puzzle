@@ -21,7 +21,7 @@ export type Database = {
       puzzle: {
         Insert: {
           created_at?: string;
-          id?: number;
+          id?: string;
           index: number;
           is_locked: boolean;
           room_id: string;
@@ -40,7 +40,7 @@ export type Database = {
         ];
         Row: {
           created_at: string;
-          id: number;
+          id: string;
           index: number;
           is_locked: boolean;
           room_id: string;
@@ -50,7 +50,7 @@ export type Database = {
         };
         Update: {
           created_at?: string;
-          id?: number;
+          id?: string;
           index?: number;
           is_locked?: boolean;
           room_id?: string;

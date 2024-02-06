@@ -29,17 +29,17 @@ import {
 import { usePlayerPresence } from "./PresenceProvider";
 
 export type FragmentState = {
-  fragmentId: number;
+  fragmentId: string;
   isLocked: boolean;
   rotation: number;
   x: number;
   y: number;
 };
 
-type PuzzleState = Record<number, FragmentState | undefined>;
+type PuzzleState = Record<string, FragmentState | undefined>;
 
 type SetFragmentStateArgs = {
-  fragmentId: number;
+  fragmentId: string;
   rotation: number;
   x: number;
   y: number;
@@ -50,7 +50,7 @@ const PUZZLE_EVENT_NAME = "rooms:puzzle";
 
 type IsLockedInPlaceArgs = {
   fragment: SetFragmentStateArgs;
-  shapes: ReadonlyMap<number, PuzzleFragmentShape>;
+  shapes: ReadonlyMap<string, PuzzleFragmentShape>;
 };
 
 const isLockedInPlace = ({ fragment, shapes }: IsLockedInPlaceArgs) => {
@@ -86,7 +86,7 @@ const createPuzzleContext = (args: CreatePuzzleContextArgs) => {
   });
 
   const shapes = createMemo(() => {
-    const shapesMap = new Map<number, PuzzleFragmentShape>();
+    const shapesMap = new Map<string, PuzzleFragmentShape>();
 
     const fragmentsConfig = config().fragments;
 

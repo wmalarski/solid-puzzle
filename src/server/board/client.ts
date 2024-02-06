@@ -97,7 +97,7 @@ export const invalidateSelectBoardsQueries = (): InvalidateQueryFilters => {
 };
 
 type UpdateFragmentArgs = {
-  fragmentId: number;
+  fragmentId: string;
   isLocked: boolean;
   rotation: number;
   x: number;

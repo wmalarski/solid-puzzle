@@ -1,5 +1,5 @@
 import { createQuery } from "@tanstack/solid-query";
-import { type Component, ErrorBoundary, For, Show, Suspense } from "solid-js";
+import { type Component, For, Match, Show, Switch } from "solid-js";
 
 import type { BoardModelWithoutConfig } from "~/types/models";
 
@@ -23,7 +23,7 @@ const BoardItem: Component<BoardItemProps> = (props) => {
   const { t } = useI18n();
 
   return (
-    <Card bg="base-300" size="compact" variant="bordered">
+    <Card bg="base-300" class="w-96" size="compact" variant="bordered">
       <Show when={props.board.media}>
         {(src) => (
           <figure>
@@ -76,15 +76,11 @@ export const BoardsList = () => {
 
   return (
     <section class="mx-auto max-w-screen-xl p-6">
-      <ErrorBoundary fallback={<BoardsListError />}>
-        <Suspense fallback={<BoardsListLoading />}>
+      <Switch>
+        <Match when={boardQuery.isSuccess}>
           <Show
             fallback={<BoardsListEmpty />}
-            when={
-              boardQuery.status === "success" &&
-              boardQuery.data &&
-              boardQuery.data.length > 0
-            }
+            when={boardQuery.data && boardQuery.data.length > 0}
           >
             <div class="flex flex-wrap gap-3">
               <For each={boardQuery.data}>
@@ -92,8 +88,14 @@ export const BoardsList = () => {
               </For>
             </div>
           </Show>
-        </Suspense>
-      </ErrorBoundary>
+        </Match>
+        <Match when={boardQuery.isError}>
+          <BoardsListError />
+        </Match>
+        <Match when={boardQuery.isPending}>
+          <BoardsListLoading />
+        </Match>
+      </Switch>
     </section>
   );
 };
