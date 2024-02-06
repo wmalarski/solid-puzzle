@@ -1,4 +1,4 @@
-import { Container, Graphics, Matrix, Text, type Texture } from "pixi.js";
+import { Container, Graphics, Matrix, type Texture } from "pixi.js";
 import {
   type Component,
   Show,
@@ -12,6 +12,7 @@ import type { PuzzleFragmentShape } from "~/utils/getPuzzleFragments";
 
 import { type Point2D, getCenterFromPoints } from "~/utils/geometry";
 
+import { usePlayerPresence } from "../../DataProviders/PresenceProvider";
 import {
   type FragmentState,
   usePuzzleStore
@@ -21,30 +22,6 @@ import { useBoardTheme } from "../BoardTheme";
 import { usePixiApp } from "../PixiApp";
 import { RotationAnchor } from "./RotationAnchor";
 import { useDragObject } from "./useDragObject";
-
-type PuzzleFragmentLabelProps = {
-  container: Container;
-  label: number;
-};
-
-const PuzzleFragmentLabel: Component<PuzzleFragmentLabelProps> = (props) => {
-  const text = new Text();
-  text.scale.set(0.5);
-
-  createEffect(() => {
-    text.text = `I:${props.label}`;
-  });
-
-  onMount(() => {
-    props.container.addChild(text);
-  });
-
-  onCleanup(() => {
-    props.container.removeChild(text);
-  });
-
-  return null;
-};
 
 const drawPuzzleShape = (shape: PuzzleFragmentShape, graphics: Graphics) => {
   const matrix = new Matrix(1, 0, 0, 1);
@@ -104,7 +81,6 @@ const PuzzleBorderGraphics: Component<PuzzleBorderGraphicsProps> = (props) => {
 type PuzzleFragmentGraphicsProps = {
   center: Point2D;
   container: Container;
-  isSelected: boolean;
   shape: PuzzleFragmentShape;
   state: FragmentState;
   texture: Texture;
@@ -155,6 +131,8 @@ type PuzzleFragmentProps = {
 export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
   const store = usePuzzleStore();
   const selection = usePlayerSelection();
+  const presence = usePlayerPresence();
+
   const app = usePixiApp();
 
   const fragment = new Container();
@@ -189,11 +167,31 @@ export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
     fragment.y = props.state.y;
   });
 
+  const remotePlayerSelection = createMemo(() => {
+    const remotePlayerId = selection.selection[props.state.fragmentId];
+    if (!remotePlayerId) {
+      return null;
+    }
+
+    const remotePlayer = presence.players[remotePlayerId];
+    if (!remotePlayer) {
+      return null;
+    }
+
+    return remotePlayer;
+  });
+
   createEffect(() => {
     if (!props.state.isLocked) {
       fragment.eventMode = "static";
       return;
     }
+
+    if (remotePlayerSelection()) {
+      fragment.eventMode = "none";
+      return;
+    }
+
     fragment.eventMode = "none";
     fragment.x = props.shape.min.x;
     fragment.y = props.shape.min.y;
@@ -256,12 +254,10 @@ export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
       <PuzzleFragmentGraphics
         center={center()}
         container={fragment}
-        isSelected={isFragmentSelected()}
         shape={props.shape}
         state={props.state}
         texture={props.texture}
       />
-      <PuzzleFragmentLabel container={fragment} label={fragmentId()} />
       <Show when={isFragmentSelected()}>
         <>
           <PuzzleBorderGraphics

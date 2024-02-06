@@ -21,7 +21,7 @@ import { useSupabase } from "~/contexts/SupabaseContext";
 import { usePlayerPresence } from "./PresenceProvider";
 import { REALTIME_THROTTLE_TIME } from "./const";
 
-type PlayerSelectionState = Record<string, null | string | undefined>;
+type PlayerSelectionState = Record<string, string | undefined>;
 
 const SELECTION_CHANNEL_NAME = "rooms:selections";
 const SELECTION_EVENT_NAME = "rooms:selection";
@@ -29,13 +29,13 @@ const SELECTION_EVENT_NAME = "rooms:selection";
 const createPlayerSelectionState = (boardAccess: () => BoardAccess) => {
   const presence = usePlayerPresence();
 
-  const [selectedId, setSelectedId] = createSignal<null | number>(null);
+  const [selectedId, setSelectedId] = createSignal<null | string>(null);
 
   const [selection, setSelection] = createStore<PlayerSelectionState>({});
 
-  const [sender, setSender] = createSignal<(arg: null | number) => void>(
+  const [sender, setSender] = createSignal<(arg: null | string) => void>(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    (_selectionId: null | number) => void 0
+    (_selectionId: null | string) => void 0
   );
 
   const supabase = useSupabase();
@@ -52,7 +52,7 @@ const createPlayerSelectionState = (boardAccess: () => BoardAccess) => {
         (payload) => {
           setSelection(
             produce((state) => {
-              state[payload.playerId] = payload.selectionId;
+              state[payload.selectionId] = payload.playerId;
             })
           );
         }
@@ -79,7 +79,7 @@ const createPlayerSelectionState = (boardAccess: () => BoardAccess) => {
     });
   });
 
-  const select = (selectionId: null | number) => {
+  const select = (selectionId: null | string) => {
     sender()(selectionId);
     setSelectedId(selectionId);
   };
@@ -87,8 +87,10 @@ const createPlayerSelectionState = (boardAccess: () => BoardAccess) => {
   const leave = (playerIds: string[]) => {
     setSelection(
       produce((state) => {
-        playerIds.forEach((playerId) => {
-          state[playerId] = undefined;
+        Object.entries(state).forEach(([fragmentId, playerId]) => {
+          if (playerId && playerIds.includes(playerId)) {
+            state[fragmentId] = undefined;
+          }
         });
       })
     );

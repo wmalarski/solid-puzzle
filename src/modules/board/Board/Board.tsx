@@ -88,9 +88,9 @@ export const Board: Component<BoardProps> = (props) => {
   return (
     <ErrorBoundary fallback={ErrorFallback}>
       <Suspense>
-        <PlayerPresenceProvider boardAccess={props.boardAccess}>
-          <PlayerSelectionProvider boardAccess={props.boardAccess}>
-            <PlayerCursorProvider boardAccess={props.boardAccess}>
+        <PlayerSelectionProvider boardAccess={props.boardAccess}>
+          <PlayerCursorProvider boardAccess={props.boardAccess}>
+            <PlayerPresenceProvider boardAccess={props.boardAccess}>
               <PuzzleStateProvider
                 board={props.board}
                 fragments={props.fragments}
@@ -103,9 +103,9 @@ export const Board: Component<BoardProps> = (props) => {
                 <InfoBar />
                 <MenuBar board={props.board} />
               </PuzzleStateProvider>
-            </PlayerCursorProvider>
-          </PlayerSelectionProvider>
-        </PlayerPresenceProvider>
+            </PlayerPresenceProvider>
+          </PlayerCursorProvider>
+        </PlayerSelectionProvider>
       </Suspense>
     </ErrorBoundary>
   );

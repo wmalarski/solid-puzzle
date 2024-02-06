@@ -21,6 +21,9 @@ import { useSessionContext } from "~/contexts/SessionContext";
 import { useSupabase } from "~/contexts/SupabaseContext";
 import { randomHexColor } from "~/utils/colors";
 
+import { usePlayerCursors } from "./CursorProvider";
+import { usePlayerSelection } from "./SelectionProvider";
+
 export type PlayerState = {
   color: string;
   name: string;
@@ -44,6 +47,8 @@ const createPlayerPresenceState = (boardAccess: () => BoardAccess) => {
   const [players, setPlayers] = createStore<PlayersState>({});
 
   const session = useSessionContext();
+  const selection = usePlayerSelection();
+  const cursors = usePlayerCursors();
 
   const currentPlayer = createMemo(() => {
     return {
@@ -93,10 +98,15 @@ const createPlayerPresenceState = (boardAccess: () => BoardAccess) => {
         REALTIME_LISTEN_TYPES.PRESENCE,
         { event: REALTIME_PRESENCE_LISTEN_EVENTS.LEAVE },
         ({ leftPresences }) => {
+          const leftIds = leftPresences.map((presence) => presence.playerId);
+
+          selection.leave(leftIds);
+          cursors.leave(leftIds);
+
           setPlayers(
             produce((state) => {
-              leftPresences.forEach((presence) => {
-                state[presence.playerId] = undefined;
+              leftIds.forEach((playerId) => {
+                state[playerId] = undefined;
               });
             })
           );
