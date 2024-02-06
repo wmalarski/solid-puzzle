@@ -58,13 +58,17 @@ const insertPuzzleFragments = ({
   rows,
   width
 }: InsertPuzzleFragmentsArgs) => {
+  const initial = getInitialFragmentState({ columns, height, rows, width });
   return event.locals.supabase
     .from("puzzle")
     .insert(
-      getInitialFragmentState({ columns, height, rows, width }).map(
-        (fragment) => ({ ...fragment, is_locked: false, room_id: boardId })
-      )
-    );
+      initial.map((fragment) => ({
+        ...fragment,
+        is_locked: false,
+        room_id: boardId
+      }))
+    )
+    .select();
 };
 
 export const insertBoardServerAction = async (form: FormData) => {
@@ -106,7 +110,7 @@ export const insertBoardServerAction = async (form: FormData) => {
     return rpcErrorResult(result.error);
   }
 
-  await insertPuzzleFragments({
+  const insertFragmentsResult = await insertPuzzleFragments({
     boardId: result.data.id,
     columns,
     event,
@@ -114,6 +118,10 @@ export const insertBoardServerAction = async (form: FormData) => {
     rows,
     width
   });
+
+  if (insertFragmentsResult.error) {
+    return rpcErrorResult(insertFragmentsResult.error);
+  }
 
   throw redirect(paths.board(result.data.id), {
     revalidate: INSERT_BOARD_ARGS_CACHE_KEY
@@ -161,12 +169,16 @@ export const updateBoardServerAction = async (form: FormData) => {
     return rpcErrorResult(result.error);
   }
 
-  await event.locals.supabase
+  const deleteFragmentsResult = await event.locals.supabase
     .from("puzzle")
     .delete()
     .eq("room_id", parsed.output.id);
 
-  await insertPuzzleFragments({
+  if (deleteFragmentsResult.error) {
+    return rpcErrorResult(deleteFragmentsResult.error);
+  }
+
+  const insertFragmentsResult = await insertPuzzleFragments({
     boardId: parsed.output.id,
     columns,
     event,
@@ -174,6 +186,10 @@ export const updateBoardServerAction = async (form: FormData) => {
     rows,
     width
   });
+
+  if (insertFragmentsResult.error) {
+    return rpcErrorResult(insertFragmentsResult.error);
+  }
 
   return rpcSuccessResult(result.data);
 };

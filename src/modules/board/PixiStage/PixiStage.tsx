@@ -7,7 +7,6 @@ import { ZoomBar } from "../ZoomBar";
 import { BoardThemeProvider } from "./BoardTheme";
 import { PixiAppProvider } from "./PixiApp";
 import { PuzzleBoard } from "./PuzzleBoard/PuzzleBoard";
-import { MOCK_IMAGE } from "./constants";
 import { usePreventMenu } from "./usePreventMenu";
 import { useStageTransform } from "./useStageTransform";
 
@@ -19,7 +18,7 @@ const Stage: Component<StageProps> = (props) => {
   useStageTransform();
   usePreventMenu();
 
-  return <PuzzleBoard board={props.board} path={MOCK_IMAGE} />;
+  return <PuzzleBoard board={props.board} path={props.board.media} />;
 };
 
 type Props = {

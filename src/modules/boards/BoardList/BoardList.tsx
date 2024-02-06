@@ -27,7 +27,7 @@ const BoardItem: Component<BoardItemProps> = (props) => {
       <Show when={props.board.media}>
         {(src) => (
           <figure>
-            <img alt="board" src={src()} />
+            <img alt="board" class="max-w-96" src={src()} />
           </figure>
         )}
       </Show>
@@ -38,6 +38,7 @@ const BoardItem: Component<BoardItemProps> = (props) => {
             boardId={props.board.id}
             color="error"
             size="sm"
+            variant="outline"
           >
             <TrashIcon class="size-4" />
             {t("board.settings.delete.button")}
@@ -74,7 +75,7 @@ export const BoardsList = () => {
   );
 
   return (
-    <section class="flex flex-wrap gap-3">
+    <section class="mx-auto max-w-screen-xl p-6">
       <ErrorBoundary fallback={<BoardsListError />}>
         <Suspense fallback={<BoardsListLoading />}>
           <Show
@@ -85,9 +86,11 @@ export const BoardsList = () => {
               boardQuery.data.length > 0
             }
           >
-            <For each={boardQuery.data}>
-              {(board) => <BoardItem board={board} />}
-            </For>
+            <div class="flex flex-wrap gap-3">
+              <For each={boardQuery.data}>
+                {(board) => <BoardItem board={board} />}
+              </For>
+            </div>
           </Show>
         </Suspense>
       </ErrorBoundary>
