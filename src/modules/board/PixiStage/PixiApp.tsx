@@ -29,7 +29,13 @@ type Props = {
 export const PixiAppProvider: Component<Props> = (props) => {
   const app = new Application();
 
-  const container = new Container();
+  const hitArea = {
+    contains() {
+      return true;
+    }
+  };
+
+  const container = new Container({ hitArea });
 
   createResource(async () => {
     await app.init({
@@ -40,15 +46,7 @@ export const PixiAppProvider: Component<Props> = (props) => {
       width: window.innerWidth
     });
 
-    const hitArea = {
-      contains() {
-        return true;
-      }
-    };
-
     app.stage.hitArea = hitArea;
-    container.hitArea = hitArea;
-
     app.renderer.resize(window.innerWidth, window.innerHeight);
   });
 

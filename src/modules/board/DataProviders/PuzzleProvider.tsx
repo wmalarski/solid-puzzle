@@ -27,6 +27,7 @@ import {
 } from "~/utils/getPuzzleFragments";
 
 import { usePlayerPresence } from "./PresenceProvider";
+import { REALTIME_THROTTLE_TIME } from "./const";
 
 export type FragmentState = {
   fragmentId: string;
@@ -214,7 +215,7 @@ const createPuzzleContext = (args: CreatePuzzleContextArgs) => {
               type: REALTIME_LISTEN_TYPES.BROADCAST,
               ...update
             });
-          })
+          }, REALTIME_THROTTLE_TIME)
         );
       });
 

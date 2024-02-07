@@ -1,4 +1,10 @@
-import { type FederatedPointerEvent, Graphics, Text, TextStyle } from "pixi.js";
+import {
+  Container,
+  type FederatedPointerEvent,
+  Graphics,
+  Text,
+  TextStyle
+} from "pixi.js";
 import {
   type Component,
   For,
@@ -11,8 +17,9 @@ import {
 
 import { usePlayerCursors } from "../../DataProviders/CursorProvider";
 import { usePlayerPresence } from "../../DataProviders/PresenceProvider";
+import { useTransformContext } from "../../TransformContext";
 import { useBoardTheme } from "../BoardTheme";
-import { usePixiContainer } from "../PixiApp";
+import { usePixiApp, usePixiContainer } from "../PixiApp";
 
 const CURSOR_SIZE = 20;
 const LABEL_PADDING = 5;
@@ -20,19 +27,19 @@ const LABEL_SHIFT = CURSOR_SIZE * 1.2;
 
 type CursorGraphicsProps = {
   color: string;
+  cursorsContainer: Container;
   name: string;
   x: number;
   y: number;
 };
 
 const CursorGraphics: Component<CursorGraphicsProps> = (props) => {
-  const container = usePixiContainer();
   const theme = useBoardTheme();
 
-  const graphics = new Graphics({ zIndex: 2 });
+  const graphics = new Graphics({ zIndex: 3 });
 
   const style = new TextStyle({ fontSize: 16 });
-  const text = new Text({ style, zIndex: 3 });
+  const text = new Text({ style, zIndex: 4 });
 
   onMount(() => {
     graphics
@@ -67,13 +74,13 @@ const CursorGraphics: Component<CursorGraphicsProps> = (props) => {
   });
 
   onMount(() => {
-    container.addChild(graphics);
-    container.addChild(text);
+    props.cursorsContainer.addChild(graphics);
+    props.cursorsContainer.addChild(text);
   });
 
   onCleanup(() => {
-    container.removeChild(graphics);
-    container.removeChild(text);
+    props.cursorsContainer.removeChild(graphics);
+    props.cursorsContainer.removeChild(text);
 
     graphics.destroy();
     text.destroy();
@@ -103,8 +110,21 @@ const usePlayerCursor = () => {
 };
 
 export const RemoteCursors: Component = () => {
+  const app = usePixiApp();
+
+  const cursorsContainer = new Container();
+
   const cursors = usePlayerCursors();
   const presence = usePlayerPresence();
+  const transform = useTransformContext();
+
+  onMount(() => {
+    app.stage.addChild(cursorsContainer);
+  });
+
+  onCleanup(() => {
+    app.stage.removeChild(cursorsContainer);
+  });
 
   usePlayerCursor();
 
@@ -121,9 +141,10 @@ export const RemoteCursors: Component = () => {
               {(player) => (
                 <CursorGraphics
                   color={player().color}
+                  cursorsContainer={cursorsContainer}
                   name={player().name}
-                  x={state().x}
-                  y={state().y}
+                  x={transform.x() + state().x * transform.scale()}
+                  y={transform.y() + state().y * transform.scale()}
                 />
               )}
             </Show>
