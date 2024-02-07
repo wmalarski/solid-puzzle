@@ -153,17 +153,14 @@ export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
   onMount(() => {
     const centerValue = center();
     fragment.pivot.set(-centerValue.x, -centerValue.y);
-
-    fragment.x = props.shape.min.x;
-    fragment.y = props.shape.min.y;
   });
 
   createEffect(() => {
-    fragment.x = props.state.x;
+    fragment.x = props.state.isLocked ? props.shape.min.x : props.state.x;
   });
 
   createEffect(() => {
-    fragment.y = props.state.y;
+    fragment.y = props.state.isLocked ? props.shape.min.y : props.state.y;
   });
 
   const remotePlayerSelection = createMemo(() => {
@@ -182,40 +179,16 @@ export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
   });
 
   createEffect(() => {
-    console.log(
-      "remotePlayerSelection",
-      remotePlayerSelection(),
-      props.state.fragmentId,
-      JSON.stringify(selection.selection, null, 2)
-    );
+    const shouldBeBlocked = props.state.isLocked || remotePlayerSelection();
+    fragment.eventMode = shouldBeBlocked ? "none" : "static";
   });
 
-  createEffect(() => {
-    if (!props.state.isLocked) {
-      fragment.eventMode = "static";
-      return;
-    }
-
-    if (remotePlayerSelection()) {
-      fragment.eventMode = "none";
-      return;
-    }
-
-    fragment.eventMode = "none";
-    fragment.x = props.shape.min.x;
-    fragment.y = props.shape.min.y;
-  });
-
-  const fragmentId = createMemo(() => {
-    return props.state.fragmentId;
-  });
-
-  const isFragmentSelected = createMemo(() => {
-    return fragmentId() === selection.selectedId();
+  const isCurrentPlayerSelected = createMemo(() => {
+    return props.state.fragmentId === selection.selectedId();
   });
 
   const zIndex = createMemo(() => {
-    return isFragmentSelected() ? 1 : 0;
+    return isCurrentPlayerSelected() || remotePlayerSelection() ? 1 : 0;
   });
 
   createEffect(() => {
@@ -241,7 +214,7 @@ export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
       });
     },
     onDragStart: () => {
-      selection.select(fragmentId());
+      selection.select(props.state.fragmentId);
     }
   });
 
@@ -278,7 +251,7 @@ export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
           />
         )}
       </Show>
-      <Show when={isFragmentSelected()}>
+      <Show when={isCurrentPlayerSelected()}>
         <>
           <PuzzleBorderGraphics
             center={center()}
