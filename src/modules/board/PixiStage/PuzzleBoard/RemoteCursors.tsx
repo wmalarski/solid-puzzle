@@ -112,7 +112,9 @@ const usePlayerCursor = () => {
 export const RemoteCursors: Component = () => {
   const app = usePixiApp();
 
-  const cursorsContainer = new Container();
+  const cursorsContainer = new Container({
+    zIndex: 5
+  });
 
   const cursors = usePlayerCursors();
   const presence = usePlayerPresence();

@@ -19,7 +19,6 @@ import type { BoardAccess } from "~/types/models";
 
 import { useSupabase } from "~/contexts/SupabaseContext";
 
-import { usePlayerPresence } from "./PresenceProvider";
 import { REALTIME_THROTTLE_TIME } from "./const";
 
 type PlayerSelectionState = Record<string, null | string | undefined>;
@@ -28,8 +27,6 @@ const SELECTION_CHANNEL_NAME = "rooms:selections";
 const SELECTION_EVENT_NAME = "rooms:selection";
 
 const createPlayerSelectionState = (boardAccess: () => BoardAccess) => {
-  const presence = usePlayerPresence();
-
   const [selectedId, setSelectedId] = createSignal<null | string>(null);
 
   const [selection, setSelection] = createStore<PlayerSelectionState>({});
@@ -56,7 +53,6 @@ const createPlayerSelectionState = (boardAccess: () => BoardAccess) => {
   onMount(() => {
     const channelName = `${SELECTION_CHANNEL_NAME}:${boardAccess().boardId}`;
     const channel = supabase().channel(channelName);
-    const playerId = presence.currentPlayer().playerId;
 
     channel
       .on(
@@ -77,6 +73,7 @@ const createPlayerSelectionState = (boardAccess: () => BoardAccess) => {
 
         setSender(() =>
           throttle((selectionId) => {
+            const playerId = boardAccess().playerId;
             channel.send({
               event: SELECTION_EVENT_NAME,
               playerId,

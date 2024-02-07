@@ -17,7 +17,6 @@ import { createStore, produce } from "solid-js/store";
 
 import type { BoardAccess } from "~/types/models";
 
-import { useSessionContext } from "~/contexts/SessionContext";
 import { useSupabase } from "~/contexts/SupabaseContext";
 import { randomHexColor } from "~/utils/colors";
 
@@ -45,16 +44,15 @@ const placeholderCurrentPlayer: PlayerState = {
 
 const createPlayerPresenceState = (boardAccess: () => BoardAccess) => {
   const [players, setPlayers] = createStore<PlayersState>({});
-
-  const session = useSessionContext();
   const selection = usePlayerSelection();
   const cursors = usePlayerCursors();
 
   const currentPlayer = createMemo(() => {
+    const access = boardAccess();
     return {
       color: defaultColor,
-      name: boardAccess().userName,
-      playerId: session()?.user.id || defaultPlayerId
+      name: access.userName,
+      playerId: access.playerId
     };
   });
 
@@ -114,7 +112,6 @@ const createPlayerPresenceState = (boardAccess: () => BoardAccess) => {
       )
       .subscribe(async (status) => {
         if (status === REALTIME_SUBSCRIBE_STATES.SUBSCRIBED) {
-          // eslint-disable-next-line no-console
           await channel.track(player);
         }
       });

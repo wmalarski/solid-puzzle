@@ -18,7 +18,6 @@ import type { BoardAccess } from "~/types/models";
 
 import { useSupabase } from "~/contexts/SupabaseContext";
 
-import { usePlayerPresence } from "./PresenceProvider";
 import { REALTIME_THROTTLE_TIME } from "./const";
 
 export type PlayerCursorState = {
@@ -32,8 +31,6 @@ const CURSOR_CHANNEL_NAME = "rooms:cursors";
 const CURSOR_EVENT_NAME = "rooms:cursor";
 
 const createPlayerCursorState = (boardAccess: () => BoardAccess) => {
-  const presence = usePlayerPresence();
-
   const [cursors, setCursors] = createStore<PlayersCursorState>({});
 
   const [sender, setSender] = createSignal<(args: PlayerCursorState) => void>(
@@ -46,7 +43,6 @@ const createPlayerCursorState = (boardAccess: () => BoardAccess) => {
   onMount(() => {
     const channelName = `${CURSOR_CHANNEL_NAME}:${boardAccess().boardId}`;
     const channel = supabase().channel(channelName);
-    const playerId = presence.currentPlayer().playerId;
 
     channel
       .on(
@@ -76,6 +72,7 @@ const createPlayerCursorState = (boardAccess: () => BoardAccess) => {
 
         setSender(() =>
           throttle((update: PlayerCursorState) => {
+            const playerId = boardAccess().playerId;
             channel.send({
               event: CURSOR_EVENT_NAME,
               playerId,

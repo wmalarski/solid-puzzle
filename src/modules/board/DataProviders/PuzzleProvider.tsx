@@ -15,7 +15,7 @@ import {
 } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 
-import type { BoardModel, FragmentModel } from "~/types/models";
+import type { BoardAccess, BoardModel, FragmentModel } from "~/types/models";
 
 import { useSupabase } from "~/contexts/SupabaseContext";
 import { useUpdateFragment } from "~/server/board/client";
@@ -26,7 +26,6 @@ import {
   getPuzzleFragments
 } from "~/utils/getPuzzleFragments";
 
-import { usePlayerPresence } from "./PresenceProvider";
 import { REALTIME_THROTTLE_TIME } from "./const";
 
 export type FragmentState = {
@@ -68,21 +67,20 @@ const isLockedInPlace = ({ fragment, shapes }: IsLockedInPlaceArgs) => {
   return isLocked;
 };
 
-type CreatePuzzleContextArgs = {
+type CreatePuzzleContextArgs = () => {
   board: BoardModel;
+  boardAccess: BoardAccess;
   fragments: FragmentModel[];
 };
 
 const createPuzzleContext = (args: CreatePuzzleContextArgs) => {
-  const presence = usePlayerPresence();
-
   const updateFragment = useUpdateFragment();
 
   const config = createMemo(() => {
     return getPuzzleFragments({
-      config: args.board.config as PuzzleCurveConfig,
-      height: args.board.height,
-      width: args.board.width
+      config: args().board.config as PuzzleCurveConfig,
+      height: args().board.height,
+      width: args().board.width
     });
   });
 
@@ -91,7 +89,7 @@ const createPuzzleContext = (args: CreatePuzzleContextArgs) => {
 
     const fragmentsConfig = config().fragments;
 
-    args.fragments.forEach((fragment) => {
+    args().fragments.forEach((fragment) => {
       const shape = fragmentsConfig[fragment.index];
       shapesMap.set(fragment.id, shape);
     });
@@ -100,13 +98,13 @@ const createPuzzleContext = (args: CreatePuzzleContextArgs) => {
   });
 
   const fragmentsIds = createMemo(() => {
-    return args.fragments.map((fragment) => fragment.id);
+    return args().fragments.map((fragment) => fragment.id);
   });
 
   const store = createMemo(() => {
     const init: PuzzleState = {};
 
-    args.fragments.forEach((fragment) => {
+    args().fragments.forEach((fragment) => {
       init[fragment.id] = {
         fragmentId: fragment.id,
         isLocked: fragment.is_locked,
@@ -179,9 +177,9 @@ const createPuzzleContext = (args: CreatePuzzleContextArgs) => {
   };
 
   createEffect(() => {
-    const channelName = `${PUZZLE_CHANNEL_NAME}:${args.board.id}`;
+    const channelName = `${PUZZLE_CHANNEL_NAME}:${args().board.id}`;
     const channel = supabase().channel(channelName);
-    const playerId = presence.currentPlayer().playerId;
+    const playerId = args().boardAccess.playerId;
     const fragmentsStore = store();
 
     channel
@@ -253,6 +251,7 @@ const PuzzleStateContext = createContext<PuzzleContextState>({
 
 type PuzzleStateProviderProps = {
   board: BoardModel;
+  boardAccess: BoardAccess;
   children: JSX.Element;
   fragments: FragmentModel[];
 };
@@ -260,7 +259,7 @@ type PuzzleStateProviderProps = {
 export const PuzzleStateProvider: Component<PuzzleStateProviderProps> = (
   props
 ) => {
-  const value = createPuzzleContext(props);
+  const value = createPuzzleContext(() => props);
 
   return (
     <PuzzleStateContext.Provider value={value}>
