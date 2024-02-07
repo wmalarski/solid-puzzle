@@ -7,7 +7,7 @@ import {
 import { type Component, createEffect, onCleanup, onMount } from "solid-js";
 
 import { useBoardTheme } from "../BoardTheme";
-import { usePixiApp } from "../PixiApp";
+import { usePixiApp, usePixiContainer } from "../PixiApp";
 import { RIGHT_BUTTON } from "../constants";
 
 type RotationAnchorProps = {
@@ -21,6 +21,7 @@ type RotationAnchorProps = {
 export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
   const app = usePixiApp();
   const theme = useBoardTheme();
+  const container = usePixiContainer();
 
   const graphics = new Graphics();
   graphics.eventMode = "static";
@@ -50,9 +51,9 @@ export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
   };
 
   const onDragEnd = (event: FederatedPointerEvent) => {
-    app.stage.off("pointermove", onDragMove);
-    app.stage.off("pointerup", onDragEnd);
-    app.stage.off("pointerupoutside", onDragEnd);
+    container.off("pointermove", onDragMove);
+    container.off("pointerup", onDragEnd);
+    container.off("pointerupoutside", onDragEnd);
 
     const rotation = toRotation(event);
     props.onEnd(rotation);
@@ -66,9 +67,9 @@ export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
     }
 
     event.stopPropagation();
-    app.stage.on("pointermove", onDragMove);
-    app.stage.once("pointerup", onDragEnd);
-    app.stage.once("pointerupoutside", onDragEnd);
+    container.on("pointermove", onDragMove);
+    container.once("pointerup", onDragEnd);
+    container.once("pointerupoutside", onDragEnd);
 
     app.canvas.style.cursor = "grab";
   };

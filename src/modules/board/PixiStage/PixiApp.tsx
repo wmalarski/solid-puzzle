@@ -1,4 +1,4 @@
-import { Application } from "pixi.js";
+import { Application, Container } from "pixi.js";
 import {
   type Component,
   type JSX,
@@ -11,8 +11,14 @@ import {
 
 const PixiAppContext = createContext<Application>({} as unknown as Application);
 
+const ContainerContext = createContext<Container>({} as unknown as Container);
+
 export const usePixiApp = () => {
   return useContext(PixiAppContext);
+};
+
+export const usePixiContainer = () => {
+  return useContext(ContainerContext);
 };
 
 type Props = {
@@ -23,6 +29,8 @@ type Props = {
 export const PixiAppProvider: Component<Props> = (props) => {
   const app = new Application();
 
+  const container = new Container();
+
   createResource(async () => {
     await app.init({
       antialias: true,
@@ -32,17 +40,19 @@ export const PixiAppProvider: Component<Props> = (props) => {
       width: window.innerWidth
     });
 
-    app.stage.hitArea = {
+    const hitArea = {
       contains() {
         return true;
       }
     };
 
+    app.stage.hitArea = hitArea;
+    container.hitArea = hitArea;
+
     app.renderer.resize(window.innerWidth, window.innerHeight);
   });
 
   const onResize = () => {
-    app.stage.hitArea = app.screen;
     app.renderer.resize(window.innerWidth, window.innerHeight);
   };
 
@@ -54,9 +64,19 @@ export const PixiAppProvider: Component<Props> = (props) => {
     window.removeEventListener("resize", onResize);
   });
 
+  onMount(() => {
+    app.stage.addChild(container);
+  });
+
+  onCleanup(() => {
+    app.stage.removeChild(container);
+  });
+
   return (
     <PixiAppContext.Provider value={app}>
-      {props.children}
+      <ContainerContext.Provider value={container}>
+        {props.children}
+      </ContainerContext.Provider>
     </PixiAppContext.Provider>
   );
 };

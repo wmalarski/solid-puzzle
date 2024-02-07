@@ -12,7 +12,7 @@ import {
 import { usePlayerCursors } from "../../DataProviders/CursorProvider";
 import { usePlayerPresence } from "../../DataProviders/PresenceProvider";
 import { useBoardTheme } from "../BoardTheme";
-import { usePixiApp } from "../PixiApp";
+import { usePixiContainer } from "../PixiApp";
 
 const CURSOR_SIZE = 20;
 const LABEL_PADDING = 5;
@@ -26,7 +26,7 @@ type CursorGraphicsProps = {
 };
 
 const CursorGraphics: Component<CursorGraphicsProps> = (props) => {
-  const app = usePixiApp();
+  const container = usePixiContainer();
   const theme = useBoardTheme();
 
   const graphics = new Graphics({ zIndex: 2 });
@@ -67,13 +67,13 @@ const CursorGraphics: Component<CursorGraphicsProps> = (props) => {
   });
 
   onMount(() => {
-    app.stage.addChild(graphics);
-    app.stage.addChild(text);
+    container.addChild(graphics);
+    container.addChild(text);
   });
 
   onCleanup(() => {
-    app.stage.removeChild(graphics);
-    app.stage.removeChild(text);
+    container.removeChild(graphics);
+    container.removeChild(text);
 
     graphics.destroy();
     text.destroy();
@@ -83,22 +83,22 @@ const CursorGraphics: Component<CursorGraphicsProps> = (props) => {
 };
 
 const usePlayerCursor = () => {
-  const app = usePixiApp();
+  const container = usePixiContainer();
   const cursors = usePlayerCursors();
 
   const onPointerMove = (event: FederatedPointerEvent) => {
-    const transform = app.stage.worldTransform;
+    const transform = container.worldTransform;
     const inverted = transform.applyInverse(event.global);
 
     cursors.send({ x: inverted.x, y: inverted.y });
   };
 
   onMount(() => {
-    app.stage.on("pointermove", onPointerMove);
+    container.on("pointermove", onPointerMove);
   });
 
   onCleanup(() => {
-    app.stage.off("pointermove", onPointerMove);
+    container.off("pointermove", onPointerMove);
   });
 };
 

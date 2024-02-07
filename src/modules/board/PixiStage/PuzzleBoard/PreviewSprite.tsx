@@ -10,14 +10,14 @@ import type { PuzzleShapeLine } from "~/utils/getPuzzleFragments";
 
 import { usePlayerSelection } from "../../DataProviders/SelectionProvider";
 import { useBoardTheme } from "../BoardTheme";
-import { usePixiApp } from "../PixiApp";
+import { usePixiContainer } from "../PixiApp";
 
 type PreviewGridProps = {
   lines: PuzzleShapeLine[];
 };
 
 export const PreviewGrid: Component<PreviewGridProps> = (props) => {
-  const app = usePixiApp();
+  const container = usePixiContainer();
   const theme = useBoardTheme();
 
   const graphics = new Graphics();
@@ -35,11 +35,11 @@ export const PreviewGrid: Component<PreviewGridProps> = (props) => {
   });
 
   onMount(() => {
-    app.stage.addChild(graphics);
+    container.addChild(graphics);
   });
 
   onCleanup(() => {
-    app.stage.removeChild(graphics);
+    container.removeChild(graphics);
   });
 
   return null;
@@ -50,7 +50,7 @@ type PreviewSpriteProps = {
 };
 
 export const PreviewSprite: Component<PreviewSpriteProps> = (props) => {
-  const app = usePixiApp();
+  const container = usePixiContainer();
   const theme = useBoardTheme();
   const selection = usePlayerSelection();
 
@@ -62,11 +62,11 @@ export const PreviewSprite: Component<PreviewSpriteProps> = (props) => {
   });
 
   onMount(() => {
-    app.stage.addChild(sprite);
+    container.addChild(sprite);
   });
 
   onCleanup(() => {
-    app.stage.removeChild(sprite);
+    container.removeChild(sprite);
   });
 
   const onPointerDown = (event: FederatedPointerEvent) => {

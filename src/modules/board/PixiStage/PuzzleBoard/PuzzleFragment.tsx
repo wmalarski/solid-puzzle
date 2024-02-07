@@ -19,7 +19,7 @@ import {
 } from "../../DataProviders/PuzzleProvider";
 import { usePlayerSelection } from "../../DataProviders/SelectionProvider";
 import { useBoardTheme } from "../BoardTheme";
-import { usePixiApp } from "../PixiApp";
+import { usePixiContainer } from "../PixiApp";
 import { RotationAnchor } from "./RotationAnchor";
 import { useDragObject } from "./useDragObject";
 
@@ -132,16 +132,16 @@ export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
   const selection = usePlayerSelection();
   const presence = usePlayerPresence();
 
-  const app = usePixiApp();
+  const container = usePixiContainer();
 
   const fragment = new Container();
 
   onMount(() => {
-    app.stage.addChild(fragment);
+    container.addChild(fragment);
   });
 
   onCleanup(() => {
-    app.stage.removeChild(fragment);
+    container.removeChild(fragment);
   });
 
   const center = createMemo(() => {

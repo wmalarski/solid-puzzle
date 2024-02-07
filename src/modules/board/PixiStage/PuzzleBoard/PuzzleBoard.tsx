@@ -12,28 +12,28 @@ import type { BoardModel } from "~/types/models";
 
 import { usePuzzleStore } from "../../DataProviders/PuzzleProvider";
 import { usePlayerSelection } from "../../DataProviders/SelectionProvider";
-import { usePixiApp } from "../PixiApp";
+import { usePixiContainer } from "../PixiApp";
 import { RIGHT_BUTTON } from "../constants";
 import { PreviewGrid, PreviewSprite } from "./PreviewSprite";
 import { PuzzleFragment } from "./PuzzleFragment";
 import { RemoteCursors } from "./RemoteCursors";
 
 const useStageDeselect = () => {
-  const app = usePixiApp();
+  const container = usePixiContainer();
   const selection = usePlayerSelection();
 
   const onPointerDown = (event: FederatedPointerEvent) => {
-    if (event.target === app.stage && event.button !== RIGHT_BUTTON) {
+    if (event.target === container && event.button !== RIGHT_BUTTON) {
       selection.select(null);
     }
   };
 
   onMount(() => {
-    app.stage.on("pointerdown", onPointerDown);
+    container.on("pointerdown", onPointerDown);
   });
 
   onCleanup(() => {
-    app.stage.off("pointerdown", onPointerDown);
+    container.off("pointerdown", onPointerDown);
   });
 };
 
