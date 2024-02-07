@@ -7,6 +7,7 @@ import {
   type Component,
   type JSX,
   createContext,
+  createMemo,
   createSignal,
   onCleanup,
   onMount,
@@ -21,7 +22,7 @@ import { useSupabase } from "~/contexts/SupabaseContext";
 import { usePlayerPresence } from "./PresenceProvider";
 import { REALTIME_THROTTLE_TIME } from "./const";
 
-type PlayerSelectionState = Record<string, string | undefined>;
+type PlayerSelectionState = Record<string, null | string | undefined>;
 
 const SELECTION_CHANNEL_NAME = "rooms:selections";
 const SELECTION_EVENT_NAME = "rooms:selection";
@@ -32,6 +33,18 @@ const createPlayerSelectionState = (boardAccess: () => BoardAccess) => {
   const [selectedId, setSelectedId] = createSignal<null | string>(null);
 
   const [selection, setSelection] = createStore<PlayerSelectionState>({});
+
+  const fragmentSelection = createMemo(() => {
+    return Object.entries(selection).reduce<Record<string, string>>(
+      (prev, [playerId, fragmentId]) => {
+        if (fragmentId) {
+          prev[fragmentId] = playerId;
+        }
+        return prev;
+      },
+      {}
+    );
+  });
 
   const [sender, setSender] = createSignal<(arg: null | string) => void>(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -52,7 +65,7 @@ const createPlayerSelectionState = (boardAccess: () => BoardAccess) => {
         (payload) => {
           setSelection(
             produce((state) => {
-              state[payload.selectionId] = payload.playerId;
+              state[payload.playerId] = payload.selectionId;
             })
           );
         }
@@ -87,16 +100,15 @@ const createPlayerSelectionState = (boardAccess: () => BoardAccess) => {
   const leave = (playerIds: string[]) => {
     setSelection(
       produce((state) => {
-        Object.entries(state).forEach(([fragmentId, playerId]) => {
-          if (playerId && playerIds.includes(playerId)) {
-            state[fragmentId] = undefined;
-          }
+        playerIds.forEach((playerId) => {
+          state[playerId] = undefined;
         });
       })
     );
   };
 
   return {
+    fragmentSelection,
     leave,
     select,
     selectedId,
@@ -109,6 +121,7 @@ type PlayerSelectionContextState = ReturnType<
 >;
 
 const PlayerSelectionContext = createContext<PlayerSelectionContextState>({
+  fragmentSelection: () => ({}),
   leave: () => void 0,
   select: () => void 0,
   selectedId: () => null,

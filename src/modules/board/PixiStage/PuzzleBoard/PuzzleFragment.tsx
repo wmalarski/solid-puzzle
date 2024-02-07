@@ -40,21 +40,20 @@ const drawPuzzleShape = (shape: PuzzleFragmentShape, graphics: Graphics) => {
 
 type PuzzleBorderGraphicsProps = {
   center: Point2D;
+  color: number | string;
   container: Container;
   shape: PuzzleFragmentShape;
   state: FragmentState;
 };
 
 const PuzzleBorderGraphics: Component<PuzzleBorderGraphicsProps> = (props) => {
-  const theme = useBoardTheme();
-
   const graphics = new Graphics();
 
   onMount(() => {
     const matrix = drawPuzzleShape(props.shape, graphics);
 
     graphics.stroke({
-      color: theme.fragmentBorderSelectedColor,
+      color: props.color,
       matrix,
       width: 2
     });
@@ -168,7 +167,8 @@ export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
   });
 
   const remotePlayerSelection = createMemo(() => {
-    const remotePlayerId = selection.selection[props.state.fragmentId];
+    const remotePlayerId =
+      selection.fragmentSelection()[props.state.fragmentId];
     if (!remotePlayerId) {
       return null;
     }
@@ -179,6 +179,15 @@ export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
     }
 
     return remotePlayer;
+  });
+
+  createEffect(() => {
+    console.log(
+      "remotePlayerSelection",
+      remotePlayerSelection(),
+      props.state.fragmentId,
+      JSON.stringify(selection.selection, null, 2)
+    );
   });
 
   createEffect(() => {
@@ -258,10 +267,22 @@ export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
         state={props.state}
         texture={props.texture}
       />
+      <Show when={remotePlayerSelection()}>
+        {(remotePlayer) => (
+          <PuzzleBorderGraphics
+            center={center()}
+            color={remotePlayer().color}
+            container={fragment}
+            shape={props.shape}
+            state={props.state}
+          />
+        )}
+      </Show>
       <Show when={isFragmentSelected()}>
         <>
           <PuzzleBorderGraphics
             center={center()}
+            color={presence.currentPlayer().color}
             container={fragment}
             shape={props.shape}
             state={props.state}
