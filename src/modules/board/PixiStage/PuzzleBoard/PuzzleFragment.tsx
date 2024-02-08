@@ -189,7 +189,7 @@ export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
   });
 
   createEffect(() => {
-    fragment.zIndex = !props.state.isLocked
+    fragment.zIndex = props.state.isLocked
       ? theme.fragmentLockedZIndex
       : isCurrentPlayerSelected() || remotePlayerSelection()
         ? theme.fragmentSelectedZIndex

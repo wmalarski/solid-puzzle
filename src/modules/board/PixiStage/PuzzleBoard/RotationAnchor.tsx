@@ -6,6 +6,7 @@ import {
 } from "pixi.js";
 import { type Component, createEffect, onCleanup, onMount } from "solid-js";
 
+import { usePlayerPresence } from "../../DataProviders/PresenceProvider";
 import { useBoardTheme } from "../BoardTheme";
 import { usePixiApp, usePixiContainer } from "../PixiApp";
 import { RIGHT_BUTTON } from "../constants";
@@ -23,17 +24,22 @@ export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
   const theme = useBoardTheme();
   const container = usePixiContainer();
 
+  const presence = usePlayerPresence();
+
   const graphics = new Graphics();
   graphics.eventMode = "static";
 
   onMount(() => {
-    const radius = Math.max(props.container.width, props.container.height) / 4;
+    const radius = Math.max(props.container.width, props.container.height) / 2;
     const x = 0;
     const y = -radius;
+    const color = presence.currentPlayer().color;
 
+    graphics.circle(0, 0, radius).stroke({ color });
     graphics
       .circle(x, y, theme.rotationAnchorRadius)
-      .fill({ color: theme.rotationAnchorColor });
+      .fill({ color })
+      .stroke({ color: "white" });
   });
 
   createEffect(() => {
