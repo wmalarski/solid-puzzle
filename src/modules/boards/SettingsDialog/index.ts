@@ -1,1 +1,5 @@
-export * from "./SettingsDialog";
+export {
+  SettingsControlledDialog,
+  SettingsUncontrolledDialog,
+  UpdateForm
+} from "./SettingsDialog";

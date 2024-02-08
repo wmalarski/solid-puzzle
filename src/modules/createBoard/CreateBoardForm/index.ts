@@ -1,1 +1,1 @@
-export * from "./CreateBoardForm";
+export { CreateBoardForm } from "./CreateBoardForm";

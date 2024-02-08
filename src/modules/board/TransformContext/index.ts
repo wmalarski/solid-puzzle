@@ -1,1 +1,5 @@
-export * from "./TransformContext";
+export {
+  TransformContextProvider,
+  type TransformContextValue,
+  useTransformContext
+} from "./TransformContext";

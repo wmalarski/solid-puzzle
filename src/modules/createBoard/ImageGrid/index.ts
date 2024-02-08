@@ -1,1 +1,1 @@
-export * from "./ImageGrid";
+export { ImageGrid } from "./ImageGrid";

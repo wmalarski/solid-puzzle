@@ -1,1 +1,1 @@
-export * from "./ZoomBar";
+export { ZoomBar } from "./ZoomBar";

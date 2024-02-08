@@ -1,1 +1,1 @@
-export * from "./ConfigFields";
+export { type BoardConfigFields, ConfigFields } from "./ConfigFields";

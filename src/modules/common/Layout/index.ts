@@ -1,1 +1,1 @@
-export * from "./Layout";
+export { FormLayout, PageFooter, PageLayout, PageTitle } from "./Layout";

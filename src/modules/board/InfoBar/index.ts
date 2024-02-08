@@ -1,1 +1,1 @@
-export * from "./InfoBar";
+export { InfoBar } from "./InfoBar";

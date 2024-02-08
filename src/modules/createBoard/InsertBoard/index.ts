@@ -1,1 +1,1 @@
-export * from "./InsertBoard";
+export { InsertBoard } from "./InsertBoard";

@@ -1,1 +1,4 @@
-export * from "./DeleteDialog";
+export {
+  DeleteBoardControlledDialog,
+  DeleteBoardUncontrolledDialog
+} from "./DeleteDialog";

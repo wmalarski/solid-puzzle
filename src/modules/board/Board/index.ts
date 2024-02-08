@@ -1,3 +1,3 @@
 import { Board } from "./Board";
-export * from "./Board";
+export { Board } from "./Board";
 export default Board;

@@ -1,1 +1,1 @@
-export * from "./AcceptInviteForm";
+export { AcceptInviteForm } from "./AcceptInviteForm";

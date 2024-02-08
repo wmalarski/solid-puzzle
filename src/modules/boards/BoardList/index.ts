@@ -1,1 +1,1 @@
-export * from "./BoardList";
+export { BoardsList } from "./BoardList";
