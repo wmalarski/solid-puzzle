@@ -21,11 +21,11 @@ dependencies:
     specifier: 0.29.3
     version: 0.29.3(solid-js@1.8.14)
   '@solidjs/router':
-    specifier: 0.11.3
-    version: 0.11.3(solid-js@1.8.14)
+    specifier: 0.11.5
+    version: 0.11.5(solid-js@1.8.14)
   '@solidjs/start':
-    specifier: 0.5.1
-    version: 0.5.1(solid-js@1.8.14)(vinxi@0.2.1)(vite@4.5.1)
+    specifier: 0.5.3
+    version: 0.5.3(solid-js@1.8.14)(vinxi@0.2.1)(vite@4.5.1)
   '@supabase/ssr':
     specifier: ^0.1.0
     version: 0.1.0(@supabase/supabase-js@2.39.3)
@@ -48,8 +48,8 @@ dependencies:
     specifier: 5.0.5
     version: 5.0.5
   pixi.js:
-    specifier: 8.0.0-rc.8
-    version: 8.0.0-rc.8
+    specifier: 8.0.0-rc.9
+    version: 8.0.0-rc.9
   solid-js:
     specifier: 1.8.14
     version: 1.8.14
@@ -75,10 +75,10 @@ devDependencies:
     version: 6.21.0(eslint@8.56.0)(typescript@5.3.3)
   autoprefixer:
     specifier: 10.4.17
-    version: 10.4.17(postcss@8.4.34)
+    version: 10.4.17(postcss@8.4.35)
   daisyui:
-    specifier: 4.6.1
-    version: 4.6.1(postcss@8.4.34)
+    specifier: 4.6.2
+    version: 4.6.2(postcss@8.4.35)
   eslint:
     specifier: 8.56.0
     version: 8.56.0
@@ -113,8 +113,8 @@ devDependencies:
     specifier: 3.14.2
     version: 3.14.2(tailwindcss@3.4.1)
   postcss:
-    specifier: 8.4.34
-    version: 8.4.34
+    specifier: 8.4.35
+    version: 8.4.35
   prettier:
     specifier: 3.2.5
     version: 3.2.5
@@ -1606,8 +1606,8 @@ packages:
       solid-js: 1.8.14
     dev: false
 
-  /@solidjs/router@0.11.3(solid-js@1.8.14):
-    resolution: {integrity: sha512-clSgyvzNnAw5iwnqHFNdzvvgt1eHbg81hu3A7H/qYz0+J5D0XIk7oqaOI7SRWCTnV8Rg9q4K83VV4foCOb+jcw==}
+  /@solidjs/router@0.11.5(solid-js@1.8.14):
+    resolution: {integrity: sha512-nclebUUufZT37rB5l0LbJn92vZwJOhYVltfjfLFI3yAcMlwiil5JOy6X2FEgekWsoX29No/GCBTkYfrSZCRfaw==}
     peerDependencies:
       solid-js: ^1.8.6
     dependencies:
@@ -1622,8 +1622,8 @@ packages:
       solid-js: 1.8.14
     dev: false
 
-  /@solidjs/start@0.5.1(solid-js@1.8.14)(vinxi@0.2.1)(vite@4.5.1):
-    resolution: {integrity: sha512-5LJoI3+kRr3Uuxik+5YAuNwEUWsk1/+LBD3cDK2LQIPk3uKyNRoZM8ZU1WTyNQmaoBDXe6Z4Sldbo+DXoZL+9g==}
+  /@solidjs/start@0.5.3(solid-js@1.8.14)(vinxi@0.2.1)(vite@4.5.1):
+    resolution: {integrity: sha512-4vapRKVUXPUmgeOV/zxOSl0aKFSorFMoBXa4BJ/Uc6dXqIQJvY7Y3WDvQwyHNg4+qpMWk6S/7Mo6Xi0YkemuLw==}
     dependencies:
       '@vinxi/plugin-directives': 0.2.0(vinxi@0.2.1)
       '@vinxi/server-components': 0.2.0(vinxi@0.2.1)
@@ -2528,7 +2528,7 @@ packages:
       has-symbols: 1.0.3
     dev: true
 
-  /autoprefixer@10.4.17(postcss@8.4.34):
+  /autoprefixer@10.4.17(postcss@8.4.35):
     resolution: {integrity: sha512-/cpVNRLSfhOtcGflT13P2794gVSgmPgTR+erw5ifnMLZb0UnSlkK4tquLmkd3BhA+nLo5tX8Cu0upUsGKvKbmg==}
     engines: {node: ^10 || ^12 || >=14}
     hasBin: true
@@ -2540,7 +2540,7 @@ packages:
       fraction.js: 4.3.7
       normalize-range: 0.1.2
       picocolors: 1.0.0
-      postcss: 8.4.34
+      postcss: 8.4.35
       postcss-value-parser: 4.2.0
     dev: true
 
@@ -2964,14 +2964,14 @@ packages:
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dev: true
 
-  /daisyui@4.6.1(postcss@8.4.34):
-    resolution: {integrity: sha512-IXI8ypN/hkl1AKsag1XPlWt0wfvL4NedTUtUkv/VFP5q/xDbBZrZthq3/9M2yU1egcbbLhp01rluIz0GICUc+g==}
+  /daisyui@4.6.2(postcss@8.4.35):
+    resolution: {integrity: sha512-LBIbI76wVVRCQt1Uis2Y2/PRdGfMkNMFsHOjfpav8n7SamwRwPOCiNUClIrnX2jerWW3mLZlzRMCnQfxmGEjow==}
     engines: {node: '>=16.9.0'}
     dependencies:
       css-selector-tokenizer: 0.8.0
       culori: 3.3.0
       picocolors: 1.0.0
-      postcss-js: 4.0.1(postcss@8.4.34)
+      postcss-js: 4.0.1(postcss@8.4.35)
     transitivePeerDependencies:
       - postcss
     dev: true
@@ -3684,7 +3684,7 @@ packages:
       tailwindcss: ^3.4.0
     dependencies:
       fast-glob: 3.3.2
-      postcss: 8.4.34
+      postcss: 8.4.35
       tailwindcss: 3.4.1
     dev: true
 
@@ -5510,8 +5510,8 @@ packages:
     resolution: {integrity: sha512-8V9+HQPupnaXMA23c5hvl69zXvTwTzyAYasnkb0Tts4XvO4CliqONMOnvlq26rkhLC3nWDFBJf73LU1e1VZLaQ==}
     engines: {node: '>= 6'}
 
-  /pixi.js@8.0.0-rc.8:
-    resolution: {integrity: sha512-JS9NuyeEsHKCEfu56CRFtQL1Ni2kSSWvS2lvku8UhwAmU9iGc3F/Va+Q2UXcAcCd0LHrAS4PQj9EV42FwaXyAA==}
+  /pixi.js@8.0.0-rc.9:
+    resolution: {integrity: sha512-4xsCeu/qaiKU5zhIU8Ktj3PgHrLh7MGRqmm+7tqewIhGCqdlft2wwxPYmm3pOZczrnzwg+4vqv1QNNHL79vP0w==}
     dependencies:
       '@pixi/colord': 2.9.6
       '@types/css-font-loading-module': 0.0.12
@@ -5532,27 +5532,27 @@ packages:
       pathe: 1.1.2
     dev: false
 
-  /postcss-import@15.1.0(postcss@8.4.34):
+  /postcss-import@15.1.0(postcss@8.4.35):
     resolution: {integrity: sha512-hpr+J05B2FVYUAXHeK1YyI267J/dDDhMU6B6civm8hSY1jYJnBXxzKDKDswzJmtLHryrjhnDjqqp/49t8FALew==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       postcss: ^8.0.0
     dependencies:
-      postcss: 8.4.34
+      postcss: 8.4.35
       postcss-value-parser: 4.2.0
       read-cache: 1.0.0
       resolve: 1.22.8
 
-  /postcss-js@4.0.1(postcss@8.4.34):
+  /postcss-js@4.0.1(postcss@8.4.35):
     resolution: {integrity: sha512-dDLF8pEO191hJMtlHFPRa8xsizHaM82MLfNkUHdUtVEV3tgTp5oj+8qbEqYM57SLfc74KSbw//4SeJma2LRVIw==}
     engines: {node: ^12 || ^14 || >= 16}
     peerDependencies:
       postcss: ^8.4.21
     dependencies:
       camelcase-css: 2.0.1
-      postcss: 8.4.34
+      postcss: 8.4.35
 
-  /postcss-load-config@4.0.1(postcss@8.4.34):
+  /postcss-load-config@4.0.1(postcss@8.4.35):
     resolution: {integrity: sha512-vEJIc8RdiBRu3oRAI0ymerOn+7rPuMvRXslTvZUKZonDHFIczxztIyJ1urxM1x9JXEikvpWWTUUqal5j/8QgvA==}
     engines: {node: '>= 14'}
     peerDependencies:
@@ -5565,16 +5565,16 @@ packages:
         optional: true
     dependencies:
       lilconfig: 2.1.0
-      postcss: 8.4.34
+      postcss: 8.4.35
       yaml: 2.2.2
 
-  /postcss-nested@6.0.1(postcss@8.4.34):
+  /postcss-nested@6.0.1(postcss@8.4.35):
     resolution: {integrity: sha512-mEp4xPMi5bSWiMbsgoPfcP74lsWLHkQbZc3sY+jWYd65CUwXrUaTp0fmNpa01ZcETKlIgUdFN/MpS2xZtqL9dQ==}
     engines: {node: '>=12.0'}
     peerDependencies:
       postcss: ^8.2.14
     dependencies:
-      postcss: 8.4.34
+      postcss: 8.4.35
       postcss-selector-parser: 6.0.13
 
   /postcss-selector-parser@6.0.13:
@@ -5587,8 +5587,8 @@ packages:
   /postcss-value-parser@4.2.0:
     resolution: {integrity: sha512-1NNCs6uurfkVbeXG4S8JFT9t19m45ICnif8zWLd5oPSZ50QnwMfK+H3jv408d4jw/7Bttv5axS5IiHoLaVNHeQ==}
 
-  /postcss@8.4.34:
-    resolution: {integrity: sha512-4eLTO36woPSocqZ1zIrFD2K1v6wH7pY1uBh0JIM2KKfrVtGvPFiAku6aNOP0W1Wr9qwnaCsF0Z+CrVnryB2A8Q==}
+  /postcss@8.4.35:
+    resolution: {integrity: sha512-u5U8qYpBCpN13BsiEB0CbR1Hhh4Gc0zLFuedrHJKMctHCHAGrMdG0PRM/KErzAL3CU6/eckEtmHNB3x6e3c0vA==}
     engines: {node: ^10 || ^12 || >=14}
     dependencies:
       nanoid: 3.3.7
@@ -6299,11 +6299,11 @@ packages:
       normalize-path: 3.0.0
       object-hash: 3.0.0
       picocolors: 1.0.0
-      postcss: 8.4.34
-      postcss-import: 15.1.0(postcss@8.4.34)
-      postcss-js: 4.0.1(postcss@8.4.34)
-      postcss-load-config: 4.0.1(postcss@8.4.34)
-      postcss-nested: 6.0.1(postcss@8.4.34)
+      postcss: 8.4.35
+      postcss-import: 15.1.0(postcss@8.4.35)
+      postcss-js: 4.0.1(postcss@8.4.35)
+      postcss-load-config: 4.0.1(postcss@8.4.35)
+      postcss-nested: 6.0.1(postcss@8.4.35)
       postcss-selector-parser: 6.0.13
       resolve: 1.22.8
       sucrase: 3.32.0
@@ -6929,7 +6929,7 @@ packages:
     dependencies:
       '@types/node': 20.11.16
       esbuild: 0.18.20
-      postcss: 8.4.34
+      postcss: 8.4.35
       rollup: 3.29.0
     optionalDependencies:
       fsevents: 2.3.3
@@ -6965,7 +6965,7 @@ packages:
     dependencies:
       '@types/node': 20.11.16
       esbuild: 0.18.20
-      postcss: 8.4.34
+      postcss: 8.4.35
       rollup: 3.29.0
     optionalDependencies:
       fsevents: 2.3.3
