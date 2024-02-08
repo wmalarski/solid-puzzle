@@ -62,6 +62,9 @@ const en_dict = {
       copy: "Link copied to your clipboard",
       title: "Share link"
     },
+    topBar: {
+      players: "Players"
+    },
     zoom: {
       reset: "Reset zoom",
       zoomIn: "Zoom in",

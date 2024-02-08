@@ -1,8 +1,7 @@
-import { type Component, For, Show, createMemo } from "solid-js";
+import { type Component } from "solid-js";
 
 import type { BoardAccess, BoardModel } from "~/types/models";
 
-import { Avatar, AvatarContent, AvatarGroup } from "~/components/Avatar";
 import { ShareIcon } from "~/components/Icons/ShareIcon";
 import { showToast } from "~/components/Toast";
 import {
@@ -14,10 +13,7 @@ import {
 } from "~/components/Tooltip";
 import { useI18n } from "~/contexts/I18nContext";
 
-import {
-  type PlayerState,
-  usePlayerPresence
-} from "../DataProviders/PresenceProvider";
+import { AvatarsDialog } from "./AvatarsDialog";
 
 export const ShareButton: Component = () => {
   const { t } = useI18n();
@@ -49,7 +45,7 @@ export const ShareButton: Component = () => {
         type="button"
         variant="ghost"
       >
-        <ShareIcon class="size-6" />
+        <ShareIcon class="size-5" />
       </TooltipTrigger>
       <TooltipPortal>
         <TooltipContent>
@@ -58,50 +54,6 @@ export const ShareButton: Component = () => {
         </TooltipContent>
       </TooltipPortal>
     </TooltipRoot>
-  );
-};
-
-type PlayerAvatarProps = {
-  state: PlayerState;
-};
-
-const PlayerAvatar: Component<PlayerAvatarProps> = (props) => {
-  return (
-    <Avatar>
-      <AvatarContent
-        placeholder
-        ring="secondary"
-        size="xs"
-        style={{
-          "--tw-ring-color": props.state.color,
-          "background-color": props.state.color
-        }}
-      >
-        <span class="flex size-full items-center justify-center uppercase">
-          {props.state.name.slice(0, 2)}
-        </span>
-      </AvatarContent>
-    </Avatar>
-  );
-};
-
-const Avatars: Component = () => {
-  const presence = usePlayerPresence();
-
-  const playerIds = createMemo(() => {
-    return Object.keys(presence.players);
-  });
-
-  return (
-    <AvatarGroup>
-      <For each={playerIds()}>
-        {(playerId) => (
-          <Show when={presence.players[playerId]}>
-            {(state) => <PlayerAvatar state={state()} />}
-          </Show>
-        )}
-      </For>
-    </AvatarGroup>
   );
 };
 
@@ -120,9 +72,7 @@ export const TopBar: Component<TopBarProps> = (props) => {
         </div>
         <h2 class="text-sm">{props.board.media}</h2>
       </div>
-      <div>
-        <Avatars />
-      </div>
+      <AvatarsDialog />
     </div>
   );
 };

@@ -29,6 +29,7 @@ export const buttonClass = twCva("btn no-animation flex items-center gap-1", {
     shape: {
       block: "btn-block",
       circle: "btn-circle",
+      ellipsis: "btn-circle w-[unset]",
       square: "btn-square",
       wide: "btn-wide"
     },
