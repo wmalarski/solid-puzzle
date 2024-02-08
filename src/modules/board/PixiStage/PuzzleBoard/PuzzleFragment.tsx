@@ -133,6 +133,7 @@ export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
   const presence = usePlayerPresence();
 
   const container = usePixiContainer();
+  const theme = useBoardTheme();
 
   const fragment = new Container();
 
@@ -187,12 +188,12 @@ export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
     return props.state.fragmentId === selection.selectedId();
   });
 
-  const zIndex = createMemo(() => {
-    return isCurrentPlayerSelected() || remotePlayerSelection() ? 1 : 0;
-  });
-
   createEffect(() => {
-    fragment.zIndex = zIndex();
+    fragment.zIndex = !props.state.isLocked
+      ? theme.fragmentLockedZIndex
+      : isCurrentPlayerSelected() || remotePlayerSelection()
+        ? theme.fragmentSelectedZIndex
+        : theme.fragmentZIndex;
   });
 
   useDragObject({

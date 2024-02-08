@@ -36,10 +36,10 @@ type CursorGraphicsProps = {
 const CursorGraphics: Component<CursorGraphicsProps> = (props) => {
   const theme = useBoardTheme();
 
-  const graphics = new Graphics({ zIndex: 3 });
+  const graphics = new Graphics({ zIndex: theme.cursorGraphicsZIndex });
 
   const style = new TextStyle({ fontSize: 16 });
-  const text = new Text({ style, zIndex: 4 });
+  const text = new Text({ style, zIndex: theme.cursorTextZIndex });
 
   onMount(() => {
     graphics
@@ -111,9 +111,10 @@ const usePlayerCursor = () => {
 
 export const RemoteCursors: Component = () => {
   const app = usePixiApp();
+  const theme = useBoardTheme();
 
   const cursorsContainer = new Container({
-    zIndex: 5
+    zIndex: theme.cursorContainerZIndex
   });
 
   const cursors = usePlayerCursors();

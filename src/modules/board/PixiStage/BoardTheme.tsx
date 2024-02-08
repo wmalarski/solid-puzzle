@@ -2,9 +2,14 @@ import { type Component, type JSX, createContext, useContext } from "solid-js";
 
 const createBoardThemeContext = () => {
   return {
+    cursorContainerZIndex: 5,
+    cursorGraphicsZIndex: 6,
     cursorStrokeColor: 0xffffff,
+    cursorTextZIndex: 7,
     fragmentBorderColor: 0xaaaaaa,
-    fragmentBorderSelectedColor: 0xaaaa33,
+    fragmentLockedZIndex: 0,
+    fragmentSelectedZIndex: 2,
+    fragmentZIndex: 1,
     previewSpriteAlpha: 0.4,
     previewStrokeColor: 0x777777,
     previewStrokeWidth: 1,
