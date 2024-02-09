@@ -1,4 +1,5 @@
-import { createMutation, useQueryClient } from "@tanstack/solid-query";
+import { useAction, useSubmission } from "@solidjs/router";
+import { useQueryClient } from "@tanstack/solid-query";
 import { type Component, type ComponentProps, Show } from "solid-js";
 
 import { Alert, AlertIcon } from "~/components/Alert";
@@ -17,9 +18,8 @@ import { XIcon } from "~/components/Icons/XIcon";
 import { useI18n } from "~/contexts/I18nContext";
 import {
   invalidateSelectBoardQuery,
-  invalidateSelectBoardsQueries
+  reloadBoardAction
 } from "~/server/board/client";
-import { updateBoardServerAction } from "~/server/board/rpc";
 
 type ReloadFormProps = {
   boardId: string;
@@ -30,25 +30,26 @@ export const ReloadForm: Component<ReloadFormProps> = (props) => {
 
   const queryClient = useQueryClient();
 
-  const mutation = createMutation(() => ({
-    mutationFn: updateBoardServerAction,
-    onSuccess() {
-      queryClient.invalidateQueries(invalidateSelectBoardQuery(props.board.id));
-      queryClient.invalidateQueries(invalidateSelectBoardsQueries());
-    }
-  }));
+  const submission = useSubmission(reloadBoardAction);
+  const action = useAction(reloadBoardAction);
 
-  const onSubmit: ComponentProps<"form">["onSubmit"] = (event) => {
+  const onSubmit: ComponentProps<"form">["onSubmit"] = async (event) => {
     event.preventDefault();
+    try {
+      await action(new FormData(event.currentTarget));
+      await queryClient.invalidateQueries(
+        invalidateSelectBoardQuery(props.boardId)
+      );
 
-    const data = new FormData(event.currentTarget);
-
-    mutation.mutate(data);
+      // props.onSuccess?.();
+    } catch {
+      // handled by useSubmission
+    }
   };
 
   return (
     <form class="flex flex-col gap-4" method="post" onSubmit={onSubmit}>
-      <Show when={mutation.error}>
+      <Show when={submission.result?.error}>
         <Alert variant="error">
           <AlertIcon variant="error" />
           Error
@@ -56,8 +57,8 @@ export const ReloadForm: Component<ReloadFormProps> = (props) => {
       </Show>
       <input name="id" type="hidden" value={props.boardId} />
       <Button
-        disabled={mutation.isPending}
-        isLoading={mutation.isPending}
+        disabled={submission.pending}
+        isLoading={submission.pending}
         type="submit"
       >
         {t("board.settings.update.button")}
@@ -66,11 +67,11 @@ export const ReloadForm: Component<ReloadFormProps> = (props) => {
   );
 };
 
-type FinishedDialogProps = {
+type ReloadDialogProps = {
   boardId: string;
 };
 
-export const FinishedDialog: Component<FinishedDialogProps> = (props) => {
+export const ReloadDialog: Component<ReloadDialogProps> = (props) => {
   const { t } = useI18n();
 
   return (
