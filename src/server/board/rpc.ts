@@ -110,8 +110,10 @@ export const insertBoardServerAction = async (form: FormData) => {
     return rpcErrorResult(result.error);
   }
 
+  const id = result.data.id;
+
   const insertFragmentsResult = await insertPuzzleFragments({
-    boardId: result.data.id,
+    boardId: id,
     columns,
     event,
     height,
@@ -123,9 +125,7 @@ export const insertBoardServerAction = async (form: FormData) => {
     return rpcErrorResult(insertFragmentsResult.error);
   }
 
-  throw redirect(paths.board(result.data.id), {
-    revalidate: INSERT_BOARD_ARGS_CACHE_KEY
-  });
+  throw redirect(paths.board(id), { revalidate: INSERT_BOARD_ARGS_CACHE_KEY });
 };
 
 export const updateBoardServerAction = async (form: FormData) => {
@@ -148,7 +148,7 @@ export const updateBoardServerAction = async (form: FormData) => {
     return rpcParseIssueResult(parsed.issues);
   }
 
-  const { columns, height, image, name, rows, width } = parsed.output;
+  const { columns, height, id, image, name, rows, width } = parsed.output;
 
   const config = generateCurves({ columns, rows });
 
@@ -163,7 +163,7 @@ export const updateBoardServerAction = async (form: FormData) => {
       rows,
       width
     })
-    .eq("id", parsed.output.id);
+    .eq("id", id);
 
   if (result.error) {
     return rpcErrorResult(result.error);
@@ -172,14 +172,14 @@ export const updateBoardServerAction = async (form: FormData) => {
   const deleteFragmentsResult = await event.locals.supabase
     .from("puzzle")
     .delete()
-    .eq("room_id", parsed.output.id);
+    .eq("room_id", id);
 
   if (deleteFragmentsResult.error) {
     return rpcErrorResult(deleteFragmentsResult.error);
   }
 
   const insertFragmentsResult = await insertPuzzleFragments({
-    boardId: parsed.output.id,
+    boardId: id,
     columns,
     event,
     height,
@@ -192,6 +192,51 @@ export const updateBoardServerAction = async (form: FormData) => {
   }
 
   return rpcSuccessResult(result.data);
+};
+
+export const reloadBoardServerAction = async (form: FormData) => {
+  const event = getRequestEventOrThrow();
+
+  const parsed = await safeParseAsync(object({ id: string() }), decode(form));
+
+  if (!parsed.success) {
+    return rpcParseIssueResult(parsed.issues);
+  }
+
+  const { id } = parsed.output;
+
+  const [fragmentsResult, boardResult] = await Promise.all([
+    event.locals.supabase.from("puzzle").select().eq("room_id", id),
+    event.locals.supabase.from("rooms").select().eq("id", id).single()
+  ]);
+
+  if (fragmentsResult.error) {
+    return rpcErrorResult(fragmentsResult.error);
+  }
+
+  if (boardResult.error) {
+    return rpcErrorResult(boardResult.error);
+  }
+
+  const { columns, height, rows, width } = boardResult.data;
+  const initial = getInitialFragmentState({ columns, height, rows, width });
+
+  const upsertFragmentsResult = await event.locals.supabase
+    .from("puzzle")
+    .upsert(
+      fragmentsResult.data.map((fragment, index) => ({
+        id: fragment.id,
+        is_locked: false,
+        room_id: id,
+        ...initial[index]
+      }))
+    );
+
+  if (upsertFragmentsResult.error) {
+    return rpcErrorResult(upsertFragmentsResult.error);
+  }
+
+  return rpcSuccessResult(fragmentsResult.data);
 };
 
 export const deleteBoardServerAction = async (form: FormData) => {

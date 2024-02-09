@@ -12,6 +12,7 @@ import {
   deleteBoardServerAction,
   getInsertBoardArgsServerLoader,
   insertBoardServerAction,
+  reloadBoardServerAction,
   updateBoardServerAction
 } from "~/server/board/rpc";
 
@@ -135,6 +136,11 @@ export const insertBoardAction = action(
 export const updateBoardAction = action(
   updateBoardServerAction,
   "updateBoardAction"
+);
+
+export const reloadBoardAction = action(
+  reloadBoardServerAction,
+  "reloadBoardAction"
 );
 
 export const deleteBoardAction = action(

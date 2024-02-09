@@ -226,10 +226,15 @@ const createPuzzleContext = (args: CreatePuzzleContextArgs) => {
     return store().value;
   });
 
+  const isFinished = createMemo(() => {
+    return Object.values(store().value).every((state) => state?.isLocked);
+  });
+
   return {
     config,
     fragments,
     fragmentsIds,
+    isFinished,
     sendFragmentState,
     setFragmentState,
     setFragmentStateWithLockCheck,
@@ -243,6 +248,7 @@ const PuzzleStateContext = createContext<PuzzleContextState>({
   config: () => ({ fragments: [], lines: [] }),
   fragments: () => ({}),
   fragmentsIds: () => [],
+  isFinished: () => false,
   sendFragmentState: () => void 0,
   setFragmentState: () => void 0,
   setFragmentStateWithLockCheck: () => void 0,
