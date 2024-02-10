@@ -31,7 +31,6 @@
     "postcss": "8.4.35",
     "prettier": "3.2.5",
     "tailwindcss": "3.4.1",
-    "tsx": "4.7.0",
     "typescript": "5.3.3"
   },
   "dependencies": {
@@ -45,8 +44,8 @@
     "@solidjs/start": "0.5.4",
     "@supabase/ssr": "^0.1.0",
     "@supabase/supabase-js": "^2.39.3",
-    "@tanstack/solid-query": "5.18.1",
-    "@tanstack/solid-query-devtools": "^5.18.1",
+    "@tanstack/solid-query": "5.20.1",
+    "@tanstack/solid-query-devtools": "^5.20.1",
     "class-variance-authority": "0.7.0",
     "decode-formdata": "^0.5.0",
     "nanoid": "5.0.5",

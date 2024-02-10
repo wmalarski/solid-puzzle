@@ -1,3 +1,4 @@
+import { createWritableMemo } from "@solid-primitives/memo";
 import { useAction, useSubmission } from "@solidjs/router";
 import { useQueryClient } from "@tanstack/solid-query";
 import { type Component, type ComponentProps, Show } from "solid-js";
@@ -21,8 +22,11 @@ import {
   reloadBoardAction
 } from "~/server/board/client";
 
+import { usePuzzleStore } from "../DataProviders/PuzzleProvider";
+
 type ReloadFormProps = {
   boardId: string;
+  onSuccess: VoidFunction;
 };
 
 export const ReloadForm: Component<ReloadFormProps> = (props) => {
@@ -41,7 +45,7 @@ export const ReloadForm: Component<ReloadFormProps> = (props) => {
         invalidateSelectBoardQuery(props.boardId)
       );
 
-      // props.onSuccess?.();
+      props.onSuccess?.();
     } catch {
       // handled by useSubmission
     }
@@ -74,8 +78,16 @@ type ReloadDialogProps = {
 export const ReloadDialog: Component<ReloadDialogProps> = (props) => {
   const { t } = useI18n();
 
+  const store = usePuzzleStore();
+
+  const [isOpen, setIsOpen] = createWritableMemo(store.isFinished);
+
+  const onSuccess = () => {
+    setIsOpen(false);
+  };
+
   return (
-    <DialogRoot>
+    <DialogRoot onOpenChange={setIsOpen} open={isOpen()}>
       <DialogPortal>
         <DialogOverlay />
         <DialogPositioner>
@@ -86,7 +98,7 @@ export const ReloadDialog: Component<ReloadDialogProps> = (props) => {
                 <XIcon />
               </DialogCloseButton>
             </DialogHeader>
-            <ReloadForm boardId={props.boardId} />
+            <ReloadForm boardId={props.boardId} onSuccess={onSuccess} />
           </DialogContent>
         </DialogPositioner>
       </DialogPortal>
