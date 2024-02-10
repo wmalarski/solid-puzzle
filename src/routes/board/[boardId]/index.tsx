@@ -12,7 +12,8 @@ import {
   Show,
   Suspense,
   Switch,
-  createMemo
+  createMemo,
+  ErrorBoundary
 } from "solid-js";
 
 import type { BoardAccess } from "~/types/models";
@@ -21,25 +22,18 @@ import { SessionProvider, useSessionContext } from "~/contexts/SessionContext";
 import { AcceptInviteForm } from "~/modules/board/AcceptInviteForm";
 import { getBoardAccessLoader } from "~/server/access/client";
 import { getSessionLoader } from "~/server/auth/client";
-import { selectBoardQueryOptions } from "~/server/board/client";
+import { selectBoardLoader } from "~/server/board/client";
 import { randomHexColor } from "~/utils/colors";
 import { paths } from "~/utils/paths";
 
 const Board = clientOnly(() => import("~/modules/board/Board"));
 
 type BoardQueryProps = {
-  boardAccess?: BoardAccess | null;
   boardId: string;
 };
 
 const BoardQuery: Component<BoardQueryProps> = (props) => {
   const session = useSessionContext();
-
-  const boardQuery = createQuery(() =>
-    selectBoardQueryOptions({
-      id: props.boardId
-    })()
-  );
 
   const access = createMemo<BoardAccess | null>(() => {
     const cookieAccess = props.boardAccess;
@@ -100,10 +94,16 @@ export default function BoardSection() {
 
   const boardAccess = createAsync(() => getBoardAccessLoader(params.boardId));
 
+  const board = createAsync(() => selectBoardLoader(params.boardId));
+
   return (
     <SessionProvider value={() => session() || null}>
       <main class="size-screen relative">
-        <BoardQuery boardAccess={boardAccess()} boardId={params.boardId} />
+        <ErrorBoundary fallback={<span>Error</span>}>
+          <Suspense fallback={<span>Loading</span>}>
+            <BoardQuery boardId={params.boardId} />
+          </Suspense>
+        </ErrorBoundary>
       </main>
     </SessionProvider>
   );

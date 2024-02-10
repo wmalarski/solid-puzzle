@@ -1,4 +1,5 @@
-import { createMutation, useQueryClient } from "@tanstack/solid-query";
+import { useAction, useSubmission } from "@solidjs/router";
+import { useQueryClient } from "@tanstack/solid-query";
 import {
   type Component,
   type ComponentProps,
@@ -27,9 +28,9 @@ import { useI18n } from "~/contexts/I18nContext";
 import { ConfigFields } from "~/modules/createBoard/ConfigFields";
 import {
   invalidateSelectBoardQuery,
-  invalidateSelectBoardsQueries
+  invalidateSelectBoardsQueries,
+  updateBoardAction
 } from "~/server/board/client";
-import { updateBoardServerAction } from "~/server/board/rpc";
 
 type UpdateFormProps = {
   board: BoardModelWithoutConfig;
@@ -40,25 +41,24 @@ export const UpdateForm: Component<UpdateFormProps> = (props) => {
 
   const queryClient = useQueryClient();
 
-  const mutation = createMutation(() => ({
-    mutationFn: updateBoardServerAction,
-    onSuccess() {
+  const submission = useSubmission(updateBoardAction);
+  const action = useAction(updateBoardAction);
+
+  const onSubmit: ComponentProps<"form">["onSubmit"] = async (event) => {
+    event.preventDefault();
+    try {
+      await action(new FormData(event.currentTarget));
+
       queryClient.invalidateQueries(invalidateSelectBoardQuery(props.board.id));
       queryClient.invalidateQueries(invalidateSelectBoardsQueries());
+    } catch {
+      // handled by useSubmission
     }
-  }));
-
-  const onSubmit: ComponentProps<"form">["onSubmit"] = (event) => {
-    event.preventDefault();
-
-    const data = new FormData(event.currentTarget);
-
-    mutation.mutate(data);
   };
 
   return (
     <form class="flex flex-col gap-4" method="post" onSubmit={onSubmit}>
-      <Show when={mutation.error}>
+      <Show when={submission.result?.error}>
         <Alert variant="error">
           <AlertIcon variant="error" />
           Error
@@ -74,8 +74,8 @@ export const UpdateForm: Component<UpdateFormProps> = (props) => {
         }}
       />
       <Button
-        disabled={mutation.isPending}
-        isLoading={mutation.isPending}
+        disabled={submission.pending}
+        isLoading={submission.pending}
         type="submit"
       >
         {t("board.settings.update.button")}

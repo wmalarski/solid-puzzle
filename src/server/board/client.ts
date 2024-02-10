@@ -7,7 +7,11 @@ import {
 
 import { useSessionContext } from "~/contexts/SessionContext";
 import { useSupabase } from "~/contexts/SupabaseContext";
-import { INSERT_BOARD_ARGS_CACHE_KEY } from "~/server/board/const";
+import {
+  INSERT_BOARD_ARGS_CACHE_KEY,
+  SELECT_BOARD_LOADER_CACHE_KEY,
+  SELECT_BOARDS_LOADER_CACHE_KEY
+} from "~/server/board/const";
 import {
   deleteBoardServerAction,
   getInsertBoardArgsServerLoader,
@@ -57,6 +61,27 @@ export const invalidateSelectBoardQuery = (
   return { queryKey: options.queryKey };
 };
 
+export const selectBoardLoader = cache(async (boardId: string) => {
+  const supabase = useSupabase();
+
+  const [board, fragments] = await Promise.all([
+    supabase().from("rooms").select().eq("id", boardId).single(),
+    supabase().from("puzzle").select().eq("room_id", boardId)
+  ]);
+
+  if (board.error) {
+    throw board.error;
+  }
+
+  if (fragments.error) {
+    throw fragments.error;
+  }
+
+  return { board: board.data, fragments: fragments.data };
+}, SELECT_BOARD_LOADER_CACHE_KEY);
+
+export type SelectBoardLoaderReturn = ReturnType<typeof selectBoardLoader>;
+
 type SelectBoardsQueryOptionsArgs = {
   limit?: number;
   offset: number;
@@ -96,6 +121,33 @@ export const invalidateSelectBoardsQueries = (): InvalidateQueryFilters => {
   const options = selectBoardsQueryOptions({ limit: 0, offset: 0 })();
   return { queryKey: options.queryKey.slice(0, 1) };
 };
+
+export const selectBoardsLoader = cache(
+  async ({
+    limit = SELECT_BOARDS_DEFAULT_LIMIT,
+    offset
+  }: SelectBoardsQueryOptionsArgs) => {
+    const supabase = useSupabase();
+
+    const session = useSessionContext();
+
+    const query = supabase()
+      .from("rooms")
+      .select("id,name,media,owner_id,created_at,width,height,columns,rows");
+
+    const userId = session()?.user.id;
+    const withUser = userId ? query.eq("owner_id", userId) : query;
+
+    const result = await withUser.range(offset, offset + limit);
+
+    if (result.error) {
+      throw result.error;
+    }
+
+    return result.data;
+  },
+  SELECT_BOARDS_LOADER_CACHE_KEY
+);
 
 type UpdateFragmentArgs = {
   fragmentId: string;
