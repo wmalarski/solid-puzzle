@@ -1,21 +1,15 @@
-import {
-  Navigate,
-  type RouteDefinition,
-  createAsync,
-  useParams
-} from "@solidjs/router";
+import { type RouteDefinition, createAsync, useParams } from "@solidjs/router";
 import { clientOnly } from "@solidjs/start";
-import { createQuery } from "@tanstack/solid-query";
 import {
   type Component,
-  Match,
+  ErrorBoundary,
   Show,
   Suspense,
-  Switch,
-  createMemo,
-  ErrorBoundary
+  createMemo
 } from "solid-js";
 
+import type { GetBoardAccessLoaderReturn } from "~/server/access/client";
+import type { SelectBoardLoaderReturn } from "~/server/board/client";
 import type { BoardAccess } from "~/types/models";
 
 import { SessionProvider, useSessionContext } from "~/contexts/SessionContext";
@@ -24,12 +18,12 @@ import { getBoardAccessLoader } from "~/server/access/client";
 import { getSessionLoader } from "~/server/auth/client";
 import { selectBoardLoader } from "~/server/board/client";
 import { randomHexColor } from "~/utils/colors";
-import { paths } from "~/utils/paths";
 
 const Board = clientOnly(() => import("~/modules/board/Board"));
 
 type BoardQueryProps = {
-  boardId: string;
+  boardAccess?: GetBoardAccessLoaderReturn;
+  data: SelectBoardLoaderReturn;
 };
 
 const BoardQuery: Component<BoardQueryProps> = (props) => {
@@ -47,7 +41,7 @@ const BoardQuery: Component<BoardQueryProps> = (props) => {
     }
 
     return {
-      boardId: props.boardId,
+      boardId: props.data.board.id,
       playerColor: randomHexColor(),
       playerId: user.id,
       userName: user.email || user.id
@@ -55,26 +49,12 @@ const BoardQuery: Component<BoardQueryProps> = (props) => {
   });
 
   return (
-    <Switch>
-      <Match when={boardQuery.status === "success"}>
-        <Show
-          fallback={<AcceptInviteForm board={boardQuery.data!.board} />}
-          when={access()}
-        >
-          {(access) => (
-            <Suspense>
-              <Board {...boardQuery.data!} boardAccess={access()} />
-            </Suspense>
-          )}
-        </Show>
-      </Match>
-      <Match when={boardQuery.status === "error"}>
-        <Navigate href={paths.notFound} />
-      </Match>
-      <Match when={boardQuery.status === "pending"}>
-        <pre>Loading</pre>
-      </Match>
-    </Switch>
+    <Show
+      fallback={<AcceptInviteForm board={props.data.board} />}
+      when={access()}
+    >
+      {(access) => <Board {...props.data} boardAccess={access()} />}
+    </Show>
   );
 };
 
@@ -94,14 +74,20 @@ export default function BoardSection() {
 
   const boardAccess = createAsync(() => getBoardAccessLoader(params.boardId));
 
-  const board = createAsync(() => selectBoardLoader(params.boardId));
+  const data = createAsync(() => selectBoardLoader(params.boardId));
 
   return (
     <SessionProvider value={() => session() || null}>
       <main class="size-screen relative">
-        <ErrorBoundary fallback={<span>Error</span>}>
+        <ErrorBoundary
+          fallback={(error) => <pre>{JSON.stringify(error, null, 2)}</pre>}
+        >
           <Suspense fallback={<span>Loading</span>}>
-            <BoardQuery boardId={params.boardId} />
+            <Show when={data()}>
+              {(data) => (
+                <BoardQuery boardAccess={boardAccess()} data={data()} />
+              )}
+            </Show>
           </Suspense>
         </ErrorBoundary>
       </main>

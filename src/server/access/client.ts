@@ -12,3 +12,7 @@ export const getBoardAccessLoader = cache(
   getBoardAccessServerLoader,
   BOARDS_ACCESS_CACHE_KEY
 );
+
+export type GetBoardAccessLoaderReturn = Awaited<
+  ReturnType<typeof getBoardAccessLoader>
+>;

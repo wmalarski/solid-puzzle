@@ -80,7 +80,9 @@ export const selectBoardLoader = cache(async (boardId: string) => {
   return { board: board.data, fragments: fragments.data };
 }, SELECT_BOARD_LOADER_CACHE_KEY);
 
-export type SelectBoardLoaderReturn = ReturnType<typeof selectBoardLoader>;
+export type SelectBoardLoaderReturn = Awaited<
+  ReturnType<typeof selectBoardLoader>
+>;
 
 type SelectBoardsQueryOptionsArgs = {
   limit?: number;
