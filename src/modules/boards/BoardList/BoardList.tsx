@@ -55,8 +55,16 @@ const BoardItem: Component<BoardItemProps> = (props) => {
   );
 };
 
-export const BoardsListError: Component = () => {
-  return <pre>Error</pre>;
+type BoardsListErrorProps = {
+  error: unknown;
+};
+
+export const BoardsListError: Component<BoardsListErrorProps> = (props) => {
+  return (
+    <div>
+      Error<pre>{JSON.stringify(props.error, null, 2)}</pre>
+    </div>
+  );
 };
 
 export const BoardsListLoading: Component = () => {

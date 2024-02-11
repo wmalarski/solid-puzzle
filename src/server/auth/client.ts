@@ -13,8 +13,8 @@ export const getSessionLoader = cache(
   SESSION_CACHE_KEY
 );
 
-export const signUpAction = action(signUpServerAction, "signUpAction");
+export const signUpAction = action(signUpServerAction);
 
-export const signInAction = action(signInServerAction, "signInAction");
+export const signInAction = action(signInServerAction);
 
-export const signOutAction = action(signOutServerAction, "signOutAction");
+export const signOutAction = action(signOutServerAction);

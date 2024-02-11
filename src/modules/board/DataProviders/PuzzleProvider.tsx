@@ -17,7 +17,6 @@ import { createStore, produce } from "solid-js/store";
 
 import type { BoardAccess, BoardModel, FragmentModel } from "~/types/models";
 
-import { useSupabase } from "~/contexts/SupabaseContext";
 import { useUpdateFragment } from "~/server/board/client";
 import { getDistance } from "~/utils/geometry";
 import {
@@ -25,6 +24,7 @@ import {
   type PuzzleFragmentShape,
   getPuzzleFragments
 } from "~/utils/getPuzzleFragments";
+import { getClientSupabase } from "~/utils/supabase";
 
 import { REALTIME_THROTTLE_TIME } from "./const";
 
@@ -123,7 +123,7 @@ const createPuzzleContext = (args: CreatePuzzleContextArgs) => {
     (_args: FragmentState) => void 0
   );
 
-  const supabase = useSupabase();
+  const supabase = getClientSupabase();
 
   const setFragmentState = (update: SetFragmentStateArgs) => {
     store().set(
@@ -178,7 +178,7 @@ const createPuzzleContext = (args: CreatePuzzleContextArgs) => {
 
   createEffect(() => {
     const channelName = `${PUZZLE_CHANNEL_NAME}:${args().board.id}`;
-    const channel = supabase().channel(channelName);
+    const channel = supabase.channel(channelName);
     const playerId = args().boardAccess.playerId;
     const fragmentsStore = store();
 
@@ -218,7 +218,7 @@ const createPuzzleContext = (args: CreatePuzzleContextArgs) => {
       });
 
     onCleanup(() => {
-      supabase().removeChannel(channel);
+      supabase.removeChannel(channel);
     });
   });
 

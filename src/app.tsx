@@ -6,7 +6,6 @@ import { Suspense, lazy } from "solid-js";
 
 import "./app.css";
 import { I18nContextProvider } from "./contexts/I18nContext";
-import { SupabaseProvider } from "./contexts/SupabaseContext";
 import { Head } from "./modules/common/Head";
 
 const ToastProvider = lazy(() =>
@@ -19,17 +18,15 @@ export default function App() {
   return (
     <Router
       root={(props) => (
-        <SupabaseProvider>
-          <I18nContextProvider>
-            <MetaProvider>
-              <Head />
-              <Suspense>{props.children}</Suspense>
-              <Suspense>
-                <ToastProvider />
-              </Suspense>
-            </MetaProvider>
-          </I18nContextProvider>
-        </SupabaseProvider>
+        <I18nContextProvider>
+          <MetaProvider>
+            <Head />
+            <Suspense>{props.children}</Suspense>
+            <Suspense>
+              <ToastProvider />
+            </Suspense>
+          </MetaProvider>
+        </I18nContextProvider>
       )}
     >
       <FileRoutes />

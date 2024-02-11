@@ -16,6 +16,7 @@ import { paths } from "~/utils/paths";
 export const route = {
   load: async () => {
     await getSessionLoader();
+    await selectBoardsLoader({ offset: 0 });
   }
 } satisfies RouteDefinition;
 
@@ -26,8 +27,11 @@ export default function Home() {
 
   return (
     <SessionProvider value={() => session() || null}>
-      <Show fallback={<Navigate href={paths.signIn} />} when={session()}>
-        <ErrorBoundary fallback={<BoardsListError />}>
+      <Show
+        fallback={<Navigate href={paths.signIn} />}
+        when={session() !== null}
+      >
+        <ErrorBoundary fallback={(error) => <BoardsListError error={error} />}>
           <Suspense fallback={<BoardsListLoading />}>
             <Show fallback={<BoardsListLoading />} when={boards()}>
               {(boards) => (

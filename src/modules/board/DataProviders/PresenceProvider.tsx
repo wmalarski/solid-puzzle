@@ -17,8 +17,8 @@ import { createStore, produce } from "solid-js/store";
 
 import type { BoardAccess } from "~/types/models";
 
-import { useSupabase } from "~/contexts/SupabaseContext";
 import { randomHexColor } from "~/utils/colors";
+import { getClientSupabase } from "~/utils/supabase";
 
 import { usePlayerCursors } from "./CursorProvider";
 import { usePlayerSelection } from "./SelectionProvider";
@@ -56,12 +56,12 @@ const createPlayerPresenceState = (boardAccess: () => BoardAccess) => {
     };
   });
 
-  const supabase = useSupabase();
+  const supabase = getClientSupabase();
 
   onMount(() => {
     const player = currentPlayer();
 
-    const channel = supabase().channel(PRESENCE_CHANNEL_NAME, {
+    const channel = supabase.channel(PRESENCE_CHANNEL_NAME, {
       config: { presence: { key: boardAccess().boardId } }
     });
 
@@ -120,7 +120,7 @@ const createPlayerPresenceState = (boardAccess: () => BoardAccess) => {
       const untrackPresence = async () => {
         await subscription.unsubscribe();
         await channel.untrack();
-        await supabase().removeChannel(channel);
+        await supabase.removeChannel(channel);
       };
 
       untrackPresence();

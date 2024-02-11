@@ -1,7 +1,6 @@
 import { action, cache } from "@solidjs/router";
+import { getRequestEvent } from "solid-js/web";
 
-import { useSessionContext } from "~/contexts/SessionContext";
-import { useSupabase } from "~/contexts/SupabaseContext";
 import {
   INSERT_BOARD_ARGS_CACHE_KEY,
   SELECT_BOARD_LOADER_CACHE_KEY,
@@ -14,15 +13,16 @@ import {
   reloadBoardServerAction,
   updateBoardServerAction
 } from "~/server/board/rpc";
+import { getClientSupabase } from "~/utils/supabase";
 
 export const SELECT_BOARDS_DEFAULT_LIMIT = 10;
 
 export const selectBoardLoader = cache(async (boardId: string) => {
-  const supabase = useSupabase();
+  const supabase = getClientSupabase();
 
   const [board, fragments] = await Promise.all([
-    supabase().from("rooms").select().eq("id", boardId).single(),
-    supabase().from("puzzle").select().eq("room_id", boardId)
+    supabase.from("rooms").select().eq("id", boardId).single(),
+    supabase.from("puzzle").select().eq("room_id", boardId)
   ]);
 
   if (board.error) {
@@ -50,17 +50,19 @@ export const selectBoardsLoader = cache(
     limit = SELECT_BOARDS_DEFAULT_LIMIT,
     offset
   }: SelectBoardsQueryOptionsArgs) => {
-    const supabase = useSupabase();
+    const event = getRequestEvent();
 
-    const session = useSessionContext();
-
-    const userId = session()?.user.id;
+    const supabase = event?.locals.supabase || getClientSupabase();
+    const session =
+      event?.locals.supabaseSession ||
+      (await supabase.auth.getSession()).data.session;
+    const userId = session?.user.id;
 
     if (!userId) {
       throw { message: "Unauthorized" };
     }
 
-    const result = await supabase()
+    const result = await supabase
       .from("rooms")
       .select("id,name,media,owner_id,created_at,width,height,columns,rows")
       .eq("owner_id", userId)
@@ -88,35 +90,23 @@ type UpdateFragmentArgs = {
 };
 
 export const useUpdateFragment = () => {
-  const supabase = useSupabase();
+  const supabase = getClientSupabase();
 
   return ({ fragmentId, isLocked, rotation, x, y }: UpdateFragmentArgs) => {
-    return supabase()
+    return supabase
       .from("puzzle")
       .update({ is_locked: isLocked, rotation, x, y })
       .eq("id", fragmentId);
   };
 };
 
-export const insertBoardAction = action(
-  insertBoardServerAction,
-  "insertBoardAction"
-);
+export const insertBoardAction = action(insertBoardServerAction);
 
-export const updateBoardAction = action(
-  updateBoardServerAction,
-  "updateBoardAction"
-);
+export const updateBoardAction = action(updateBoardServerAction);
 
-export const reloadBoardAction = action(
-  reloadBoardServerAction,
-  "reloadBoardAction"
-);
+export const reloadBoardAction = action(reloadBoardServerAction);
 
-export const deleteBoardAction = action(
-  deleteBoardServerAction,
-  "deleteBoardAction"
-);
+export const deleteBoardAction = action(deleteBoardServerAction);
 
 export const getInsertBoardArgsLoader = cache(
   getInsertBoardArgsServerLoader,

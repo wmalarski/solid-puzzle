@@ -16,7 +16,7 @@ import { createStore, produce } from "solid-js/store";
 
 import type { BoardAccess } from "~/types/models";
 
-import { useSupabase } from "~/contexts/SupabaseContext";
+import { getClientSupabase } from "~/utils/supabase";
 
 import { REALTIME_THROTTLE_TIME } from "./const";
 
@@ -38,11 +38,11 @@ const createPlayerCursorState = (boardAccess: () => BoardAccess) => {
     (_args: PlayerCursorState) => void 0
   );
 
-  const supabase = useSupabase();
+  const supabase = getClientSupabase();
 
   onMount(() => {
     const channelName = `${CURSOR_CHANNEL_NAME}:${boardAccess().boardId}`;
-    const channel = supabase().channel(channelName);
+    const channel = supabase.channel(channelName);
 
     channel
       .on(
@@ -84,7 +84,7 @@ const createPlayerCursorState = (boardAccess: () => BoardAccess) => {
       });
 
     onCleanup(() => {
-      supabase().removeChannel(channel);
+      supabase.removeChannel(channel);
     });
   });
 
