@@ -2,9 +2,7 @@
 import { MetaProvider } from "@solidjs/meta";
 import { Router } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start";
-import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
-import { SolidQueryDevtools } from "@tanstack/solid-query-devtools";
-import { Suspense, createSignal, lazy } from "solid-js";
+import { Suspense, lazy } from "solid-js";
 
 import "./app.css";
 import { I18nContextProvider } from "./contexts/I18nContext";
@@ -18,22 +16,18 @@ const ToastProvider = lazy(() =>
 );
 
 export default function App() {
-  const [queryClient] = createSignal(new QueryClient());
   return (
     <Router
       root={(props) => (
         <SupabaseProvider>
           <I18nContextProvider>
-            <QueryClientProvider client={queryClient()}>
-              <MetaProvider>
-                <Head />
-                <Suspense>{props.children}</Suspense>
-                <Suspense>
-                  <ToastProvider />
-                </Suspense>
-              </MetaProvider>
-              <SolidQueryDevtools buttonPosition="bottom-left" />
-            </QueryClientProvider>
+            <MetaProvider>
+              <Head />
+              <Suspense>{props.children}</Suspense>
+              <Suspense>
+                <ToastProvider />
+              </Suspense>
+            </MetaProvider>
           </I18nContextProvider>
         </SupabaseProvider>
       )}

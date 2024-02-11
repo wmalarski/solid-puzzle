@@ -44,8 +44,6 @@
     "@solidjs/start": "0.5.4",
     "@supabase/ssr": "^0.1.0",
     "@supabase/supabase-js": "^2.39.3",
-    "@tanstack/solid-query": "5.20.1",
-    "@tanstack/solid-query-devtools": "^5.20.1",
     "class-variance-authority": "0.7.0",
     "decode-formdata": "^0.5.0",
     "nanoid": "5.0.5",

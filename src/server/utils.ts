@@ -3,7 +3,7 @@ import { type RequestEvent, getRequestEvent } from "solid-js/web";
 import {
   type BaseSchema,
   type BaseSchemaAsync,
-  type Issues,
+  type SchemaIssues,
   coerce,
   integer,
   minValue,
@@ -30,10 +30,6 @@ export const boardDimension = () => {
   return coerce(number([integer(), minValue(3)]), Number);
 };
 
-export const rpcParseIssueError = (issues: Issues) => {
-  return new Error(issues[0].message);
-};
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type RpcResult<T = any> = {
   data?: T;
@@ -42,7 +38,7 @@ type RpcResult<T = any> = {
   success: boolean;
 };
 
-export const rpcParseIssueResult = (issues: Issues): RpcResult => {
+export const rpcParseIssueResult = (issues: SchemaIssues): RpcResult => {
   return {
     errors: Object.fromEntries(
       issues.map((issue) => [

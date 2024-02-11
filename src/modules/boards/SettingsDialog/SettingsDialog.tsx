@@ -1,11 +1,5 @@
-import { useAction, useSubmission } from "@solidjs/router";
-import { useQueryClient } from "@tanstack/solid-query";
-import {
-  type Component,
-  type ComponentProps,
-  Show,
-  splitProps
-} from "solid-js";
+import { useSubmission } from "@solidjs/router";
+import { type Component, Show, splitProps } from "solid-js";
 
 import type { DialogTriggerProps } from "~/components/Dialog";
 import type { BoardModelWithoutConfig } from "~/types/models";
@@ -26,11 +20,7 @@ import {
 import { XIcon } from "~/components/Icons/XIcon";
 import { useI18n } from "~/contexts/I18nContext";
 import { ConfigFields } from "~/modules/createBoard/ConfigFields";
-import {
-  invalidateSelectBoardQuery,
-  invalidateSelectBoardsQueries,
-  updateBoardAction
-} from "~/server/board/client";
+import { updateBoardAction } from "~/server/board/client";
 
 type UpdateFormProps = {
   board: BoardModelWithoutConfig;
@@ -39,25 +29,10 @@ type UpdateFormProps = {
 export const UpdateForm: Component<UpdateFormProps> = (props) => {
   const { t } = useI18n();
 
-  const queryClient = useQueryClient();
-
   const submission = useSubmission(updateBoardAction);
-  const action = useAction(updateBoardAction);
-
-  const onSubmit: ComponentProps<"form">["onSubmit"] = async (event) => {
-    event.preventDefault();
-    try {
-      await action(new FormData(event.currentTarget));
-
-      queryClient.invalidateQueries(invalidateSelectBoardQuery(props.board.id));
-      queryClient.invalidateQueries(invalidateSelectBoardsQueries());
-    } catch {
-      // handled by useSubmission
-    }
-  };
 
   return (
-    <form class="flex flex-col gap-4" method="post" onSubmit={onSubmit}>
+    <form action={updateBoardAction} class="flex flex-col gap-4" method="post">
       <Show when={submission.result?.error}>
         <Alert variant="error">
           <AlertIcon variant="error" />

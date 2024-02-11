@@ -1,7 +1,7 @@
 "use server";
 import type { RequestEvent } from "solid-js/web";
 
-import { redirect } from "@solidjs/router";
+import { redirect, reload } from "@solidjs/router";
 import { decode } from "decode-formdata";
 import { minLength, number, object, safeParseAsync, string } from "valibot";
 import { setCookie } from "vinxi/http";
@@ -18,10 +18,13 @@ import {
   getParsedCookie,
   getRequestEventOrThrow,
   rpcErrorResult,
-  rpcParseIssueResult,
-  rpcSuccessResult
+  rpcParseIssueResult
 } from "../utils";
-import { INSERT_BOARD_ARGS_CACHE_KEY } from "./const";
+import {
+  INSERT_BOARD_ARGS_CACHE_KEY,
+  SELECT_BOARD_LOADER_CACHE_KEY,
+  SELECT_BOARDS_LOADER_CACHE_KEY
+} from "./const";
 
 const insertBoardSchema = () => {
   return object({
@@ -125,7 +128,9 @@ export const insertBoardServerAction = async (form: FormData) => {
     return rpcErrorResult(insertFragmentsResult.error);
   }
 
-  throw redirect(paths.board(id), { revalidate: INSERT_BOARD_ARGS_CACHE_KEY });
+  throw redirect(paths.board(id), {
+    revalidate: [INSERT_BOARD_ARGS_CACHE_KEY, SELECT_BOARDS_LOADER_CACHE_KEY]
+  });
 };
 
 export const updateBoardServerAction = async (form: FormData) => {
@@ -191,7 +196,9 @@ export const updateBoardServerAction = async (form: FormData) => {
     return rpcErrorResult(insertFragmentsResult.error);
   }
 
-  return rpcSuccessResult(result.data);
+  throw reload({
+    revalidate: [SELECT_BOARD_LOADER_CACHE_KEY, SELECT_BOARDS_LOADER_CACHE_KEY]
+  });
 };
 
 export const reloadBoardServerAction = async (form: FormData) => {
@@ -236,7 +243,7 @@ export const reloadBoardServerAction = async (form: FormData) => {
     return rpcErrorResult(upsertFragmentsResult.error);
   }
 
-  return rpcSuccessResult(fragmentsResult.data);
+  throw reload({ revalidate: SELECT_BOARD_LOADER_CACHE_KEY });
 };
 
 export const deleteBoardServerAction = async (form: FormData) => {
@@ -257,7 +264,7 @@ export const deleteBoardServerAction = async (form: FormData) => {
     return rpcErrorResult(result.error);
   }
 
-  throw redirect(paths.home);
+  throw redirect(paths.home, { revalidate: SELECT_BOARDS_LOADER_CACHE_KEY });
 };
 
 export const getInsertBoardArgsServerLoader = () => {
