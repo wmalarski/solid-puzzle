@@ -12,9 +12,9 @@ import type { GetBoardAccessLoaderReturn } from "~/server/access/client";
 import type { SelectBoardLoaderReturn } from "~/server/board/client";
 import type { BoardAccess } from "~/types/models";
 
-import { useI18n } from "~/contexts/I18nContext";
 import { SessionProvider, useSessionContext } from "~/contexts/SessionContext";
 import { AcceptInviteForm } from "~/modules/board/AcceptInviteForm";
+import { BoardPlaceholder } from "~/modules/board/BoardPlaceholder";
 import { ErrorFallback } from "~/modules/common/ErrorFallback";
 import { getBoardAccessLoader } from "~/server/access/client";
 import { getSessionLoader } from "~/server/auth/client";
@@ -70,8 +70,6 @@ export const route = {
 } satisfies RouteDefinition;
 
 export default function BoardSection() {
-  const { t } = useI18n();
-
   const params = useParams();
 
   const session = createAsync(() => getSessionLoader());
@@ -84,8 +82,8 @@ export default function BoardSection() {
     <SessionProvider value={() => session() || null}>
       <main class="size-screen relative">
         <ErrorBoundary fallback={ErrorFallback}>
-          <Suspense fallback={<span>{t("board.loading")}</span>}>
-            <Show fallback={<span>{t("board.loading")}</span>} when={data()}>
+          <Suspense fallback={<BoardPlaceholder />}>
+            <Show fallback={<BoardPlaceholder />} when={data()}>
               {(data) => (
                 <BoardQuery boardAccess={boardAccess()} data={data()} />
               )}

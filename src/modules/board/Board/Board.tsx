@@ -13,6 +13,7 @@ import type { BoardAccess, BoardModel, FragmentModel } from "~/types/models";
 import { InfoBar } from "~/modules/board/InfoBar";
 import { ErrorFallback } from "~/modules/common/ErrorFallback";
 
+import { BoardPlaceholder } from "../BoardPlaceholder";
 import { PlayerCursorProvider } from "../DataProviders/CursorProvider";
 import { PlayerPresenceProvider } from "../DataProviders/PresenceProvider";
 import { PuzzleStateProvider } from "../DataProviders/PuzzleProvider";
@@ -35,7 +36,7 @@ const ClientBoard: Component<ClientBoardProps> = (props) => {
       <canvas class="size-full bg-base-100" ref={setCanvas} />
       <Show when={canvas()}>
         {(canvas) => (
-          <Suspense>
+          <Suspense fallback={<BoardPlaceholder />}>
             <PixiStage board={props.board} canvas={canvas()} />
           </Suspense>
         )}
@@ -53,7 +54,7 @@ type BoardProps = {
 export const Board: Component<BoardProps> = (props) => {
   return (
     <ErrorBoundary fallback={ErrorFallback}>
-      <Suspense>
+      <Suspense fallback={<BoardPlaceholder />}>
         <PlayerSelectionProvider boardAccess={props.boardAccess}>
           <PlayerCursorProvider boardAccess={props.boardAccess}>
             <PlayerPresenceProvider boardAccess={props.boardAccess}>

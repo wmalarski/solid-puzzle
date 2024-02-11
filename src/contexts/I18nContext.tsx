@@ -39,7 +39,6 @@ const en_dict = {
   },
   board: {
     home: "Home",
-    loading: "Loading",
     menu: "Menu",
     newGame: "New game",
     reload: {
