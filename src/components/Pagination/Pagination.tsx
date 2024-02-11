@@ -10,7 +10,7 @@ import { ArrowRightIcon } from "../Icons/ArrowRightIcon";
 import { DotsHorizontalIcon } from "../Icons/DotsHorizontalIcon";
 import { twCx } from "../utils/twCva";
 
-export const Pagination: Component<ComponentProps<"nav">> = (props) => {
+export const PaginationRoot: Component<ComponentProps<"nav">> = (props) => {
   const [, rest] = splitProps(props, ["class"]);
 
   return (

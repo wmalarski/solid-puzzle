@@ -4,4 +4,7 @@ export default defineConfig({
   start: {
     middleware: "./src/middleware.ts"
   },
+  ssr: {
+    noExternal: ["@kobalte/core"]
+  }
 });

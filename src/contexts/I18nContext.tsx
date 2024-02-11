@@ -132,6 +132,7 @@ const en_dict = {
     title: "Not Found"
   },
   pagination: {
+    label: "Pagination",
     more: "More pages",
     next: "Next",
     nextLabel: "Go to next page",

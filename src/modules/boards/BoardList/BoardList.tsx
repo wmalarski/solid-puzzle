@@ -1,5 +1,6 @@
 import { type Component, For, Show } from "solid-js";
 
+import type { SelectBoardsLoaderReturn } from "~/server/board/client";
 import type { BoardModelWithoutConfig } from "~/types/models";
 
 import { LinkButton } from "~/components/Button";
@@ -7,6 +8,12 @@ import { Card, CardActions, CardBody, CardTitle } from "~/components/Card";
 import { ArrowRightIcon } from "~/components/Icons/ArrowRightIcon";
 import { SettingsIcon } from "~/components/Icons/SettingsIcon";
 import { TrashIcon } from "~/components/Icons/TrashIcon";
+import {
+  SimplePaginationNext,
+  SimplePaginationPrevious,
+  SimplePaginationRoot,
+  SimplePaginationValue
+} from "~/components/SimplePagination";
 import { useI18n } from "~/contexts/I18nContext";
 import { paths } from "~/utils/paths";
 
@@ -82,20 +89,41 @@ const BoardsListEmpty: Component = () => {
   return <pre>{t("list.empty")}</pre>;
 };
 
+type ListPaginationProps = {
+  count: number;
+  page: number;
+};
+
+const ListPagination: Component<ListPaginationProps> = (props) => {
+  return (
+    <SimplePaginationRoot count={props.count} page={props.page}>
+      <SimplePaginationPrevious />
+      <SimplePaginationValue>{props.page + 1}</SimplePaginationValue>
+      <SimplePaginationNext />
+    </SimplePaginationRoot>
+  );
+};
+
 type BoardsListProps = {
-  boards: BoardModelWithoutConfig[];
+  boards: SelectBoardsLoaderReturn;
+  limit: number;
+  page: number;
 };
 
 export const BoardsList: Component<BoardsListProps> = (props) => {
   return (
     <section class="mx-auto max-w-screen-xl p-6">
-      <Show fallback={<BoardsListEmpty />} when={props.boards.length > 0}>
+      <Show fallback={<BoardsListEmpty />} when={props.boards.data.length > 0}>
         <div class="flex flex-wrap gap-3">
-          <For each={props.boards}>
+          <For each={props.boards.data}>
             {(board) => <BoardItem board={board} />}
           </For>
         </div>
       </Show>
+      <ListPagination
+        count={(props.boards.count || 0) / props.limit}
+        page={props.page}
+      />
     </section>
   );
 };
