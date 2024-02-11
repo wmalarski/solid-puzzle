@@ -1,1 +1,1 @@
-export { BoardsList, BoardsListError, BoardsListLoading } from "./BoardList";
+export { BoardsList, BoardsListLoading } from "./BoardList";

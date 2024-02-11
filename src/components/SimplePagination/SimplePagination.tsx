@@ -11,7 +11,7 @@ import {
 
 import { useI18n } from "~/contexts/I18nContext";
 
-import { buttonClass } from "../Button";
+import { buttonClass, buttonSplitProps } from "../Button";
 import { ArrowLeftIcon } from "../Icons/ArrowLeftIcon";
 import { ArrowRightIcon } from "../Icons/ArrowRightIcon";
 import { twCx } from "../utils/twCva";
@@ -55,32 +55,14 @@ export const SimplePaginationRoot: Component<SimplePaginationRootProps> = (
 };
 
 type PaginationLinkProps = ComponentProps<"a"> &
-  Omit<VariantProps<typeof buttonClass>, "shape">;
-
-const PaginationLink: Component<PaginationLinkProps> = (props) => {
-  const [split, rest] = splitProps(props, [
-    "class",
-    "size",
-    "color",
-    "isLoading",
-    "variant"
-  ]);
-
-  return (
-    // eslint-disable-next-line jsx-a11y/anchor-has-content
-    <a
-      class={buttonClass({ shape: "square", ...split, class: props.class })}
-      {...rest}
-    />
-  );
-};
+  VariantProps<typeof buttonClass>;
 
 export const SimplePaginationPrevious: Component<PaginationLinkProps> = (
   props
 ) => {
   const { t } = useI18n();
 
-  const [, rest] = splitProps(props, ["class", "href"]);
+  const [split, rest] = splitProps(props, buttonSplitProps);
 
   const context = useContext(SimplePaginationContext);
 
@@ -89,23 +71,24 @@ export const SimplePaginationPrevious: Component<PaginationLinkProps> = (
   });
 
   return (
-    <PaginationLink
+    <a
       aria-disabled={hasPrevious()}
       aria-label={t("pagination.previousLabel")}
-      href={hasPrevious() ? props.href : "#"}
+      class={buttonClass({ ...split, class: props.class })}
       role={hasPrevious() ? undefined : "button"}
       {...rest}
+      href={hasPrevious() ? props.href : "#"}
     >
       <ArrowLeftIcon class="size-4" />
       <span>{t("pagination.previous")}</span>
-    </PaginationLink>
+    </a>
   );
 };
 
 export const SimplePaginationNext: Component<PaginationLinkProps> = (props) => {
   const { t } = useI18n();
 
-  const [, rest] = splitProps(props, ["class", "href"]);
+  const [split, rest] = splitProps(props, buttonSplitProps);
 
   const context = useContext(SimplePaginationContext);
 
@@ -115,16 +98,17 @@ export const SimplePaginationNext: Component<PaginationLinkProps> = (props) => {
   });
 
   return (
-    <PaginationLink
+    <a
       aria-disabled={hasNext()}
       aria-label={t("pagination.nextLabel")}
-      href={hasNext() ? props.href : "#"}
+      class={buttonClass({ ...split, class: props.class })}
       role={hasNext() ? undefined : "button"}
       {...rest}
+      href={hasNext() ? props.href : "#"}
     >
       <span>{t("pagination.next")}</span>
       <ArrowRightIcon class="size-4" />
-    </PaginationLink>
+    </a>
   );
 };
 
@@ -135,5 +119,5 @@ export const SimplePaginationValue: Component<SimplePaginationValueProps> = (
 ) => {
   const [, rest] = splitProps(props, ["class"]);
 
-  return <span class={twCx("", props.class)} {...rest} />;
+  return <span class={twCx("px-2", props.class)} {...rest} />;
 };

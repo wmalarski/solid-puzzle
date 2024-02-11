@@ -38,12 +38,6 @@ const en_dict = {
     }
   },
   board: {
-    error: {
-      description: "Something went wrong: {{message}}",
-      home: "Home",
-      reload: "Reload",
-      title: "Puzzle error"
-    },
     home: "Home",
     loading: "Loading",
     menu: "Menu",
@@ -97,6 +91,12 @@ const en_dict = {
       placeholder: "Enter number of rows"
     },
     title: "Create board"
+  },
+  error: {
+    description: "Something went wrong: {{message}}",
+    home: "Home",
+    reload: "Reload",
+    title: "Puzzle error"
   },
   footer: {
     madeBy: "Made by wmalarski"

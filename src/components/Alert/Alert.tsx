@@ -27,9 +27,9 @@ export type AlertProps = ComponentProps<"div"> &
   VariantProps<typeof alertClass>;
 
 export const Alert: Component<AlertProps> = (props) => {
-  const [split, rest] = splitProps(props, ["variant"]);
+  const [split, rest] = splitProps(props, ["variant", "class"]);
 
-  return <div {...rest} class={alertClass({ class: rest.class, ...split })} />;
+  return <div class={alertClass({ class: split.class, ...split })} {...rest} />;
 };
 
 const alertIconMap: Record<

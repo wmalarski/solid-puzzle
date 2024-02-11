@@ -62,21 +62,6 @@ const BoardItem: Component<BoardItemProps> = (props) => {
   );
 };
 
-type BoardsListErrorProps = {
-  error: unknown;
-};
-
-export const BoardsListError: Component<BoardsListErrorProps> = (props) => {
-  const { t } = useI18n();
-
-  return (
-    <div>
-      {t("list.error")}
-      <pre>{JSON.stringify(props.error, null, 2)}</pre>
-    </div>
-  );
-};
-
 export const BoardsListLoading: Component = () => {
   const { t } = useI18n();
 

@@ -15,6 +15,7 @@ import type { BoardAccess } from "~/types/models";
 import { useI18n } from "~/contexts/I18nContext";
 import { SessionProvider, useSessionContext } from "~/contexts/SessionContext";
 import { AcceptInviteForm } from "~/modules/board/AcceptInviteForm";
+import { ErrorFallback } from "~/modules/common/ErrorFallback";
 import { getBoardAccessLoader } from "~/server/access/client";
 import { getSessionLoader } from "~/server/auth/client";
 import { selectBoardLoader } from "~/server/board/client";
@@ -82,9 +83,7 @@ export default function BoardSection() {
   return (
     <SessionProvider value={() => session() || null}>
       <main class="size-screen relative">
-        <ErrorBoundary
-          fallback={(error) => <pre>{JSON.stringify(error, null, 2)}</pre>}
-        >
+        <ErrorBoundary fallback={ErrorFallback}>
           <Suspense fallback={<span>{t("board.loading")}</span>}>
             <Show fallback={<span>{t("board.loading")}</span>} when={data()}>
               {(data) => (

@@ -7,11 +7,8 @@ import {
 import { ErrorBoundary, Show, Suspense } from "solid-js";
 
 import { SessionProvider } from "~/contexts/SessionContext";
-import {
-  BoardsList,
-  BoardsListError,
-  BoardsListLoading
-} from "~/modules/boards/BoardList";
+import { BoardsList, BoardsListLoading } from "~/modules/boards/BoardList";
+import { ErrorFallback } from "~/modules/common/ErrorFallback";
 import { PageLayout } from "~/modules/common/Layout";
 import { TopNavbar } from "~/modules/common/TopNavbar";
 import { getSessionLoader } from "~/server/auth/client";
@@ -43,7 +40,7 @@ export default function Home() {
         fallback={<Navigate href={paths.signIn} />}
         when={session() !== null}
       >
-        <ErrorBoundary fallback={(error) => <BoardsListError error={error} />}>
+        <ErrorBoundary fallback={ErrorFallback}>
           <Suspense fallback={<BoardsListLoading />}>
             <Show fallback={<BoardsListLoading />} when={boards()}>
               {(boards) => (
