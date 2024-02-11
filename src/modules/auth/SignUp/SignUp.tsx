@@ -31,7 +31,7 @@ export const SignUp: Component = () => {
           <Show when={submission.result?.success}>
             <Alert variant="success">
               <AlertIcon variant="success" />
-              Success
+              {t("auth.signUp.success")}
             </Alert>
           </Show>
           <Show when={submission.result?.error}>

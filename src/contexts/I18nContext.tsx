@@ -28,6 +28,7 @@ const en_dict = {
     signUp: {
       button: "Sign Up",
       signIn: "Sign In",
+      success: "Success",
       title: "Sign Up"
     },
     signUpSuccess: {
@@ -44,14 +45,22 @@ const en_dict = {
       title: "Puzzle error"
     },
     home: "Home",
+    loading: "Loading",
     menu: "Menu",
     newGame: "New game",
+    reload: {
+      description: "Do you want to play again?",
+      error: "Error",
+      startAgain: "Start Again",
+      title: "Congratulations!"
+    },
     settings: {
       delete: {
         button: "Delete",
         cancel: "Cancel",
         title: "Delete board"
       },
+      error: "Error",
       label: "Settings",
       title: "Board settings",
       update: {
@@ -114,7 +123,20 @@ const en_dict = {
     }
   },
   list: {
-    go: "Play"
+    empty: "Empty",
+    error: "Loading list error",
+    go: "Play",
+    loading: "Loading"
+  },
+  notFound: {
+    title: "Not Found"
+  },
+  pagination: {
+    more: "More pages",
+    next: "Next",
+    nextLabel: "Go to next page",
+    previous: "Previous",
+    previousLabel: "Go to previous page"
   }
 };
 

@@ -7,6 +7,7 @@ import { Button } from "~/components/Button";
 import {
   DialogCloseButton,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogOverlay,
   DialogPortal,
@@ -35,7 +36,7 @@ export const ReloadForm: Component<ReloadFormProps> = (props) => {
       <Show when={submission.result?.error}>
         <Alert variant="error">
           <AlertIcon variant="error" />
-          Error
+          {t("board.reload.error")}
         </Alert>
       </Show>
       <input name="id" type="hidden" value={props.boardId} />
@@ -44,7 +45,7 @@ export const ReloadForm: Component<ReloadFormProps> = (props) => {
         isLoading={submission.pending}
         type="submit"
       >
-        {t("board.settings.update.button")}
+        {t("board.reload.startAgain")}
       </Button>
     </form>
   );
@@ -72,7 +73,10 @@ export const ReloadDialog: Component<ReloadDialogProps> = (props) => {
         <DialogPositioner>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>{t("board.settings.title")}</DialogTitle>
+              <DialogTitle>{t("board.reload.title")}</DialogTitle>
+              <DialogDescription>
+                {t("board.reload.description")}
+              </DialogDescription>
               <DialogCloseButton>
                 <XIcon />
               </DialogCloseButton>

@@ -1,6 +1,7 @@
 import { action, cache } from "@solidjs/router";
 import { getRequestEvent } from "solid-js/web";
 
+import { useSessionContext } from "~/contexts/SessionContext";
 import {
   INSERT_BOARD_ARGS_CACHE_KEY,
   SELECT_BOARD_LOADER_CACHE_KEY,
@@ -53,9 +54,7 @@ export const selectBoardsLoader = cache(
     const event = getRequestEvent();
 
     const supabase = event?.locals.supabase || getClientSupabase();
-    const session =
-      event?.locals.supabaseSession ||
-      (await supabase.auth.getSession()).data.session;
+    const session = event?.locals.supabaseSession || useSessionContext()();
     const userId = session?.user.id;
 
     if (!userId) {

@@ -15,6 +15,7 @@ export const route = {
 
 export default function Home() {
   const session = createAsync(() => getSessionLoader());
+
   const insertArgs = createAsync(() => getInsertBoardArgsLoader());
 
   return (

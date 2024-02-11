@@ -60,19 +60,26 @@ type BoardsListErrorProps = {
 };
 
 export const BoardsListError: Component<BoardsListErrorProps> = (props) => {
+  const { t } = useI18n();
+
   return (
     <div>
-      Error<pre>{JSON.stringify(props.error, null, 2)}</pre>
+      {t("list.error")}
+      <pre>{JSON.stringify(props.error, null, 2)}</pre>
     </div>
   );
 };
 
 export const BoardsListLoading: Component = () => {
-  return <pre>Loading</pre>;
+  const { t } = useI18n();
+
+  return <pre>{t("list.loading")}</pre>;
 };
 
 const BoardsListEmpty: Component = () => {
-  return <pre>Empty</pre>;
+  const { t } = useI18n();
+
+  return <pre>{t("list.empty")}</pre>;
 };
 
 type BoardsListProps = {

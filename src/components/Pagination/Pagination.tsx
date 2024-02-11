@@ -2,6 +2,8 @@ import type { VariantProps } from "class-variance-authority";
 
 import { type Component, type ComponentProps, splitProps } from "solid-js";
 
+import { useI18n } from "~/contexts/I18nContext";
+
 import { buttonClass } from "../Button";
 import { ArrowLeftIcon } from "../Icons/ArrowLeftIcon";
 import { ArrowRightIcon } from "../Icons/ArrowRightIcon";
@@ -67,27 +69,33 @@ export const PaginationLink: Component<PaginationLinkProps> = (props) => {
 
 export const PaginationPrevious: typeof PaginationLink = (props) => {
   const [, rest] = splitProps(props, ["class"]);
+
+  const { t } = useI18n();
+
   return (
     <PaginationLink
-      aria-label="Go to previous page"
+      aria-label={t("pagination.previousLabel")}
       class={twCx("gap-1 pl-2.5", props.class)}
       {...rest}
     >
       <ArrowLeftIcon class="size-4" />
-      <span>Previous</span>
+      <span>{t("pagination.previous")}</span>
     </PaginationLink>
   );
 };
 
 export const PaginationNext: typeof PaginationLink = (props) => {
   const [, rest] = splitProps(props, ["class"]);
+
+  const { t } = useI18n();
+
   return (
     <PaginationLink
-      aria-label="Go to next page"
+      aria-label={t("pagination.nextLabel")}
       class={twCx("gap-1 pr-2.5", props.class)}
       {...rest}
     >
-      <span>Next</span>
+      <span>{t("pagination.next")}</span>
       <ArrowRightIcon class="size-4" />
     </PaginationLink>
   );
@@ -97,6 +105,9 @@ export const PaginationEllipsis: Component<ComponentProps<"span">> = (
   props
 ) => {
   const [, rest] = splitProps(props, ["class"]);
+
+  const { t } = useI18n();
+
   return (
     <span
       aria-hidden
@@ -104,7 +115,7 @@ export const PaginationEllipsis: Component<ComponentProps<"span">> = (
       {...rest}
     >
       <DotsHorizontalIcon class="size-4" />
-      <span class="sr-only">More pages</span>
+      <span class="sr-only">{t("pagination.more")}</span>
     </span>
   );
 };

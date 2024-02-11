@@ -36,7 +36,7 @@ export const UpdateForm: Component<UpdateFormProps> = (props) => {
       <Show when={submission.result?.error}>
         <Alert variant="error">
           <AlertIcon variant="error" />
-          Error
+          {t("board.settings.error")}
         </Alert>
       </Show>
       <input name="id" type="hidden" value={props.board.id} />
