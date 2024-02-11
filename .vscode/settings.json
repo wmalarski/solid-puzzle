@@ -17,7 +17,8 @@
     "tanstack",
     "undici",
     "valibot",
-    "vinxi"
+    "vinxi",
+    "wmalarski"
   ],
   "tailwindCSS.experimental.classRegex": [
     ["twCva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
