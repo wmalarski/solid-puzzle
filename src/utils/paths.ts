@@ -1,6 +1,8 @@
+import { buildSearchParams } from "./searchParams";
+
 export const paths = {
   board: (boardId: string) => `/board/${boardId}`,
-  boards: "/board",
+  boards: (page = 0) => `/board?${buildSearchParams({ page })}`,
   home: "/",
   invite: (boardId: string) => `/invite/${boardId}`,
   notFound: "/404",

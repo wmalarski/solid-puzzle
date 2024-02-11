@@ -55,7 +55,7 @@ export const TopNavbar: Component = () => {
         >
           <LinkButton
             class="flex text-sm uppercase"
-            href={paths.boards}
+            href={paths.boards()}
             size="sm"
           >
             {t("home.boards")}

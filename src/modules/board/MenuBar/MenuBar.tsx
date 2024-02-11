@@ -75,7 +75,7 @@ const Menu: Component<MenuProps> = (props) => {
   };
 
   const onDeleteSuccess = () => {
-    navigate(paths.boards);
+    navigate(paths.boards());
   };
 
   return (
