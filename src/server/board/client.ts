@@ -133,14 +133,17 @@ export const selectBoardsLoader = cache(
 
     const session = useSessionContext();
 
-    const query = supabase()
-      .from("rooms")
-      .select("id,name,media,owner_id,created_at,width,height,columns,rows");
-
     const userId = session()?.user.id;
-    const withUser = userId ? query.eq("owner_id", userId) : query;
 
-    const result = await withUser.range(offset, offset + limit);
+    if (!userId) {
+      throw { message: "Unauthorized" };
+    }
+
+    const result = await supabase()
+      .from("rooms")
+      .select("id,name,media,owner_id,created_at,width,height,columns,rows")
+      .eq("owner_id", userId)
+      .range(offset, offset + limit);
 
     if (result.error) {
       throw result.error;
@@ -150,6 +153,10 @@ export const selectBoardsLoader = cache(
   },
   SELECT_BOARDS_LOADER_CACHE_KEY
 );
+
+export type SelectBoardsLoaderReturn = Awaited<
+  ReturnType<typeof selectBoardsLoader>
+>;
 
 type UpdateFragmentArgs = {
   fragmentId: string;

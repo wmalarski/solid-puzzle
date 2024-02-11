@@ -1,5 +1,4 @@
-import { createQuery } from "@tanstack/solid-query";
-import { type Component, For, Match, Show, Switch } from "solid-js";
+import { type Component, For, Show } from "solid-js";
 
 import type { BoardModelWithoutConfig } from "~/types/models";
 
@@ -9,7 +8,6 @@ import { ArrowRightIcon } from "~/components/Icons/ArrowRightIcon";
 import { SettingsIcon } from "~/components/Icons/SettingsIcon";
 import { TrashIcon } from "~/components/Icons/TrashIcon";
 import { useI18n } from "~/contexts/I18nContext";
-import { selectBoardsQueryOptions } from "~/server/board/client";
 import { paths } from "~/utils/paths";
 
 import { DeleteBoardUncontrolledDialog } from "../DeleteDialog";
@@ -57,11 +55,11 @@ const BoardItem: Component<BoardItemProps> = (props) => {
   );
 };
 
-const BoardsListError: Component = () => {
+export const BoardsListError: Component = () => {
   return <pre>Error</pre>;
 };
 
-const BoardsListLoading: Component = () => {
+export const BoardsListLoading: Component = () => {
   return <pre>Loading</pre>;
 };
 
@@ -69,33 +67,20 @@ const BoardsListEmpty: Component = () => {
   return <pre>Empty</pre>;
 };
 
-export const BoardsList = () => {
-  const boardQuery = createQuery(() =>
-    selectBoardsQueryOptions({ offset: 0 })()
-  );
+type BoardsListProps = {
+  boards: BoardModelWithoutConfig[];
+};
 
+export const BoardsList: Component<BoardsListProps> = (props) => {
   return (
     <section class="mx-auto max-w-screen-xl p-6">
-      <Switch>
-        <Match when={boardQuery.isSuccess}>
-          <Show
-            fallback={<BoardsListEmpty />}
-            when={boardQuery.data && boardQuery.data.length > 0}
-          >
-            <div class="flex flex-wrap gap-3">
-              <For each={boardQuery.data}>
-                {(board) => <BoardItem board={board} />}
-              </For>
-            </div>
-          </Show>
-        </Match>
-        <Match when={boardQuery.isError}>
-          <BoardsListError />
-        </Match>
-        <Match when={boardQuery.isPending}>
-          <BoardsListLoading />
-        </Match>
-      </Switch>
+      <Show fallback={<BoardsListEmpty />} when={props.boards.length > 0}>
+        <div class="flex flex-wrap gap-3">
+          <For each={props.boards}>
+            {(board) => <BoardItem board={board} />}
+          </For>
+        </div>
+      </Show>
     </section>
   );
 };
