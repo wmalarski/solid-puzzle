@@ -3,18 +3,18 @@ import { useSubmission } from "@solidjs/router";
 import { type Component, Show } from "solid-js";
 
 import { Alert, AlertIcon } from "~/components/Alert";
-import { Button } from "~/components/Button";
 import {
-  DialogCloseButton,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogOverlay,
-  DialogPortal,
-  DialogPositioner,
-  DialogRoot,
-  DialogTitle
-} from "~/components/Dialog";
+  AlertDialogCloseButton,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  AlertDialogPortal,
+  AlertDialogPositioner,
+  AlertDialogRoot,
+  AlertDialogTitle
+} from "~/components/AlertDialog";
+import { Button } from "~/components/Button";
 import { XIcon } from "~/components/Icons/XIcon";
 import { useI18n } from "~/contexts/I18nContext";
 import { reloadBoardAction } from "~/server/board/client";
@@ -67,24 +67,24 @@ export const ReloadDialog: Component<ReloadDialogProps> = (props) => {
   };
 
   return (
-    <DialogRoot onOpenChange={setIsOpen} open={isOpen()}>
-      <DialogPortal>
-        <DialogOverlay />
-        <DialogPositioner>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>{t("board.reload.title")}</DialogTitle>
-              <DialogDescription>
+    <AlertDialogRoot onOpenChange={setIsOpen} open={isOpen()}>
+      <AlertDialogPortal>
+        <AlertDialogOverlay />
+        <AlertDialogPositioner>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>{t("board.reload.title")}</AlertDialogTitle>
+              <AlertDialogDescription>
                 {t("board.reload.description")}
-              </DialogDescription>
-              <DialogCloseButton>
+              </AlertDialogDescription>
+              <AlertDialogCloseButton>
                 <XIcon />
-              </DialogCloseButton>
-            </DialogHeader>
+              </AlertDialogCloseButton>
+            </AlertDialogHeader>
             <ReloadForm boardId={props.boardId} onSuccess={onSuccess} />
-          </DialogContent>
-        </DialogPositioner>
-      </DialogPortal>
-    </DialogRoot>
+          </AlertDialogContent>
+        </AlertDialogPositioner>
+      </AlertDialogPortal>
+    </AlertDialogRoot>
   );
 };

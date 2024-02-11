@@ -4,18 +4,18 @@ import { type Component, Show, splitProps } from "solid-js";
 import type { DialogTriggerProps } from "~/components/Dialog";
 
 import { Alert, AlertIcon } from "~/components/Alert";
-import { Button } from "~/components/Button";
 import {
-  DialogCloseButton,
-  DialogContent,
-  DialogHeader,
-  DialogOverlay,
-  DialogPortal,
-  DialogPositioner,
-  DialogRoot,
-  DialogTitle,
-  DialogTrigger
-} from "~/components/Dialog";
+  AlertDialogCloseButton,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  AlertDialogPortal,
+  AlertDialogPositioner,
+  AlertDialogRoot,
+  AlertDialogTitle,
+  AlertDialogTrigger
+} from "~/components/AlertDialog";
+import { Button } from "~/components/Button";
 import { XIcon } from "~/components/Icons/XIcon";
 import { useI18n } from "~/contexts/I18nContext";
 import { deleteBoardAction } from "~/server/board/client";
@@ -40,9 +40,9 @@ const DeleteBoardForm: Component<DeleteBoardFormProps> = (props) => {
       </Show>
       <input name="id" type="hidden" value={props.boardId} />
       <footer class="flex w-full gap-4">
-        <DialogCloseButton type="button">
+        <AlertDialogCloseButton type="button">
           {t("board.settings.delete.cancel")}
-        </DialogCloseButton>
+        </AlertDialogCloseButton>
         <Button
           disabled={submission.pending}
           isLoading={submission.pending}
@@ -64,23 +64,25 @@ const DeleteBoard: Component<DeleteBoardProps> = (props) => {
   const { t } = useI18n();
 
   return (
-    <DialogPortal>
-      <DialogOverlay />
-      <DialogPositioner>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{t("board.settings.delete.title")}</DialogTitle>
-            <DialogCloseButton>
+    <AlertDialogPortal>
+      <AlertDialogOverlay />
+      <AlertDialogPositioner>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {t("board.settings.delete.title")}
+            </AlertDialogTitle>
+            <AlertDialogCloseButton>
               <XIcon />
-            </DialogCloseButton>
-          </DialogHeader>
+            </AlertDialogCloseButton>
+          </AlertDialogHeader>
           <DeleteBoardForm
             boardId={props.boardId}
             onSuccess={props.onSuccess}
           />
-        </DialogContent>
-      </DialogPositioner>
-    </DialogPortal>
+        </AlertDialogContent>
+      </AlertDialogPositioner>
+    </AlertDialogPortal>
   );
 };
 
@@ -95,9 +97,9 @@ export const DeleteBoardControlledDialog: Component<
   DeleteBoardControlledDialogProps
 > = (props) => {
   return (
-    <DialogRoot onOpenChange={props.onIsOpenChange} open={props.isOpen}>
+    <AlertDialogRoot onOpenChange={props.onIsOpenChange} open={props.isOpen}>
       <DeleteBoard boardId={props.boardId} onSuccess={props.onSuccess} />
-    </DialogRoot>
+    </AlertDialogRoot>
   );
 };
 
@@ -112,9 +114,9 @@ export const DeleteBoardUncontrolledDialog: Component<
   const [split, rest] = splitProps(props, ["boardId", "onSuccess"]);
 
   return (
-    <DialogRoot>
-      <DialogTrigger {...rest} />
+    <AlertDialogRoot>
+      <AlertDialogTrigger {...rest} />
       <DeleteBoard boardId={split.boardId} onSuccess={split.onSuccess} />
-    </DialogRoot>
+    </AlertDialogRoot>
   );
 };
