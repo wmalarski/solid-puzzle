@@ -65,9 +65,11 @@ export const selectBoardsLoader = cache(
 
     const result = await supabase
       .from("rooms")
-      .select("id,name,media,owner_id,created_at,width,height,columns,rows")
+      .select("id,name,media,owner_id,created_at,width,height,columns,rows", {
+        count: "estimated"
+      })
       .eq("owner_id", userId)
-      .range(offset, offset + limit);
+      .range(offset, offset + limit - 1);
 
     if (result.error) {
       throw result.error;

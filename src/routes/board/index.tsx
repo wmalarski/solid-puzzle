@@ -2,9 +2,18 @@ import {
   Navigate,
   type RouteDefinition,
   createAsync,
-  useParams
+  useLocation
 } from "@solidjs/router";
-import { ErrorBoundary, Show, Suspense } from "solid-js";
+import { ErrorBoundary, Show, Suspense, createMemo } from "solid-js";
+import {
+  coerce,
+  number,
+  object,
+  optional,
+  parse,
+  parseAsync,
+  transform
+} from "valibot";
 
 import { SessionProvider } from "~/contexts/SessionContext";
 import { BoardsList, BoardsListLoading } from "~/modules/boards/BoardList";
@@ -15,11 +24,17 @@ import { getSessionLoader } from "~/server/auth/client";
 import { selectBoardsLoader } from "~/server/board/client";
 import { paths } from "~/utils/paths";
 
-const PAGE_LIMIT = 2;
+const PAGE_LIMIT = 10;
+
+const boardsRouteSchema = () => {
+  return object({
+    page: transform(optional(coerce(number(), Number), 1), (input) => input - 1)
+  });
+};
 
 export const route = {
-  load: async ({ params }) => {
-    const page = +params.page || 0;
+  load: async ({ location }) => {
+    const { page } = await parseAsync(boardsRouteSchema(), location.query);
     await Promise.all([
       getSessionLoader(),
       selectBoardsLoader({ limit: PAGE_LIMIT, offset: PAGE_LIMIT * page })
@@ -28,11 +43,20 @@ export const route = {
 } satisfies RouteDefinition;
 
 export default function Home() {
-  const params = useParams();
+  const location = useLocation();
+
+  const page = createMemo(() => {
+    return parse(boardsRouteSchema(), location.query).page;
+  });
 
   const session = createAsync(() => getSessionLoader());
 
-  const boards = createAsync(() => selectBoardsLoader({ offset: 0 }));
+  const boards = createAsync(() =>
+    selectBoardsLoader({
+      limit: PAGE_LIMIT,
+      offset: PAGE_LIMIT * page()
+    })
+  );
 
   return (
     <SessionProvider value={() => session() || null}>
@@ -49,7 +73,7 @@ export default function Home() {
                   <BoardsList
                     boards={boards()}
                     limit={PAGE_LIMIT}
-                    page={+params.page || 0}
+                    page={page()}
                   />
                 </PageLayout>
               )}

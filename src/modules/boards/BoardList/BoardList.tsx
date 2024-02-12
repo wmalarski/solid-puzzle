@@ -82,9 +82,9 @@ type ListPaginationProps = {
 const ListPagination: Component<ListPaginationProps> = (props) => {
   return (
     <SimplePaginationRoot count={props.count} page={props.page}>
-      <SimplePaginationPrevious href={paths.boards(props.page - 1)} />
+      <SimplePaginationPrevious href={paths.boards(props.page)} />
       <SimplePaginationValue>{props.page + 1}</SimplePaginationValue>
-      <SimplePaginationNext href={paths.boards(props.page + 1)} />
+      <SimplePaginationNext href={paths.boards(props.page + 2)} />
     </SimplePaginationRoot>
   );
 };

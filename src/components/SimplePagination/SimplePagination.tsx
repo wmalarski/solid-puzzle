@@ -74,7 +74,11 @@ export const SimplePaginationPrevious: Component<PaginationLinkProps> = (
     <a
       aria-disabled={hasPrevious()}
       aria-label={t("pagination.previousLabel")}
-      class={buttonClass({ ...split, class: props.class })}
+      class={buttonClass({
+        ...split,
+        class: props.class,
+        variant: hasPrevious() ? split.variant : "disabled"
+      })}
       role={hasPrevious() ? undefined : "button"}
       {...rest}
       href={hasPrevious() ? props.href : "#"}
@@ -101,7 +105,11 @@ export const SimplePaginationNext: Component<PaginationLinkProps> = (props) => {
     <a
       aria-disabled={hasNext()}
       aria-label={t("pagination.nextLabel")}
-      class={buttonClass({ ...split, class: props.class })}
+      class={buttonClass({
+        ...split,
+        class: props.class,
+        variant: hasNext() ? split.variant : "disabled"
+      })}
       role={hasNext() ? undefined : "button"}
       {...rest}
       href={hasNext() ? props.href : "#"}
