@@ -119,8 +119,7 @@ const createPuzzleContext = (args: CreatePuzzleContextArgs) => {
   });
 
   const [sender, setSender] = createSignal<(args: FragmentState) => void>(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    (_args: FragmentState) => void 0
+    () => void 0
   );
 
   const supabase = getClientSupabase();

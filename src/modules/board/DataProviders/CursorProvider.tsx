@@ -34,8 +34,7 @@ const createPlayerCursorState = (boardAccess: () => BoardAccess) => {
   const [cursors, setCursors] = createStore<PlayersCursorState>({});
 
   const [sender, setSender] = createSignal<(args: PlayerCursorState) => void>(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    (_args: PlayerCursorState) => void 0
+    () => void 0
   );
 
   const supabase = getClientSupabase();

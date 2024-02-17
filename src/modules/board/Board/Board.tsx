@@ -25,7 +25,6 @@ const PixiStage = clientOnly(() => import("../PixiStage"));
 
 type ClientBoardProps = {
   board: BoardModel;
-  fragments: FragmentModel[];
 };
 
 const ClientBoard: Component<ClientBoardProps> = (props) => {
@@ -63,7 +62,7 @@ export const Board: Component<BoardProps> = (props) => {
                 boardAccess={props.boardAccess}
                 fragments={props.fragments}
               >
-                <ClientBoard board={props.board} fragments={props.fragments} />
+                <ClientBoard board={props.board} />
                 <TopNavbar
                   board={props.board}
                   boardAccess={props.boardAccess}

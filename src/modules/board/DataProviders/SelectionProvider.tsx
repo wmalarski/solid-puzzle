@@ -44,8 +44,7 @@ const createPlayerSelectionState = (boardAccess: () => BoardAccess) => {
   });
 
   const [sender, setSender] = createSignal<(arg: null | string) => void>(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    (_selectionId: null | string) => void 0
+    () => void 0
   );
 
   const supabase = getClientSupabase();
