@@ -38,9 +38,10 @@ const en_dict = {
     }
   },
   board: {
+    boards: "Boards",
     home: "Home",
     menu: "Menu",
-    newGame: "New game",
+    newBoard: "New board",
     reload: {
       description: "Do you want to play again?",
       error: "Error",
@@ -51,6 +52,7 @@ const en_dict = {
       delete: {
         button: "Delete",
         cancel: "Cancel",
+        label: "Are you sure?",
         title: "Delete board"
       },
       error: "Error",

@@ -16,13 +16,13 @@ import {
   AlertDialogTrigger
 } from "~/components/AlertDialog";
 import { Button } from "~/components/Button";
+import { TrashIcon } from "~/components/Icons/TrashIcon";
 import { XIcon } from "~/components/Icons/XIcon";
 import { useI18n } from "~/contexts/I18nContext";
 import { deleteBoardAction } from "~/server/board/client";
 
 type DeleteBoardFormProps = {
   boardId: string;
-  onSuccess?: VoidFunction;
 };
 
 const DeleteBoardForm: Component<DeleteBoardFormProps> = (props) => {
@@ -39,15 +39,18 @@ const DeleteBoardForm: Component<DeleteBoardFormProps> = (props) => {
         </Alert>
       </Show>
       <input name="id" type="hidden" value={props.boardId} />
+      <span>{t("board.settings.delete.label")}</span>
       <footer class="flex w-full gap-4">
         <AlertDialogCloseButton type="button">
           {t("board.settings.delete.cancel")}
         </AlertDialogCloseButton>
         <Button
+          color="error"
           disabled={submission.pending}
           isLoading={submission.pending}
           type="submit"
         >
+          <TrashIcon class="size-4" />
           {t("board.settings.delete.button")}
         </Button>
       </footer>
@@ -57,7 +60,6 @@ const DeleteBoardForm: Component<DeleteBoardFormProps> = (props) => {
 
 type DeleteBoardProps = {
   boardId: string;
-  onSuccess?: VoidFunction;
 };
 
 const DeleteBoard: Component<DeleteBoardProps> = (props) => {
@@ -72,14 +74,11 @@ const DeleteBoard: Component<DeleteBoardProps> = (props) => {
             <AlertDialogTitle>
               {t("board.settings.delete.title")}
             </AlertDialogTitle>
-            <AlertDialogCloseButton>
+            <AlertDialogCloseButton shape="circle">
               <XIcon />
             </AlertDialogCloseButton>
           </AlertDialogHeader>
-          <DeleteBoardForm
-            boardId={props.boardId}
-            onSuccess={props.onSuccess}
-          />
+          <DeleteBoardForm boardId={props.boardId} />
         </AlertDialogContent>
       </AlertDialogPositioner>
     </AlertDialogPortal>
@@ -90,7 +89,6 @@ type DeleteBoardControlledDialogProps = {
   boardId: string;
   isOpen: boolean;
   onIsOpenChange: (isOpen: boolean) => void;
-  onSuccess: VoidFunction;
 };
 
 export const DeleteBoardControlledDialog: Component<
@@ -98,25 +96,24 @@ export const DeleteBoardControlledDialog: Component<
 > = (props) => {
   return (
     <AlertDialogRoot onOpenChange={props.onIsOpenChange} open={props.isOpen}>
-      <DeleteBoard boardId={props.boardId} onSuccess={props.onSuccess} />
+      <DeleteBoard boardId={props.boardId} />
     </AlertDialogRoot>
   );
 };
 
 type DeleteBoardUncontrolledDialogProps = DialogTriggerProps & {
   boardId: string;
-  onSuccess?: VoidFunction;
 };
 
 export const DeleteBoardUncontrolledDialog: Component<
   DeleteBoardUncontrolledDialogProps
 > = (props) => {
-  const [split, rest] = splitProps(props, ["boardId", "onSuccess"]);
+  const [split, rest] = splitProps(props, ["boardId"]);
 
   return (
     <AlertDialogRoot>
       <AlertDialogTrigger {...rest} />
-      <DeleteBoard boardId={split.boardId} onSuccess={split.onSuccess} />
+      <DeleteBoard boardId={split.boardId} />
     </AlertDialogRoot>
   );
 };

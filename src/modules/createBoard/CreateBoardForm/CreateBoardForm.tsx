@@ -33,8 +33,10 @@ export const CreateBoardForm: Component<CreateBoardFormProps> = (props) => {
         initialValues={props.initialValues}
       />
       <Button
+        color="secondary"
         disabled={submission.pending}
         isLoading={submission.pending}
+        size="lg"
         type="submit"
       >
         <Show fallback={t("createBoard.link")} when={session()}>

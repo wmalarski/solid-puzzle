@@ -92,7 +92,7 @@ export const AlertDialogHeader: Component<AlertDialogHeaderProps> = (props) => {
   return (
     <header
       {...props}
-      class={twCx("flex items-baseline justify-between mb-3", props.class)}
+      class={twCx("flex items-center justify-between mb-3", props.class)}
     />
   );
 };

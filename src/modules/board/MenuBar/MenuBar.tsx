@@ -66,6 +66,10 @@ const Menu: Component<MenuProps> = (props) => {
     navigate(paths.home);
   };
 
+  const onBoardsPageClick = () => {
+    navigate(paths.boards());
+  };
+
   const onSettingsClick = () => {
     setAreSettingsOpen(true);
   };
@@ -74,17 +78,12 @@ const Menu: Component<MenuProps> = (props) => {
     setIsDeleteOpen(true);
   };
 
-  const onDeleteSuccess = () => {
-    navigate(paths.boards());
-  };
-
   return (
     <>
       <DeleteBoardControlledDialog
         boardId={props.board.id}
         isOpen={isDeleteOpen()}
         onIsOpenChange={setIsDeleteOpen}
-        onSuccess={onDeleteSuccess}
       />
       <Show when={props.board.owner_id === session()?.user.id}>
         <SettingsControlledDialog
@@ -110,14 +109,20 @@ const Menu: Component<MenuProps> = (props) => {
             <DropdownMenuItem onSelect={onHomePageClick}>
               <DropdownMenuItemLabel>
                 <HomeIcon class="size-4" />
-                {t("board.home")}
+                {t("board.newBoard")}
+              </DropdownMenuItemLabel>
+            </DropdownMenuItem>
+            <DropdownMenuItem onSelect={onBoardsPageClick}>
+              <DropdownMenuItemLabel>
+                <HomeIcon class="size-4" />
+                {t("board.boards")}
               </DropdownMenuItemLabel>
             </DropdownMenuItem>
             <Show when={props.board.owner_id === session()?.user.id}>
               <DropdownMenuItem onSelect={onSettingsClick}>
                 <DropdownMenuItemLabel>
                   <SettingsIcon class="size-4" />
-                  {t("board.newGame")}
+                  {t("board.settings.label")}
                 </DropdownMenuItemLabel>
               </DropdownMenuItem>
             </Show>

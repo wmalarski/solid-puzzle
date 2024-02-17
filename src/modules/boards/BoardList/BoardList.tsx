@@ -1,6 +1,6 @@
+import { useSubmission } from "@solidjs/router";
 import { type Component, For, Show } from "solid-js";
 
-import type { SelectBoardsLoaderReturn } from "~/server/board/client";
 import type { BoardModelWithoutConfig } from "~/types/models";
 
 import { LinkButton } from "~/components/Button";
@@ -15,6 +15,10 @@ import {
   SimplePaginationValue
 } from "~/components/SimplePagination";
 import { useI18n } from "~/contexts/I18nContext";
+import {
+  type SelectBoardsLoaderReturn,
+  deleteBoardAction
+} from "~/server/board/client";
 import { paths } from "~/utils/paths";
 
 import { DeleteBoardUncontrolledDialog } from "../DeleteDialog";
@@ -27,38 +31,45 @@ type BoardItemProps = {
 const BoardItem: Component<BoardItemProps> = (props) => {
   const { t } = useI18n();
 
+  const deleteSubmission = useSubmission(
+    deleteBoardAction,
+    ([form]) => form.get("id") === props.board.id
+  );
+
   return (
-    <Card bg="base-300" class="w-96" size="compact" variant="bordered">
-      <Show when={props.board.media}>
-        {(src) => (
-          <figure>
-            <img alt="board" class="max-w-96" src={src()} />
-          </figure>
-        )}
-      </Show>
-      <CardBody>
-        <CardTitle component="h3">{props.board.name}</CardTitle>
-        <CardActions justify="end">
-          <DeleteBoardUncontrolledDialog
-            boardId={props.board.id}
-            color="error"
-            size="sm"
-            variant="outline"
-          >
-            <TrashIcon class="size-4" />
-            {t("board.settings.delete.button")}
-          </DeleteBoardUncontrolledDialog>
-          <SettingsUncontrolledDialog board={props.board} size="sm">
-            <SettingsIcon class="size-4" />
-            {t("board.settings.label")}
-          </SettingsUncontrolledDialog>
-          <LinkButton href={paths.board(props.board.id)} size="sm">
-            <ArrowRightIcon class="size-4" />
-            {t("list.go")}
-          </LinkButton>
-        </CardActions>
-      </CardBody>
-    </Card>
+    <Show when={!deleteSubmission.pending}>
+      <Card bg="base-300" class="w-96" size="compact" variant="bordered">
+        <Show when={props.board.media}>
+          {(src) => (
+            <figure>
+              <img alt="board" class="max-w-96" src={src()} />
+            </figure>
+          )}
+        </Show>
+        <CardBody>
+          <CardTitle component="h3">{props.board.name}</CardTitle>
+          <CardActions justify="end">
+            <DeleteBoardUncontrolledDialog
+              boardId={props.board.id}
+              color="error"
+              size="sm"
+              variant="outline"
+            >
+              <TrashIcon class="size-4" />
+              {t("board.settings.delete.button")}
+            </DeleteBoardUncontrolledDialog>
+            <SettingsUncontrolledDialog board={props.board} size="sm">
+              <SettingsIcon class="size-4" />
+              {t("board.settings.label")}
+            </SettingsUncontrolledDialog>
+            <LinkButton href={paths.board(props.board.id)} size="sm">
+              <ArrowRightIcon class="size-4" />
+              {t("list.go")}
+            </LinkButton>
+          </CardActions>
+        </CardBody>
+      </Card>
+    </Show>
   );
 };
 

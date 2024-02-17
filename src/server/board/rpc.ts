@@ -264,7 +264,9 @@ export const deleteBoardServerAction = async (form: FormData) => {
     return rpcErrorResult(result.error);
   }
 
-  throw redirect(paths.home, { revalidate: SELECT_BOARDS_LOADER_CACHE_KEY });
+  throw redirect(paths.boards(), {
+    revalidate: SELECT_BOARDS_LOADER_CACHE_KEY
+  });
 };
 
 export const getInsertBoardArgsServerLoader = () => {
