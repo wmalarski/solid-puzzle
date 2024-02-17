@@ -1,3 +1,5 @@
+import type { Component } from "solid-js";
+
 import {
   Navigate,
   type RouteDefinition,
@@ -35,52 +37,69 @@ const boardsRouteSchema = () => {
 export const route = {
   load: async ({ location }) => {
     const { page } = await parseAsync(boardsRouteSchema(), location.query);
-    await Promise.all([
-      getSessionLoader(),
-      selectBoardsLoader({ limit: PAGE_LIMIT, offset: PAGE_LIMIT * page })
-    ]);
+    const session = await getSessionLoader();
+    const userId = session?.user.id;
+
+    if (userId) {
+      await selectBoardsLoader({
+        limit: PAGE_LIMIT,
+        offset: PAGE_LIMIT * page,
+        userId
+      });
+    }
   }
 } satisfies RouteDefinition;
 
-export default function Home() {
+type BoardFetchingProps = {
+  userId: string;
+};
+
+const BoardFetching: Component<BoardFetchingProps> = (props) => {
   const location = useLocation();
 
   const page = createMemo(() => {
     return parse(boardsRouteSchema(), location.query).page;
   });
 
-  const session = createAsync(() => getSessionLoader());
-
   const boards = createAsync(() =>
     selectBoardsLoader({
       limit: PAGE_LIMIT,
-      offset: PAGE_LIMIT * page()
+      offset: PAGE_LIMIT * page(),
+      userId: props.userId
     })
   );
 
   return (
-    <SessionProvider value={() => session() || null}>
-      <Show
-        fallback={<Navigate href={paths.signIn} />}
-        when={session() !== null}
-      >
-        <ErrorBoundary fallback={ErrorFallback}>
-          <Suspense fallback={<BoardsListLoading />}>
-            <Show fallback={<BoardsListLoading />} when={boards()}>
-              {(boards) => (
-                <PageLayout>
-                  <TopNavbar />
-                  <BoardsList
-                    boards={boards()}
-                    limit={PAGE_LIMIT}
-                    page={page()}
-                  />
-                </PageLayout>
-              )}
+    <ErrorBoundary fallback={ErrorFallback}>
+      <Suspense fallback={<BoardsListLoading />}>
+        <Show fallback={<BoardsListLoading />} when={boards()}>
+          {(boards) => (
+            <BoardsList boards={boards()} limit={PAGE_LIMIT} page={page()} />
+          )}
+        </Show>
+      </Suspense>
+    </ErrorBoundary>
+  );
+};
+
+export default function BoardPage() {
+  const session = createAsync(() => getSessionLoader());
+
+  return (
+    <Suspense fallback={<BoardsListLoading />}>
+      <SessionProvider value={() => session() || null}>
+        <Show
+          fallback={<Navigate href={paths.signIn} />}
+          when={session() !== null}
+        >
+          <PageLayout>
+            <TopNavbar />
+            <Show when={session()}>
+              {(session) => <BoardFetching userId={session().user.id} />}
             </Show>
-          </Suspense>
-        </ErrorBoundary>
-      </Show>
-    </SessionProvider>
+          </PageLayout>
+        </Show>
+      </SessionProvider>
+    </Suspense>
   );
 }

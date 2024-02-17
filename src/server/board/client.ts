@@ -43,21 +43,18 @@ export type SelectBoardLoaderReturn = Awaited<
 type SelectBoardsQueryOptionsArgs = {
   limit?: number;
   offset: number;
+  userId: string;
 };
 
 export const selectBoardsLoader = cache(
   async ({
     limit = SELECT_BOARDS_DEFAULT_LIMIT,
-    offset
+    offset,
+    userId
   }: SelectBoardsQueryOptionsArgs) => {
     const event = getRequestEvent();
 
     const supabase = event?.locals.supabase || getClientSupabase();
-    const session =
-      event?.locals.supabaseSession ||
-      (await supabase.auth.getSession()).data.session;
-
-    const userId = session?.user.id;
 
     if (!userId) {
       throw { message: "Unauthorized" };
