@@ -37,9 +37,8 @@ const createPlayerCursorState = (boardAccess: () => BoardAccess) => {
     () => void 0
   );
 
-  const supabase = getClientSupabase();
-
   onMount(() => {
+    const supabase = getClientSupabase();
     const channelName = `${CURSOR_CHANNEL_NAME}:${boardAccess().boardId}`;
     const channel = supabase.channel(channelName);
 

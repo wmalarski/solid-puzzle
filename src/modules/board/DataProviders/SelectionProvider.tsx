@@ -47,9 +47,8 @@ const createPlayerSelectionState = (boardAccess: () => BoardAccess) => {
     () => void 0
   );
 
-  const supabase = getClientSupabase();
-
   onMount(() => {
+    const supabase = getClientSupabase();
     const channelName = `${SELECTION_CHANNEL_NAME}:${boardAccess().boardId}`;
     const channel = supabase.channel(channelName);
 

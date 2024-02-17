@@ -122,8 +122,6 @@ const createPuzzleContext = (args: CreatePuzzleContextArgs) => {
     () => void 0
   );
 
-  const supabase = getClientSupabase();
-
   const setFragmentState = (update: SetFragmentStateArgs) => {
     store().set(
       produce((state) => {
@@ -176,6 +174,7 @@ const createPuzzleContext = (args: CreatePuzzleContextArgs) => {
   };
 
   createEffect(() => {
+    const supabase = getClientSupabase();
     const channelName = `${PUZZLE_CHANNEL_NAME}:${args().board.id}`;
     const channel = supabase.channel(channelName);
     const playerId = args().boardAccess.playerId;

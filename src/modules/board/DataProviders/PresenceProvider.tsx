@@ -56,9 +56,8 @@ const createPlayerPresenceState = (boardAccess: () => BoardAccess) => {
     };
   });
 
-  const supabase = getClientSupabase();
-
   onMount(() => {
+    const supabase = getClientSupabase();
     const player = currentPlayer();
 
     const channel = supabase.channel(PRESENCE_CHANNEL_NAME, {

@@ -14,6 +14,7 @@ import { InfoBar } from "~/modules/board/InfoBar";
 import { ErrorFallback } from "~/modules/common/ErrorFallback";
 
 import { BoardPlaceholder } from "../BoardPlaceholder";
+import { BoardRevalidateProvider } from "../DataProviders/BoardRevalidate";
 import { PlayerCursorProvider } from "../DataProviders/CursorProvider";
 import { PlayerPresenceProvider } from "../DataProviders/PresenceProvider";
 import { PuzzleStateProvider } from "../DataProviders/PuzzleProvider";
@@ -54,25 +55,27 @@ export const Board: Component<BoardProps> = (props) => {
   return (
     <ErrorBoundary fallback={ErrorFallback}>
       <Suspense fallback={<BoardPlaceholder />}>
-        <PlayerSelectionProvider boardAccess={props.boardAccess}>
-          <PlayerCursorProvider boardAccess={props.boardAccess}>
-            <PlayerPresenceProvider boardAccess={props.boardAccess}>
-              <PuzzleStateProvider
-                board={props.board}
-                boardAccess={props.boardAccess}
-                fragments={props.fragments}
-              >
-                <ClientBoard board={props.board} />
-                <TopNavbar
+        <BoardRevalidateProvider boardId={props.boardAccess.boardId}>
+          <PlayerSelectionProvider boardAccess={props.boardAccess}>
+            <PlayerCursorProvider boardAccess={props.boardAccess}>
+              <PlayerPresenceProvider boardAccess={props.boardAccess}>
+                <PuzzleStateProvider
                   board={props.board}
                   boardAccess={props.boardAccess}
-                />
-                <InfoBar />
-                <MenuBar board={props.board} />
-              </PuzzleStateProvider>
-            </PlayerPresenceProvider>
-          </PlayerCursorProvider>
-        </PlayerSelectionProvider>
+                  fragments={props.fragments}
+                >
+                  <ClientBoard board={props.board} />
+                  <TopNavbar
+                    board={props.board}
+                    boardAccess={props.boardAccess}
+                  />
+                  <InfoBar />
+                  <MenuBar board={props.board} />
+                </PuzzleStateProvider>
+              </PlayerPresenceProvider>
+            </PlayerCursorProvider>
+          </PlayerSelectionProvider>
+        </BoardRevalidateProvider>
       </Suspense>
     </ErrorBoundary>
   );
