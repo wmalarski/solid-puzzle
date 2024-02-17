@@ -1,12 +1,6 @@
+import { createAsync } from "@solidjs/router";
 import { Assets, type FederatedPointerEvent, type Texture } from "pixi.js";
-import {
-  type Component,
-  For,
-  Show,
-  createResource,
-  onCleanup,
-  onMount
-} from "solid-js";
+import { type Component, For, Show, onCleanup, onMount } from "solid-js";
 
 import type { BoardModel } from "~/types/models";
 
@@ -14,6 +8,8 @@ import { usePuzzleStore } from "../../DataProviders/PuzzleProvider";
 import { usePlayerSelection } from "../../DataProviders/SelectionProvider";
 import { usePixiContainer } from "../PixiApp";
 import { RIGHT_BUTTON } from "../constants";
+import { usePreventMenu } from "../usePreventMenu";
+import { useStageTransform } from "../useStageTransform";
 import { PreviewGrid, PreviewSprite } from "./PreviewSprite";
 import { PuzzleFragment } from "./PuzzleFragment";
 import { RemoteCursors } from "./RemoteCursors";
@@ -67,39 +63,32 @@ const Board: Component<BoardProps> = (props) => {
   );
 };
 
-type ProviderProps = {
-  board: BoardModel;
-  texture: Texture;
-};
-
-const Provider: Component<ProviderProps> = (props) => {
-  const store = usePuzzleStore();
-
-  return (
-    <>
-      <PreviewSprite texture={props.texture} />
-      <PreviewGrid lines={store.config().lines} />
-      <Board texture={props.texture} />
-      <RemoteCursors />
-    </>
-  );
-};
-
 type Props = {
   board: BoardModel;
   path: string;
 };
 
 export const PuzzleBoard: Component<Props> = (props) => {
-  const [texture] = createResource(async () => {
-    const asset = await Assets.load(props.path);
+  const store = usePuzzleStore();
 
+  useStageTransform();
+  usePreventMenu();
+
+  const texture = createAsync(async () => {
+    const asset = await Assets.load(props.path);
     return asset as Texture;
   });
 
   return (
     <Show when={texture()}>
-      {(texture) => <Provider board={props.board} texture={texture()} />}
+      {(texture) => (
+        <>
+          <PreviewSprite texture={texture()} />
+          <PreviewGrid lines={store.config().lines} />
+          <Board texture={texture()} />
+          <RemoteCursors />
+        </>
+      )}
     </Show>
   );
 };

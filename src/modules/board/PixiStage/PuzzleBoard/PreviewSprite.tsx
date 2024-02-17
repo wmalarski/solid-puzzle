@@ -23,6 +23,7 @@ export const PreviewGrid: Component<PreviewGridProps> = (props) => {
   const graphics = new Graphics();
 
   createEffect(() => {
+    graphics.clear();
     props.lines.forEach((line) => {
       graphics
         .moveTo(line.start.x, line.start.y)
