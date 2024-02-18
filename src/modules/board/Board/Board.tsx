@@ -55,27 +55,26 @@ export const Board: Component<BoardProps> = (props) => {
   return (
     <ErrorBoundary fallback={ErrorFallback}>
       <Suspense fallback={<BoardPlaceholder />}>
-        <BoardRevalidateProvider boardId={props.boardAccess.boardId}>
-          <PlayerSelectionProvider boardAccess={props.boardAccess}>
-            <PlayerCursorProvider boardAccess={props.boardAccess}>
-              <PlayerPresenceProvider boardAccess={props.boardAccess}>
-                <PuzzleStateProvider
+        <BoardRevalidateProvider boardId={props.boardAccess.boardId} />
+        <PlayerSelectionProvider boardAccess={props.boardAccess}>
+          <PlayerCursorProvider boardAccess={props.boardAccess}>
+            <PlayerPresenceProvider boardAccess={props.boardAccess}>
+              <PuzzleStateProvider
+                board={props.board}
+                boardAccess={props.boardAccess}
+                fragments={props.fragments}
+              >
+                <ClientBoard board={props.board} />
+                <TopNavbar
                   board={props.board}
                   boardAccess={props.boardAccess}
-                  fragments={props.fragments}
-                >
-                  <ClientBoard board={props.board} />
-                  <TopNavbar
-                    board={props.board}
-                    boardAccess={props.boardAccess}
-                  />
-                  <InfoBar />
-                  <MenuBar board={props.board} />
-                </PuzzleStateProvider>
-              </PlayerPresenceProvider>
-            </PlayerCursorProvider>
-          </PlayerSelectionProvider>
-        </BoardRevalidateProvider>
+                />
+                <InfoBar />
+                <MenuBar board={props.board} />
+              </PuzzleStateProvider>
+            </PlayerPresenceProvider>
+          </PlayerCursorProvider>
+        </PlayerSelectionProvider>
       </Suspense>
     </ErrorBoundary>
   );

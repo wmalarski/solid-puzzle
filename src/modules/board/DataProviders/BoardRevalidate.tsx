@@ -1,42 +1,22 @@
 import { revalidate, useNavigate } from "@solidjs/router";
-import { REALTIME_LISTEN_TYPES } from "@supabase/supabase-js";
-import { type Component, type JSX, onCleanup, onMount } from "solid-js";
+import {
+  REALTIME_LISTEN_TYPES,
+  REALTIME_POSTGRES_CHANGES_LISTEN_EVENT
+} from "@supabase/supabase-js";
+import { type Component, onCleanup, onMount } from "solid-js";
 
-import { SELECT_BOARD_LOADER_CACHE_KEY } from "~/server/board/const";
+import {
+  SELECT_BOARD_LOADER_CACHE_KEY,
+  SELECT_BOARDS_LOADER_CACHE_KEY
+} from "~/server/board/const";
 import { paths } from "~/utils/paths";
 import { getClientSupabase } from "~/utils/supabase";
 
-const BOARD_CHANNEL_NAME = "rooms:board";
-const BOARD_EVENT_NAME = "rooms:board";
-
-type SendBoardRevalidateEventArgs = {
-  boardId: string;
-  removed: boolean;
-};
-
-export const sendBoardRevalidateEvent = ({
-  boardId,
-  removed
-}: SendBoardRevalidateEventArgs) => {
-  const supabase = getClientSupabase();
-  const channelName = `${BOARD_CHANNEL_NAME}:${boardId}`;
-  const channel = supabase.channel(channelName);
-
-  channel.subscribe(async (type) => {
-    if (type === "SUBSCRIBED") {
-      await channel.send({
-        event: BOARD_EVENT_NAME,
-        removed,
-        type: REALTIME_LISTEN_TYPES.BROADCAST
-      });
-      channel.unsubscribe();
-    }
-  });
-};
+const BOARD_REMOVE_CHANNEL_NAME = "rooms:remove_board";
+const BOARD_UPDATE_CHANNEL_NAME = "rooms:update_board";
 
 type BoardRevalidateProviderProps = {
   boardId: string;
-  children: JSX.Element;
 };
 
 export const BoardRevalidateProvider: Component<
@@ -46,22 +26,45 @@ export const BoardRevalidateProvider: Component<
 
   onMount(() => {
     const supabase = getClientSupabase();
-    const channelName = `${BOARD_CHANNEL_NAME}:${props.boardId}`;
-    const channel = supabase.channel(channelName);
 
-    channel.on(
-      REALTIME_LISTEN_TYPES.BROADCAST,
-      { event: BOARD_EVENT_NAME },
-      async (payload) => {
-        if (payload.removed) {
+    const updateChannel = supabase
+      .channel(BOARD_UPDATE_CHANNEL_NAME)
+      .on(
+        REALTIME_LISTEN_TYPES.POSTGRES_CHANGES,
+        {
+          event: REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.UPDATE,
+          filter: `id=eq.${props.boardId}`,
+          schema: "public",
+          table: "rooms"
+        },
+        async (payload) => {
+          console.log("Update change received!", payload);
+          await revalidate(SELECT_BOARD_LOADER_CACHE_KEY);
+        }
+      )
+      .subscribe();
+
+    const deleteChannel = supabase
+      .channel(BOARD_REMOVE_CHANNEL_NAME)
+      .on(
+        REALTIME_LISTEN_TYPES.POSTGRES_CHANGES,
+        {
+          event: REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.DELETE,
+          filter: `id=eq.${props.boardId}`,
+          schema: "public",
+          table: "rooms"
+        },
+        async (payload) => {
+          console.log("Delete change received!", payload);
+          await revalidate(SELECT_BOARDS_LOADER_CACHE_KEY);
           navigate(paths.boards());
         }
-        await revalidate(SELECT_BOARD_LOADER_CACHE_KEY);
-      }
-    );
+      )
+      .subscribe();
 
     onCleanup(() => {
-      supabase.removeChannel(channel);
+      supabase.removeChannel(updateChannel);
+      supabase.removeChannel(deleteChannel);
     });
   });
 
