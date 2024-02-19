@@ -1,5 +1,7 @@
+import type { ComponentProps } from "solid-js";
+
 import { createWritableMemo } from "@solid-primitives/memo";
-import { useSubmission } from "@solidjs/router";
+import { useAction, useSubmission } from "@solidjs/router";
 import { type Component, Show } from "solid-js";
 
 import { Alert, AlertIcon } from "~/components/Alert";
@@ -30,9 +32,21 @@ export const ReloadForm: Component<ReloadFormProps> = (props) => {
   const { t } = useI18n();
 
   const submission = useSubmission(reloadBoardAction);
+  const action = useAction(reloadBoardAction);
+
+  const onSubmit: ComponentProps<"form">["onSubmit"] = async (event) => {
+    event.preventDefault();
+
+    try {
+      await action(new FormData(event.currentTarget));
+      props.onSuccess();
+    } catch {
+      // handler by useSubmission
+    }
+  };
 
   return (
-    <form action={reloadBoardAction} class="flex flex-col gap-4" method="post">
+    <form class="flex flex-col gap-4" method="post" onSubmit={onSubmit}>
       <Show when={submission.result?.error}>
         <Alert variant="error">
           <AlertIcon variant="error" />
@@ -60,7 +74,7 @@ export const ReloadDialog: Component<ReloadDialogProps> = (props) => {
 
   const store = usePuzzleStore();
 
-  const [isOpen, setIsOpen] = createWritableMemo(store.isFinished);
+  const [isOpen, setIsOpen] = createWritableMemo(() => store.isFinished());
 
   const onSuccess = () => {
     setIsOpen(false);

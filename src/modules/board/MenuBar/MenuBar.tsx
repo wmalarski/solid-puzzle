@@ -80,12 +80,12 @@ const Menu: Component<MenuProps> = (props) => {
 
   return (
     <>
-      <DeleteBoardControlledDialog
-        boardId={props.board.id}
-        isOpen={isDeleteOpen()}
-        onIsOpenChange={setIsDeleteOpen}
-      />
       <Show when={props.board.owner_id === session()?.user.id}>
+        <DeleteBoardControlledDialog
+          boardId={props.board.id}
+          isOpen={isDeleteOpen()}
+          onIsOpenChange={setIsDeleteOpen}
+        />
         <SettingsControlledDialog
           board={props.board}
           isOpen={areSettingsOpen()}
@@ -125,13 +125,13 @@ const Menu: Component<MenuProps> = (props) => {
                   {t("board.settings.label")}
                 </DropdownMenuItemLabel>
               </DropdownMenuItem>
+              <DropdownMenuItem onSelect={onDeleteClick}>
+                <DropdownMenuItemLabel>
+                  <TrashIcon class="size-4" />
+                  {t("board.settings.delete.button")}
+                </DropdownMenuItemLabel>
+              </DropdownMenuItem>
             </Show>
-            <DropdownMenuItem onSelect={onDeleteClick}>
-              <DropdownMenuItemLabel>
-                <TrashIcon class="size-4" />
-                {t("board.settings.delete.button")}
-              </DropdownMenuItemLabel>
-            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <SignOutMenuItem />
           </DropdownMenuContent>

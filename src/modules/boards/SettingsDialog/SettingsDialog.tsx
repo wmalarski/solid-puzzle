@@ -1,4 +1,6 @@
-import { useSubmission } from "@solidjs/router";
+import type { ComponentProps } from "solid-js";
+
+import { useAction, useSubmission } from "@solidjs/router";
 import { type Component, Show, splitProps } from "solid-js";
 
 import type { DialogTriggerProps } from "~/components/Dialog";
@@ -24,15 +26,28 @@ import { updateBoardAction } from "~/server/board/client";
 
 type UpdateFormProps = {
   board: BoardModelWithoutConfig;
+  onSuccess?: VoidFunction;
 };
 
 export const UpdateForm: Component<UpdateFormProps> = (props) => {
   const { t } = useI18n();
 
   const submission = useSubmission(updateBoardAction);
+  const action = useAction(updateBoardAction);
+
+  const onSubmit: ComponentProps<"form">["onSubmit"] = async (event) => {
+    event.preventDefault();
+
+    try {
+      await action(new FormData(event.currentTarget));
+      props.onSuccess?.();
+    } catch {
+      // handler by useSubmission
+    }
+  };
 
   return (
-    <form action={updateBoardAction} class="flex flex-col gap-4" method="post">
+    <form class="flex flex-col gap-4" method="post" onSubmit={onSubmit}>
       <Show when={submission.result?.error}>
         <Alert variant="error">
           <AlertIcon variant="error" />
@@ -61,6 +76,7 @@ export const UpdateForm: Component<UpdateFormProps> = (props) => {
 
 type SettingsDialogProps = {
   board: BoardModelWithoutConfig;
+  onSuccess?: VoidFunction;
 };
 
 const SettingsDialog: Component<SettingsDialogProps> = (props) => {
@@ -77,7 +93,7 @@ const SettingsDialog: Component<SettingsDialogProps> = (props) => {
               <XIcon />
             </DialogCloseButton>
           </DialogHeader>
-          <UpdateForm board={props.board} />
+          <UpdateForm board={props.board} onSuccess={props.onSuccess} />
         </DialogContent>
       </DialogPositioner>
     </DialogPortal>
@@ -93,15 +109,20 @@ type SettingsControlledDialogProps = {
 export const SettingsControlledDialog: Component<
   SettingsControlledDialogProps
 > = (props) => {
+  const onSuccess = () => {
+    props.onIsOpenChange(false);
+  };
+
   return (
     <DialogRoot onOpenChange={props.onIsOpenChange} open={props.isOpen}>
-      <SettingsDialog board={props.board} />
+      <SettingsDialog board={props.board} onSuccess={onSuccess} />
     </DialogRoot>
   );
 };
 
 type SettingsUncontrolledDialogProps = DialogTriggerProps & {
   board: BoardModelWithoutConfig;
+  onSuccess?: VoidFunction;
 };
 
 export const SettingsUncontrolledDialog: Component<
@@ -112,7 +133,7 @@ export const SettingsUncontrolledDialog: Component<
   return (
     <DialogRoot>
       <DialogTrigger {...rest} />
-      <SettingsDialog board={split.board} />
+      <SettingsDialog board={split.board} onSuccess={props.onSuccess} />
     </DialogRoot>
   );
 };

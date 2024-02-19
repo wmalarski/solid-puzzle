@@ -69,6 +69,7 @@ export type Database = {
           media: string;
           name: string;
           owner_id?: string;
+          repeats?: number;
           rows?: number;
           width: number;
         };
@@ -90,6 +91,7 @@ export type Database = {
           media: string;
           name: string;
           owner_id: string;
+          repeats: number;
           rows: number;
           width: number;
         };
@@ -102,6 +104,7 @@ export type Database = {
           media?: string;
           name?: string;
           owner_id?: string;
+          repeats?: number;
           rows?: number;
           width?: number;
         };

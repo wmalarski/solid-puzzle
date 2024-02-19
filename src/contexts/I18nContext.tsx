@@ -66,6 +66,12 @@ const en_dict = {
       copy: "Link copied to your clipboard",
       title: "Share link"
     },
+    toasts: {
+      deleted: "Board deleted",
+      deletedDescription: "Board is no longer available",
+      updated: "Board updated",
+      updatedDescription: "New game started"
+    },
     topBar: {
       players: "Players"
     },

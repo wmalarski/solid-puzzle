@@ -22,7 +22,6 @@ import {
 } from "../utils";
 import {
   INSERT_BOARD_ARGS_CACHE_KEY,
-  SELECT_BOARD_LOADER_CACHE_KEY,
   SELECT_BOARDS_LOADER_CACHE_KEY
 } from "./const";
 
@@ -155,25 +154,6 @@ export const updateBoardServerAction = async (form: FormData) => {
 
   const { columns, height, id, image, name, rows, width } = parsed.output;
 
-  const config = generateCurves({ columns, rows });
-
-  const result = await event.locals.supabase
-    .from("rooms")
-    .update({
-      columns,
-      config,
-      height,
-      media: image,
-      name: name,
-      rows,
-      width
-    })
-    .eq("id", id);
-
-  if (result.error) {
-    return rpcErrorResult(result.error);
-  }
-
   const deleteFragmentsResult = await event.locals.supabase
     .from("puzzle")
     .delete()
@@ -196,9 +176,26 @@ export const updateBoardServerAction = async (form: FormData) => {
     return rpcErrorResult(insertFragmentsResult.error);
   }
 
-  throw reload({
-    revalidate: [SELECT_BOARD_LOADER_CACHE_KEY, SELECT_BOARDS_LOADER_CACHE_KEY]
-  });
+  const config = generateCurves({ columns, rows });
+
+  const result = await event.locals.supabase
+    .from("rooms")
+    .update({
+      columns,
+      config,
+      height,
+      media: image,
+      name: name,
+      rows,
+      width
+    })
+    .eq("id", id);
+
+  if (result.error) {
+    return rpcErrorResult(result.error);
+  }
+
+  throw reload({ revalidate: SELECT_BOARDS_LOADER_CACHE_KEY });
 };
 
 export const reloadBoardServerAction = async (form: FormData) => {
@@ -243,7 +240,16 @@ export const reloadBoardServerAction = async (form: FormData) => {
     return rpcErrorResult(upsertFragmentsResult.error);
   }
 
-  throw reload({ revalidate: SELECT_BOARD_LOADER_CACHE_KEY });
+  const result = await event.locals.supabase
+    .from("rooms")
+    .update({ repeats: boardResult.data.repeats + 1 })
+    .eq("id", id);
+
+  if (result.error) {
+    return rpcErrorResult(result.error);
+  }
+
+  throw reload({ revalidate: SELECT_BOARDS_LOADER_CACHE_KEY });
 };
 
 export const deleteBoardServerAction = async (form: FormData) => {
