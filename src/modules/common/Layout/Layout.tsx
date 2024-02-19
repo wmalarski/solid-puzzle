@@ -23,9 +23,9 @@ export const PageFooter: Component = () => {
 
   return (
     <footer class="p-4">
-      <a class="link text-xs" href={paths.repository}>
+      <Link href={paths.repository} size="xs">
         {t("footer.madeBy")}
-      </a>
+      </Link>
     </footer>
   );
 };

@@ -1,11 +1,9 @@
-import { clientOnly } from "@solidjs/start";
 import {
   type Component,
   ErrorBoundary,
   Show,
   Suspense,
-  createSignal,
-  lazy
+  createSignal
 } from "solid-js";
 
 import type { BoardAccess, BoardModel, FragmentModel } from "~/types/models";
@@ -19,10 +17,9 @@ import { PlayerCursorProvider } from "../DataProviders/CursorProvider";
 import { PlayerPresenceProvider } from "../DataProviders/PresenceProvider";
 import { PuzzleStateProvider } from "../DataProviders/PuzzleProvider";
 import { PlayerSelectionProvider } from "../DataProviders/SelectionProvider";
-
-const MenuBar = lazy(() => import("../MenuBar"));
-const TopNavbar = lazy(() => import("../TopBar"));
-const PixiStage = clientOnly(() => import("../PixiStage"));
+import { MenuBar } from "../MenuBar";
+import { PixiStage } from "../PixiStage";
+import { TopBar } from "../TopBar";
 
 type ClientBoardProps = {
   board: BoardModel;
@@ -65,10 +62,7 @@ export const Board: Component<BoardProps> = (props) => {
                 fragments={props.fragments}
               >
                 <ClientBoard board={props.board} />
-                <TopNavbar
-                  board={props.board}
-                  boardAccess={props.boardAccess}
-                />
+                <TopBar board={props.board} boardAccess={props.boardAccess} />
                 <InfoBar />
                 <MenuBar board={props.board} />
               </PuzzleStateProvider>

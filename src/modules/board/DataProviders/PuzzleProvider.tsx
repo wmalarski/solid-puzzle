@@ -225,7 +225,11 @@ const createPuzzleContext = (args: CreatePuzzleContextArgs) => {
   });
 
   const isFinished = createMemo(() => {
-    return Object.values(store().value).every((state) => state?.isLocked);
+    const result = Object.values(store().value).every(
+      (state) => state?.isLocked
+    );
+    console.log("isFinished", { result });
+    return result;
   });
 
   return {

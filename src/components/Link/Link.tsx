@@ -7,7 +7,8 @@ import { twCva } from "../utils/twCva";
 export const linkClass = twCva("link", {
   defaultVariants: {
     color: null,
-    hover: null
+    hover: null,
+    size: null
   },
   variants: {
     color: {
@@ -23,6 +24,9 @@ export const linkClass = twCva("link", {
     hover: {
       false: "",
       true: "link-hover"
+    },
+    size: {
+      xs: "text-xs"
     }
   }
 });
@@ -30,7 +34,7 @@ export const linkClass = twCva("link", {
 export type LinkProps = ComponentProps<"a"> & VariantProps<typeof linkClass>;
 
 export const Link: Component<LinkProps> = (props) => {
-  const [split, rest] = splitProps(props, ["color", "hover"]);
+  const [split, rest] = splitProps(props, ["color", "hover", "size"]);
 
   // eslint-disable-next-line jsx-a11y/anchor-has-content
   return <a {...rest} class={linkClass({ class: props.class, ...split })} />;
