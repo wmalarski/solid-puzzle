@@ -19,6 +19,7 @@ import { PuzzleStateProvider } from "../DataProviders/PuzzleProvider";
 import { PlayerSelectionProvider } from "../DataProviders/SelectionProvider";
 import { MenuBar } from "../MenuBar";
 import { PixiStage } from "../PixiStage";
+import { ReloadDialog } from "../ReloadDialog";
 import { TopBar } from "../TopBar";
 
 type ClientBoardProps = {
@@ -65,6 +66,7 @@ export const Board: Component<BoardProps> = (props) => {
                 <TopBar board={props.board} boardAccess={props.boardAccess} />
                 <InfoBar />
                 <MenuBar board={props.board} />
+                <ReloadDialog boardId={props.board.id} />
               </PuzzleStateProvider>
             </PlayerPresenceProvider>
           </PlayerCursorProvider>

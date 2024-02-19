@@ -80,8 +80,12 @@ export const ReloadDialog: Component<ReloadDialogProps> = (props) => {
     setIsOpen(false);
   };
 
+  const onOpenChange = () => {
+    //
+  };
+
   return (
-    <AlertDialogRoot onOpenChange={setIsOpen} open={isOpen()}>
+    <AlertDialogRoot modal onOpenChange={onOpenChange} open={isOpen()}>
       <AlertDialogPortal>
         <AlertDialogOverlay />
         <AlertDialogPositioner>

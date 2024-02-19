@@ -144,7 +144,9 @@ const createPuzzleContext = (args: CreatePuzzleContextArgs) => {
     sender()({ ...update, isLocked });
   };
 
-  const setFragmentStateWithLockCheck = (update: SetFragmentStateArgs) => {
+  const setFragmentStateWithLockCheck = async (
+    update: SetFragmentStateArgs
+  ) => {
     const isLocked = isLockedInPlace({
       fragment: update,
       shapes: shapes()
@@ -152,7 +154,7 @@ const createPuzzleContext = (args: CreatePuzzleContextArgs) => {
 
     sender()({ ...update, isLocked });
 
-    updateFragment({
+    await updateFragment({
       fragmentId: update.fragmentId,
       isLocked,
       rotation: update.rotation,
@@ -228,7 +230,6 @@ const createPuzzleContext = (args: CreatePuzzleContextArgs) => {
     const result = Object.values(store().value).every(
       (state) => state?.isLocked
     );
-    console.log("isFinished", { result });
     return result;
   });
 
@@ -253,7 +254,7 @@ const PuzzleStateContext = createContext<PuzzleContextState>({
   isFinished: () => false,
   sendFragmentState: () => void 0,
   setFragmentState: () => void 0,
-  setFragmentStateWithLockCheck: () => void 0,
+  setFragmentStateWithLockCheck: () => Promise.resolve(),
   shapes: () => new Map()
 });
 
