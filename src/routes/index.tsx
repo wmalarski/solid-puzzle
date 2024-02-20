@@ -19,7 +19,7 @@ export default function Home() {
   const insertArgs = createAsync(() => getInsertBoardArgsLoader());
 
   return (
-    <SessionProvider value={() => session() || null}>
+    <SessionProvider value={session()}>
       <PageLayout>
         <TopNavbar />
         <InsertBoard initialValues={insertArgs()} />

@@ -79,7 +79,7 @@ export default function BoardSection() {
   const data = createAsync(() => selectBoardLoader(params.boardId));
 
   return (
-    <SessionProvider value={() => session() || null}>
+    <SessionProvider value={session()}>
       <main class="size-screen relative">
         <ErrorBoundary fallback={ErrorFallback}>
           <Suspense fallback={<BoardPlaceholder />}>

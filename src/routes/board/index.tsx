@@ -1,7 +1,6 @@
 import type { Component } from "solid-js";
 
 import {
-  Navigate,
   type RouteDefinition,
   createAsync,
   useLocation
@@ -17,14 +16,16 @@ import {
   transform
 } from "valibot";
 
-import { SessionProvider } from "~/contexts/SessionContext";
+import {
+  AuthorizedSessionProvider,
+  useAuthorizedSessionContext
+} from "~/contexts/SessionContext";
 import { BoardsList, BoardsListLoading } from "~/modules/boards/BoardList";
 import { ErrorFallback } from "~/modules/common/ErrorFallback";
 import { PageLayout } from "~/modules/common/Layout";
 import { TopNavbar } from "~/modules/common/TopNavbar";
 import { getSessionLoader } from "~/server/auth/client";
 import { selectBoardsLoader } from "~/server/board/client";
-import { paths } from "~/utils/paths";
 
 const PAGE_LIMIT = 10;
 
@@ -50,12 +51,10 @@ export const route = {
   }
 } satisfies RouteDefinition;
 
-type BoardFetchingProps = {
-  userId: string;
-};
-
-const BoardFetching: Component<BoardFetchingProps> = (props) => {
+const BoardFetching: Component = () => {
   const location = useLocation();
+
+  const session = useAuthorizedSessionContext();
 
   const page = createMemo(() => {
     return parse(boardsRouteSchema(), location.query).page;
@@ -65,7 +64,7 @@ const BoardFetching: Component<BoardFetchingProps> = (props) => {
     selectBoardsLoader({
       limit: PAGE_LIMIT,
       offset: PAGE_LIMIT * page(),
-      userId: props.userId
+      userId: session().user.id
     })
   );
 
@@ -87,19 +86,15 @@ export default function BoardPage() {
 
   return (
     <Suspense fallback={<BoardsListLoading />}>
-      <SessionProvider value={() => session() || null}>
-        <Show
-          fallback={<Navigate href={paths.signIn} />}
-          when={session() !== null}
-        >
-          <PageLayout>
-            <TopNavbar />
-            <Show when={session()}>
-              {(session) => <BoardFetching userId={session().user.id} />}
-            </Show>
-          </PageLayout>
-        </Show>
-      </SessionProvider>
+      <AuthorizedSessionProvider
+        loadingFallback={<BoardsListLoading />}
+        value={session()}
+      >
+        <PageLayout>
+          <TopNavbar />
+          <BoardFetching />
+        </PageLayout>
+      </AuthorizedSessionProvider>
     </Suspense>
   );
 }
