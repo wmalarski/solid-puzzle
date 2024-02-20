@@ -31,6 +31,7 @@ export const CreateBoardForm: Component<CreateBoardFormProps> = (props) => {
       <ConfigFields
         errors={submission.result?.errors}
         initialValues={props.initialValues}
+        scrollableImageGrid
       />
       <Button
         color="secondary"

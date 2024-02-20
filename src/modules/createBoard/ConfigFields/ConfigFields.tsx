@@ -21,6 +21,7 @@ export type BoardConfigFields = {
 type ConfigFieldsProps = {
   errors?: Record<string, string>;
   initialValues?: BoardConfigFields | null;
+  scrollableImageGrid: boolean;
 };
 
 export const ConfigFields: Component<ConfigFieldsProps> = (props) => {
@@ -83,7 +84,7 @@ export const ConfigFields: Component<ConfigFieldsProps> = (props) => {
           <TextFieldErrorMessage>{props.errors?.rows}</TextFieldErrorMessage>
         </Show>
       </TextFieldRoot>
-      <ImageGrid />
+      <ImageGrid scrollable={props.scrollableImageGrid} />
       <Show when={props.errors?.image}>
         <TextFieldErrorMessage>{props.errors?.image}</TextFieldErrorMessage>
       </Show>

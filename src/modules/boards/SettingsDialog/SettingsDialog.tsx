@@ -55,14 +55,17 @@ export const UpdateForm: Component<UpdateFormProps> = (props) => {
         </Alert>
       </Show>
       <input name="id" type="hidden" value={props.board.id} />
-      <ConfigFields
-        initialValues={{
-          columns: props.board.columns,
-          image: props.board.media,
-          name: props.board.name,
-          rows: props.board.rows
-        }}
-      />
+      <div class="max-h-[70vh] overflow-y-auto pr-2">
+        <ConfigFields
+          initialValues={{
+            columns: props.board.columns,
+            image: props.board.media,
+            name: props.board.name,
+            rows: props.board.rows
+          }}
+          scrollableImageGrid={false}
+        />
+      </div>
       <Button
         disabled={submission.pending}
         isLoading={submission.pending}
