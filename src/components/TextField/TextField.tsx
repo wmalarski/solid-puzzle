@@ -52,7 +52,8 @@ export const textFieldInputClass = twCva("input", {
   defaultVariants: {
     color: null,
     size: "md",
-    variant: null
+    variant: null,
+    width: null
   },
   variants: {
     color: {
@@ -73,15 +74,20 @@ export const textFieldInputClass = twCva("input", {
     variant: {
       bordered: "input-bordered",
       ghost: "input-ghost"
+    },
+    width: {
+      full: "w-full"
     }
   }
 });
+
+const variantPropsList = ["color", "size", "variant", "width"] as const;
 
 export type TextFieldInputProps = ComponentProps<"input"> &
   VariantProps<typeof textFieldInputClass>;
 
 export const TextFieldInput: Component<TextFieldInputProps> = (props) => {
-  const [split, rest] = splitProps(props, ["color", "size", "variant"]);
+  const [split, rest] = splitProps(props, variantPropsList);
 
   return (
     <input
@@ -95,7 +101,7 @@ export type TextFieldTextAreaProps = ComponentProps<"textarea"> &
   VariantProps<typeof textFieldInputClass>;
 
 export const TextFieldTextArea: Component<TextFieldTextAreaProps> = (props) => {
-  const [split, rest] = splitProps(props, ["color", "size", "variant"]);
+  const [split, rest] = splitProps(props, variantPropsList);
 
   return (
     <textarea

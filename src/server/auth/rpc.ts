@@ -5,6 +5,7 @@ import { redirect } from "@solidjs/router";
 import { decode } from "decode-formdata";
 import {
   email,
+  hexColor,
   maxLength,
   minLength,
   object,
@@ -90,6 +91,32 @@ export const signOutServerAction = async () => {
   }
 
   throw redirect(paths.signIn, { revalidate: SESSION_CACHE_KEY });
+};
+
+export const updateUserServerAction = async (form: FormData) => {
+  const event = getRequestEventOrThrow();
+
+  const parsed = await safeParseAsync(
+    object({
+      color: string([hexColor()]),
+      name: string()
+    }),
+    decode(form)
+  );
+
+  if (!parsed.success) {
+    return rpcParseIssueResult(parsed.issues);
+  }
+
+  const result = await event.locals.supabase.auth.updateUser({
+    data: parsed.output
+  });
+
+  if (result.error) {
+    return rpcErrorResult(result.error);
+  }
+
+  return redirect(paths.home, { revalidate: SESSION_CACHE_KEY });
 };
 
 export const getSessionServerLoader = async () => {

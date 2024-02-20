@@ -1,6 +1,6 @@
 import type { Session } from "@supabase/supabase-js";
 
-import { Navigate } from "@solidjs/router";
+import { Navigate, useLocation } from "@solidjs/router";
 import {
   type Component,
   type JSX,
@@ -22,10 +22,13 @@ const AuthorizedSessionContext = createContext<() => Session>(() => {
 type SessionProviderProps = {
   children: JSX.Element;
   loadingFallback?: JSX.Element;
+  unauthorizedFallback?: JSX.Element;
   value: Session | null | undefined;
 };
 
 export const SessionProvider: Component<SessionProviderProps> = (props) => {
+  const location = useLocation();
+
   return (
     <Show
       fallback={props.loadingFallback}
@@ -33,11 +36,22 @@ export const SessionProvider: Component<SessionProviderProps> = (props) => {
     >
       {(accessor) => (
         <SessionContext.Provider value={() => accessor().session}>
-          <Show fallback={props.children} when={accessor().session}>
+          <Show
+            fallback={props.unauthorizedFallback || props.children}
+            when={accessor().session}
+          >
             <AuthorizedSessionContext.Provider
               value={() => accessor().session!}
             >
-              {props.children}
+              <Show
+                fallback={<Navigate href={paths.intro} />}
+                when={
+                  accessor().session?.user.app_metadata.name ||
+                  location.pathname === paths.intro
+                }
+              >
+                {props.children}
+              </Show>
             </AuthorizedSessionContext.Provider>
           </Show>
         </SessionContext.Provider>
@@ -58,24 +72,12 @@ export const AuthorizedSessionProvider: Component<SessionProviderProps> = (
   props
 ) => {
   return (
-    <Show
-      fallback={props.loadingFallback}
-      when={props.value !== undefined ? { session: props.value } : null}
+    <SessionProvider
+      loadingFallback={props.loadingFallback}
+      unauthorizedFallback={<Navigate href={paths.signIn} />}
+      value={props.value}
     >
-      {(accessor) => (
-        <SessionContext.Provider value={() => accessor().session}>
-          <Show
-            fallback={<Navigate href={paths.signIn} />}
-            when={accessor().session}
-          >
-            <AuthorizedSessionContext.Provider
-              value={() => accessor().session!}
-            >
-              {props.children}
-            </AuthorizedSessionContext.Provider>
-          </Show>
-        </SessionContext.Provider>
-      )}
-    </Show>
+      {props.children}
+    </SessionProvider>
   );
 };

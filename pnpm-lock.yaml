@@ -24,8 +24,8 @@ dependencies:
     specifier: 0.29.3
     version: 0.29.3(solid-js@1.8.15)
   '@solidjs/router':
-    specifier: 0.12.3
-    version: 0.12.3(solid-js@1.8.15)
+    specifier: 0.12.4
+    version: 0.12.4(solid-js@1.8.15)
   '@solidjs/start':
     specifier: 0.5.9
     version: 0.5.9(solid-js@1.8.15)(vinxi@0.2.1)(vite@4.5.1)
@@ -42,11 +42,11 @@ dependencies:
     specifier: ^0.6.0
     version: 0.6.0
   nanoid:
-    specifier: 5.0.5
-    version: 5.0.5
+    specifier: 5.0.6
+    version: 5.0.6
   pixi.js:
-    specifier: 8.0.0-rc.9
-    version: 8.0.0-rc.9
+    specifier: 8.0.0-rc.10
+    version: 8.0.0-rc.10
   solid-js:
     specifier: 1.8.15
     version: 1.8.15
@@ -54,8 +54,8 @@ dependencies:
     specifier: 2.2.1
     version: 2.2.1
   valibot:
-    specifier: ^0.28.1
-    version: 0.28.1
+    specifier: ^0.29.0
+    version: 0.29.0
   vinxi:
     specifier: ^0.2.1
     version: 0.2.1(@types/node@20.11.19)(preact@10.19.3)
@@ -1641,8 +1641,8 @@ packages:
       solid-js: 1.8.15
     dev: false
 
-  /@solidjs/router@0.12.3(solid-js@1.8.15):
-    resolution: {integrity: sha512-s5HunmOt5BXt514kHD9aDbiQ6la33297h9XKUGuMKpzJD1wgXhWTm+HmtG3SXirRfGc0UJ3yDDhNoAD8b2Om1w==}
+  /@solidjs/router@0.12.4(solid-js@1.8.15):
+    resolution: {integrity: sha512-2S5QWYmpWSIWn5ei85eoStEMmECERX2BiBkEvmqYDrgX79I8D95YaWVdHbcFGOxISPTY4TP7RxjRiofs/AIFJQ==}
     peerDependencies:
       solid-js: ^1.8.6
     dependencies:
@@ -5070,8 +5070,8 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
-  /nanoid@5.0.5:
-    resolution: {integrity: sha512-/Veqm+QKsyMY3kqi4faWplnY1u+VuKO3dD2binyPIybP31DRO29bPF+1mszgLnrR2KqSLceFLBNw0zmvDzN1QQ==}
+  /nanoid@5.0.6:
+    resolution: {integrity: sha512-rRq0eMHoGZxlvaFOUdK1Ev83Bd1IgzzR+WJ3IbDJ7QOSdAxYjlurSPqFs9s4lJg29RT6nPwizFtJhQS6V5xgiA==}
     engines: {node: ^18 || >=20}
     hasBin: true
     dev: false
@@ -5512,8 +5512,8 @@ packages:
     resolution: {integrity: sha512-8V9+HQPupnaXMA23c5hvl69zXvTwTzyAYasnkb0Tts4XvO4CliqONMOnvlq26rkhLC3nWDFBJf73LU1e1VZLaQ==}
     engines: {node: '>= 6'}
 
-  /pixi.js@8.0.0-rc.9:
-    resolution: {integrity: sha512-4xsCeu/qaiKU5zhIU8Ktj3PgHrLh7MGRqmm+7tqewIhGCqdlft2wwxPYmm3pOZczrnzwg+4vqv1QNNHL79vP0w==}
+  /pixi.js@8.0.0-rc.10:
+    resolution: {integrity: sha512-yalAy1pP0k16ZyIQ1MBCTLVKlPlaOu1UbLncJSPpuqvL87G+0VzpWHZbCgam6igdOdRMtPb75bqYvjVugqs88w==}
     dependencies:
       '@pixi/colord': 2.9.6
       '@types/css-font-loading-module': 0.0.12
@@ -6705,8 +6705,8 @@ packages:
       which-typed-array: 1.1.11
     dev: false
 
-  /valibot@0.28.1:
-    resolution: {integrity: sha512-zQnjwNJuXk6362Leu0+4eFa/SMwRom3/hEvH6s1EGf3oXIPbo2WFKDra9ymnbVh3clLRvd8hw4sKF5ruI2Lyvw==}
+  /valibot@0.29.0:
+    resolution: {integrity: sha512-JhZn08lwZPhAamOCfBwBkv/btQt4KeQhekULPH8crH053zUCLSOGEF2zKExu3bFf245tsj6J1dY0ysd/jUiMIQ==}
     dev: false
 
   /validate-html-nesting@1.2.2:

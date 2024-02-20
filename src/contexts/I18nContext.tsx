@@ -121,6 +121,12 @@ const en_dict = {
     madeBy: "Made by wmalarski",
     title: "Solid Puzzle"
   },
+  intro: {
+    color: "Color",
+    name: "Name",
+    save: "Save",
+    title: "Welcome!"
+  },
   invite: {
     button: "Accept",
     title: "Invitation to {{name}}",
