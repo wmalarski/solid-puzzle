@@ -15,6 +15,8 @@ import {
   onMount
 } from "solid-js";
 
+import { getTextColor } from "~/utils/colors";
+
 import { usePlayerCursors } from "../../DataProviders/CursorProvider";
 import { usePlayerPresence } from "../../DataProviders/PresenceProvider";
 import { useTransformContext } from "../../TransformContext";
@@ -52,6 +54,7 @@ const CursorGraphics: Component<CursorGraphicsProps> = (props) => {
       .stroke({ color: theme.cursorStrokeColor });
 
     text.text = props.name;
+    text.style.fill = getTextColor(props.color);
 
     graphics
       .rect(

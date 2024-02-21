@@ -14,6 +14,7 @@ import {
 } from "~/components/Dialog";
 import { XIcon } from "~/components/Icons/XIcon";
 import { useI18n } from "~/contexts/I18nContext";
+import { getTextColor } from "~/utils/colors";
 
 import type { PlayerState } from "../../DataProviders/PresenceProvider";
 
@@ -32,7 +33,8 @@ const PlayerAvatar: Component<PlayerAvatarProps> = (props) => {
         size="xs"
         style={{
           "--tw-ring-color": props.state.color,
-          "background-color": props.state.color
+          "background-color": props.state.color,
+          color: getTextColor(props.state.color)
         }}
       >
         <span class="flex size-full items-center justify-center uppercase">

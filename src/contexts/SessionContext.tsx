@@ -46,7 +46,7 @@ export const SessionProvider: Component<SessionProviderProps> = (props) => {
               <Show
                 fallback={<Navigate href={paths.intro} />}
                 when={
-                  accessor().session?.user.app_metadata.name ||
+                  accessor().session?.user.user_metadata.name ||
                   location.pathname === paths.intro
                 }
               >

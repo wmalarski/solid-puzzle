@@ -33,11 +33,9 @@ type PlayersState = Record<string, PlayerState | undefined>;
 
 const PRESENCE_CHANNEL_NAME = "rooms";
 
-const defaultColor = randomHexColor();
 const defaultPlayerId = nanoid();
-
 const placeholderCurrentPlayer: PlayerState = {
-  color: defaultColor,
+  color: randomHexColor(),
   name: defaultPlayerId,
   playerId: defaultPlayerId
 };
@@ -50,7 +48,7 @@ const createPlayerPresenceState = (boardAccess: () => BoardAccess) => {
   const currentPlayer = createMemo(() => {
     const access = boardAccess();
     return {
-      color: defaultColor,
+      color: access.playerColor,
       name: access.userName,
       playerId: access.playerId
     };

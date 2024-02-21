@@ -19,7 +19,6 @@ import { ErrorFallback } from "~/modules/common/ErrorFallback";
 import { getBoardAccessLoader } from "~/server/access/client";
 import { getSessionLoader } from "~/server/auth/client";
 import { selectBoardLoader } from "~/server/board/client";
-import { randomHexColor } from "~/utils/colors";
 
 const Board = clientOnly(() => import("~/modules/board/Board"));
 
@@ -38,15 +37,16 @@ const BoardQuery: Component<BoardQueryProps> = (props) => {
     }
 
     const user = session()?.user;
-    if (!user) {
+    const metadata = user?.user_metadata;
+    if (!user || !metadata?.name || !metadata.color) {
       return null;
     }
 
     return {
       boardId: props.data.board.id,
-      playerColor: randomHexColor(),
+      playerColor: metadata.color,
       playerId: user.id,
-      userName: user.email || user.id
+      userName: metadata.name
     };
   });
 
