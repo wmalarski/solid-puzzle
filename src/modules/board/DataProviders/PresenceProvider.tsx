@@ -57,9 +57,10 @@ const createPlayerPresenceState = (boardAccess: () => BoardAccess) => {
   onMount(() => {
     const supabase = getClientSupabase();
     const player = currentPlayer();
+    const boardId = boardAccess().boardId;
 
     const channel = supabase.channel(PRESENCE_CHANNEL_NAME, {
-      config: { presence: { key: boardAccess().boardId } }
+      config: { presence: { key: boardId } }
     });
 
     const subscription = channel
@@ -67,9 +68,19 @@ const createPlayerPresenceState = (boardAccess: () => BoardAccess) => {
         REALTIME_LISTEN_TYPES.PRESENCE,
         { event: REALTIME_PRESENCE_LISTEN_EVENTS.SYNC },
         () => {
-          const newState = channel.presenceState();
-          // eslint-disable-next-line no-console
-          console.log("PRESENCE_sync", newState);
+          const newState = channel.presenceState<PlayerState>();
+
+          setPlayers(
+            produce((state) => {
+              newState[boardId]?.forEach((presence) => {
+                state[presence.playerId] = {
+                  color: presence.color,
+                  name: presence.name,
+                  playerId: presence.playerId
+                };
+              });
+            })
+          );
         }
       )
       .on(
