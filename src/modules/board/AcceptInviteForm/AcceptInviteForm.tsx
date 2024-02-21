@@ -65,6 +65,21 @@ export const AcceptInviteForm: Component<AcceptInviteFormProps> = (props) => {
                 variant="bordered"
               />
             </TextFieldRoot>
+            <TextFieldRoot>
+              <TextFieldLabel for="color">
+                <TextFieldLabelText>{t("invite.color")}</TextFieldLabelText>
+              </TextFieldLabel>
+              <TextFieldInput
+                disabled={submission.pending}
+                id="color"
+                name="playerColor"
+                placeholder={t("invite.color")}
+                type="color"
+                value={defaultPlayerColor}
+                variant="bordered"
+                width="full"
+              />
+            </TextFieldRoot>
             <Button
               disabled={submission.pending}
               isLoading={submission.pending}

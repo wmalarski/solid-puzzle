@@ -129,6 +129,7 @@ const en_dict = {
   },
   invite: {
     button: "Accept",
+    color: "Color",
     title: "Invitation to {{name}}",
     username: {
       label: "Name",
