@@ -48,12 +48,13 @@ const BoardItem: Component<BoardItemProps> = (props) => {
         </Show>
         <CardBody>
           <CardTitle component="h3">{props.board.name}</CardTitle>
+          <span class="text-nowrap text-sm">{props.board.media}</span>
+          <span class="text-nowrap text-sm opacity-80">{`${props.board.columns} x ${props.board.rows}`}</span>
           <CardActions justify="end">
             <DeleteBoardUncontrolledDialog
               boardId={props.board.id}
               color="error"
               size="sm"
-              variant="outline"
             >
               <TrashIcon class="size-4" />
               {t("board.settings.delete.button")}
@@ -62,7 +63,11 @@ const BoardItem: Component<BoardItemProps> = (props) => {
               <SettingsIcon class="size-4" />
               {t("board.settings.label")}
             </SettingsUncontrolledDialog>
-            <LinkButton href={paths.board(props.board.id)} size="sm">
+            <LinkButton
+              color="secondary"
+              href={paths.board(props.board.id)}
+              size="sm"
+            >
               <ArrowRightIcon class="size-4" />
               {t("list.go")}
             </LinkButton>
