@@ -1,8 +1,10 @@
 "use server";
 
+import type { Output } from "valibot";
+
 import { redirect } from "@solidjs/router";
 import { decode } from "decode-formdata";
-import { object, safeParseAsync, string } from "valibot";
+import { hexColor, object, safeParseAsync, string } from "valibot";
 import { setCookie } from "vinxi/http";
 
 import { paths } from "~/utils/paths";
@@ -18,11 +20,13 @@ import { BOARDS_ACCESS_CACHE_KEY } from "./const";
 const boardAccessSchema = () => {
   return object({
     boardId: string(),
-    playerColor: string(),
+    playerColor: string([hexColor()]),
     playerId: string(),
     userName: string()
   });
 };
+
+export type BoardAccess = Output<ReturnType<typeof boardAccessSchema>>;
 
 const getBoardAccessCookieName = (boardId: string) => {
   return `BoardAccess-${boardId}`;

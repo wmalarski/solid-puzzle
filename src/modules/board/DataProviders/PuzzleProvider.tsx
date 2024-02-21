@@ -15,7 +15,8 @@ import {
 } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 
-import type { BoardAccess, BoardModel, FragmentModel } from "~/types/models";
+import type { BoardAccess } from "~/server/access/rpc";
+import type { BoardModel, FragmentModel } from "~/types/models";
 
 import { useUpdateFragment } from "~/server/board/client";
 import { getDistance } from "~/utils/geometry";

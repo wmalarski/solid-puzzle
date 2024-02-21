@@ -6,7 +6,8 @@ import {
   createSignal
 } from "solid-js";
 
-import type { BoardAccess, BoardModel, FragmentModel } from "~/types/models";
+import type { BoardAccess } from "~/server/access/rpc";
+import type { BoardModel, FragmentModel } from "~/types/models";
 
 import { InfoBar } from "~/modules/board/InfoBar";
 import { ErrorFallback } from "~/modules/common/ErrorFallback";

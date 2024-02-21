@@ -9,8 +9,8 @@ import {
 } from "solid-js";
 
 import type { GetBoardAccessLoaderReturn } from "~/server/access/client";
+import type { BoardAccess } from "~/server/access/rpc";
 import type { SelectBoardLoaderReturn } from "~/server/board/client";
-import type { BoardAccess } from "~/types/models";
 
 import { SessionProvider, useSessionContext } from "~/contexts/SessionContext";
 import { AcceptInviteForm } from "~/modules/board/AcceptInviteForm";

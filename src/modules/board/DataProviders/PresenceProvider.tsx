@@ -15,7 +15,7 @@ import {
 } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 
-import type { BoardAccess } from "~/types/models";
+import type { BoardAccess } from "~/server/access/rpc";
 
 import { randomHexColor } from "~/utils/colors";
 import { getClientSupabase } from "~/utils/supabase";

@@ -1,6 +1,7 @@
 import { type Component } from "solid-js";
 
-import type { BoardAccess, BoardModel } from "~/types/models";
+import type { BoardAccess } from "~/server/access/rpc";
+import type { BoardModel } from "~/types/models";
 
 import { ShareIcon } from "~/components/Icons/ShareIcon";
 import { showToast } from "~/components/Toast";
