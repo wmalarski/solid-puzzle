@@ -18,11 +18,7 @@ export default function IntroductionPage() {
 
   return (
     <Suspense>
-      <AuthorizedSessionProvider
-        loadingFallback={<span>Loading</span>}
-        unauthorizedFallback={<span>Unauth</span>}
-        value={session()}
-      >
+      <AuthorizedSessionProvider value={session()}>
         <IntroForm />
       </AuthorizedSessionProvider>
     </Suspense>

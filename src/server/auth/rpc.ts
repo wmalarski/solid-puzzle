@@ -112,6 +112,8 @@ export const updateUserServerAction = async (form: FormData) => {
     data: parsed.output
   });
 
+  console.log(JSON.stringify({ parsed, result }, null, 2));
+
   if (result.error) {
     return rpcErrorResult(result.error);
   }

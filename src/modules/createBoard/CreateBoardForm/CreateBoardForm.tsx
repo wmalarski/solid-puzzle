@@ -29,6 +29,7 @@ export const CreateBoardForm: Component<CreateBoardFormProps> = (props) => {
         </Alert>
       </Show>
       <ConfigFields
+        disabled={submission.pending}
         errors={submission.result?.errors}
         initialValues={props.initialValues}
         scrollableImageGrid

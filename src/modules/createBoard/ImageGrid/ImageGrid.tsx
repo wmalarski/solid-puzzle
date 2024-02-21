@@ -8,6 +8,7 @@ import type { ImageEntry } from "./const";
 import { IMAGES } from "./const";
 
 type ImageGridProps = {
+  disabled: boolean;
   initialValue?: string;
   scrollable: boolean;
 };
@@ -42,6 +43,7 @@ export const ImageGrid: Component<ImageGridProps> = (props) => {
                 "flex rounded border-2 border-base-300 p-2 items-center justify-center",
                 value().path === image.path ? "border-accent bg-base-300" : null
               )}
+              disabled={props.disabled}
               onClick={onButtonClick(image)}
               type="button"
             >

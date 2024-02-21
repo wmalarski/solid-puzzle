@@ -19,6 +19,7 @@ export type BoardConfigFields = {
 };
 
 type ConfigFieldsProps = {
+  disabled: boolean;
   errors?: Record<string, string>;
   initialValues?: BoardConfigFields | null;
   scrollableImageGrid: boolean;
@@ -34,6 +35,7 @@ export const ConfigFields: Component<ConfigFieldsProps> = (props) => {
           <TextFieldLabelText>{t("createBoard.name.label")}</TextFieldLabelText>
         </TextFieldLabel>
         <TextFieldInput
+          disabled={props.disabled}
           id="name"
           name="name"
           placeholder={t("createBoard.name.placeholder")}
@@ -51,6 +53,7 @@ export const ConfigFields: Component<ConfigFieldsProps> = (props) => {
           </TextFieldLabelText>
         </TextFieldLabel>
         <TextFieldInput
+          disabled={props.disabled}
           id="columns"
           max={20}
           min={3}
@@ -70,6 +73,7 @@ export const ConfigFields: Component<ConfigFieldsProps> = (props) => {
           <TextFieldLabelText>{t("createBoard.rows.label")}</TextFieldLabelText>
         </TextFieldLabel>
         <TextFieldInput
+          disabled={props.disabled}
           id="rows"
           max={20}
           min={3}
@@ -84,7 +88,10 @@ export const ConfigFields: Component<ConfigFieldsProps> = (props) => {
           <TextFieldErrorMessage>{props.errors?.rows}</TextFieldErrorMessage>
         </Show>
       </TextFieldRoot>
-      <ImageGrid scrollable={props.scrollableImageGrid} />
+      <ImageGrid
+        disabled={props.disabled}
+        scrollable={props.scrollableImageGrid}
+      />
       <Show when={props.errors?.image}>
         <TextFieldErrorMessage>{props.errors?.image}</TextFieldErrorMessage>
       </Show>

@@ -64,20 +64,27 @@ export const useSessionContext = () => {
   return useContext(SessionContext);
 };
 
-export const useAuthorizedSessionContext = () => {
-  return useContext(AuthorizedSessionContext);
+type AuthorizedSessionProviderProps = {
+  children: JSX.Element;
+  loadingFallback?: JSX.Element;
+  value: Session | null | undefined;
 };
 
-export const AuthorizedSessionProvider: Component<SessionProviderProps> = (
-  props
-) => {
+export const AuthorizedSessionProvider: Component<
+  AuthorizedSessionProviderProps
+> = (props) => {
   return (
     <SessionProvider
       loadingFallback={props.loadingFallback}
       unauthorizedFallback={<Navigate href={paths.signIn} />}
+      // eslint-disable-next-line solid/reactivity
       value={props.value}
     >
       {props.children}
     </SessionProvider>
   );
+};
+
+export const useAuthorizedSessionContext = () => {
+  return useContext(AuthorizedSessionContext);
 };

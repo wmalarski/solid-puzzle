@@ -57,6 +57,7 @@ export const UpdateForm: Component<UpdateFormProps> = (props) => {
       <input name="id" type="hidden" value={props.board.id} />
       <div class="max-h-[70vh] overflow-y-auto pr-2">
         <ConfigFields
+          disabled={submission.pending}
           initialValues={{
             columns: props.board.columns,
             image: props.board.media,

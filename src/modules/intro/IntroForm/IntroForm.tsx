@@ -1,6 +1,7 @@
 import { useSubmission } from "@solidjs/router";
-import { type Component } from "solid-js";
+import { type Component, Show } from "solid-js";
 
+import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
 import { Card, CardBody, cardTitleClass } from "~/components/Card";
 import {
@@ -10,7 +11,6 @@ import {
   TextFieldRoot
 } from "~/components/TextField";
 import { useI18n } from "~/contexts/I18nContext";
-import { setBoardAccessAction } from "~/server/access/client";
 import { updateUserAction } from "~/server/auth/client";
 import { randomHexColor } from "~/utils/colors";
 
@@ -28,15 +28,22 @@ export const IntroForm: Component = () => {
           <h2 class={cardTitleClass()}>{t("intro.title")}</h2>
         </header>
         <form
-          action={setBoardAccessAction}
+          action={updateUserAction}
           class="flex flex-col gap-4"
           method="post"
         >
+          <Show when={submission.result?.error}>
+            <Alert variant="error">
+              <AlertIcon variant="error" />
+              {submission.result?.error}
+            </Alert>
+          </Show>
           <TextFieldRoot>
             <TextFieldLabel for="name">
               <TextFieldLabelText>{t("intro.name")}</TextFieldLabelText>
             </TextFieldLabel>
             <TextFieldInput
+              disabled={submission.pending}
               id="name"
               name="name"
               placeholder={t("intro.name")}
@@ -48,6 +55,7 @@ export const IntroForm: Component = () => {
               <TextFieldLabelText>{t("intro.color")}</TextFieldLabelText>
             </TextFieldLabel>
             <TextFieldInput
+              disabled={submission.pending}
               id="color"
               name="color"
               placeholder={t("intro.color")}
@@ -58,6 +66,7 @@ export const IntroForm: Component = () => {
             />
           </TextFieldRoot>
           <Button
+            color="secondary"
             disabled={submission.pending}
             isLoading={submission.pending}
             type="submit"

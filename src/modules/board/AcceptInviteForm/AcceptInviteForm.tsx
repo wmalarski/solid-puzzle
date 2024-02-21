@@ -58,6 +58,7 @@ export const AcceptInviteForm: Component<AcceptInviteFormProps> = (props) => {
                 </TextFieldLabelText>
               </TextFieldLabel>
               <TextFieldInput
+                disabled={submission.pending}
                 id="userName"
                 name="userName"
                 placeholder={t("invite.username.placeholder")}

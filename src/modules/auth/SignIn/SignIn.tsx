@@ -39,6 +39,7 @@ export const SignIn: Component = () => {
               <TextFieldLabelText>{t("auth.email.label")}</TextFieldLabelText>
             </TextFieldLabel>
             <TextFieldInput
+              disabled={submission.pending}
               id="email"
               name="email"
               placeholder={t("auth.email.placeholder")}
@@ -58,6 +59,7 @@ export const SignIn: Component = () => {
               </TextFieldLabelText>
             </TextFieldLabel>
             <TextFieldInput
+              disabled={submission.pending}
               id="password"
               name="password"
               placeholder={t("auth.password.placeholder")}

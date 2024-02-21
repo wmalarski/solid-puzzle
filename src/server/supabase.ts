@@ -39,3 +39,10 @@ declare module "@solidjs/start/server" {
     supabaseSession: Session | null;
   }
 }
+
+declare module "@supabase/supabase-js" {
+  interface UserAppMetadata {
+    color?: string;
+    name?: string;
+  }
+}
