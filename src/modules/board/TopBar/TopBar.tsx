@@ -67,8 +67,9 @@ export const TopBar: Component<TopBarProps> = (props) => {
   return (
     <div class="absolute inset-x-auto right-4 top-4 flex w-min items-center gap-4 rounded-3xl bg-base-300 p-1 shadow-lg">
       <div class="flex flex-col gap-2 p-1 pl-4">
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-4">
           <h1 class="grow font-bold">{props.board.name}</h1>
+          <span class="text-nowrap text-sm opacity-80">{`${props.board.columns} x ${props.board.rows}`}</span>
           <ShareButton />
         </div>
         <h2 class="text-sm">{props.board.media}</h2>

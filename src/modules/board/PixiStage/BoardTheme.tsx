@@ -6,15 +6,17 @@ const createBoardThemeContext = () => {
     cursorGraphicsZIndex: 6,
     cursorStrokeColor: 0xffffff,
     cursorTextZIndex: 7,
-    fragmentBorderColor: 0xaaaaaa,
+    fragmentBorderWidth: 4,
     fragmentLockedZIndex: 0,
-    fragmentSelectedZIndex: 2,
+    fragmentRemoteZIndex: 2,
+    fragmentSelectedZIndex: 3,
     fragmentZIndex: 1,
     previewSpriteAlpha: 0.4,
     previewStrokeColor: 0x777777,
     previewStrokeWidth: 1,
-    rotationAnchorColor: 0xaa3333,
-    rotationAnchorRadius: 10
+    rotationAnchorColor: 0xffffff,
+    rotationAnchorRadius: 15,
+    rotationAnchorWidth: 2
   };
 };
 

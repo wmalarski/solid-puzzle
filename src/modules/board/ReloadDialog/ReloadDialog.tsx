@@ -6,7 +6,6 @@ import { type Component, Show } from "solid-js";
 
 import { Alert, AlertIcon } from "~/components/Alert";
 import {
-  AlertDialogCloseButton,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogHeader,
@@ -16,10 +15,10 @@ import {
   AlertDialogRoot,
   AlertDialogTitle
 } from "~/components/AlertDialog";
-import { Button } from "~/components/Button";
-import { XIcon } from "~/components/Icons/XIcon";
+import { Button, LinkButton } from "~/components/Button";
 import { useI18n } from "~/contexts/I18nContext";
 import { reloadBoardAction } from "~/server/board/client";
+import { paths } from "~/utils/paths";
 
 import { usePuzzleStore } from "../DataProviders/PuzzleProvider";
 
@@ -46,7 +45,7 @@ export const ReloadForm: Component<ReloadFormProps> = (props) => {
   };
 
   return (
-    <form class="flex flex-col gap-4" method="post" onSubmit={onSubmit}>
+    <form class="flex flex-col gap-4 pt-4" method="post" onSubmit={onSubmit}>
       <Show when={submission.result?.error}>
         <Alert variant="error">
           <AlertIcon variant="error" />
@@ -54,13 +53,17 @@ export const ReloadForm: Component<ReloadFormProps> = (props) => {
         </Alert>
       </Show>
       <input name="id" type="hidden" value={props.boardId} />
-      <Button
-        disabled={submission.pending}
-        isLoading={submission.pending}
-        type="submit"
-      >
-        {t("board.reload.startAgain")}
-      </Button>
+      <div class="grid w-full grid-cols-2 gap-2">
+        <LinkButton href={paths.home}>{t("board.reload.goHome")}</LinkButton>
+        <Button
+          color="secondary"
+          disabled={submission.pending}
+          isLoading={submission.pending}
+          type="submit"
+        >
+          {t("board.reload.startAgain")}
+        </Button>
+      </div>
     </form>
   );
 };
@@ -92,13 +95,10 @@ export const ReloadDialog: Component<ReloadDialogProps> = (props) => {
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>{t("board.reload.title")}</AlertDialogTitle>
-              <AlertDialogDescription>
-                {t("board.reload.description")}
-              </AlertDialogDescription>
-              <AlertDialogCloseButton>
-                <XIcon />
-              </AlertDialogCloseButton>
             </AlertDialogHeader>
+            <AlertDialogDescription>
+              {t("board.reload.description")}
+            </AlertDialogDescription>
             <ReloadForm boardId={props.boardId} onSuccess={onSuccess} />
           </AlertDialogContent>
         </AlertDialogPositioner>

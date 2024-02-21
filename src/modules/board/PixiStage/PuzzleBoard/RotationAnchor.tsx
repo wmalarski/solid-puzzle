@@ -36,10 +36,10 @@ export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
     const color = presence.currentPlayer().color;
 
     graphics.circle(0, 0, radius).stroke({ color });
-    graphics
-      .circle(x, y, theme.rotationAnchorRadius)
-      .fill({ color })
-      .stroke({ color: "white" });
+    graphics.circle(x, y, theme.rotationAnchorRadius).fill({ color }).stroke({
+      color: theme.rotationAnchorColor,
+      width: theme.rotationAnchorWidth
+    });
   });
 
   createEffect(() => {

@@ -45,6 +45,7 @@ const en_dict = {
     reload: {
       description: "Do you want to play again?",
       error: "Error",
+      goHome: "Go home",
       startAgain: "Start Again",
       title: "Congratulations!"
     },

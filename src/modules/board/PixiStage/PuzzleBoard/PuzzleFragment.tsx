@@ -47,6 +47,8 @@ type PuzzleBorderGraphicsProps = {
 };
 
 const PuzzleBorderGraphics: Component<PuzzleBorderGraphicsProps> = (props) => {
+  const theme = useBoardTheme();
+
   const graphics = new Graphics();
 
   onMount(() => {
@@ -55,7 +57,7 @@ const PuzzleBorderGraphics: Component<PuzzleBorderGraphicsProps> = (props) => {
     graphics.stroke({
       color: props.color,
       matrix,
-      width: 2
+      width: theme.fragmentBorderWidth
     });
 
     graphics.pivot.set(props.center.x, props.center.y);
@@ -88,19 +90,12 @@ type PuzzleFragmentGraphicsProps = {
 const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
   props
 ) => {
-  const theme = useBoardTheme();
-
   const graphics = new Graphics();
 
   onMount(() => {
     const matrix = drawPuzzleShape(props.shape, graphics);
 
     graphics.fill({ matrix, texture: props.texture });
-    graphics.stroke({
-      color: theme.fragmentBorderColor,
-      matrix,
-      width: 1
-    });
 
     graphics.pivot.set(props.center.x, props.center.y);
   });
@@ -191,9 +186,11 @@ export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
   createEffect(() => {
     fragment.zIndex = props.state.isLocked
       ? theme.fragmentLockedZIndex
-      : isCurrentPlayerSelected() || remotePlayerSelection()
+      : isCurrentPlayerSelected()
         ? theme.fragmentSelectedZIndex
-        : theme.fragmentZIndex;
+        : remotePlayerSelection()
+          ? theme.fragmentRemoteZIndex
+          : theme.fragmentZIndex;
   });
 
   useDragObject({

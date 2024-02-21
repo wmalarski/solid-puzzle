@@ -17,6 +17,7 @@ import {
 } from "~/components/DropdownMenu";
 import { ExitIcon } from "~/components/Icons/ExitIcon";
 import { HomeIcon } from "~/components/Icons/HomeIcon";
+import { ListIcon } from "~/components/Icons/ListIcon";
 import { MenuIcon } from "~/components/Icons/MenuIcon";
 import { SettingsIcon } from "~/components/Icons/SettingsIcon";
 import { TrashIcon } from "~/components/Icons/TrashIcon";
@@ -114,7 +115,7 @@ const Menu: Component<MenuProps> = (props) => {
             </DropdownMenuItem>
             <DropdownMenuItem onSelect={onBoardsPageClick}>
               <DropdownMenuItemLabel>
-                <HomeIcon class="size-4" />
+                <ListIcon class="size-4" />
                 {t("board.boards")}
               </DropdownMenuItemLabel>
             </DropdownMenuItem>
