@@ -14,7 +14,7 @@ export const InsertBoard: Component<InsertBoardProps> = (props) => {
   const { t } = useI18n();
 
   return (
-    <Card bg="base-300" class="w-full max-w-md" variant="bordered">
+    <Card bg="base-200" class="w-full max-w-md" variant="bordered">
       <CardBody>
         <header class="flex items-center justify-between gap-2">
           <h2 class={cardTitleClass()}>{t("createBoard.title")}</h2>

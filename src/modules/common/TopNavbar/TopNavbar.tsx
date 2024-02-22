@@ -8,6 +8,7 @@ import { Link } from "~/components/Link";
 import { Navbar, NavbarEnd, NavbarStart } from "~/components/Navbar";
 import { useI18n } from "~/contexts/I18nContext";
 import { useSessionContext } from "~/contexts/SessionContext";
+import { useThemeContext } from "~/contexts/ThemeContext";
 import { signOutAction } from "~/server/auth/client";
 import { paths } from "~/utils/paths";
 
@@ -31,6 +32,8 @@ export const TopNavbar: Component = () => {
 
   const session = useSessionContext();
 
+  const theme = useThemeContext();
+
   return (
     <Navbar>
       <NavbarStart>
@@ -40,6 +43,12 @@ export const TopNavbar: Component = () => {
         </Link>
       </NavbarStart>
       <NavbarEnd>
+        <button onClick={() => theme.setTheme("fantasy")} type="button">
+          White
+        </button>
+        <button onClick={() => theme.setTheme("dracula")} type="button">
+          Dark
+        </button>
         <Show
           fallback={
             <>

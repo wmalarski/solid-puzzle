@@ -55,7 +55,7 @@ export const setBoardAccessServerAction = async (form: FormData) => {
   );
 
   throw redirect(paths.board(parsed.output.boardId), {
-    revalidate: [BOARDS_ACCESS_CACHE_KEY]
+    revalidate: BOARDS_ACCESS_CACHE_KEY
   });
 };
 

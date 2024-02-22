@@ -38,7 +38,7 @@ const BoardItem: Component<BoardItemProps> = (props) => {
 
   return (
     <Show when={!deleteSubmission.pending}>
-      <Card bg="base-300" class="w-96" size="compact" variant="bordered">
+      <Card bg="base-200" class="w-96" size="compact" variant="bordered">
         <Show when={props.board.media}>
           {(src) => (
             <figure>
@@ -113,7 +113,7 @@ type BoardsListProps = {
 
 export const BoardsList: Component<BoardsListProps> = (props) => {
   return (
-    <section class="mx-auto max-w-screen-xl p-6">
+    <section class="mx-auto flex max-w-screen-xl flex-col gap-4 p-6">
       <Show fallback={<BoardsListEmpty />} when={props.boards.data.length > 0}>
         <div class="flex flex-wrap gap-3">
           <For each={props.boards.data}>
