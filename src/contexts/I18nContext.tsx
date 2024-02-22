@@ -42,6 +42,10 @@ const en_dict = {
     home: "Home",
     menu: "Menu",
     newBoard: "New board",
+    previewVisibility: {
+      hide: "Hide",
+      show: "Show"
+    },
     reload: {
       description: "Do you want to play again?",
       error: "Error",

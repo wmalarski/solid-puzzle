@@ -9,6 +9,7 @@ import { type Component, createEffect, onCleanup, onMount } from "solid-js";
 import type { PuzzleShapeLine } from "~/utils/getPuzzleFragments";
 
 import { usePlayerSelection } from "../../DataProviders/SelectionProvider";
+import { usePreviewContext } from "../../PreviewContext";
 import { useBoardTheme } from "../BoardTheme";
 import { usePixiContainer } from "../PixiApp";
 
@@ -54,9 +55,10 @@ export const PreviewSprite: Component<PreviewSpriteProps> = (props) => {
   const container = usePixiContainer();
   const theme = useBoardTheme();
   const selection = usePlayerSelection();
+  const preview = usePreviewContext();
 
   const sprite = new Sprite();
-  sprite.alpha = theme.previewSpriteAlpha;
+  sprite.alpha = 0;
 
   createEffect(() => {
     sprite.texture = props.texture;
@@ -83,6 +85,10 @@ export const PreviewSprite: Component<PreviewSpriteProps> = (props) => {
 
   onCleanup(() => {
     sprite.off("pointerdown", onPointerDown);
+  });
+
+  createEffect(() => {
+    sprite.alpha = preview.isPreviewVisible() ? theme.previewSpriteAlpha : 0;
   });
 
   return null;

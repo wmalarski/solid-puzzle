@@ -1,1 +1,1 @@
-export { PreviewContextProvider } from "./PreviewContext";
+export { PreviewContextProvider, usePreviewContext } from "./PreviewContext";

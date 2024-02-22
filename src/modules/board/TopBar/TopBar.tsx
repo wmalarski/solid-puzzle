@@ -1,8 +1,10 @@
-import { type Component } from "solid-js";
+import { type Component, createMemo } from "solid-js";
 
 import type { BoardAccess } from "~/server/access/rpc";
 import type { BoardModel } from "~/types/models";
 
+import { EyeIcon } from "~/components/Icons/EyeIcon";
+import { EyeOffIcon } from "~/components/Icons/EyeOffIcon";
 import { ShareIcon } from "~/components/Icons/ShareIcon";
 import { showToast } from "~/components/Toast";
 import {
@@ -15,6 +17,7 @@ import {
 import { useI18n } from "~/contexts/I18nContext";
 
 import { usePuzzleStore } from "../DataProviders/PuzzleProvider";
+import { usePreviewContext } from "../PreviewContext";
 import { AvatarsDialog } from "./AvatarsDialog";
 
 const ShareButton: Component = () => {
@@ -59,6 +62,54 @@ const ShareButton: Component = () => {
   );
 };
 
+const PreviewVisibilityToggle: Component = () => {
+  const { t } = useI18n();
+
+  const preview = usePreviewContext();
+
+  const onMouseDown = () => {
+    preview.setIsPreviewVisible(true);
+  };
+
+  const onMouseUp = () => {
+    preview.setIsPreviewVisible(false);
+  };
+
+  const label = createMemo(() => {
+    return t(
+      preview.isPreviewVisible()
+        ? "board.previewVisibility.hide"
+        : "board.previewVisibility.show"
+    );
+  });
+
+  return (
+    <TooltipRoot>
+      <TooltipTrigger
+        aria-label={label()}
+        color={preview.isPreviewVisible() ? "accent" : "secondary"}
+        onMouseDown={onMouseDown}
+        onMouseUp={onMouseUp}
+        shape="circle"
+        size="sm"
+        type="button"
+      >
+        {preview.isPreviewVisible() ? (
+          <EyeOffIcon class="size-5" />
+        ) : (
+          <EyeIcon class="size-5" />
+        )}
+      </TooltipTrigger>
+      <TooltipPortal>
+        <TooltipContent>
+          <TooltipArrow />
+          {label()}
+        </TooltipContent>
+      </TooltipPortal>
+    </TooltipRoot>
+  );
+};
+
 type TopBarProps = {
   board: BoardModel;
   boardAccess: BoardAccess;
@@ -74,9 +125,10 @@ export const TopBar: Component<TopBarProps> = (props) => {
   };
 
   return (
-    <div class="absolute inset-x-auto right-4 top-4 flex w-min items-center gap-4 rounded-3xl bg-base-300 p-1 shadow-lg">
+    <div class="absolute inset-x-auto right-4 top-4 flex w-min items-center gap-2 rounded-3xl bg-base-300 p-1 shadow-lg">
       <div class="flex flex-col gap-2 p-1 pl-4">
         <div class="flex items-center gap-4">
+          <PreviewVisibilityToggle />
           <h1 class="grow font-bold">{props.board.name}</h1>
           <span class="text-nowrap text-sm opacity-80">{`${props.board.columns} x ${props.board.rows}`}</span>
           <span class="text-nowrap text-sm opacity-80">
