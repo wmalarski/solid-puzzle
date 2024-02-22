@@ -14,6 +14,7 @@ import {
 } from "~/components/Tooltip";
 import { useI18n } from "~/contexts/I18nContext";
 
+import { usePuzzleStore } from "../DataProviders/PuzzleProvider";
 import { AvatarsDialog } from "./AvatarsDialog";
 
 export const ShareButton: Component = () => {
@@ -64,12 +65,23 @@ type TopBarProps = {
 };
 
 export const TopBar: Component<TopBarProps> = (props) => {
+  const store = usePuzzleStore();
+
+  const finishedPercent = () => {
+    const all = props.board.columns * props.board.rows;
+    const finished = all - store.unfinishedCount();
+    return `${Math.round((finished / all) * 10000) / 100}%`;
+  };
+
   return (
     <div class="absolute inset-x-auto right-4 top-4 flex w-min items-center gap-4 rounded-3xl bg-base-300 p-1 shadow-lg">
       <div class="flex flex-col gap-2 p-1 pl-4">
         <div class="flex items-center gap-4">
           <h1 class="grow font-bold">{props.board.name}</h1>
           <span class="text-nowrap text-sm opacity-80">{`${props.board.columns} x ${props.board.rows}`}</span>
+          <span class="text-nowrap text-sm opacity-80">
+            {finishedPercent()}
+          </span>
           <ShareButton />
         </div>
         <h2 class="text-sm">{props.board.media}</h2>

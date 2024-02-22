@@ -137,12 +137,7 @@ const createPuzzleContext = (args: CreatePuzzleContextArgs) => {
   };
 
   const sendFragmentState = (update: SetFragmentStateArgs) => {
-    const isLocked = isLockedInPlace({
-      fragment: update,
-      shapes: shapes()
-    });
-
-    sender()({ ...update, isLocked });
+    sender()({ ...update, isLocked: false });
   };
 
   const setFragmentStateWithLockCheck = async (
@@ -227,11 +222,14 @@ const createPuzzleContext = (args: CreatePuzzleContextArgs) => {
     return store().value;
   });
 
+  const unfinishedCount = createMemo(() => {
+    const values = Object.values(store().value);
+    const unfinished = values.filter((state) => !state?.isLocked);
+    return unfinished.length;
+  });
+
   const isFinished = createMemo(() => {
-    const result = Object.values(store().value).every(
-      (state) => state?.isLocked
-    );
-    return result;
+    return unfinishedCount() === 0;
   });
 
   return {
@@ -242,7 +240,8 @@ const createPuzzleContext = (args: CreatePuzzleContextArgs) => {
     sendFragmentState,
     setFragmentState,
     setFragmentStateWithLockCheck,
-    shapes
+    shapes,
+    unfinishedCount
   };
 };
 
@@ -256,7 +255,8 @@ const PuzzleStateContext = createContext<PuzzleContextState>({
   sendFragmentState: () => void 0,
   setFragmentState: () => void 0,
   setFragmentStateWithLockCheck: () => Promise.resolve(),
-  shapes: () => new Map()
+  shapes: () => new Map(),
+  unfinishedCount: () => 0
 });
 
 type PuzzleStateProviderProps = {
