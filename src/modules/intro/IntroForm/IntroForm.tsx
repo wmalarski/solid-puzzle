@@ -22,7 +22,7 @@ export const IntroForm: Component = () => {
   const submission = useSubmission(updateUserAction);
 
   return (
-    <Card class="w-full max-w-md" variant="bordered">
+    <Card bg="base-200" class="w-full max-w-md" variant="bordered">
       <CardBody>
         <header class="flex items-center justify-between gap-2">
           <h2 class={cardTitleClass()}>{t("intro.title")}</h2>

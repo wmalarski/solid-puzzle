@@ -13,6 +13,7 @@ import {
   TextFieldRoot
 } from "~/components/TextField";
 import { useI18n } from "~/contexts/I18nContext";
+import { ThemeToggle } from "~/modules/common/ThemeToggle";
 import { signUpAction } from "~/server/auth/client";
 import { paths } from "~/utils/paths";
 
@@ -22,10 +23,11 @@ export const SignUp: Component = () => {
   const submission = useSubmission(signUpAction);
 
   return (
-    <Card class="w-full max-w-md" variant="bordered">
+    <Card bg="base-200" class="w-full max-w-md" variant="bordered">
       <CardBody>
         <header class="flex items-center justify-between gap-2">
           <h2 class={cardTitleClass()}>{t("auth.signUp.title")}</h2>
+          <ThemeToggle />
         </header>
         <form action={signUpAction} class="flex flex-col gap-4" method="post">
           <Show when={submission.result?.success}>

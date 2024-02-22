@@ -14,6 +14,7 @@ import {
 } from "~/components/TextField";
 import { useI18n } from "~/contexts/I18nContext";
 import { FormLayout, PageFooter, PageTitle } from "~/modules/common/Layout";
+import { ThemeToggle } from "~/modules/common/ThemeToggle";
 import { setBoardAccessAction } from "~/server/access/client";
 import { randomHexColor } from "~/utils/colors";
 
@@ -32,11 +33,12 @@ export const AcceptInviteForm: Component<AcceptInviteFormProps> = (props) => {
   return (
     <FormLayout>
       <PageTitle />
-      <Card class="w-full max-w-md" variant="bordered">
+      <Card bg="base-200" class="w-full max-w-md" variant="bordered">
         <CardBody>
           <header class="flex items-center justify-between gap-2">
             <h2 class={cardTitleClass()}>
               {t("invite.title", { name: props.board.name })}
+              <ThemeToggle />
             </h2>
           </header>
           <form

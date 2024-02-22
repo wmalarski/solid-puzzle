@@ -15,6 +15,7 @@ import {
   TooltipTrigger
 } from "~/components/Tooltip";
 import { useI18n } from "~/contexts/I18nContext";
+import { ThemeToggle } from "~/modules/common/ThemeToggle";
 
 import { usePuzzleStore } from "../DataProviders/PuzzleProvider";
 import { usePreviewContext } from "../PreviewContext";
@@ -89,7 +90,11 @@ const PreviewVisibilityToggle: Component = () => {
         aria-label={label()}
         color={preview.isPreviewVisible() ? "accent" : "secondary"}
         onMouseDown={onMouseDown}
+        onMouseLeave={onMouseUp}
         onMouseUp={onMouseUp}
+        onTouchCancel={onMouseUp}
+        onTouchEnd={onMouseUp}
+        onTouchStart={onMouseDown}
         shape="circle"
         size="sm"
         type="button"
@@ -134,6 +139,7 @@ export const TopBar: Component<TopBarProps> = (props) => {
           <span class="text-nowrap text-sm opacity-80">
             {finishedPercent()}
           </span>
+          <ThemeToggle />
           <ShareButton />
         </div>
         <h2 class="text-sm">{props.board.media}</h2>

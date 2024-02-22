@@ -47,7 +47,7 @@ export const setAppThemeServerAction = async (theme: AppTheme) => {
 
 export const getAppThemeCookie = () => {
   const event = getRequestEventOrThrow();
-  return getCookie(event, APP_THEME_COOKIE_NAME);
+  return getCookie(event, APP_THEME_COOKIE_NAME) as AppTheme;
 };
 
 export const getAppThemeServerLoader = () => {

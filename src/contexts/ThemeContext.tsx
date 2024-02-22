@@ -1,3 +1,4 @@
+import { createWritableMemo } from "@solid-primitives/memo";
 import { createAsync } from "@solidjs/router";
 import { type Component, type JSX, createContext, useContext } from "solid-js";
 
@@ -5,21 +6,26 @@ import { getAppThemeLoader } from "~/server/theme/client";
 import { type AppTheme, setAppThemeServerAction } from "~/server/theme/rpc";
 
 const createThemeValue = () => {
-  const theme = createAsync(() => getAppThemeLoader());
+  const themeAsync = createAsync(() => getAppThemeLoader());
 
-  const setTheme = async (theme: AppTheme) => {
+  const [theme, setTheme] = createWritableMemo(() => {
+    return themeAsync();
+  });
+
+  const updateTheme = async (theme: AppTheme) => {
     document.querySelector("html")?.setAttribute("data-theme", theme);
+    setTheme(theme);
     await setAppThemeServerAction(theme);
   };
 
-  return { setTheme, theme };
+  return { theme, updateTheme };
 };
 
 type ThemeContextValue = ReturnType<typeof createThemeValue>;
 
 const ThemeContext = createContext<ThemeContextValue>({
-  setTheme: () => Promise.resolve(),
-  theme: () => "dracula" as const
+  theme: () => "dracula" as const,
+  updateTheme: () => Promise.resolve()
 });
 
 type ThemeProviderProps = {
