@@ -87,11 +87,13 @@ export const useTransformContext = () => {
   return useContext(TransformContext);
 };
 
-type Props = {
+type TransformContextProviderProps = {
   children: JSX.Element;
 };
 
-export const TransformContextProvider: Component<Props> = (props) => {
+export const TransformContextProvider: Component<
+  TransformContextProviderProps
+> = (props) => {
   const value = createTransform();
 
   return (

@@ -8,12 +8,12 @@ import { BoardThemeProvider } from "./BoardTheme";
 import { PixiAppProvider } from "./PixiApp";
 import { PuzzleBoard } from "./PuzzleBoard/PuzzleBoard";
 
-type Props = {
+type PixiStageProps = {
   board: BoardModel;
   canvas: HTMLCanvasElement;
 };
 
-export const PixiStage: Component<Props> = (props) => {
+export const PixiStage: Component<PixiStageProps> = (props) => {
   return (
     <BoardThemeProvider>
       <PixiAppProvider canvas={props.canvas}>

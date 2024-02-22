@@ -17,7 +17,7 @@ import { useI18n } from "~/contexts/I18nContext";
 import { usePuzzleStore } from "../DataProviders/PuzzleProvider";
 import { AvatarsDialog } from "./AvatarsDialog";
 
-export const ShareButton: Component = () => {
+const ShareButton: Component = () => {
   const { t } = useI18n();
 
   const onShare = async () => {

@@ -20,6 +20,7 @@ import { PuzzleStateProvider } from "../DataProviders/PuzzleProvider";
 import { PlayerSelectionProvider } from "../DataProviders/SelectionProvider";
 import { MenuBar } from "../MenuBar";
 import { PixiStage } from "../PixiStage";
+import { PreviewContextProvider } from "../PreviewContext";
 import { ReloadDialog } from "../ReloadDialog";
 import { TopBar } from "../TopBar";
 
@@ -63,11 +64,13 @@ export const Board: Component<BoardProps> = (props) => {
                 boardAccess={props.boardAccess}
                 fragments={props.fragments}
               >
-                <ClientBoard board={props.board} />
-                <TopBar board={props.board} boardAccess={props.boardAccess} />
-                <InfoBar />
-                <MenuBar board={props.board} />
-                <ReloadDialog boardId={props.board.id} />
+                <PreviewContextProvider>
+                  <ClientBoard board={props.board} />
+                  <TopBar board={props.board} boardAccess={props.boardAccess} />
+                  <InfoBar />
+                  <MenuBar board={props.board} />
+                  <ReloadDialog boardId={props.board.id} />
+                </PreviewContextProvider>
               </PuzzleStateProvider>
             </PlayerPresenceProvider>
           </PlayerCursorProvider>

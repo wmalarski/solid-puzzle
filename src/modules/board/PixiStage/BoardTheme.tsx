@@ -28,11 +28,13 @@ export const useBoardTheme = () => {
   return useContext(BoardThemeContext);
 };
 
-type Props = {
+type BoardThemeProviderProps = {
   children: JSX.Element;
 };
 
-export const BoardThemeProvider: Component<Props> = (props) => {
+export const BoardThemeProvider: Component<BoardThemeProviderProps> = (
+  props
+) => {
   const value = createBoardThemeContext();
 
   return (

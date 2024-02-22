@@ -63,12 +63,12 @@ const Board: Component<BoardProps> = (props) => {
   );
 };
 
-type Props = {
+type PuzzleBoardProps = {
   board: BoardModel;
   path: string;
 };
 
-export const PuzzleBoard: Component<Props> = (props) => {
+export const PuzzleBoard: Component<PuzzleBoardProps> = (props) => {
   const store = usePuzzleStore();
 
   useStageTransform();

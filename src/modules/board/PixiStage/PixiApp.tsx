@@ -21,12 +21,12 @@ export const usePixiContainer = () => {
   return useContext(ContainerContext);
 };
 
-type Props = {
+type PixiAppProviderProps = {
   canvas: HTMLCanvasElement;
   children: JSX.Element;
 };
 
-export const PixiAppProvider: Component<Props> = (props) => {
+export const PixiAppProvider: Component<PixiAppProviderProps> = (props) => {
   const app = new Application();
 
   const hitArea = {
