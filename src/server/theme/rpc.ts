@@ -20,5 +20,5 @@ export const getAppThemeCookie = () => {
 };
 
 export const getAppThemeServerLoader = () => {
-  return Promise.resolve(getAppThemeCookie());
+  return Promise.resolve(getAppThemeCookie() || "dracula");
 };
