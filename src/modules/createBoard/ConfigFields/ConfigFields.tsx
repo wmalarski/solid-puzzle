@@ -24,11 +24,14 @@ export type BoardConfigFields = {
   rows: number;
 };
 
+const INITIAL_BOARD_SIZE = 5;
+
 type ConfigFieldsProps = {
   disabled: boolean;
   errors?: Record<string, string>;
   initialValues?: BoardConfigFields | null;
   scrollableImageGrid: boolean;
+  showName: boolean;
 };
 
 export const ConfigFields: Component<ConfigFieldsProps> = (props) => {
@@ -36,24 +39,28 @@ export const ConfigFields: Component<ConfigFieldsProps> = (props) => {
 
   return (
     <div class="flex flex-col gap-4">
-      <TextFieldRoot>
-        <TextFieldLabel for="name">
-          <TextFieldLabelText>{t("createBoard.name.label")}</TextFieldLabelText>
-        </TextFieldLabel>
-        <TextFieldInput
-          disabled={props.disabled}
-          id="name"
-          maxlength={BOARD_MAX_NAME_LENGTH}
-          minLength={BOARD_MIN_NAME_LENGTH}
-          name="name"
-          placeholder={t("createBoard.name.placeholder")}
-          value={props.initialValues?.name}
-          variant="bordered"
-        />
-        <Show when={props.errors?.name}>
-          <TextFieldErrorMessage>{props.errors?.name}</TextFieldErrorMessage>
-        </Show>
-      </TextFieldRoot>
+      <Show when={props.showName}>
+        <TextFieldRoot>
+          <TextFieldLabel for="name">
+            <TextFieldLabelText>
+              {t("createBoard.name.label")}
+            </TextFieldLabelText>
+          </TextFieldLabel>
+          <TextFieldInput
+            disabled={props.disabled}
+            id="name"
+            maxlength={BOARD_MAX_NAME_LENGTH}
+            minLength={BOARD_MIN_NAME_LENGTH}
+            name="name"
+            placeholder={t("createBoard.name.placeholder")}
+            value={props.initialValues?.name}
+            variant="bordered"
+          />
+          <Show when={props.errors?.name}>
+            <TextFieldErrorMessage>{props.errors?.name}</TextFieldErrorMessage>
+          </Show>
+        </TextFieldRoot>
+      </Show>
       <TextFieldRoot>
         <TextFieldLabel for="columns">
           <TextFieldLabelText>
@@ -69,7 +76,7 @@ export const ConfigFields: Component<ConfigFieldsProps> = (props) => {
           placeholder={t("createBoard.columns.placeholder")}
           step={1}
           type="number"
-          value={props.initialValues?.columns || 5}
+          value={props.initialValues?.columns || INITIAL_BOARD_SIZE}
           variant="bordered"
         />
         <Show when={props.errors?.columns}>
@@ -89,7 +96,7 @@ export const ConfigFields: Component<ConfigFieldsProps> = (props) => {
           placeholder={t("createBoard.rows.placeholder")}
           step={1}
           type="number"
-          value={props.initialValues?.rows || 5}
+          value={props.initialValues?.rows || INITIAL_BOARD_SIZE}
           variant="bordered"
         />
         <Show when={props.errors?.rows}>

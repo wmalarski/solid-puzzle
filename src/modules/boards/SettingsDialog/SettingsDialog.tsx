@@ -65,6 +65,7 @@ export const UpdateForm: Component<UpdateFormProps> = (props) => {
             rows: props.board.rows
           }}
           scrollableImageGrid={false}
+          showName
         />
       </div>
       <Button

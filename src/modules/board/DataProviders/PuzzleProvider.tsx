@@ -78,10 +78,11 @@ const createPuzzleContext = (args: CreatePuzzleContextArgs) => {
   const updateFragment = useUpdateFragment();
 
   const config = createMemo(() => {
+    const value = args();
     return getPuzzleFragments({
-      config: args().board.config as PuzzleCurveConfig,
-      height: args().board.height,
-      width: args().board.width
+      config: value.board.config as PuzzleCurveConfig,
+      height: value.board.height,
+      width: value.board.width
     });
   });
 

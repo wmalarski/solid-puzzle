@@ -102,7 +102,12 @@ const createPlayerSelectionState = (boardAccess: () => BoardAccess) => {
     );
   };
 
+  const clear = () => {
+    setSelection({});
+  };
+
   return {
+    clear,
     fragmentSelection,
     leave,
     select,
@@ -116,6 +121,7 @@ type PlayerSelectionContextState = ReturnType<
 >;
 
 const PlayerSelectionContext = createContext<PlayerSelectionContextState>({
+  clear: () => void 0,
   fragmentSelection: () => ({}),
   leave: () => void 0,
   select: () => void 0,

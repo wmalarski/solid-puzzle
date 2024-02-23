@@ -92,7 +92,9 @@ const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
 ) => {
   const graphics = new Graphics();
 
-  onMount(() => {
+  createEffect(() => {
+    graphics.clear();
+
     const matrix = drawPuzzleShape(props.shape, graphics);
 
     graphics.fill({ matrix, texture: props.texture });

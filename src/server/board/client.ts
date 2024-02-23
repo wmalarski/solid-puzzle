@@ -22,7 +22,7 @@ export const selectBoardLoader = cache(async (boardId: string) => {
 
   const [board, fragments] = await Promise.all([
     supabase.from("rooms").select().eq("id", boardId).single(),
-    supabase.from("puzzle").select().eq("room_id", boardId)
+    supabase.from("puzzle").select().eq("room_id", boardId).order("index")
   ]);
 
   if (board.error) {

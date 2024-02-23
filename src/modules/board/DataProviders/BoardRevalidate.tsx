@@ -14,6 +14,8 @@ import {
 import { paths } from "~/utils/paths";
 import { getClientSupabase } from "~/utils/supabase";
 
+import { usePlayerSelection } from "./SelectionProvider";
+
 const BOARD_REMOVE_CHANNEL_NAME = "rooms:remove_board";
 const BOARD_UPDATE_CHANNEL_NAME = "rooms:update_board";
 
@@ -27,6 +29,8 @@ export const BoardRevalidateProvider: Component<
   const { t } = useI18n();
 
   const navigate = useNavigate();
+
+  const selection = usePlayerSelection();
 
   onMount(() => {
     const supabase = getClientSupabase();
@@ -49,6 +53,7 @@ export const BoardRevalidateProvider: Component<
             variant: "info"
           });
           await revalidate(SELECT_BOARD_LOADER_CACHE_KEY);
+          selection.clear();
         }
       )
       .subscribe();

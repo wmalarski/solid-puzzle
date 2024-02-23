@@ -55,10 +55,10 @@ export const Board: Component<BoardProps> = (props) => {
   return (
     <ErrorBoundary fallback={ErrorFallback}>
       <Suspense fallback={<BoardPlaceholder />}>
-        <BoardRevalidateProvider boardId={props.boardAccess.boardId} />
         <PlayerSelectionProvider boardAccess={props.boardAccess}>
           <PlayerCursorProvider boardAccess={props.boardAccess}>
             <PlayerPresenceProvider boardAccess={props.boardAccess}>
+              <BoardRevalidateProvider boardId={props.boardAccess.boardId} />
               <PuzzleStateProvider
                 board={props.board}
                 boardAccess={props.boardAccess}
