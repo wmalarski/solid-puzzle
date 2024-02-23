@@ -2,6 +2,8 @@ import { type Component, type JSX, createContext, useContext } from "solid-js";
 
 const createBoardThemeContext = () => {
   return {
+    backgroundDarkColor: 0x1d1d21,
+    backgroundLightColor: 0xdddddd,
     cursorContainerZIndex: 5,
     cursorGraphicsZIndex: 6,
     cursorStrokeColor: 0xffffff,

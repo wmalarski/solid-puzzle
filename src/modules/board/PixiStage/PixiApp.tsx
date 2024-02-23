@@ -3,11 +3,18 @@ import {
   type Component,
   type JSX,
   createContext,
+  createEffect,
+  createMemo,
   createResource,
   onCleanup,
   onMount,
+  untrack,
   useContext
 } from "solid-js";
+
+import { useThemeContext } from "~/contexts/ThemeContext";
+
+import { useBoardTheme } from "./BoardTheme";
 
 const PixiAppContext = createContext<Application>({} as unknown as Application);
 
@@ -27,6 +34,15 @@ type PixiAppProviderProps = {
 };
 
 export const PixiAppProvider: Component<PixiAppProviderProps> = (props) => {
+  const theme = useThemeContext();
+  const boardTheme = useBoardTheme();
+
+  const backgroundColor = createMemo(() => {
+    return theme.theme() === "dracula"
+      ? boardTheme.backgroundDarkColor
+      : boardTheme.backgroundLightColor;
+  });
+
   const app = new Application();
 
   const hitArea = {
@@ -40,6 +56,7 @@ export const PixiAppProvider: Component<PixiAppProviderProps> = (props) => {
   createResource(async () => {
     await app.init({
       antialias: true,
+      backgroundColor: untrack(backgroundColor),
       canvas: props.canvas,
       eventMode: "static",
       height: window.innerHeight,
@@ -48,6 +65,13 @@ export const PixiAppProvider: Component<PixiAppProviderProps> = (props) => {
 
     app.stage.hitArea = hitArea;
     app.renderer.resize(window.innerWidth, window.innerHeight);
+  });
+
+  createEffect(() => {
+    const color = backgroundColor();
+    if (app?.renderer?.background) {
+      app.renderer.background.color = color;
+    }
   });
 
   const onResize = () => {
