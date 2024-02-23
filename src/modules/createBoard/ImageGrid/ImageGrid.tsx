@@ -32,8 +32,8 @@ export const ImageGrid: Component<ImageGridProps> = (props) => {
       <input name="height" type="hidden" value={value().height} />
       <div
         class={twCx(
-          "flex flex-col gap-1 overflow-x-hidden",
-          props.scrollable ? "h-96  overflow-y-scroll" : null
+          "flex flex-col gap-1 overflow-x-hidden py-2",
+          props.scrollable ? "h-96 overflow-y-scroll" : null
         )}
       >
         <For each={IMAGES}>

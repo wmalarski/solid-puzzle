@@ -8,6 +8,12 @@ import {
   TextFieldRoot
 } from "~/components/TextField";
 import { useI18n } from "~/contexts/I18nContext";
+import {
+  BOARD_MAX_NAME_LENGTH,
+  BOARD_MAX_SIZE,
+  BOARD_MIN_NAME_LENGTH,
+  BOARD_MIN_SIZE
+} from "~/server/board/const";
 
 import { ImageGrid } from "../ImageGrid";
 
@@ -37,6 +43,8 @@ export const ConfigFields: Component<ConfigFieldsProps> = (props) => {
         <TextFieldInput
           disabled={props.disabled}
           id="name"
+          maxlength={BOARD_MAX_NAME_LENGTH}
+          minLength={BOARD_MIN_NAME_LENGTH}
           name="name"
           placeholder={t("createBoard.name.placeholder")}
           value={props.initialValues?.name}
@@ -55,13 +63,13 @@ export const ConfigFields: Component<ConfigFieldsProps> = (props) => {
         <TextFieldInput
           disabled={props.disabled}
           id="columns"
-          max={20}
-          min={3}
+          max={BOARD_MAX_SIZE}
+          min={BOARD_MIN_SIZE}
           name="columns"
           placeholder={t("createBoard.columns.placeholder")}
           step={1}
           type="number"
-          value={props.initialValues?.columns || 10}
+          value={props.initialValues?.columns || 5}
           variant="bordered"
         />
         <Show when={props.errors?.columns}>
@@ -75,13 +83,13 @@ export const ConfigFields: Component<ConfigFieldsProps> = (props) => {
         <TextFieldInput
           disabled={props.disabled}
           id="rows"
-          max={20}
-          min={3}
+          max={BOARD_MAX_SIZE}
+          min={BOARD_MIN_SIZE}
           name="rows"
           placeholder={t("createBoard.rows.placeholder")}
           step={1}
           type="number"
-          value={props.initialValues?.rows || 10}
+          value={props.initialValues?.rows || 5}
           variant="bordered"
         />
         <Show when={props.errors?.rows}>

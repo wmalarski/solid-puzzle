@@ -87,7 +87,7 @@ const en_dict = {
     }
   },
   createBoard: {
-    button: "Save",
+    button: "Add",
     columns: {
       label: "Columns",
       placeholder: "Enter number of columns"

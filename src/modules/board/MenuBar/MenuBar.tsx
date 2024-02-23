@@ -152,13 +152,13 @@ export const MenuBar: Component<MenuBarProps> = (props) => {
   const session = useSessionContext();
 
   return (
-    <div class="absolute left-4 top-4 rounded-3xl bg-base-300 p-1 shadow">
+    <div class="absolute left-4 top-4 rounded-3xl bg-base-300 p-1 shadow-lg">
       <Show
         fallback={
           <LinkButton
             aria-label={t("board.home")}
             href={paths.home}
-            shape="square"
+            shape="circle"
             size="sm"
             variant="ghost"
           >

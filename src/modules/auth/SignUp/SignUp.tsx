@@ -49,6 +49,7 @@ export const SignUp: Component = () => {
             <TextFieldInput
               disabled={submission.pending}
               id="email"
+              inputMode="email"
               name="email"
               placeholder={t("auth.email.placeholder")}
               type="email"

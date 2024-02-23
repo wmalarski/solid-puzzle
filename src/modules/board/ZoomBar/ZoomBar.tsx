@@ -35,7 +35,7 @@ export const ZoomBar: Component = () => {
   };
 
   return (
-    <div class="absolute bottom-4 left-4 flex gap-1 rounded-3xl bg-base-300 p-1 shadow">
+    <div class="absolute bottom-4 left-4 flex gap-1 rounded-3xl bg-base-300 p-1 shadow-lg">
       <TooltipRoot>
         <TooltipTrigger
           aria-label={t("board.zoom.zoomIn")}

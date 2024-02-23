@@ -3,7 +3,18 @@ import type { RequestEvent } from "solid-js/web";
 
 import { redirect, reload } from "@solidjs/router";
 import { decode } from "decode-formdata";
-import { minLength, number, object, safeParseAsync, string } from "valibot";
+import {
+  coerce,
+  integer,
+  maxLength,
+  maxValue,
+  minLength,
+  minValue,
+  number,
+  object,
+  safeParseAsync,
+  string
+} from "valibot";
 import { setCookie } from "vinxi/http";
 
 import {
@@ -14,23 +25,36 @@ import { paths } from "~/utils/paths";
 
 import {
   type CookieSerializeOptions,
-  boardDimension,
   getParsedCookie,
   getRequestEventOrThrow,
   rpcErrorResult,
   rpcParseIssueResult
 } from "../utils";
 import {
+  BOARD_MAX_NAME_LENGTH,
+  BOARD_MAX_SIZE,
+  BOARD_MIN_NAME_LENGTH,
+  BOARD_MIN_SIZE,
   INSERT_BOARD_ARGS_CACHE_KEY,
   SELECT_BOARDS_LOADER_CACHE_KEY
 } from "./const";
+
+const boardDimension = () => {
+  return coerce(
+    number([integer(), minValue(BOARD_MIN_SIZE), maxValue(BOARD_MAX_SIZE)]),
+    Number
+  );
+};
 
 const insertBoardSchema = () => {
   return object({
     columns: boardDimension(),
     height: number(),
     image: string(),
-    name: string([minLength(3)]),
+    name: string([
+      minLength(BOARD_MIN_NAME_LENGTH),
+      maxLength(BOARD_MAX_NAME_LENGTH)
+    ]),
     rows: boardDimension(),
     width: number()
   });

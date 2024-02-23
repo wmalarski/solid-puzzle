@@ -135,7 +135,7 @@ export const TopBar: Component<TopBarProps> = (props) => {
         <div class="flex items-center gap-4">
           <PreviewVisibilityToggle />
           <h1 class="grow font-bold">{props.board.name}</h1>
-          <span class="text-nowrap text-sm opacity-80">{`${props.board.columns} x ${props.board.rows}`}</span>
+          <span class="text-nowrap text-sm opacity-80">{`${props.board.columns}x${props.board.rows}`}</span>
           <span class="text-nowrap text-sm opacity-80">
             {finishedPercent()}
           </span>

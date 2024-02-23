@@ -4,10 +4,6 @@ import {
   type BaseSchema,
   type BaseSchemaAsync,
   type SchemaIssues,
-  coerce,
-  integer,
-  minValue,
-  number,
   safeParseAsync
 } from "valibot";
 import { getCookie, type setCookie } from "vinxi/http";
@@ -24,10 +20,6 @@ export const getRequestEventOrThrow = () => {
   }
 
   return event;
-};
-
-export const boardDimension = () => {
-  return coerce(number([integer(), minValue(3)]), Number);
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

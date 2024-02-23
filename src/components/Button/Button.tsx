@@ -24,7 +24,7 @@ export const buttonClass = twCva("btn no-animation flex items-center gap-1", {
     },
     isLoading: {
       false: "",
-      true: "loading"
+      true: "after:loading after:loading-spinner pointer-events-none"
     },
     shape: {
       block: "btn-block",
