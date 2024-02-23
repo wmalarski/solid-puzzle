@@ -27,8 +27,8 @@ dependencies:
     specifier: 0.12.4
     version: 0.12.4(solid-js@1.8.15)
   '@solidjs/start':
-    specifier: 0.5.9
-    version: 0.5.9(solid-js@1.8.15)(vinxi@0.2.1)(vite@4.5.1)
+    specifier: 0.5.10
+    version: 0.5.10(solid-js@1.8.15)(vinxi@0.2.1)(vite@4.5.1)
   '@supabase/ssr':
     specifier: ^0.1.0
     version: 0.1.0(@supabase/supabase-js@2.39.7)
@@ -58,12 +58,12 @@ dependencies:
     version: 0.29.0
   vinxi:
     specifier: ^0.2.1
-    version: 0.2.1(@types/node@20.11.19)(preact@10.19.3)
+    version: 0.2.1(@types/node@20.11.20)(preact@10.19.3)
 
 devDependencies:
   '@types/node':
-    specifier: 20.11.19
-    version: 20.11.19
+    specifier: 20.11.20
+    version: 20.11.20
   '@typescript-eslint/eslint-plugin':
     specifier: 7.0.2
     version: 7.0.2(@typescript-eslint/parser@7.0.2)(eslint@8.56.0)(typescript@5.3.3)
@@ -107,8 +107,8 @@ devDependencies:
     specifier: 0.13.1
     version: 0.13.1(eslint@8.56.0)(typescript@5.3.3)
   eslint-plugin-tailwindcss:
-    specifier: 3.14.2
-    version: 3.14.2(tailwindcss@3.4.1)
+    specifier: 3.14.3
+    version: 3.14.3(tailwindcss@3.4.1)
   postcss:
     specifier: 8.4.35
     version: 8.4.35
@@ -1218,7 +1218,7 @@ packages:
       magic-string: 0.30.5
       node-html-parser: 6.1.12
       resolve: 1.22.8
-      vite: 4.5.0(@types/node@20.11.19)
+      vite: 4.5.0(@types/node@20.11.20)
     transitivePeerDependencies:
       - preact
       - supports-color
@@ -1252,7 +1252,7 @@ packages:
       '@prefresh/utils': 1.2.0
       '@rollup/pluginutils': 4.2.1
       preact: 10.19.3
-      vite: 4.5.0(@types/node@20.11.19)
+      vite: 4.5.0(@types/node@20.11.20)
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -1657,8 +1657,8 @@ packages:
       solid-js: 1.8.15
     dev: false
 
-  /@solidjs/start@0.5.9(solid-js@1.8.15)(vinxi@0.2.1)(vite@4.5.1):
-    resolution: {integrity: sha512-NNDmre4EYPQ6ZklfFZl1s4uvmGhsC61CMkOxcdfWS3+KAS0GpF52my7IztApKw4h+adLFbBy3qkF7qi8aCfcjw==}
+  /@solidjs/start@0.5.10(solid-js@1.8.15)(vinxi@0.2.1)(vite@4.5.1):
+    resolution: {integrity: sha512-hAZ5V9gwo6YBrfk6dzOTKTFyx3KebK2a5nZNcQ3HAUSeRs89cEPxvATnMe0Qh2Vea/PCssqodb0jWbPAnlUp3Q==}
     dependencies:
       '@vinxi/plugin-directives': 0.2.0(vinxi@0.2.1)
       '@vinxi/server-components': 0.2.0(vinxi@0.2.1)
@@ -1809,7 +1809,7 @@ packages:
   /@types/http-proxy@1.17.14:
     resolution: {integrity: sha512-SSrD0c1OQzlFX7pGu1eXxSEjemej64aaNPRhhVYUGqXh0BtldAAx37MG8btcumvpgKyZp1F5Gn3JkktdxiFv6w==}
     dependencies:
-      '@types/node': 20.11.19
+      '@types/node': 20.11.20
     dev: false
 
   /@types/json-schema@7.0.12:
@@ -1830,8 +1830,8 @@ packages:
     resolution: {integrity: sha512-iJt33IQnVRkqeqC7PzBHPTC6fDlRNRW8vjrgqtScAhrmMwe8c4Eo7+fUGTa+XdWrpEgpyKWMYmi2dIwMAYRzPw==}
     dev: false
 
-  /@types/node@20.11.19:
-    resolution: {integrity: sha512-7xMnVEcZFu0DikYjWOlRq7NTPETrm7teqUT2WkQjrTIkEgUyyGdWsj/Zg8bEJt5TNklzbPD1X3fqfsHw3SpapQ==}
+  /@types/node@20.11.20:
+    resolution: {integrity: sha512-7/rR21OS+fq8IyHTgtLkDK949uzsa6n8BkziAKtPVpugIkO6D+/ooXMvzXxDnZrmtXVfjb1bKQafYpb8s89LOg==}
     dependencies:
       undici-types: 5.26.5
 
@@ -1852,13 +1852,13 @@ packages:
     dependencies:
       '@types/http-errors': 2.0.4
       '@types/mime': 3.0.4
-      '@types/node': 20.11.19
+      '@types/node': 20.11.20
     dev: false
 
   /@types/ws@8.5.10:
     resolution: {integrity: sha512-vmQSUcfalpIq0R9q7uTo2lXs6eGIpt9wtnLdMv9LVpIjCA/+ufZRozlVoVelIYixx1ugCBKDhn89vnsEGOCx9A==}
     dependencies:
-      '@types/node': 20.11.19
+      '@types/node': 20.11.20
     dev: false
 
   /@typescript-eslint/eslint-plugin@7.0.2(@typescript-eslint/parser@7.0.2)(eslint@8.56.0)(typescript@5.3.3):
@@ -2201,7 +2201,7 @@ packages:
       magicast: 0.2.11
       recast: 0.23.4
       tslib: 2.6.2
-      vinxi: 0.2.1(@types/node@20.11.19)(preact@10.19.3)
+      vinxi: 0.2.1(@types/node@20.11.20)(preact@10.19.3)
     dev: false
 
   /@vinxi/server-components@0.2.0(vinxi@0.2.1):
@@ -2216,7 +2216,7 @@ packages:
       astring: 1.8.6
       magicast: 0.2.11
       recast: 0.23.4
-      vinxi: 0.2.1(@types/node@20.11.19)(preact@10.19.3)
+      vinxi: 0.2.1(@types/node@20.11.20)(preact@10.19.3)
     dev: false
 
   /@vinxi/server-functions@0.2.1(vinxi@0.2.1):
@@ -2231,7 +2231,7 @@ packages:
       astring: 1.8.6
       magicast: 0.2.11
       recast: 0.23.4
-      vinxi: 0.2.1(@types/node@20.11.19)(preact@10.19.3)
+      vinxi: 0.2.1(@types/node@20.11.20)(preact@10.19.3)
     dev: false
 
   /@webgpu/types@0.1.40:
@@ -3685,8 +3685,8 @@ packages:
       - typescript
     dev: true
 
-  /eslint-plugin-tailwindcss@3.14.2(tailwindcss@3.4.1):
-    resolution: {integrity: sha512-fNzdf4poZP2yQC0xC2prQxMuArMSb5mnellLQvwb9HC3NcLzxs+0IVKWIg1BqUqyui0c+bbjMmhWcKUWK67SLQ==}
+  /eslint-plugin-tailwindcss@3.14.3(tailwindcss@3.4.1):
+    resolution: {integrity: sha512-1MKT8CrVuqVJleHxb7ICHsF2QwO0G+VJ28athTtlcOkccp0qmwK7nCUa1C9paCZ+VVgQU4fonsjLz/wUxoMHJQ==}
     engines: {node: '>=12.13.0'}
     peerDependencies:
       tailwindcss: ^3.4.0
@@ -6713,7 +6713,7 @@ packages:
     resolution: {integrity: sha512-hGdgQozCsQJMyfK5urgFcWEqsSSrK63Awe0t/IMR0bZ0QMtnuaiHzThW81guu3qx9abLi99NEuiaN6P9gVYsNg==}
     dev: false
 
-  /vinxi@0.2.1(@types/node@20.11.19)(preact@10.19.3):
+  /vinxi@0.2.1(@types/node@20.11.20)(preact@10.19.3):
     resolution: {integrity: sha512-zrgFO2XuKpdoW5VwlbieeQ0YhzMuuYCJyFWFyj41h9BnymHZ5dnKElALvFQn5JVzHhyrsdmlm8GU7tIuH786hw==}
     hasBin: true
     dependencies:
@@ -6759,7 +6759,7 @@ packages:
       unenv: 1.9.0
       unimport: 3.7.0(rollup@4.9.1)
       unstorage: 1.10.1
-      vite: 4.5.0(@types/node@20.11.19)
+      vite: 4.5.0(@types/node@20.11.20)
       ws: 8.15.1
       zod: 3.22.2
     transitivePeerDependencies:
@@ -6812,7 +6812,7 @@ packages:
       open: 9.1.0
       picocolors: 1.0.0
       sirv: 2.0.3
-      vite: 4.5.0(@types/node@20.11.19)
+      vite: 4.5.0(@types/node@20.11.20)
     transitivePeerDependencies:
       - rollup
       - supports-color
@@ -6836,7 +6836,7 @@ packages:
       open: 9.1.0
       picocolors: 1.0.0
       sirv: 2.0.3
-      vite: 4.5.1(@types/node@20.11.19)
+      vite: 4.5.1(@types/node@20.11.20)
     transitivePeerDependencies:
       - rollup
       - supports-color
@@ -6858,7 +6858,7 @@ packages:
       merge-anything: 5.1.7
       solid-js: 1.8.15
       solid-refresh: 0.6.3(solid-js@1.8.15)
-      vite: 4.5.0(@types/node@20.11.19)
+      vite: 4.5.0(@types/node@20.11.20)
       vitefu: 0.2.5(vite@4.5.0)
     transitivePeerDependencies:
       - supports-color
@@ -6880,13 +6880,13 @@ packages:
       merge-anything: 5.1.7
       solid-js: 1.8.15
       solid-refresh: 0.6.3(solid-js@1.8.15)
-      vite: 4.5.1(@types/node@20.11.19)
+      vite: 4.5.1(@types/node@20.11.20)
       vitefu: 0.2.5(vite@4.5.1)
     transitivePeerDependencies:
       - supports-color
     dev: false
 
-  /vite@4.5.0(@types/node@20.11.19):
+  /vite@4.5.0(@types/node@20.11.20):
     resolution: {integrity: sha512-ulr8rNLA6rkyFAlVWw2q5YJ91v098AFQ2R0PRFwPzREXOUJQPtFUG0t+/ZikhaOCDqFoDhN6/v8Sq0o4araFAw==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -6914,7 +6914,7 @@ packages:
       terser:
         optional: true
     dependencies:
-      '@types/node': 20.11.19
+      '@types/node': 20.11.20
       esbuild: 0.18.20
       postcss: 8.4.35
       rollup: 3.29.0
@@ -6922,7 +6922,7 @@ packages:
       fsevents: 2.3.3
     dev: false
 
-  /vite@4.5.1(@types/node@20.11.19):
+  /vite@4.5.1(@types/node@20.11.20):
     resolution: {integrity: sha512-AXXFaAJ8yebyqzoNB9fu2pHoo/nWX+xZlaRwoeYUxEqBO+Zj4msE5G+BhGBll9lYEKv9Hfks52PAF2X7qDYXQA==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -6950,7 +6950,7 @@ packages:
       terser:
         optional: true
     dependencies:
-      '@types/node': 20.11.19
+      '@types/node': 20.11.20
       esbuild: 0.18.20
       postcss: 8.4.35
       rollup: 3.29.0
@@ -6966,7 +6966,7 @@ packages:
       vite:
         optional: true
     dependencies:
-      vite: 4.5.0(@types/node@20.11.19)
+      vite: 4.5.0(@types/node@20.11.20)
     dev: false
 
   /vitefu@0.2.5(vite@4.5.1):
@@ -6977,7 +6977,7 @@ packages:
       vite:
         optional: true
     dependencies:
-      vite: 4.5.1(@types/node@20.11.19)
+      vite: 4.5.1(@types/node@20.11.20)
     dev: false
 
   /webidl-conversions@3.0.1:
