@@ -4,7 +4,7 @@ import type { Output } from "valibot";
 
 import { redirect } from "@solidjs/router";
 import { decode } from "decode-formdata";
-import { hexColor, object, safeParseAsync, string } from "valibot";
+import { hexColor, minLength, object, safeParseAsync, string } from "valibot";
 import { setCookie } from "vinxi/http";
 
 import { paths } from "~/utils/paths";
@@ -15,14 +15,14 @@ import {
   getRequestEventOrThrow,
   rpcParseIssueResult
 } from "../utils";
-import { BOARDS_ACCESS_CACHE_KEY } from "./const";
+import { ACCESS_USERNAME_MIN_LENGTH, BOARDS_ACCESS_CACHE_KEY } from "./const";
 
 const boardAccessSchema = () => {
   return object({
     boardId: string(),
     playerColor: string([hexColor()]),
     playerId: string(),
-    userName: string()
+    userName: string([minLength(ACCESS_USERNAME_MIN_LENGTH)])
   });
 };
 

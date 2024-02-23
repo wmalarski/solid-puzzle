@@ -1,12 +1,13 @@
 import { useSubmission } from "@solidjs/router";
 import { nanoid } from "nanoid";
-import { type Component } from "solid-js";
+import { type Component, Show } from "solid-js";
 
 import type { BoardModel } from "~/types/models";
 
 import { Button } from "~/components/Button";
 import { Card, CardBody, cardTitleClass } from "~/components/Card";
 import {
+  TextFieldErrorMessage,
   TextFieldInput,
   TextFieldLabel,
   TextFieldLabelText,
@@ -16,6 +17,7 @@ import { useI18n } from "~/contexts/I18nContext";
 import { FormLayout, PageFooter, PageTitle } from "~/modules/common/Layout";
 import { ThemeToggle } from "~/modules/common/ThemeToggle";
 import { setBoardAccessAction } from "~/server/access/client";
+import { ACCESS_USERNAME_MIN_LENGTH } from "~/server/access/const";
 import { randomHexColor } from "~/utils/colors";
 
 type AcceptInviteFormProps = {
@@ -38,8 +40,8 @@ export const AcceptInviteForm: Component<AcceptInviteFormProps> = (props) => {
           <header class="flex items-center justify-between gap-2">
             <h2 class={cardTitleClass()}>
               {t("invite.title", { name: props.board.name })}
-              <ThemeToggle />
             </h2>
+            <ThemeToggle />
           </header>
           <form
             action={setBoardAccessAction}
@@ -62,10 +64,16 @@ export const AcceptInviteForm: Component<AcceptInviteFormProps> = (props) => {
               <TextFieldInput
                 disabled={submission.pending}
                 id="userName"
+                minLength={ACCESS_USERNAME_MIN_LENGTH}
                 name="userName"
                 placeholder={t("invite.username.placeholder")}
                 variant="bordered"
               />
+              <Show when={submission.result?.errors?.userName}>
+                <TextFieldErrorMessage>
+                  {submission.result?.errors?.userName}
+                </TextFieldErrorMessage>
+              </Show>
             </TextFieldRoot>
             <TextFieldRoot>
               <TextFieldLabel for="color">
@@ -83,6 +91,7 @@ export const AcceptInviteForm: Component<AcceptInviteFormProps> = (props) => {
               />
             </TextFieldRoot>
             <Button
+              color="secondary"
               disabled={submission.pending}
               isLoading={submission.pending}
               type="submit"
