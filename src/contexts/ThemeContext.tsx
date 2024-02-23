@@ -3,7 +3,8 @@ import { createAsync } from "@solidjs/router";
 import { type Component, type JSX, createContext, useContext } from "solid-js";
 
 import { getAppThemeLoader } from "~/server/theme/client";
-import { type AppTheme, setAppThemeServerAction } from "~/server/theme/rpc";
+import { APP_THEME_COOKIE_NAME } from "~/server/theme/const";
+import { type AppTheme } from "~/server/theme/rpc";
 
 const createThemeValue = () => {
   const themeAsync = createAsync(() => getAppThemeLoader());
@@ -12,10 +13,10 @@ const createThemeValue = () => {
     return themeAsync();
   });
 
-  const updateTheme = async (theme: AppTheme) => {
+  const updateTheme = (theme: AppTheme) => {
     document.querySelector("html")?.setAttribute("data-theme", theme);
+    document.cookie = `${APP_THEME_COOKIE_NAME}=${theme}`;
     setTheme(theme);
-    await setAppThemeServerAction(theme);
   };
 
   return { theme, updateTheme };
@@ -25,7 +26,7 @@ type ThemeContextValue = ReturnType<typeof createThemeValue>;
 
 const ThemeContext = createContext<ThemeContextValue>({
   theme: () => "dracula" as const,
-  updateTheme: () => Promise.resolve()
+  updateTheme: () => void 0
 });
 
 type ThemeProviderProps = {
