@@ -1,32 +1,28 @@
-import { throttle } from "@solid-primitives/scheduled";
-import {
-  REALTIME_LISTEN_TYPES,
-  REALTIME_SUBSCRIBE_STATES
-} from "@supabase/supabase-js";
 import {
   type Component,
   type JSX,
   createContext,
   createMemo,
   createSignal,
-  onCleanup,
-  onMount,
   useContext
 } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 
-import type { BoardAccess } from "~/server/access/rpc";
-
-import { getClientSupabase } from "~/utils/supabase";
-
-import { REALTIME_THROTTLE_TIME } from "./const";
-
 type PlayerSelectionState = Record<string, null | string | undefined>;
 
-const SELECTION_CHANNEL_NAME = "rooms:selections";
-const SELECTION_EVENT_NAME = "rooms:selection";
+export type SelectionPayload = {
+  playerId: string;
+  selectionId: null | string;
+};
 
-const createPlayerSelectionState = (boardAccess: () => BoardAccess) => {
+type PlayerSelectionProviderProps = {
+  children: JSX.Element;
+  playerId: string;
+};
+
+const createPlayerSelectionState = (
+  args: () => PlayerSelectionProviderProps
+) => {
   const [selectedId, setSelectedId] = createSignal<null | string>(null);
 
   const [selection, setSelection] = createStore<PlayerSelectionState>({});
@@ -43,52 +39,12 @@ const createPlayerSelectionState = (boardAccess: () => BoardAccess) => {
     );
   });
 
-  const [sender, setSender] = createSignal<(arg: null | string) => void>(
+  const [sender, setSender] = createSignal<(arg: SelectionPayload) => void>(
     () => void 0
   );
 
-  onMount(() => {
-    const supabase = getClientSupabase();
-    const channelName = `${SELECTION_CHANNEL_NAME}:${boardAccess().boardId}`;
-    const channel = supabase.channel(channelName);
-
-    channel
-      .on(
-        REALTIME_LISTEN_TYPES.BROADCAST,
-        { event: SELECTION_EVENT_NAME },
-        (payload) => {
-          setSelection(
-            produce((state) => {
-              state[payload.playerId] = payload.selectionId;
-            })
-          );
-        }
-      )
-      .subscribe((status) => {
-        if (status !== REALTIME_SUBSCRIBE_STATES.SUBSCRIBED) {
-          return;
-        }
-
-        setSender(() =>
-          throttle((selectionId) => {
-            const playerId = boardAccess().playerId;
-            channel.send({
-              event: SELECTION_EVENT_NAME,
-              playerId,
-              selectionId,
-              type: REALTIME_LISTEN_TYPES.BROADCAST
-            });
-          }, REALTIME_THROTTLE_TIME)
-        );
-      });
-
-    onCleanup(() => {
-      supabase.removeChannel(channel);
-    });
-  });
-
   const select = (selectionId: null | string) => {
-    sender()(selectionId);
+    sender()({ playerId: args().playerId, selectionId });
     setSelectedId(selectionId);
   };
 
@@ -102,6 +58,18 @@ const createPlayerSelectionState = (boardAccess: () => BoardAccess) => {
     );
   };
 
+  const setRemoteSelection = ({ playerId, selectionId }: SelectionPayload) => {
+    setSelection(
+      produce((state) => {
+        state[playerId] = selectionId;
+      })
+    );
+  };
+
+  const setRemoteSender = (sender: (payload: SelectionPayload) => void) => {
+    setSender(() => sender);
+  };
+
   const clear = () => {
     setSelection({});
   };
@@ -112,7 +80,9 @@ const createPlayerSelectionState = (boardAccess: () => BoardAccess) => {
     leave,
     select,
     selectedId,
-    selection
+    selection,
+    setRemoteSelection,
+    setRemoteSender
   };
 };
 
@@ -126,18 +96,15 @@ const PlayerSelectionContext = createContext<PlayerSelectionContextState>({
   leave: () => void 0,
   select: () => void 0,
   selectedId: () => null,
-  selection: {}
+  selection: {},
+  setRemoteSelection: () => void 0,
+  setRemoteSender: () => void 0
 });
-
-type PlayerSelectionProviderProps = {
-  boardAccess: BoardAccess;
-  children: JSX.Element;
-};
 
 export const PlayerSelectionProvider: Component<
   PlayerSelectionProviderProps
 > = (props) => {
-  const value = createPlayerSelectionState(() => props.boardAccess);
+  const value = createPlayerSelectionState(() => props);
 
   return (
     <PlayerSelectionContext.Provider value={value}>

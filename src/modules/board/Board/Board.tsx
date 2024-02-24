@@ -14,6 +14,7 @@ import { ErrorFallback } from "~/modules/common/ErrorFallback";
 
 import { BoardPlaceholder } from "../BoardPlaceholder";
 import { BoardRevalidateProvider } from "../DataProviders/BoardRevalidate";
+import { BroadcastProvider } from "../DataProviders/BroadcastProvider";
 import { PlayerCursorProvider } from "../DataProviders/CursorProvider";
 import { PlayerPresenceProvider } from "../DataProviders/PresenceProvider";
 import { PuzzleStateProvider } from "../DataProviders/PuzzleProvider";
@@ -55,10 +56,11 @@ export const Board: Component<BoardProps> = (props) => {
   return (
     <ErrorBoundary fallback={ErrorFallback}>
       <Suspense fallback={<BoardPlaceholder />}>
-        <PlayerSelectionProvider boardAccess={props.boardAccess}>
-          <PlayerCursorProvider boardAccess={props.boardAccess}>
+        <PlayerSelectionProvider playerId={props.boardAccess.playerId}>
+          <PlayerCursorProvider playerId={props.boardAccess.playerId}>
             <PlayerPresenceProvider boardAccess={props.boardAccess}>
               <BoardRevalidateProvider boardId={props.boardAccess.boardId} />
+              <BroadcastProvider boardId={props.boardAccess.boardId} />
               <PuzzleStateProvider
                 board={props.board}
                 boardAccess={props.boardAccess}

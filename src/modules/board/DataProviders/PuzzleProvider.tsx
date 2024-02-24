@@ -1,16 +1,9 @@
-import { throttle } from "@solid-primitives/scheduled";
-import {
-  REALTIME_LISTEN_TYPES,
-  REALTIME_SUBSCRIBE_STATES
-} from "@supabase/supabase-js";
 import {
   type Component,
   type JSX,
   createContext,
-  createEffect,
   createMemo,
   createSignal,
-  onCleanup,
   useContext
 } from "solid-js";
 import { createStore, produce } from "solid-js/store";
@@ -25,9 +18,6 @@ import {
   type PuzzleFragmentShape,
   getPuzzleFragments
 } from "~/utils/getPuzzleFragments";
-import { getClientSupabase } from "~/utils/supabase";
-
-import { REALTIME_THROTTLE_TIME } from "./const";
 
 export type FragmentState = {
   fragmentId: string;
@@ -45,9 +35,6 @@ type SetFragmentStateArgs = {
   x: number;
   y: number;
 };
-
-const PUZZLE_CHANNEL_NAME = "rooms:puzzle";
-const PUZZLE_EVENT_NAME = "rooms:puzzle";
 
 type IsLockedInPlaceArgs = {
   fragment: SetFragmentStateArgs;
@@ -68,13 +55,14 @@ const isLockedInPlace = ({ fragment, shapes }: IsLockedInPlaceArgs) => {
   return isLocked;
 };
 
-type CreatePuzzleContextArgs = () => {
+type PuzzleStateProviderProps = {
   board: BoardModel;
   boardAccess: BoardAccess;
+  children: JSX.Element;
   fragments: FragmentModel[];
 };
 
-const createPuzzleContext = (args: CreatePuzzleContextArgs) => {
+const createPuzzleContext = (args: () => PuzzleStateProviderProps) => {
   const updateFragment = useUpdateFragment();
 
   const config = createMemo(() => {
@@ -172,53 +160,6 @@ const createPuzzleContext = (args: CreatePuzzleContextArgs) => {
     );
   };
 
-  createEffect(() => {
-    const supabase = getClientSupabase();
-    const channelName = `${PUZZLE_CHANNEL_NAME}:${args().board.id}`;
-    const channel = supabase.channel(channelName);
-    const playerId = args().boardAccess.playerId;
-    const fragmentsStore = store();
-
-    channel
-      .on(
-        REALTIME_LISTEN_TYPES.BROADCAST,
-        { event: PUZZLE_EVENT_NAME },
-        (payload) => {
-          fragmentsStore.set(
-            produce((state) => {
-              const fragment = state[payload.fragmentId];
-              if (fragment) {
-                fragment.rotation = payload.rotation;
-                fragment.x = payload.x;
-                fragment.y = payload.y;
-                fragment.isLocked = payload.isLocked;
-              }
-            })
-          );
-        }
-      )
-      .subscribe((status) => {
-        if (status !== REALTIME_SUBSCRIBE_STATES.SUBSCRIBED) {
-          return;
-        }
-
-        setSender(() =>
-          throttle((update: SetFragmentStateArgs) => {
-            channel.send({
-              event: PUZZLE_EVENT_NAME,
-              playerId,
-              type: REALTIME_LISTEN_TYPES.BROADCAST,
-              ...update
-            });
-          }, REALTIME_THROTTLE_TIME)
-        );
-      });
-
-    onCleanup(() => {
-      supabase.removeChannel(channel);
-    });
-  });
-
   const fragments = createMemo(() => {
     return store().value;
   });
@@ -233,6 +174,24 @@ const createPuzzleContext = (args: CreatePuzzleContextArgs) => {
     return unfinishedCount() === 0;
   });
 
+  const setRemoteSender = (sender: (payload: FragmentState) => void) => {
+    setSender(() => sender);
+  };
+
+  const setRemoteFragment = (payload: FragmentState) => {
+    store().set(
+      produce((state) => {
+        const fragment = state[payload.fragmentId];
+        if (fragment) {
+          fragment.rotation = payload.rotation;
+          fragment.x = payload.x;
+          fragment.y = payload.y;
+          fragment.isLocked = payload.isLocked;
+        }
+      })
+    );
+  };
+
   return {
     config,
     fragments,
@@ -241,6 +200,8 @@ const createPuzzleContext = (args: CreatePuzzleContextArgs) => {
     sendFragmentState,
     setFragmentState,
     setFragmentStateWithLockCheck,
+    setRemoteFragment,
+    setRemoteSender,
     shapes,
     unfinishedCount
   };
@@ -256,16 +217,11 @@ const PuzzleStateContext = createContext<PuzzleContextState>({
   sendFragmentState: () => void 0,
   setFragmentState: () => void 0,
   setFragmentStateWithLockCheck: () => Promise.resolve(),
+  setRemoteFragment: () => void 0,
+  setRemoteSender: () => void 0,
   shapes: () => new Map(),
   unfinishedCount: () => 0
 });
-
-type PuzzleStateProviderProps = {
-  board: BoardModel;
-  boardAccess: BoardAccess;
-  children: JSX.Element;
-  fragments: FragmentModel[];
-};
 
 export const PuzzleStateProvider: Component<PuzzleStateProviderProps> = (
   props

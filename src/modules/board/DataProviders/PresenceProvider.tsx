@@ -40,13 +40,18 @@ const placeholderCurrentPlayer: PlayerState = {
   playerId: defaultPlayerId
 };
 
-const createPlayerPresenceState = (boardAccess: () => BoardAccess) => {
+type PlayerPresenceProviderProps = {
+  boardAccess: BoardAccess;
+  children: JSX.Element;
+};
+
+const createPlayerPresenceState = (args: () => PlayerPresenceProviderProps) => {
   const [players, setPlayers] = createStore<PlayersState>({});
   const selection = usePlayerSelection();
   const cursors = usePlayerCursors();
 
   const currentPlayer = createMemo(() => {
-    const access = boardAccess();
+    const access = args().boardAccess;
     return {
       color: access.playerColor,
       name: access.userName,
@@ -57,7 +62,7 @@ const createPlayerPresenceState = (boardAccess: () => BoardAccess) => {
   onMount(() => {
     const supabase = getClientSupabase();
     const player = currentPlayer();
-    const boardId = boardAccess().boardId;
+    const boardId = args().boardAccess.boardId;
 
     const channel = supabase.channel(PRESENCE_CHANNEL_NAME, {
       config: { presence: { key: boardId } }
@@ -145,15 +150,10 @@ const PlayerPresenceContext = createContext<PlayerPresenceState>({
   players: {}
 });
 
-type PlayerPresenceProviderProps = {
-  boardAccess: BoardAccess;
-  children: JSX.Element;
-};
-
 export const PlayerPresenceProvider: Component<PlayerPresenceProviderProps> = (
   props
 ) => {
-  const value = createPlayerPresenceState(() => props.boardAccess);
+  const value = createPlayerPresenceState(() => props);
 
   return (
     <PlayerPresenceContext.Provider value={value}>

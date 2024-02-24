@@ -40,7 +40,7 @@ export const BoardRevalidateProvider: Component<
       table: "rooms"
     };
 
-    const updateChannel = supabase
+    const channel = supabase
       .channel(BOARD_UPDATE_CHANNEL_NAME)
       .on(
         REALTIME_LISTEN_TYPES.POSTGRES_CHANGES,
@@ -71,7 +71,7 @@ export const BoardRevalidateProvider: Component<
       .subscribe();
 
     onCleanup(() => {
-      supabase.removeChannel(updateChannel);
+      supabase.removeChannel(channel);
     });
   });
 
