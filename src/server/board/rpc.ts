@@ -36,6 +36,7 @@ import {
   BOARD_MIN_NAME_LENGTH,
   BOARD_MIN_SIZE,
   INSERT_BOARD_ARGS_CACHE_KEY,
+  SELECT_BOARD_LOADER_CACHE_KEY,
   SELECT_BOARDS_LOADER_CACHE_KEY
 } from "./const";
 
@@ -264,16 +265,9 @@ export const reloadBoardServerAction = async (form: FormData) => {
     return rpcErrorResult(upsertFragmentsResult.error);
   }
 
-  const result = await event.locals.supabase
-    .from("rooms")
-    .update({ repeats: boardResult.data.repeats + 1 })
-    .eq("id", id);
-
-  if (result.error) {
-    return rpcErrorResult(result.error);
-  }
-
-  throw reload({ revalidate: SELECT_BOARDS_LOADER_CACHE_KEY });
+  throw reload({
+    revalidate: [SELECT_BOARDS_LOADER_CACHE_KEY, SELECT_BOARD_LOADER_CACHE_KEY]
+  });
 };
 
 export const deleteBoardServerAction = async (form: FormData) => {

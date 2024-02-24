@@ -16,7 +16,6 @@ import { getClientSupabase } from "~/utils/supabase";
 
 import { usePlayerSelection } from "./SelectionProvider";
 
-const BOARD_REMOVE_CHANNEL_NAME = "rooms:remove_board";
 const BOARD_UPDATE_CHANNEL_NAME = "rooms:update_board";
 
 type BoardRevalidateProviderProps = {
@@ -56,10 +55,6 @@ export const BoardRevalidateProvider: Component<
           selection.clear();
         }
       )
-      .subscribe();
-
-    const deleteChannel = supabase
-      .channel(BOARD_REMOVE_CHANNEL_NAME)
       .on(
         REALTIME_LISTEN_TYPES.POSTGRES_CHANGES,
         { ...config, event: REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.DELETE },
@@ -77,7 +72,6 @@ export const BoardRevalidateProvider: Component<
 
     onCleanup(() => {
       supabase.removeChannel(updateChannel);
-      supabase.removeChannel(deleteChannel);
     });
   });
 
