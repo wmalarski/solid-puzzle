@@ -12,9 +12,9 @@ import type { GetBoardAccessLoaderReturn } from "~/server/access/client";
 import type { BoardAccess } from "~/server/access/rpc";
 import type { SelectBoardLoaderReturn } from "~/server/board/client";
 
+import { Skeleton } from "~/components/Skeleton";
 import { SessionProvider, useSessionContext } from "~/contexts/SessionContext";
 import { AcceptInviteForm } from "~/modules/board/AcceptInviteForm";
-import { BoardPlaceholder } from "~/modules/board/BoardPlaceholder";
 import { ErrorFallback } from "~/modules/common/ErrorFallback";
 import { Head } from "~/modules/common/Head";
 import { getBoardAccessLoader } from "~/server/access/client";
@@ -26,6 +26,14 @@ const Board = clientOnly(() => import("~/modules/board/Board"));
 type BoardQueryProps = {
   boardAccess?: GetBoardAccessLoaderReturn;
   data: SelectBoardLoaderReturn;
+};
+
+const BoardPlaceholder: Component = () => {
+  return (
+    <div class="h-screen w-screen p-6">
+      <Skeleton class="size-full" />
+    </div>
+  );
 };
 
 const BoardQuery: Component<BoardQueryProps> = (props) => {
