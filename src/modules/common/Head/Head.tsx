@@ -34,14 +34,14 @@ export const Head: Component<HeadProps> = (props) => {
   return (
     <>
       <Title>{title()}</Title>
-      <meta content={description()} name="description" />
-      <meta content={title()} property="og:title" />
-      <meta content={description()} property="og:description" />
-      <meta content="website" property="og:type" />
-      <meta content={ogUrl()} property="og:url" />
-      <meta content={`${url().origin}/og-image.png`} property="og:image" />
-      <meta content="461" property="og:image:width" />
-      <meta content="460" property="og:image:height" />
+      <Meta content={description()} name="description" />
+      <Meta content={title()} property="og:title" />
+      <Meta content={description()} property="og:description" />
+      <Meta content="website" property="og:type" />
+      <Meta content={ogUrl()} property="og:url" />
+      <Meta content={`${url().origin}/og-image.png`} property="og:image" />
+      <Meta content="461" property="og:image:width" />
+      <Meta content="460" property="og:image:height" />
     </>
   );
 };
