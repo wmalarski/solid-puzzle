@@ -67,14 +67,16 @@ export const Board: Component<BoardProps> = (props) => {
                 >
                   <BroadcastProvider boardId={props.boardAccess.boardId} />
                   <PreviewContextProvider>
-                    <ClientBoard board={props.board} />
-                    <TopBar
-                      board={props.board}
-                      boardAccess={props.boardAccess}
-                    />
-                    <InfoBar />
-                    <MenuBar board={props.board} />
-                    <ReloadDialog boardId={props.board.id} />
+                    <main class="size-screen relative">
+                      <ClientBoard board={props.board} />
+                      <TopBar
+                        board={props.board}
+                        boardAccess={props.boardAccess}
+                      />
+                      <InfoBar />
+                      <MenuBar board={props.board} />
+                      <ReloadDialog boardId={props.board.id} />
+                    </main>
                   </PreviewContextProvider>
                 </PuzzleStateProvider>
               </BoardRevalidateProvider>

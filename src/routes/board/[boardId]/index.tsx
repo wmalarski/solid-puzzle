@@ -46,14 +46,12 @@ function BoardQuery(props: BoardQueryProps) {
   });
 
   return (
-    <main class="size-screen relative">
-      <Show
-        fallback={<AcceptInviteForm board={props.data.board} />}
-        when={access()}
-      >
-        {(access) => <Board {...props.data} boardAccess={access()} />}
-      </Show>
-    </main>
+    <Show
+      fallback={<AcceptInviteForm board={props.data.board} />}
+      when={access()}
+    >
+      {(access) => <Board {...props.data} boardAccess={access()} />}
+    </Show>
   );
 }
 
