@@ -3,7 +3,7 @@
   "scripts": {
     "dev": "vinxi dev",
     "build": "vinxi build --preset cloudflare-pages",
-    "start": "node ./.output/server/index.mjs",
+    "start": "vinxi start",
     "=== LINTERS ===": "",
     "lint": "eslint src --fix --ext .tsx,.ts",
     "prettier": "prettier 'src/**/*.(ts|tsx)' --write",

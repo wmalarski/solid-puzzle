@@ -1,12 +1,6 @@
 import { type RouteDefinition, createAsync, useParams } from "@solidjs/router";
 import { clientOnly } from "@solidjs/start";
-import {
-  type Component,
-  ErrorBoundary,
-  Show,
-  Suspense,
-  createMemo
-} from "solid-js";
+import { ErrorBoundary, Show, Suspense, createMemo } from "solid-js";
 
 import type { GetBoardAccessLoaderReturn } from "~/server/access/client";
 import type { BoardAccess } from "~/server/access/rpc";
@@ -27,7 +21,7 @@ type BoardQueryProps = {
   data: SelectBoardLoaderReturn;
 };
 
-const BoardQuery: Component<BoardQueryProps> = (props) => {
+function BoardQuery(props: BoardQueryProps) {
   const session = useSessionContext();
 
   const access = createMemo<BoardAccess | null>(() => {
@@ -62,7 +56,7 @@ const BoardQuery: Component<BoardQueryProps> = (props) => {
       </main>
     </>
   );
-};
+}
 
 export const route = {
   load: async ({ params }) => {
