@@ -1,13 +1,7 @@
 import type { Session } from "@supabase/supabase-js";
 
 import { Navigate, useLocation } from "@solidjs/router";
-import {
-  type Component,
-  type JSX,
-  Show,
-  createContext,
-  useContext
-} from "solid-js";
+import { type JSX, Show, createContext, useContext } from "solid-js";
 
 import { paths } from "~/utils/paths";
 
