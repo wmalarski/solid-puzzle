@@ -70,7 +70,7 @@ export const BroadcastProvider: Component<BroadcastProviderProps> = (props) => {
             });
           }, REALTIME_THROTTLE_TIME)
         );
-        puzzle.setRemoteSender(
+        cursors.setRemoteSender(
           throttle((payload) => {
             channel.send({
               event: CURSOR_EVENT_NAME,

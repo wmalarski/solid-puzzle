@@ -53,7 +53,6 @@ const BoardQuery: Component<BoardQueryProps> = (props) => {
 
   return (
     <>
-      <Head title={props.data.board.name} />
       <Show
         fallback={<AcceptInviteForm board={props.data.board} />}
         when={access()}
@@ -84,6 +83,7 @@ export default function BoardSection() {
 
   return (
     <main class="size-screen relative">
+      <Head />
       <SessionProvider loadingFallback={<BoardPlaceholder />} value={session()}>
         <ErrorBoundary fallback={ErrorFallback}>
           <Suspense fallback={<BoardPlaceholder />}>
