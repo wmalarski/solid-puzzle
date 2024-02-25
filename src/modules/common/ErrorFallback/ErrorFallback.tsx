@@ -7,8 +7,6 @@ import { Link } from "~/components/Link";
 import { useI18n } from "~/contexts/I18nContext";
 import { paths } from "~/utils/paths";
 
-import { ThemeToggle } from "../ThemeToggle";
-
 export const ErrorFallback = (err: unknown, reset: VoidFunction) => {
   const { t } = useI18n();
 
@@ -24,7 +22,6 @@ export const ErrorFallback = (err: unknown, reset: VoidFunction) => {
           <XCircleIcon class="size-10 text-error" />
           <header class="flex items-center justify-between gap-2 text-error">
             <h2 class={cardTitleClass()}>{t("error.title")}</h2>
-            <ThemeToggle />
           </header>
           <span class="text-center">
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}

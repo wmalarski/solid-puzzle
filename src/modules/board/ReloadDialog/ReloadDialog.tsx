@@ -20,6 +20,7 @@ import { useI18n } from "~/contexts/I18nContext";
 import { reloadBoardAction } from "~/server/board/client";
 import { paths } from "~/utils/paths";
 
+import { useBoardRevalidate } from "../DataProviders/BoardRevalidate";
 import { usePuzzleStore } from "../DataProviders/PuzzleProvider";
 
 type ReloadFormProps = {
@@ -30,6 +31,8 @@ type ReloadFormProps = {
 export const ReloadForm: Component<ReloadFormProps> = (props) => {
   const { t } = useI18n();
 
+  const revalidate = useBoardRevalidate();
+
   const submission = useSubmission(reloadBoardAction);
   const action = useAction(reloadBoardAction);
 
@@ -38,6 +41,9 @@ export const ReloadForm: Component<ReloadFormProps> = (props) => {
 
     try {
       await action(new FormData(event.currentTarget));
+
+      revalidate.sendRevalidate();
+
       props.onSuccess();
     } catch {
       // handler by useSubmission

@@ -59,21 +59,25 @@ export const Board: Component<BoardProps> = (props) => {
         <PlayerSelectionProvider playerId={props.boardAccess.playerId}>
           <PlayerCursorProvider playerId={props.boardAccess.playerId}>
             <PlayerPresenceProvider boardAccess={props.boardAccess}>
-              <BoardRevalidateProvider boardId={props.boardAccess.boardId} />
-              <PuzzleStateProvider
-                board={props.board}
-                boardAccess={props.boardAccess}
-                fragments={props.fragments}
-              >
-                <BroadcastProvider boardId={props.boardAccess.boardId} />
-                <PreviewContextProvider>
-                  <ClientBoard board={props.board} />
-                  <TopBar board={props.board} boardAccess={props.boardAccess} />
-                  <InfoBar />
-                  <MenuBar board={props.board} />
-                  <ReloadDialog boardId={props.board.id} />
-                </PreviewContextProvider>
-              </PuzzleStateProvider>
+              <BoardRevalidateProvider boardId={props.boardAccess.boardId}>
+                <PuzzleStateProvider
+                  board={props.board}
+                  boardAccess={props.boardAccess}
+                  fragments={props.fragments}
+                >
+                  <BroadcastProvider boardId={props.boardAccess.boardId} />
+                  <PreviewContextProvider>
+                    <ClientBoard board={props.board} />
+                    <TopBar
+                      board={props.board}
+                      boardAccess={props.boardAccess}
+                    />
+                    <InfoBar />
+                    <MenuBar board={props.board} />
+                    <ReloadDialog boardId={props.board.id} />
+                  </PreviewContextProvider>
+                </PuzzleStateProvider>
+              </BoardRevalidateProvider>
             </PlayerPresenceProvider>
           </PlayerCursorProvider>
         </PlayerSelectionProvider>

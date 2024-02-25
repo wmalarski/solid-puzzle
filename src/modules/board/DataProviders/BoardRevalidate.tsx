@@ -1,9 +1,18 @@
+import type { JSX } from "solid-js";
+
 import { revalidate, useNavigate } from "@solidjs/router";
 import {
   REALTIME_LISTEN_TYPES,
   REALTIME_POSTGRES_CHANGES_LISTEN_EVENT
 } from "@supabase/supabase-js";
-import { type Component, onCleanup, onMount } from "solid-js";
+import {
+  type Component,
+  createContext,
+  createSignal,
+  onCleanup,
+  onMount,
+  useContext
+} from "solid-js";
 
 import { showToast } from "~/components/Toast";
 import { useI18n } from "~/contexts/I18nContext";
@@ -20,7 +29,44 @@ const BOARD_UPDATE_CHANNEL_NAME = "rooms:update_board";
 
 type BoardRevalidateProviderProps = {
   boardId: string;
+  children: JSX.Element;
 };
+
+const createBoardRevalidate = () => {
+  const { t } = useI18n();
+
+  const selection = usePlayerSelection();
+
+  const [sender, setSender] = createSignal<() => void>(() => void 0);
+
+  const setRemoteSender = (sender: () => void) => {
+    setSender(() => sender);
+  };
+
+  const setRemoteRevalidate = async () => {
+    showToast({
+      description: t("board.toasts.updatedDescription"),
+      title: t("board.toasts.updated"),
+      variant: "info"
+    });
+    selection.clear();
+    await revalidate(SELECT_BOARD_LOADER_CACHE_KEY);
+  };
+
+  const sendRevalidate = () => {
+    sender()();
+  };
+
+  return { sendRevalidate, setRemoteRevalidate, setRemoteSender };
+};
+
+type BoardRevalidateContextState = ReturnType<typeof createBoardRevalidate>;
+
+const BoardRevalidateContext = createContext<BoardRevalidateContextState>({
+  sendRevalidate: () => void 0,
+  setRemoteRevalidate: () => Promise.resolve(),
+  setRemoteSender: () => void 0
+});
 
 export const BoardRevalidateProvider: Component<
   BoardRevalidateProviderProps
@@ -29,35 +75,21 @@ export const BoardRevalidateProvider: Component<
 
   const navigate = useNavigate();
 
-  const selection = usePlayerSelection();
+  const boardRevalidate = createBoardRevalidate();
 
   onMount(() => {
     const supabase = getClientSupabase();
-
-    const config = {
-      filter: `id=eq.${props.boardId}`,
-      schema: "public",
-      table: "rooms"
-    };
 
     const channel = supabase
       .channel(BOARD_UPDATE_CHANNEL_NAME)
       .on(
         REALTIME_LISTEN_TYPES.POSTGRES_CHANGES,
-        { ...config, event: REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.UPDATE },
-        async () => {
-          showToast({
-            description: t("board.toasts.updatedDescription"),
-            title: t("board.toasts.updated"),
-            variant: "info"
-          });
-          await revalidate(SELECT_BOARD_LOADER_CACHE_KEY);
-          selection.clear();
-        }
-      )
-      .on(
-        REALTIME_LISTEN_TYPES.POSTGRES_CHANGES,
-        { ...config, event: REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.DELETE },
+        {
+          event: REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.DELETE,
+          filter: `id=eq.${props.boardId}`,
+          schema: "public",
+          table: "rooms"
+        },
         async () => {
           showToast({
             description: t("board.toasts.deletedDescription"),
@@ -65,7 +97,7 @@ export const BoardRevalidateProvider: Component<
             variant: "error"
           });
           await revalidate(SELECT_BOARDS_LOADER_CACHE_KEY);
-          navigate(paths.boards());
+          navigate(paths.home);
         }
       )
       .subscribe();
@@ -75,5 +107,13 @@ export const BoardRevalidateProvider: Component<
     });
   });
 
-  return null;
+  return (
+    <BoardRevalidateContext.Provider value={boardRevalidate}>
+      {props.children}
+    </BoardRevalidateContext.Provider>
+  );
+};
+
+export const useBoardRevalidate = () => {
+  return useContext(BoardRevalidateContext);
 };
