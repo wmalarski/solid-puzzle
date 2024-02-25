@@ -109,6 +109,7 @@ type SettingsControlledDialogProps = {
   board: BoardModelWithoutConfig;
   isOpen: boolean;
   onIsOpenChange: (isOpen: boolean) => void;
+  onSuccess: VoidFunction;
 };
 
 export const SettingsControlledDialog: Component<
@@ -116,6 +117,7 @@ export const SettingsControlledDialog: Component<
 > = (props) => {
   const onSuccess = () => {
     props.onIsOpenChange(false);
+    props.onSuccess();
   };
 
   return (

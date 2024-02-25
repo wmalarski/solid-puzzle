@@ -1,4 +1,9 @@
-import { useAction, useNavigate, useSubmission } from "@solidjs/router";
+import {
+  revalidate,
+  useAction,
+  useNavigate,
+  useSubmission
+} from "@solidjs/router";
 import { type Component, Show, createSignal } from "solid-js";
 
 import type { BoardModel } from "~/types/models";
@@ -26,7 +31,10 @@ import { useSessionContext } from "~/contexts/SessionContext";
 import { DeleteBoardControlledDialog } from "~/modules/boards/DeleteDialog";
 import { SettingsControlledDialog } from "~/modules/boards/SettingsDialog";
 import { signOutAction } from "~/server/auth/client";
+import { SELECT_BOARD_LOADER_CACHE_KEY } from "~/server/board/const";
 import { paths } from "~/utils/paths";
+
+import { useBoardRevalidate } from "../DataProviders/BoardRevalidate";
 
 const SignOutMenuItem: Component = () => {
   const { t } = useI18n();
@@ -57,6 +65,7 @@ const Menu: Component<MenuProps> = (props) => {
   const { t } = useI18n();
 
   const session = useSessionContext();
+  const boardRevalidate = useBoardRevalidate();
 
   const navigate = useNavigate();
 
@@ -79,6 +88,11 @@ const Menu: Component<MenuProps> = (props) => {
     setIsDeleteOpen(true);
   };
 
+  const onUpdateSuccess = async () => {
+    boardRevalidate.sendRevalidate();
+    await revalidate(SELECT_BOARD_LOADER_CACHE_KEY);
+  };
+
   return (
     <>
       <Show when={props.board.owner_id === session()?.user.id}>
@@ -91,6 +105,7 @@ const Menu: Component<MenuProps> = (props) => {
           board={props.board}
           isOpen={areSettingsOpen()}
           onIsOpenChange={setAreSettingsOpen}
+          onSuccess={onUpdateSuccess}
         />
       </Show>
       <DropdownMenuRoot>
