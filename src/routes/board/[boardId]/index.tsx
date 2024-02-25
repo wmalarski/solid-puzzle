@@ -53,12 +53,14 @@ const BoardQuery: Component<BoardQueryProps> = (props) => {
 
   return (
     <>
-      <Show
-        fallback={<AcceptInviteForm board={props.data.board} />}
-        when={access()}
-      >
-        {(access) => <Board {...props.data} boardAccess={access()} />}
-      </Show>
+      <main class="size-screen relative">
+        <Show
+          fallback={<AcceptInviteForm board={props.data.board} />}
+          when={access()}
+        >
+          {(access) => <Board {...props.data} boardAccess={access()} />}
+        </Show>
+      </main>
     </>
   );
 };
@@ -82,7 +84,7 @@ export default function BoardSection() {
   const data = createAsync(() => selectBoardLoader(params.boardId));
 
   return (
-    <main class="size-screen relative">
+    <>
       <Head />
       <SessionProvider loadingFallback={<BoardPlaceholder />} value={session()}>
         <ErrorBoundary fallback={ErrorFallback}>
@@ -95,6 +97,6 @@ export default function BoardSection() {
           </Suspense>
         </ErrorBoundary>
       </SessionProvider>
-    </main>
+    </>
   );
 }

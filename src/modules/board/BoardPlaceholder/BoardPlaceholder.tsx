@@ -4,7 +4,7 @@ import { Skeleton } from "~/components/Skeleton";
 
 export const BoardPlaceholder: Component = () => {
   return (
-    <div class="size-full p-6">
+    <div class="h-screen w-screen p-6">
       <Skeleton class="size-full" />
     </div>
   );
