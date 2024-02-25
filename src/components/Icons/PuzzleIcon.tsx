@@ -8,7 +8,7 @@ export const PuzzleIcon = (props: ComponentProps<"svg">) => {
       stroke="currentColor"
       stroke-linecap="round"
       stroke-linejoin="round"
-      stroke-width="2"
+      stroke-width="1.5"
       viewBox="0 0 24 24"
       width="24"
       xmlns="http://www.w3.org/2000/svg"
