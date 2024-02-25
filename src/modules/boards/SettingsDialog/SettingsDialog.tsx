@@ -51,7 +51,7 @@ export const UpdateForm: Component<UpdateFormProps> = (props) => {
       <Show when={submission.result?.error}>
         <Alert variant="error">
           <AlertIcon variant="error" />
-          {t("board.settings.error")}
+          {t("settings.error")}
         </Alert>
       </Show>
       <input name="id" type="hidden" value={props.board.id} />
@@ -73,7 +73,7 @@ export const UpdateForm: Component<UpdateFormProps> = (props) => {
         isLoading={submission.pending}
         type="submit"
       >
-        {t("board.settings.update.button")}
+        {t("settings.update.button")}
       </Button>
     </form>
   );
@@ -93,7 +93,7 @@ const SettingsDialog: Component<SettingsDialogProps> = (props) => {
       <DialogPositioner>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{t("board.settings.title")}</DialogTitle>
+            <DialogTitle>{t("settings.title")}</DialogTitle>
             <DialogCloseButton>
               <XIcon />
             </DialogCloseButton>

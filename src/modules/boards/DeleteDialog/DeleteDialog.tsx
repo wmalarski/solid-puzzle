@@ -39,10 +39,10 @@ const DeleteBoardForm: Component<DeleteBoardFormProps> = (props) => {
         </Alert>
       </Show>
       <input name="id" type="hidden" value={props.boardId} />
-      <span>{t("board.settings.delete.label")}</span>
+      <span>{t("settings.delete.label")}</span>
       <footer class="flex w-full gap-4">
         <AlertDialogCloseButton type="button">
-          {t("board.settings.delete.cancel")}
+          {t("settings.delete.cancel")}
         </AlertDialogCloseButton>
         <Button
           color="error"
@@ -51,7 +51,7 @@ const DeleteBoardForm: Component<DeleteBoardFormProps> = (props) => {
           type="submit"
         >
           <TrashIcon class="size-4" />
-          {t("board.settings.delete.button")}
+          {t("settings.delete.button")}
         </Button>
       </footer>
     </form>
@@ -71,9 +71,7 @@ const DeleteBoard: Component<DeleteBoardProps> = (props) => {
       <AlertDialogPositioner>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>
-              {t("board.settings.delete.title")}
-            </AlertDialogTitle>
+            <AlertDialogTitle>{t("settings.delete.title")}</AlertDialogTitle>
             <AlertDialogCloseButton shape="circle">
               <XIcon />
             </AlertDialogCloseButton>

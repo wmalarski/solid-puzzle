@@ -123,13 +123,13 @@ const Menu: Component<MenuProps> = (props) => {
               <DropdownMenuItem onSelect={onSettingsClick}>
                 <DropdownMenuItemLabel>
                   <SettingsIcon class="size-4" />
-                  {t("board.settings.label")}
+                  {t("settings.label")}
                 </DropdownMenuItemLabel>
               </DropdownMenuItem>
               <DropdownMenuItem onSelect={onDeleteClick}>
                 <DropdownMenuItemLabel>
                   <TrashIcon class="size-4" />
-                  {t("board.settings.delete.button")}
+                  {t("settings.delete.button")}
                 </DropdownMenuItemLabel>
               </DropdownMenuItem>
             </Show>

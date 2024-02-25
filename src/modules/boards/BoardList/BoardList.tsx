@@ -57,11 +57,11 @@ const BoardItem: Component<BoardItemProps> = (props) => {
               size="sm"
             >
               <TrashIcon class="size-4" />
-              {t("board.settings.delete.button")}
+              {t("settings.delete.button")}
             </DeleteBoardUncontrolledDialog>
             <SettingsUncontrolledDialog board={props.board} size="sm">
               <SettingsIcon class="size-4" />
-              {t("board.settings.label")}
+              {t("settings.label")}
             </SettingsUncontrolledDialog>
             <LinkButton
               color="secondary"
@@ -79,9 +79,7 @@ const BoardItem: Component<BoardItemProps> = (props) => {
 };
 
 export const BoardsListLoading: Component = () => {
-  const { t } = useI18n();
-
-  return <pre>{t("list.loading")}</pre>;
+  return <div />;
 };
 
 const BoardsListEmpty: Component = () => {

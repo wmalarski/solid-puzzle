@@ -54,20 +54,6 @@ const en_dict = {
       startAgain: "Start Again",
       title: "Congratulations!"
     },
-    settings: {
-      delete: {
-        button: "Delete",
-        cancel: "Cancel",
-        label: "Are you sure?",
-        title: "Delete board"
-      },
-      error: "Error",
-      label: "Settings",
-      title: "Board settings",
-      update: {
-        button: "Save"
-      }
-    },
     share: {
       copy: "Link copied to your clipboard",
       title: "Share link"
@@ -141,9 +127,7 @@ const en_dict = {
   },
   list: {
     empty: "Empty",
-    error: "Loading list error",
     go: "Play",
-    loading: "Loading",
     title: "Puzzle List"
   },
   notFound: {
@@ -161,6 +145,20 @@ const en_dict = {
     description:
       "Solid Jigsaw Puzzle app is a non-trivial demo application built using Solid Start.",
     title: "Solid Jigsaw Puzzle"
+  },
+  settings: {
+    delete: {
+      button: "Delete",
+      cancel: "Cancel",
+      label: "Are you sure?",
+      title: "Delete board"
+    },
+    error: "Error",
+    label: "Settings",
+    title: "Board settings",
+    update: {
+      button: "Save"
+    }
   }
 };
 
