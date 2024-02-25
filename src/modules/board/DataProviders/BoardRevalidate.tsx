@@ -23,8 +23,6 @@ import {
 import { paths } from "~/utils/paths";
 import { getClientSupabase } from "~/utils/supabase";
 
-import { usePlayerSelection } from "./SelectionProvider";
-
 const BOARD_UPDATE_CHANNEL_NAME = "rooms:update_board";
 
 type BoardRevalidateProviderProps = {
@@ -34,8 +32,6 @@ type BoardRevalidateProviderProps = {
 
 const createBoardRevalidate = () => {
   const { t } = useI18n();
-
-  const selection = usePlayerSelection();
 
   const [sender, setSender] = createSignal<() => void>(() => void 0);
 
@@ -49,7 +45,6 @@ const createBoardRevalidate = () => {
       title: t("board.toasts.updated"),
       variant: "info"
     });
-    selection.clear();
     await revalidate(SELECT_BOARD_LOADER_CACHE_KEY);
   };
 

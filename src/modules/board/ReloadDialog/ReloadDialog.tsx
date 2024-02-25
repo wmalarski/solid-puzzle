@@ -22,6 +22,7 @@ import { paths } from "~/utils/paths";
 
 import { useBoardRevalidate } from "../DataProviders/BoardRevalidate";
 import { usePuzzleStore } from "../DataProviders/PuzzleProvider";
+import { usePlayerSelection } from "../DataProviders/SelectionProvider";
 
 type ReloadFormProps = {
   boardId: string;
@@ -32,6 +33,7 @@ export const ReloadForm: Component<ReloadFormProps> = (props) => {
   const { t } = useI18n();
 
   const revalidate = useBoardRevalidate();
+  const selection = usePlayerSelection();
 
   const submission = useSubmission(reloadBoardAction);
   const action = useAction(reloadBoardAction);
@@ -42,6 +44,7 @@ export const ReloadForm: Component<ReloadFormProps> = (props) => {
     try {
       await action(new FormData(event.currentTarget));
 
+      selection.clear();
       revalidate.sendRevalidate();
 
       props.onSuccess();

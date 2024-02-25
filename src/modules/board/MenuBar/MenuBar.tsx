@@ -35,6 +35,7 @@ import { SELECT_BOARD_LOADER_CACHE_KEY } from "~/server/board/const";
 import { paths } from "~/utils/paths";
 
 import { useBoardRevalidate } from "../DataProviders/BoardRevalidate";
+import { usePlayerSelection } from "../DataProviders/SelectionProvider";
 
 const SignOutMenuItem: Component = () => {
   const { t } = useI18n();
@@ -65,6 +66,7 @@ const Menu: Component<MenuProps> = (props) => {
   const { t } = useI18n();
 
   const session = useSessionContext();
+  const selection = usePlayerSelection();
   const boardRevalidate = useBoardRevalidate();
 
   const navigate = useNavigate();
@@ -89,6 +91,7 @@ const Menu: Component<MenuProps> = (props) => {
   };
 
   const onUpdateSuccess = async () => {
+    selection.clear();
     boardRevalidate.sendRevalidate();
     await revalidate(SELECT_BOARD_LOADER_CACHE_KEY);
   };

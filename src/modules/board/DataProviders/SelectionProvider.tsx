@@ -72,6 +72,7 @@ const createPlayerSelectionState = (
 
   const clear = () => {
     setSelection({});
+    setSelectedId(null);
   };
 
   return {
