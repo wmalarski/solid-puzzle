@@ -1,5 +1,5 @@
 import { useSubmission } from "@solidjs/router";
-import { type Component, Show } from "solid-js";
+import { Show } from "solid-js";
 
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
@@ -16,7 +16,7 @@ import { randomHexColor } from "~/utils/colors";
 
 const defaultPlayerColor = randomHexColor();
 
-export const IntroForm: Component = () => {
+export function IntroForm() {
   const { t } = useI18n();
 
   const submission = useSubmission(updateUserAction);
@@ -77,4 +77,4 @@ export const IntroForm: Component = () => {
       </CardBody>
     </Card>
   );
-};
+}

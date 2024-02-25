@@ -1,11 +1,11 @@
-import type { Component, JSX } from "solid-js";
+import type { JSX } from "solid-js";
 
 import { PuzzleIcon } from "~/components/Icons/PuzzleIcon";
 import { Link } from "~/components/Link";
 import { useI18n } from "~/contexts/I18nContext";
 import { paths } from "~/utils/paths";
 
-export const PageTitle: Component = () => {
+export function PageTitle() {
   const { t } = useI18n();
 
   return (
@@ -16,9 +16,9 @@ export const PageTitle: Component = () => {
       </Link>
     </h1>
   );
-};
+}
 
-export const PageFooter: Component = () => {
+export function PageFooter() {
   const { t } = useI18n();
 
   return (
@@ -28,24 +28,24 @@ export const PageFooter: Component = () => {
       </Link>
     </footer>
   );
-};
+}
 
 type FormLayoutProps = {
   children: JSX.Element;
 };
 
-export const FormLayout: Component<FormLayoutProps> = (props) => {
+export function FormLayout(props: FormLayoutProps) {
   return (
     <main class="mx-auto flex flex-col items-center p-4">{props.children}</main>
   );
-};
+}
 
 type PageLayoutProps = {
   children: JSX.Element;
 };
 
-export const PageLayout: Component<PageLayoutProps> = (props) => {
+export function PageLayout(props: PageLayoutProps) {
   return (
     <main class="mx-auto flex flex-col items-center">{props.children}</main>
   );
-};
+}

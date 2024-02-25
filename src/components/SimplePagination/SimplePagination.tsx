@@ -28,9 +28,7 @@ const SimplePaginationContext = createContext<
 export type SimplePaginationRootProps = ComponentProps<"nav"> &
   SimplePaginationContextValues;
 
-export const SimplePaginationRoot: Component<SimplePaginationRootProps> = (
-  props
-) => {
+export function SimplePaginationRoot(props: SimplePaginationRootProps) {
   const { t } = useI18n();
 
   const [, rest] = splitProps(props, ["class", "count", "page"]);
@@ -52,14 +50,12 @@ export const SimplePaginationRoot: Component<SimplePaginationRootProps> = (
       />
     </SimplePaginationContext.Provider>
   );
-};
+}
 
 type PaginationLinkProps = ComponentProps<"a"> &
   VariantProps<typeof buttonClass>;
 
-export const SimplePaginationPrevious: Component<PaginationLinkProps> = (
-  props
-) => {
+export function SimplePaginationPrevious(props: PaginationLinkProps) {
   const { t } = useI18n();
 
   const [split, rest] = splitProps(props, buttonSplitProps);
@@ -87,9 +83,9 @@ export const SimplePaginationPrevious: Component<PaginationLinkProps> = (
       <span>{t("pagination.previous")}</span>
     </a>
   );
-};
+}
 
-export const SimplePaginationNext: Component<PaginationLinkProps> = (props) => {
+export function SimplePaginationNext(props: PaginationLinkProps) {
   const { t } = useI18n();
 
   const [split, rest] = splitProps(props, buttonSplitProps);
@@ -118,14 +114,12 @@ export const SimplePaginationNext: Component<PaginationLinkProps> = (props) => {
       <ArrowRightIcon class="size-4" />
     </a>
   );
-};
+}
 
 type SimplePaginationValueProps = ComponentProps<"span">;
 
-export const SimplePaginationValue: Component<SimplePaginationValueProps> = (
-  props
-) => {
+export function SimplePaginationValue(props: SimplePaginationValueProps) {
   const [, rest] = splitProps(props, ["class"]);
 
   return <span class={twCx("px-2", props.class)} {...rest} />;
-};
+}

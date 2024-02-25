@@ -1,6 +1,6 @@
 import type { VariantProps } from "class-variance-authority";
 
-import { type Component, type ComponentProps, splitProps } from "solid-js";
+import { type ComponentProps, splitProps } from "solid-js";
 
 import { twCva } from "../utils/twCva";
 
@@ -62,13 +62,13 @@ export const buttonSplitProps = [
 export type ButtonProps = ComponentProps<"button"> &
   VariantProps<typeof buttonClass>;
 
-export const Button: Component<ButtonProps> = (props) => {
+export function Button(props: ButtonProps) {
   const [split, rest] = splitProps(props, buttonSplitProps);
 
   return (
     <button {...rest} class={buttonClass({ class: props.class, ...split })} />
   );
-};
+}
 
 export const buttonGroupClass = twCva("btn-group", {
   defaultVariants: {
@@ -85,20 +85,20 @@ export const buttonGroupClass = twCva("btn-group", {
 export type ButtonGroupProps = ComponentProps<"div"> &
   VariantProps<typeof buttonGroupClass>;
 
-export const ButtonGroup: Component<ButtonGroupProps> = (props) => {
+export function ButtonGroup(props: ButtonGroupProps) {
   const [split, rest] = splitProps(props, ["direction"]);
 
   return (
     <div {...rest} class={buttonGroupClass({ class: props.class, ...split })} />
   );
-};
+}
 
 export type LinkButtonProps = ComponentProps<"a"> &
   VariantProps<typeof buttonClass>;
 
-export const LinkButton: Component<LinkButtonProps> = (props) => {
+export function LinkButton(props: LinkButtonProps) {
   const [split, rest] = splitProps(props, buttonSplitProps);
 
   // eslint-disable-next-line jsx-a11y/anchor-has-content
   return <a {...rest} class={buttonClass({ class: props.class, ...split })} />;
-};
+}

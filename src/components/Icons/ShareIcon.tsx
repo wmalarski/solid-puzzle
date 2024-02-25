@@ -1,6 +1,6 @@
 import type { ComponentProps } from "solid-js";
 
-export const ShareIcon = (props: ComponentProps<"svg">) => {
+export function ShareIcon(props: ComponentProps<"svg">) {
   return (
     <svg
       fill="none"
@@ -21,4 +21,4 @@ export const ShareIcon = (props: ComponentProps<"svg">) => {
       <line x1="15.41" x2="8.59" y1="6.51" y2="10.49" />
     </svg>
   );
-};
+}

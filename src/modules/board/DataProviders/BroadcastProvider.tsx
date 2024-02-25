@@ -23,7 +23,7 @@ type BroadcastProviderProps = {
   boardId: string;
 };
 
-export const BroadcastProvider: Component<BroadcastProviderProps> = (props) => {
+export function BroadcastProvider(props: BroadcastProviderProps) {
   const selection = usePlayerSelection();
   const puzzle = usePuzzleStore();
   const cursors = usePlayerCursors();
@@ -103,4 +103,4 @@ export const BroadcastProvider: Component<BroadcastProviderProps> = (props) => {
   });
 
   return null;
-};
+}

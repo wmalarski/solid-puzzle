@@ -37,7 +37,7 @@ type BoardProps = {
   texture: Texture;
 };
 
-const Board: Component<BoardProps> = (props) => {
+function Board(props: BoardProps) {
   const store = usePuzzleStore();
 
   useStageDeselect();
@@ -61,14 +61,14 @@ const Board: Component<BoardProps> = (props) => {
       )}
     </For>
   );
-};
+}
 
 type PuzzleBoardProps = {
   board: BoardModel;
   path: string;
 };
 
-export const PuzzleBoard: Component<PuzzleBoardProps> = (props) => {
+export function PuzzleBoard(props: PuzzleBoardProps) {
   const store = usePuzzleStore();
 
   useStageTransform();
@@ -91,4 +91,4 @@ export const PuzzleBoard: Component<PuzzleBoardProps> = (props) => {
       )}
     </Show>
   );
-};
+}

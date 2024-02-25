@@ -1,52 +1,46 @@
 import type { VariantProps } from "class-variance-authority";
 
-import { type Component, type ComponentProps, splitProps } from "solid-js";
+import { type ComponentProps, splitProps } from "solid-js";
 
 import { twCva, twCx } from "../utils/twCva";
 
 export type TextFieldRootProps = ComponentProps<"fieldset">;
 
-export const TextFieldRoot: Component<TextFieldRootProps> = (props) => {
+export function TextFieldRoot(props: TextFieldRootProps) {
   return <fieldset {...props} class={twCx("form-control", props.class)} />;
-};
+}
 
 export type TextFieldLabelProps = ComponentProps<"label">;
 
-export const TextFieldLabel: Component<TextFieldLabelProps> = (props) => {
+export function TextFieldLabel(props: TextFieldLabelProps) {
   return (
     // eslint-disable-next-line jsx-a11y/label-has-associated-control
     <label {...props} class={twCx("label gap-2", props.class)} />
   );
-};
+}
 
 export type TextFieldLabelTextProps = ComponentProps<"span">;
 
-export const TextFieldLabelText: Component<TextFieldLabelTextProps> = (
-  props
-) => {
+export function TextFieldLabelText(props: TextFieldLabelTextProps) {
   return (
     // eslint-disable-next-line jsx-a11y/label-has-associated-control
     <span {...props} class={twCx("label-text", props.class)} />
   );
-};
+}
 
 export type TextFieldDescriptionProps = ComponentProps<"span">;
 
-export const TextFieldDescription: Component<TextFieldDescriptionProps> = (
-  props
-) => {
+export function TextFieldDescription(props: TextFieldDescriptionProps) {
   return <span {...props} class={twCx("label-text-alt pt-2", props.class)} />;
-};
+}
 
 export type TextFieldErrorMessageProps = ComponentProps<"span">;
 
-export const TextFieldErrorMessage: Component<TextFieldErrorMessageProps> = (
-  props
-) => {
+export function TextFieldErrorMessage(props: TextFieldErrorMessageProps) {
   return (
     <span {...props} class={twCx("text-sm text-error pt-2", props.class)} />
   );
-};
+}
 
 export const textFieldInputClass = twCva("input", {
   defaultVariants: {
@@ -86,7 +80,7 @@ const variantPropsList = ["color", "size", "variant", "width"] as const;
 export type TextFieldInputProps = ComponentProps<"input"> &
   VariantProps<typeof textFieldInputClass>;
 
-export const TextFieldInput: Component<TextFieldInputProps> = (props) => {
+export function TextFieldInput(props: TextFieldInputProps) {
   const [split, rest] = splitProps(props, variantPropsList);
 
   return (
@@ -95,12 +89,12 @@ export const TextFieldInput: Component<TextFieldInputProps> = (props) => {
       class={textFieldInputClass({ class: props.class, ...split })}
     />
   );
-};
+}
 
 export type TextFieldTextAreaProps = ComponentProps<"textarea"> &
   VariantProps<typeof textFieldInputClass>;
 
-export const TextFieldTextArea: Component<TextFieldTextAreaProps> = (props) => {
+export function TextFieldTextArea(props: TextFieldTextAreaProps) {
   const [split, rest] = splitProps(props, variantPropsList);
 
   return (
@@ -109,4 +103,4 @@ export const TextFieldTextArea: Component<TextFieldTextAreaProps> = (props) => {
       class={textFieldInputClass({ class: props.class, ...split })}
     />
   );
-};
+}

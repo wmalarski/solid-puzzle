@@ -1,7 +1,7 @@
 import type { ComponentProps } from "solid-js";
 
 import { useAction, useSubmission } from "@solidjs/router";
-import { type Component, Show, splitProps } from "solid-js";
+import { Show, splitProps } from "solid-js";
 
 import type { DialogTriggerProps } from "~/components/Dialog";
 import type { BoardModelWithoutConfig } from "~/types/models";
@@ -29,7 +29,7 @@ type UpdateFormProps = {
   onSuccess?: VoidFunction;
 };
 
-export const UpdateForm: Component<UpdateFormProps> = (props) => {
+export function UpdateForm(props: UpdateFormProps) {
   const { t } = useI18n();
 
   const submission = useSubmission(updateBoardAction);
@@ -77,14 +77,14 @@ export const UpdateForm: Component<UpdateFormProps> = (props) => {
       </Button>
     </form>
   );
-};
+}
 
 type SettingsDialogProps = {
   board: BoardModelWithoutConfig;
   onSuccess?: VoidFunction;
 };
 
-const SettingsDialog: Component<SettingsDialogProps> = (props) => {
+function SettingsDialog(props: SettingsDialogProps) {
   const { t } = useI18n();
 
   return (
@@ -103,7 +103,7 @@ const SettingsDialog: Component<SettingsDialogProps> = (props) => {
       </DialogPositioner>
     </DialogPortal>
   );
-};
+}
 
 type SettingsControlledDialogProps = {
   board: BoardModelWithoutConfig;
@@ -112,9 +112,7 @@ type SettingsControlledDialogProps = {
   onSuccess: VoidFunction;
 };
 
-export const SettingsControlledDialog: Component<
-  SettingsControlledDialogProps
-> = (props) => {
+export function SettingsControlledDialog(props: SettingsControlledDialogProps) {
   const onSuccess = () => {
     props.onIsOpenChange(false);
     props.onSuccess();
@@ -125,16 +123,16 @@ export const SettingsControlledDialog: Component<
       <SettingsDialog board={props.board} onSuccess={onSuccess} />
     </DialogRoot>
   );
-};
+}
 
 type SettingsUncontrolledDialogProps = DialogTriggerProps & {
   board: BoardModelWithoutConfig;
   onSuccess?: VoidFunction;
 };
 
-export const SettingsUncontrolledDialog: Component<
-  SettingsUncontrolledDialogProps
-> = (props) => {
+export function SettingsUncontrolledDialog(
+  props: SettingsUncontrolledDialogProps
+) {
   const [split, rest] = splitProps(props, ["board"]);
 
   return (
@@ -143,4 +141,4 @@ export const SettingsUncontrolledDialog: Component<
       <SettingsDialog board={split.board} onSuccess={props.onSuccess} />
     </DialogRoot>
   );
-};
+}

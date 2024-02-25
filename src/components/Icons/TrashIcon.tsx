@@ -1,6 +1,6 @@
 import type { ComponentProps } from "solid-js";
 
-export const TrashIcon = (props: ComponentProps<"svg">) => {
+export function TrashIcon(props: ComponentProps<"svg">) {
   return (
     <svg
       fill="none"
@@ -19,4 +19,4 @@ export const TrashIcon = (props: ComponentProps<"svg">) => {
       <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
     </svg>
   );
-};
+}

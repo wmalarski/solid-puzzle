@@ -13,7 +13,7 @@ type PixiStageProps = {
   canvas: HTMLCanvasElement;
 };
 
-export const PixiStage: Component<PixiStageProps> = (props) => {
+export function PixiStage(props: PixiStageProps) {
   return (
     <BoardThemeProvider>
       <PixiAppProvider canvas={props.canvas}>
@@ -24,4 +24,4 @@ export const PixiStage: Component<PixiStageProps> = (props) => {
       </PixiAppProvider>
     </BoardThemeProvider>
   );
-};
+}

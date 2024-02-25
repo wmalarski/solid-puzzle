@@ -46,7 +46,7 @@ type PuzzleBorderGraphicsProps = {
   state: FragmentState;
 };
 
-const PuzzleBorderGraphics: Component<PuzzleBorderGraphicsProps> = (props) => {
+function PuzzleBorderGraphics(props: PuzzleBorderGraphicsProps) {
   const theme = useBoardTheme();
 
   const graphics = new Graphics();
@@ -77,7 +77,7 @@ const PuzzleBorderGraphics: Component<PuzzleBorderGraphicsProps> = (props) => {
   });
 
   return null;
-};
+}
 
 type PuzzleFragmentGraphicsProps = {
   center: Point2D;
@@ -87,9 +87,7 @@ type PuzzleFragmentGraphicsProps = {
   texture: Texture;
 };
 
-const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
-  props
-) => {
+function PuzzleFragmentGraphics(props: PuzzleFragmentGraphicsProps) {
   const graphics = new Graphics();
 
   createEffect(() => {
@@ -116,7 +114,7 @@ const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
   });
 
   return null;
-};
+}
 
 type PuzzleFragmentProps = {
   shape: PuzzleFragmentShape;
@@ -124,7 +122,7 @@ type PuzzleFragmentProps = {
   texture: Texture;
 };
 
-export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
+export function PuzzleFragment(props: PuzzleFragmentProps) {
   const store = usePuzzleStore();
   const selection = usePlayerSelection();
   const presence = usePlayerPresence();
@@ -271,4 +269,4 @@ export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
       </Show>
     </>
   );
-};
+}

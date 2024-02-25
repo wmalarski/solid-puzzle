@@ -63,9 +63,7 @@ const BoardRevalidateContext = createContext<BoardRevalidateContextState>({
   setRemoteSender: () => void 0
 });
 
-export const BoardRevalidateProvider: Component<
-  BoardRevalidateProviderProps
-> = (props) => {
+export function BoardRevalidateProvider(props: BoardRevalidateProviderProps) {
   const { t } = useI18n();
 
   const navigate = useNavigate();
@@ -107,7 +105,7 @@ export const BoardRevalidateProvider: Component<
       {props.children}
     </BoardRevalidateContext.Provider>
   );
-};
+}
 
 export const useBoardRevalidate = () => {
   return useContext(BoardRevalidateContext);

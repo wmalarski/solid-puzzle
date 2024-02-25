@@ -1,6 +1,6 @@
 import type { ComponentProps } from "solid-js";
 
-export const DotsHorizontalIcon = (props: ComponentProps<"svg">) => {
+export function DotsHorizontalIcon(props: ComponentProps<"svg">) {
   return (
     <svg
       fill="none"
@@ -19,4 +19,4 @@ export const DotsHorizontalIcon = (props: ComponentProps<"svg">) => {
       <circle cx="5" cy="12" r="1" />
     </svg>
   );
-};
+}

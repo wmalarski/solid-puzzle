@@ -150,9 +150,7 @@ const PlayerPresenceContext = createContext<PlayerPresenceState>({
   players: {}
 });
 
-export const PlayerPresenceProvider: Component<PlayerPresenceProviderProps> = (
-  props
-) => {
+export function PlayerPresenceProvider(props: PlayerPresenceProviderProps) {
   const value = createPlayerPresenceState(() => props);
 
   return (
@@ -160,7 +158,7 @@ export const PlayerPresenceProvider: Component<PlayerPresenceProviderProps> = (
       {props.children}
     </PlayerPresenceContext.Provider>
   );
-};
+}
 
 export const usePlayerPresence = () => {
   return useContext(PlayerPresenceContext);

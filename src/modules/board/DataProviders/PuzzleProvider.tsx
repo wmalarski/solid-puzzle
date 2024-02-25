@@ -223,9 +223,7 @@ const PuzzleStateContext = createContext<PuzzleContextState>({
   unfinishedCount: () => 0
 });
 
-export const PuzzleStateProvider: Component<PuzzleStateProviderProps> = (
-  props
-) => {
+export function PuzzleStateProvider(props: PuzzleStateProviderProps) {
   const value = createPuzzleContext(() => props);
 
   return (
@@ -233,7 +231,7 @@ export const PuzzleStateProvider: Component<PuzzleStateProviderProps> = (
       {props.children}
     </PuzzleStateContext.Provider>
   );
-};
+}
 
 export const usePuzzleStore = () => {
   return useContext(PuzzleStateContext);

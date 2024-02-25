@@ -1,10 +1,4 @@
-import {
-  type Component,
-  type JSX,
-  createContext,
-  createSignal,
-  useContext
-} from "solid-js";
+import { type JSX, createContext, createSignal, useContext } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 
 export type PlayerCursorState = {
@@ -78,9 +72,7 @@ const PlayerCursorContext = createContext<PlayerCursorContextState>({
   setRemoteSender: () => void 0
 });
 
-export const PlayerCursorProvider: Component<PlayerCursorProviderProps> = (
-  props
-) => {
+export function PlayerCursorProvider(props: PlayerCursorProviderProps) {
   const value = createPlayerCursorState(() => props);
 
   return (
@@ -88,7 +80,7 @@ export const PlayerCursorProvider: Component<PlayerCursorProviderProps> = (
       {props.children}
     </PlayerCursorContext.Provider>
   );
-};
+}
 
 export const usePlayerCursors = () => {
   return useContext(PlayerCursorContext);

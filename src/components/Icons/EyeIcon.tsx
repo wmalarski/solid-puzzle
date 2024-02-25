@@ -1,6 +1,6 @@
 import type { ComponentProps } from "solid-js";
 
-export const EyeIcon = (props: ComponentProps<"svg">) => {
+export function EyeIcon(props: ComponentProps<"svg">) {
   return (
     <svg
       fill="none"
@@ -18,4 +18,4 @@ export const EyeIcon = (props: ComponentProps<"svg">) => {
       <circle cx="12" cy="12" r="3" />
     </svg>
   );
-};
+}

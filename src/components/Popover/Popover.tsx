@@ -1,7 +1,7 @@
 import type { VariantProps } from "class-variance-authority";
 
 import { Popover as KobaltePopover } from "@kobalte/core";
-import { type Component, type ComponentProps, splitProps } from "solid-js";
+import { type ComponentProps, splitProps } from "solid-js";
 
 import { buttonClass, buttonSplitProps } from "../Button";
 import { twCx } from "../utils/twCva";
@@ -12,7 +12,7 @@ export const PopoverRoot = KobaltePopover.Root;
 export type PopoverTriggerProps = KobaltePopover.PopoverTriggerProps &
   VariantProps<typeof buttonClass>;
 
-export const PopoverTrigger: Component<PopoverTriggerProps> = (props) => {
+export function PopoverTrigger(props: PopoverTriggerProps) {
   const [split, rest] = splitProps(props, buttonSplitProps);
 
   return (
@@ -21,19 +21,15 @@ export const PopoverTrigger: Component<PopoverTriggerProps> = (props) => {
       class={buttonClass({ class: props.class, ...split })}
     />
   );
-};
+}
 
-export const PopoverAnchor: Component<KobaltePopover.PopoverAnchorProps> = (
-  props
-) => {
+export function PopoverAnchor(props: KobaltePopover.PopoverAnchorProps) {
   return <KobaltePopover.Anchor {...props} class={twCx("", props.class)} />;
-};
+}
 
 export const PopoverPortal = KobaltePopover.Portal;
 
-export const PopoverContent: Component<KobaltePopover.PopoverContentProps> = (
-  props
-) => {
+export function PopoverContent(props: KobaltePopover.PopoverContentProps) {
   return (
     <KobaltePopover.Content
       {...props}
@@ -44,17 +40,15 @@ export const PopoverContent: Component<KobaltePopover.PopoverContentProps> = (
       )}
     />
   );
-};
+}
 
-export const PopoverArrow: Component<KobaltePopover.PopoverArrowProps> = (
-  props
-) => {
+export function PopoverArrow(props: KobaltePopover.PopoverArrowProps) {
   return <KobaltePopover.Arrow {...props} class={twCx("", props.class)} />;
-};
+}
 
 export type PopoverHeaderProps = ComponentProps<"div">;
 
-export const PopoverHeader: Component<PopoverHeaderProps> = (props) => {
+export function PopoverHeader(props: PopoverHeaderProps) {
   return (
     <div
       {...props}
@@ -64,37 +58,35 @@ export const PopoverHeader: Component<PopoverHeaderProps> = (props) => {
       )}
     />
   );
-};
+}
 
-export const PopoverCloseButton: Component<
-  KobaltePopover.PopoverCloseButtonProps
-> = (props) => {
+export function PopoverCloseButton(
+  props: KobaltePopover.PopoverCloseButtonProps
+) {
   return (
     <KobaltePopover.CloseButton
       {...props}
       class={twCx("h-4 w-4", props.class)}
     />
   );
-};
+}
 
-export const PopoverTitle: Component<KobaltePopover.PopoverTitleProps> = (
-  props
-) => {
+export function PopoverTitle(props: KobaltePopover.PopoverTitleProps) {
   return (
     <KobaltePopover.Title
       {...props}
       class={twCx("text-base uppercase font-semibold", props.class)}
     />
   );
-};
+}
 
-export const PopoverDescription: Component<
-  KobaltePopover.PopoverDescriptionProps
-> = (props) => {
+export function PopoverDescription(
+  props: KobaltePopover.PopoverDescriptionProps
+) {
   return (
     <KobaltePopover.Description
       {...props}
       class={twCx("text-sm py-1", props.class)}
     />
   );
-};
+}

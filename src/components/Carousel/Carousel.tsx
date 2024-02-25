@@ -23,16 +23,16 @@ export const carouselClass = twCva("carousel", {
 export type CarouselProps = ComponentProps<"div"> &
   VariantProps<typeof carouselClass>;
 
-export const Carousel: Component<CarouselProps> = (props) => {
+export function Carousel(props: CarouselProps) {
   const [split, rest] = splitProps(props, ["isVertical", "snap"]);
 
   return (
     <div {...rest} class={carouselClass({ class: props.class, ...split })} />
   );
-};
+}
 
 export type CarouselItemProps = ComponentProps<"div">;
 
-export const CarouselItem: Component<CarouselItemProps> = (props) => {
+export function CarouselItem(props: CarouselItemProps) {
   return <div {...props} class={twCx("carousel-item", props.class)} />;
-};
+}

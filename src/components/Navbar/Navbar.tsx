@@ -4,9 +4,9 @@ import { twCx } from "../utils/twCva";
 
 export type NavbarProps = ComponentProps<"nav">;
 
-export const Navbar: Component<NavbarProps> = (props) => {
+export function Navbar(props: NavbarProps) {
   return <nav {...props} class={twCx("navbar", props.class)} />;
-};
+}
 
 export type NavbarStartProps = ComponentProps<"div">;
 

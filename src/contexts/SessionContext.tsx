@@ -26,7 +26,7 @@ type SessionProviderProps = {
   value: Session | null | undefined;
 };
 
-export const SessionProvider: Component<SessionProviderProps> = (props) => {
+export function SessionProvider(props: SessionProviderProps) {
   const location = useLocation();
 
   return (
@@ -58,7 +58,7 @@ export const SessionProvider: Component<SessionProviderProps> = (props) => {
       )}
     </Show>
   );
-};
+}
 
 export const useSessionContext = () => {
   return useContext(SessionContext);
@@ -70,9 +70,9 @@ type AuthorizedSessionProviderProps = {
   value: Session | null | undefined;
 };
 
-export const AuthorizedSessionProvider: Component<
-  AuthorizedSessionProviderProps
-> = (props) => {
+export function AuthorizedSessionProvider(
+  props: AuthorizedSessionProviderProps
+) {
   return (
     <SessionProvider
       loadingFallback={props.loadingFallback}
@@ -83,7 +83,7 @@ export const AuthorizedSessionProvider: Component<
       {props.children}
     </SessionProvider>
   );
-};
+}
 
 export const useAuthorizedSessionContext = () => {
   return useContext(AuthorizedSessionContext);

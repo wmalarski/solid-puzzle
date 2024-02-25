@@ -6,7 +6,6 @@ import {
   TextStyle
 } from "pixi.js";
 import {
-  type Component,
   For,
   Show,
   createEffect,
@@ -35,7 +34,7 @@ type CursorGraphicsProps = {
   y: number;
 };
 
-const CursorGraphics: Component<CursorGraphicsProps> = (props) => {
+function CursorGraphics(props: CursorGraphicsProps) {
   const theme = useBoardTheme();
 
   const graphics = new Graphics({ zIndex: theme.cursorGraphicsZIndex });
@@ -90,7 +89,7 @@ const CursorGraphics: Component<CursorGraphicsProps> = (props) => {
   });
 
   return null;
-};
+}
 
 const usePlayerCursor = () => {
   const container = usePixiContainer();
@@ -112,7 +111,7 @@ const usePlayerCursor = () => {
   });
 };
 
-export const RemoteCursors: Component = () => {
+export function RemoteCursors() {
   const app = usePixiApp();
   const theme = useBoardTheme();
 
@@ -159,4 +158,4 @@ export const RemoteCursors: Component = () => {
       )}
     </For>
   );
-};
+}

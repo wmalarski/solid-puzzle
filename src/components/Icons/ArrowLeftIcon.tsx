@@ -1,6 +1,6 @@
 import type { ComponentProps } from "solid-js";
 
-export const ArrowLeftIcon = (props: ComponentProps<"svg">) => {
+export function ArrowLeftIcon(props: ComponentProps<"svg">) {
   return (
     <svg
       fill="none"
@@ -18,4 +18,4 @@ export const ArrowLeftIcon = (props: ComponentProps<"svg">) => {
       <path d="M19 12H5" />
     </svg>
   );
-};
+}

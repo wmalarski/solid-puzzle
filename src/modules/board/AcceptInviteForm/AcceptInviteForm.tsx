@@ -27,7 +27,7 @@ type AcceptInviteFormProps = {
 const defaultPlayerId = nanoid();
 const defaultPlayerColor = randomHexColor();
 
-export const AcceptInviteForm: Component<AcceptInviteFormProps> = (props) => {
+export function AcceptInviteForm(props: AcceptInviteFormProps) {
   const { t } = useI18n();
 
   const submission = useSubmission(setBoardAccessAction);
@@ -105,4 +105,4 @@ export const AcceptInviteForm: Component<AcceptInviteFormProps> = (props) => {
       <PageFooter />
     </FormLayout>
   );
-};
+}

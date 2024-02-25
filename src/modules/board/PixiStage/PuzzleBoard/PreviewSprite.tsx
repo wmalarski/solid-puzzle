@@ -17,7 +17,7 @@ type PreviewGridProps = {
   lines: PuzzleShapeLine[];
 };
 
-export const PreviewGrid: Component<PreviewGridProps> = (props) => {
+export function PreviewGrid(props: PreviewGridProps) {
   const container = usePixiContainer();
   const theme = useBoardTheme();
 
@@ -45,13 +45,13 @@ export const PreviewGrid: Component<PreviewGridProps> = (props) => {
   });
 
   return null;
-};
+}
 
 type PreviewSpriteProps = {
   texture: Texture;
 };
 
-export const PreviewSprite: Component<PreviewSpriteProps> = (props) => {
+export function PreviewSprite(props: PreviewSpriteProps) {
   const container = usePixiContainer();
   const theme = useBoardTheme();
   const selection = usePlayerSelection();
@@ -92,4 +92,4 @@ export const PreviewSprite: Component<PreviewSpriteProps> = (props) => {
   });
 
   return null;
-};
+}

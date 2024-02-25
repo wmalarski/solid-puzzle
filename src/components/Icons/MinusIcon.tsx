@@ -1,6 +1,6 @@
 import type { ComponentProps } from "solid-js";
 
-export const MinusIcon = (props: ComponentProps<"svg">) => {
+export function MinusIcon(props: ComponentProps<"svg">) {
   return (
     <svg
       fill="none"
@@ -17,4 +17,4 @@ export const MinusIcon = (props: ComponentProps<"svg">) => {
       <path d="M5 12h14" />
     </svg>
   );
-};
+}

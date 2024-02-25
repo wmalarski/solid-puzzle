@@ -47,11 +47,11 @@ export const cardClass = twCva("card", {
 
 export type CardProps = ComponentProps<"div"> & VariantProps<typeof cardClass>;
 
-export const Card: Component<CardProps> = (props) => {
+export function Card(props: CardProps) {
   const [split, rest] = splitProps(props, ["variant", "size", "color", "bg"]);
 
   return <div {...rest} class={cardClass({ class: props.class, ...split })} />;
-};
+}
 
 export const cardTitleClass = twCva("card-title");
 
@@ -87,10 +87,10 @@ export const cardActionsClass = twCva("card-actions", {
 export type CardActionsProps = ComponentProps<"div"> &
   VariantProps<typeof cardActionsClass>;
 
-export const CardActions: Component<CardActionsProps> = (props) => {
+export function CardActions(props: CardActionsProps) {
   const [split, rest] = splitProps(props, ["justify"]);
 
   return (
     <div {...rest} class={cardActionsClass({ class: props.class, ...split })} />
   );
-};
+}

@@ -1,6 +1,6 @@
 import type { ComponentProps } from "solid-js";
 
-export const SettingsIcon = (props: ComponentProps<"svg">) => {
+export function SettingsIcon(props: ComponentProps<"svg">) {
   return (
     <svg
       fill="none"
@@ -18,4 +18,4 @@ export const SettingsIcon = (props: ComponentProps<"svg">) => {
       <circle cx="12" cy="12" r="3" />
     </svg>
   );
-};
+}

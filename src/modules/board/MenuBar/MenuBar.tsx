@@ -4,7 +4,7 @@ import {
   useNavigate,
   useSubmission
 } from "@solidjs/router";
-import { type Component, Show, createSignal } from "solid-js";
+import { Show, createSignal } from "solid-js";
 
 import type { BoardModel } from "~/types/models";
 
@@ -37,7 +37,7 @@ import { paths } from "~/utils/paths";
 import { useBoardRevalidate } from "../DataProviders/BoardRevalidate";
 import { usePlayerSelection } from "../DataProviders/SelectionProvider";
 
-const SignOutMenuItem: Component = () => {
+function SignOutMenuItem() {
   const { t } = useI18n();
 
   const action = useAction(signOutAction);
@@ -56,13 +56,13 @@ const SignOutMenuItem: Component = () => {
       </DropdownMenuItemLabel>
     </DropdownMenuItem>
   );
-};
+}
 
 type MenuProps = {
   board: BoardModel;
 };
 
-const Menu: Component<MenuProps> = (props) => {
+function Menu(props: MenuProps) {
   const { t } = useI18n();
 
   const session = useSessionContext();
@@ -158,13 +158,13 @@ const Menu: Component<MenuProps> = (props) => {
       </DropdownMenuRoot>
     </>
   );
-};
+}
 
 type MenuBarProps = {
   board: BoardModel;
 };
 
-export const MenuBar: Component<MenuBarProps> = (props) => {
+export function MenuBar(props: MenuBarProps) {
   const { t } = useI18n();
 
   const session = useSessionContext();
@@ -189,4 +189,4 @@ export const MenuBar: Component<MenuBarProps> = (props) => {
       </Show>
     </div>
   );
-};
+}

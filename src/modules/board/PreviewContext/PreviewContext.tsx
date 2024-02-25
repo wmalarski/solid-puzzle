@@ -27,9 +27,7 @@ type PreviewProviderProps = {
   children: JSX.Element;
 };
 
-export const PreviewContextProvider: Component<PreviewProviderProps> = (
-  props
-) => {
+export function PreviewContextProvider(props: PreviewProviderProps) {
   const value = createPreviewContext();
 
   return (
@@ -37,4 +35,4 @@ export const PreviewContextProvider: Component<PreviewProviderProps> = (
       {props.children}
     </PreviewContext.Provider>
   );
-};
+}

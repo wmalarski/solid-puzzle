@@ -25,7 +25,7 @@ type DeleteBoardFormProps = {
   boardId: string;
 };
 
-const DeleteBoardForm: Component<DeleteBoardFormProps> = (props) => {
+function DeleteBoardForm(props: DeleteBoardFormProps) {
   const { t } = useI18n();
 
   const submission = useSubmission(deleteBoardAction);
@@ -56,13 +56,13 @@ const DeleteBoardForm: Component<DeleteBoardFormProps> = (props) => {
       </footer>
     </form>
   );
-};
+}
 
 type DeleteBoardProps = {
   boardId: string;
 };
 
-const DeleteBoard: Component<DeleteBoardProps> = (props) => {
+function DeleteBoard(props: DeleteBoardProps) {
   const { t } = useI18n();
 
   return (
@@ -81,7 +81,7 @@ const DeleteBoard: Component<DeleteBoardProps> = (props) => {
       </AlertDialogPositioner>
     </AlertDialogPortal>
   );
-};
+}
 
 type DeleteBoardControlledDialogProps = {
   boardId: string;
@@ -89,23 +89,23 @@ type DeleteBoardControlledDialogProps = {
   onIsOpenChange: (isOpen: boolean) => void;
 };
 
-export const DeleteBoardControlledDialog: Component<
-  DeleteBoardControlledDialogProps
-> = (props) => {
+export function DeleteBoardControlledDialog(
+  props: DeleteBoardControlledDialogProps
+) {
   return (
     <AlertDialogRoot onOpenChange={props.onIsOpenChange} open={props.isOpen}>
       <DeleteBoard boardId={props.boardId} />
     </AlertDialogRoot>
   );
-};
+}
 
 type DeleteBoardUncontrolledDialogProps = DialogTriggerProps & {
   boardId: string;
 };
 
-export const DeleteBoardUncontrolledDialog: Component<
-  DeleteBoardUncontrolledDialogProps
-> = (props) => {
+export function DeleteBoardUncontrolledDialog(
+  props: DeleteBoardUncontrolledDialogProps
+) {
   const [split, rest] = splitProps(props, ["boardId"]);
 
   return (
@@ -114,4 +114,4 @@ export const DeleteBoardUncontrolledDialog: Component<
       <DeleteBoard boardId={split.boardId} />
     </AlertDialogRoot>
   );
-};
+}

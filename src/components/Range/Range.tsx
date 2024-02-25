@@ -31,7 +31,7 @@ export const rangeClass = twCva("range", {
 export type RangeProps = ComponentProps<"input"> &
   VariantProps<typeof rangeClass>;
 
-export const Range: Component<RangeProps> = (props) => {
+export function Range(props: RangeProps) {
   const [split, rest] = splitProps(props, ["color", "size"]);
 
   return (
@@ -41,4 +41,4 @@ export const Range: Component<RangeProps> = (props) => {
       class={rangeClass({ class: props.class, ...split })}
     />
   );
-};
+}

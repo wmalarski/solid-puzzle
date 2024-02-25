@@ -29,7 +29,7 @@ type ReloadFormProps = {
   onSuccess: VoidFunction;
 };
 
-export const ReloadForm: Component<ReloadFormProps> = (props) => {
+export function ReloadForm(props: ReloadFormProps) {
   const { t } = useI18n();
 
   const revalidate = useBoardRevalidate();
@@ -75,13 +75,13 @@ export const ReloadForm: Component<ReloadFormProps> = (props) => {
       </div>
     </form>
   );
-};
+}
 
 type ReloadDialogProps = {
   boardId: string;
 };
 
-export const ReloadDialog: Component<ReloadDialogProps> = (props) => {
+export function ReloadDialog(props: ReloadDialogProps) {
   const { t } = useI18n();
 
   const store = usePuzzleStore();
@@ -114,4 +114,4 @@ export const ReloadDialog: Component<ReloadDialogProps> = (props) => {
       </AlertDialogPortal>
     </AlertDialogRoot>
   );
-};
+}

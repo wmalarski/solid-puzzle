@@ -1,7 +1,7 @@
 import type { VariantProps } from "class-variance-authority";
 
 import { Tooltip } from "@kobalte/core";
-import { type Component, splitProps } from "solid-js";
+import { splitProps } from "solid-js";
 
 import { buttonClass, buttonSplitProps } from "../Button";
 import { twCx } from "../utils/twCva";
@@ -9,12 +9,12 @@ import styles from "./Tooltip.module.css";
 
 export type TooltipRootProps = Tooltip.TooltipRootProps;
 
-export const TooltipRoot: Component<TooltipRootProps> = Tooltip.Root;
+export const TooltipRoot = Tooltip.Root;
 
 export type TooltipTriggerProps = Tooltip.TooltipTriggerProps &
   VariantProps<typeof buttonClass>;
 
-export const TooltipTrigger: Component<TooltipTriggerProps> = (props) => {
+export function TooltipTrigger(props: TooltipTriggerProps) {
   const [split, rest] = splitProps(props, buttonSplitProps);
 
   return (
@@ -23,15 +23,15 @@ export const TooltipTrigger: Component<TooltipTriggerProps> = (props) => {
       class={buttonClass({ class: props.class, ...split })}
     />
   );
-};
+}
 
 export type TooltipPortalProps = Tooltip.TooltipPortalProps;
 
-export const TooltipPortal: Component<TooltipPortalProps> = Tooltip.Portal;
+export const TooltipPortal = Tooltip.Portal;
 
 export type TooltipContentProps = Tooltip.TooltipContentProps;
 
-export const TooltipContent: Component<TooltipContentProps> = (props) => {
+export function TooltipContent(props: TooltipContentProps) {
   return (
     <Tooltip.Content
       {...props}
@@ -42,10 +42,10 @@ export const TooltipContent: Component<TooltipContentProps> = (props) => {
       )}
     />
   );
-};
+}
 
 export type TooltipArrowProps = Tooltip.TooltipArrowProps;
 
-export const TooltipArrow: Component<TooltipArrowProps> = (props) => {
+export function TooltipArrow(props: TooltipArrowProps) {
   return <Tooltip.Arrow {...props} class={twCx("", props.class)} />;
-};
+}

@@ -1,7 +1,6 @@
 import { flatten, resolveTemplate, translator } from "@solid-primitives/i18n";
 import {
   type Accessor,
-  type Component,
   type ParentProps,
   createContext,
   createMemo,
@@ -193,13 +192,13 @@ export const I18nContext = createContext<I18nContextValue>({
   }
 });
 
-export const I18nContextProvider: Component<ParentProps> = (props) => {
+export function I18nContextProvider(props: ParentProps) {
   const value = createI18nValue();
 
   return (
     <I18nContext.Provider value={value}>{props.children}</I18nContext.Provider>
   );
-};
+}
 
 export const useI18n = () => {
   return useContext(I18nContext);

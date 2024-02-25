@@ -1,6 +1,6 @@
 import type { ComponentProps } from "solid-js";
 
-export const ListIcon = (props: ComponentProps<"svg">) => {
+export function ListIcon(props: ComponentProps<"svg">) {
   return (
     <svg
       fill="none"
@@ -22,4 +22,4 @@ export const ListIcon = (props: ComponentProps<"svg">) => {
       <line x1="3" x2="3.01" y1="18" y2="18" />
     </svg>
   );
-};
+}

@@ -1,10 +1,10 @@
-import { type Component, createMemo } from "solid-js";
+import { createMemo } from "solid-js";
 
 import { MoonIcon } from "~/components/Icons/MoonIcon";
 import { SunIcon } from "~/components/Icons/SunIcon";
 import { useThemeContext } from "~/contexts/ThemeContext";
 
-export const ThemeToggle: Component = () => {
+export function ThemeToggle() {
   const { theme, updateTheme } = useThemeContext();
 
   const isLight = createMemo(() => {
@@ -22,4 +22,4 @@ export const ThemeToggle: Component = () => {
       <MoonIcon class="swap-off size-5" />
     </label>
   );
-};
+}

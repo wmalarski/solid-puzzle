@@ -1,4 +1,4 @@
-import { type Component, Show } from "solid-js";
+import { Show } from "solid-js";
 
 import {
   TextFieldErrorMessage,
@@ -34,7 +34,7 @@ type ConfigFieldsProps = {
   showName: boolean;
 };
 
-export const ConfigFields: Component<ConfigFieldsProps> = (props) => {
+export function ConfigFields(props: ConfigFieldsProps) {
   const { t } = useI18n();
 
   return (
@@ -112,4 +112,4 @@ export const ConfigFields: Component<ConfigFieldsProps> = (props) => {
       </Show>
     </div>
   );
-};
+}

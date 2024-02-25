@@ -1,16 +1,16 @@
 import type { VariantProps } from "class-variance-authority";
 
-import { type Component, type ComponentProps, splitProps } from "solid-js";
+import { type ComponentProps, splitProps } from "solid-js";
 
 import { twCva, twCx } from "../utils/twCva";
 
 export type AvatarGroupProps = ComponentProps<"div">;
 
-export const AvatarGroup: Component<AvatarGroupProps> = (props) => {
+export function AvatarGroup(props: AvatarGroupProps) {
   return (
     <div {...props} class={twCx("avatar-group -space-x-6", props.class)} />
   );
-};
+}
 
 export const avatarClass = twCva("avatar", {
   defaultVariants: {
@@ -31,13 +31,13 @@ export const avatarClass = twCva("avatar", {
 export type AvatarProps = ComponentProps<"div"> &
   VariantProps<typeof avatarClass>;
 
-export const Avatar: Component<AvatarProps> = (props) => {
+export function Avatar(props: AvatarProps) {
   const [split, rest] = splitProps(props, ["placeholder", "presence"]);
 
   return (
     <div {...rest} class={avatarClass({ class: props.class, ...split })} />
   );
-};
+}
 
 export const avatarContentClass = twCva("", {
   defaultVariants: {
@@ -75,7 +75,7 @@ export const avatarContentClass = twCva("", {
 export type AvatarContentProps = ComponentProps<"div"> &
   VariantProps<typeof avatarContentClass>;
 
-export const AvatarContent: Component<AvatarContentProps> = (props) => {
+export function AvatarContent(props: AvatarContentProps) {
   const [split, rest] = splitProps(props, [
     "size",
     "variant",
@@ -89,4 +89,4 @@ export const AvatarContent: Component<AvatarContentProps> = (props) => {
       class={avatarContentClass({ class: props.class, ...split })}
     />
   );
-};
+}

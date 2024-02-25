@@ -102,9 +102,7 @@ const PlayerSelectionContext = createContext<PlayerSelectionContextState>({
   setRemoteSender: () => void 0
 });
 
-export const PlayerSelectionProvider: Component<
-  PlayerSelectionProviderProps
-> = (props) => {
+export function PlayerSelectionProvider(props: PlayerSelectionProviderProps) {
   const value = createPlayerSelectionState(() => props);
 
   return (
@@ -112,7 +110,7 @@ export const PlayerSelectionProvider: Component<
       {props.children}
     </PlayerSelectionContext.Provider>
   );
-};
+}
 
 export const usePlayerSelection = () => {
   return useContext(PlayerSelectionContext);

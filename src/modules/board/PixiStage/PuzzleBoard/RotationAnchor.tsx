@@ -19,7 +19,7 @@ type RotationAnchorProps = {
   rotationOffset: number;
 };
 
-export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
+export function RotationAnchor(props: RotationAnchorProps) {
   const app = usePixiApp();
   const theme = useBoardTheme();
   const container = usePixiContainer();
@@ -92,4 +92,4 @@ export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
   });
 
   return null;
-};
+}

@@ -1,4 +1,4 @@
-import { type Component, For, createSignal } from "solid-js";
+import { For, createSignal } from "solid-js";
 
 import { twCx } from "~/components/utils/twCva";
 import { useI18n } from "~/contexts/I18nContext";
@@ -13,7 +13,7 @@ type ImageGridProps = {
   scrollable: boolean;
 };
 
-export const ImageGrid: Component<ImageGridProps> = (props) => {
+export function ImageGrid(props: ImageGridProps) {
   const { t } = useI18n();
 
   const [value, setValue] = createSignal(
@@ -54,4 +54,4 @@ export const ImageGrid: Component<ImageGridProps> = (props) => {
       </div>
     </div>
   );
-};
+}

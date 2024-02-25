@@ -1,10 +1,4 @@
-import {
-  type Component,
-  ErrorBoundary,
-  Show,
-  Suspense,
-  createSignal
-} from "solid-js";
+import { ErrorBoundary, Show, Suspense, createSignal } from "solid-js";
 
 import type { BoardAccess } from "~/server/access/rpc";
 import type { BoardModel, FragmentModel } from "~/types/models";
@@ -29,7 +23,7 @@ type ClientBoardProps = {
   board: BoardModel;
 };
 
-const ClientBoard: Component<ClientBoardProps> = (props) => {
+function ClientBoard(props: ClientBoardProps) {
   const [canvas, setCanvas] = createSignal<HTMLCanvasElement>();
 
   return (
@@ -44,7 +38,7 @@ const ClientBoard: Component<ClientBoardProps> = (props) => {
       </Show>
     </>
   );
-};
+}
 
 type BoardProps = {
   board: BoardModel;
@@ -52,7 +46,7 @@ type BoardProps = {
   fragments: FragmentModel[];
 };
 
-export const Board: Component<BoardProps> = (props) => {
+export function Board(props: BoardProps) {
   return (
     <ErrorBoundary fallback={ErrorFallback}>
       <Suspense fallback={<BoardPlaceholder />}>
@@ -86,4 +80,4 @@ export const Board: Component<BoardProps> = (props) => {
       </Suspense>
     </ErrorBoundary>
   );
-};
+}

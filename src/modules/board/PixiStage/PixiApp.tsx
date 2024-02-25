@@ -33,7 +33,7 @@ type PixiAppProviderProps = {
   children: JSX.Element;
 };
 
-export const PixiAppProvider: Component<PixiAppProviderProps> = (props) => {
+export function PixiAppProvider(props: PixiAppProviderProps) {
   const theme = useThemeContext();
   const boardTheme = useBoardTheme();
 
@@ -101,4 +101,4 @@ export const PixiAppProvider: Component<PixiAppProviderProps> = (props) => {
       </ContainerContext.Provider>
     </PixiAppContext.Provider>
   );
-};
+}

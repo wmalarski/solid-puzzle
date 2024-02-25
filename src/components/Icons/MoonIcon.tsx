@@ -1,6 +1,6 @@
 import type { ComponentProps } from "solid-js";
 
-export const MoonIcon = (props: ComponentProps<"svg">) => {
+export function MoonIcon(props: ComponentProps<"svg">) {
   return (
     <svg
       fill="none"
@@ -17,4 +17,4 @@ export const MoonIcon = (props: ComponentProps<"svg">) => {
       <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
     </svg>
   );
-};
+}

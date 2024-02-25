@@ -34,9 +34,7 @@ type BoardThemeProviderProps = {
   children: JSX.Element;
 };
 
-export const BoardThemeProvider: Component<BoardThemeProviderProps> = (
-  props
-) => {
+export function BoardThemeProvider(props: BoardThemeProviderProps) {
   const value = createBoardThemeContext();
 
   return (
@@ -44,4 +42,4 @@ export const BoardThemeProvider: Component<BoardThemeProviderProps> = (
       {props.children}
     </BoardThemeContext.Provider>
   );
-};
+}

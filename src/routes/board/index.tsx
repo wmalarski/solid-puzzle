@@ -1,5 +1,3 @@
-import type { Component } from "solid-js";
-
 import {
   type RouteDefinition,
   createAsync,
@@ -53,7 +51,7 @@ export const route = {
   }
 } satisfies RouteDefinition;
 
-const BoardFetching: Component = () => {
+function BoardFetching() {
   const location = useLocation();
 
   const session = useAuthorizedSessionContext();
@@ -81,7 +79,7 @@ const BoardFetching: Component = () => {
       </Suspense>
     </ErrorBoundary>
   );
-};
+}
 
 export default function BoardPage() {
   const { t } = useI18n();

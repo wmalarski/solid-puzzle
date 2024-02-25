@@ -1,6 +1,6 @@
 import type { VariantProps } from "class-variance-authority";
 
-import { type Component, type ComponentProps, splitProps } from "solid-js";
+import { type ComponentProps, splitProps } from "solid-js";
 
 import { useI18n } from "~/contexts/I18nContext";
 
@@ -10,7 +10,7 @@ import { ArrowRightIcon } from "../Icons/ArrowRightIcon";
 import { DotsHorizontalIcon } from "../Icons/DotsHorizontalIcon";
 import { twCx } from "../utils/twCva";
 
-export const PaginationRoot: Component<ComponentProps<"nav">> = (props) => {
+export function PaginationRoot(props: ComponentProps<"nav">) {
   const [, rest] = splitProps(props, ["class"]);
 
   return (
@@ -21,9 +21,9 @@ export const PaginationRoot: Component<ComponentProps<"nav">> = (props) => {
       {...rest}
     />
   );
-};
+}
 
-export const PaginationContent: Component<ComponentProps<"ul">> = (props) => {
+export function PaginationContent(props: ComponentProps<"ul">) {
   const [, rest] = splitProps(props, ["class"]);
 
   return (
@@ -32,20 +32,20 @@ export const PaginationContent: Component<ComponentProps<"ul">> = (props) => {
       {...rest}
     />
   );
-};
+}
 
-export const PaginationItem: Component<ComponentProps<"li">> = (props) => {
+export function PaginationItem(props: ComponentProps<"li">) {
   const [, rest] = splitProps(props, ["class"]);
 
   return <li class={twCx("", props.class)} {...rest} />;
-};
+}
 
 type PaginationLinkProps = ComponentProps<"a"> &
   Omit<VariantProps<typeof buttonClass>, "shape" | "variant"> & {
     isActive?: boolean;
   };
 
-export const PaginationLink: Component<PaginationLinkProps> = (props) => {
+export function PaginationLink(props: PaginationLinkProps) {
   const [, rest] = splitProps(props, ["class", "isActive", "size", "color"]);
 
   return (
@@ -65,9 +65,9 @@ export const PaginationLink: Component<PaginationLinkProps> = (props) => {
       />
     </PaginationItem>
   );
-};
+}
 
-export const PaginationPrevious: typeof PaginationLink = (props) => {
+export function PaginationPrevious(props: PaginationLinkProps) {
   const [, rest] = splitProps(props, ["class"]);
 
   const { t } = useI18n();
@@ -82,9 +82,9 @@ export const PaginationPrevious: typeof PaginationLink = (props) => {
       <span>{t("pagination.previous")}</span>
     </PaginationLink>
   );
-};
+}
 
-export const PaginationNext: typeof PaginationLink = (props) => {
+export function PaginationNext(props: PaginationLinkProps) {
   const [, rest] = splitProps(props, ["class"]);
 
   const { t } = useI18n();
@@ -99,11 +99,9 @@ export const PaginationNext: typeof PaginationLink = (props) => {
       <ArrowRightIcon class="size-4" />
     </PaginationLink>
   );
-};
+}
 
-export const PaginationEllipsis: Component<ComponentProps<"span">> = (
-  props
-) => {
+export function PaginationEllipsis(props: ComponentProps<"span">) {
   const [, rest] = splitProps(props, ["class"]);
 
   const { t } = useI18n();
@@ -118,4 +116,4 @@ export const PaginationEllipsis: Component<ComponentProps<"span">> = (
       <span class="sr-only">{t("pagination.more")}</span>
     </span>
   );
-};
+}

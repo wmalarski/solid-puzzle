@@ -1,4 +1,4 @@
-import { type Component, createMemo } from "solid-js";
+import { createMemo } from "solid-js";
 
 import type { BoardAccess } from "~/server/access/rpc";
 import type { BoardModel } from "~/types/models";
@@ -21,7 +21,7 @@ import { usePuzzleStore } from "../DataProviders/PuzzleProvider";
 import { usePreviewContext } from "../PreviewContext";
 import { AvatarsDialog } from "./AvatarsDialog";
 
-const ShareButton: Component = () => {
+function ShareButton() {
   const { t } = useI18n();
 
   const onShare = async () => {
@@ -61,9 +61,9 @@ const ShareButton: Component = () => {
       </TooltipPortal>
     </TooltipRoot>
   );
-};
+}
 
-const PreviewVisibilityToggle: Component = () => {
+function PreviewVisibilityToggle() {
   const { t } = useI18n();
 
   const preview = usePreviewContext();
@@ -113,14 +113,14 @@ const PreviewVisibilityToggle: Component = () => {
       </TooltipPortal>
     </TooltipRoot>
   );
-};
+}
 
 type TopBarProps = {
   board: BoardModel;
   boardAccess: BoardAccess;
 };
 
-export const TopBar: Component<TopBarProps> = (props) => {
+export function TopBar(props: TopBarProps) {
   const store = usePuzzleStore();
 
   const finishedPercent = () => {
@@ -147,4 +147,4 @@ export const TopBar: Component<TopBarProps> = (props) => {
       <AvatarsDialog />
     </div>
   );
-};
+}

@@ -1,5 +1,5 @@
 import { Meta, Title } from "@solidjs/meta";
-import { type Component, createMemo } from "solid-js";
+import { createMemo } from "solid-js";
 import { getRequestEvent } from "solid-js/web";
 
 import { useI18n } from "~/contexts/I18nContext";
@@ -9,7 +9,7 @@ type HeadProps = {
   title?: string;
 };
 
-export const Head: Component<HeadProps> = (props) => {
+export function Head(props: HeadProps) {
   const { t } = useI18n();
 
   const title = createMemo(() => {
@@ -42,4 +42,4 @@ export const Head: Component<HeadProps> = (props) => {
       <Meta content="460" property="og:image:height" />
     </>
   );
-};
+}
