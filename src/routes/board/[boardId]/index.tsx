@@ -1,12 +1,6 @@
 import { type RouteDefinition, createAsync, useParams } from "@solidjs/router";
 import { clientOnly } from "@solidjs/start";
-import {
-  type Component,
-  ErrorBoundary,
-  Show,
-  Suspense,
-  createMemo
-} from "solid-js";
+import { ErrorBoundary, Show, Suspense, createMemo } from "solid-js";
 
 import type { GetBoardAccessLoaderReturn } from "~/server/access/client";
 import type { BoardAccess } from "~/server/access/rpc";
@@ -24,10 +18,11 @@ const Board = clientOnly(() => import("~/modules/board/Board"));
 
 type BoardQueryProps = {
   boardAccess?: GetBoardAccessLoaderReturn;
+  boardId: string;
   data: SelectBoardLoaderReturn;
 };
 
-const BoardQuery: Component<BoardQueryProps> = (props) => {
+function BoardQuery(props: BoardQueryProps) {
   const session = useSessionContext();
 
   const access = createMemo<BoardAccess | null>(() => {
@@ -43,7 +38,7 @@ const BoardQuery: Component<BoardQueryProps> = (props) => {
     }
 
     return {
-      boardId: props.data.board.id,
+      boardId: props.boardId,
       playerColor: metadata.color,
       playerId: user.id,
       userName: metadata.name
@@ -60,18 +55,19 @@ const BoardQuery: Component<BoardQueryProps> = (props) => {
       </Show>
     </main>
   );
-};
+}
 
 export const route = {
   load: async ({ params }) => {
     await Promise.all([
       getSessionLoader(),
-      getBoardAccessLoader(params.boardId)
+      getBoardAccessLoader(params.boardId),
+      selectBoardLoader(params.boardId)
     ]);
   }
 } satisfies RouteDefinition;
 
-const BoardSection = () => {
+export default function BoardSection() {
   const params = useParams();
 
   const session = createAsync(() => getSessionLoader());
@@ -88,7 +84,11 @@ const BoardSection = () => {
           <Suspense>
             <Show when={data()}>
               {(data) => (
-                <BoardQuery boardAccess={boardAccess()} data={data()} />
+                <BoardQuery
+                  boardAccess={boardAccess()}
+                  boardId={params.boardId}
+                  data={data()}
+                />
               )}
             </Show>
           </Suspense>
@@ -96,6 +96,4 @@ const BoardSection = () => {
       </SessionProvider>
     </>
   );
-};
-
-export default BoardSection;
+}
