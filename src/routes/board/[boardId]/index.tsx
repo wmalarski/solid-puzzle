@@ -12,7 +12,6 @@ import type { GetBoardAccessLoaderReturn } from "~/server/access/client";
 import type { BoardAccess } from "~/server/access/rpc";
 import type { SelectBoardLoaderReturn } from "~/server/board/client";
 
-import { Skeleton } from "~/components/Skeleton";
 import { SessionProvider, useSessionContext } from "~/contexts/SessionContext";
 import { AcceptInviteForm } from "~/modules/board/AcceptInviteForm";
 import { ErrorFallback } from "~/modules/common/ErrorFallback";
@@ -26,14 +25,6 @@ const Board = clientOnly(() => import("~/modules/board/Board"));
 type BoardQueryProps = {
   boardAccess?: GetBoardAccessLoaderReturn;
   data: SelectBoardLoaderReturn;
-};
-
-const BoardPlaceholder: Component = () => {
-  return (
-    <div class="h-screen w-screen p-6">
-      <Skeleton class="size-full" />
-    </div>
-  );
 };
 
 const BoardQuery: Component<BoardQueryProps> = (props) => {
@@ -94,10 +85,10 @@ export default function BoardSection() {
   return (
     <>
       <Head />
-      <SessionProvider loadingFallback={<BoardPlaceholder />} value={session()}>
+      <SessionProvider value={session()}>
         <ErrorBoundary fallback={ErrorFallback}>
-          <Suspense fallback={<BoardPlaceholder />}>
-            <Show fallback={<BoardPlaceholder />} when={data()}>
+          <Suspense>
+            <Show when={data()}>
               {(data) => (
                 <BoardQuery boardAccess={boardAccess()} data={data()} />
               )}
