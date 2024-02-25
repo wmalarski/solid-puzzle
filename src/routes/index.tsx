@@ -1,6 +1,7 @@
 import { type RouteDefinition, createAsync } from "@solidjs/router";
 
 import { SessionProvider } from "~/contexts/SessionContext";
+import { Head } from "~/modules/common/Head";
 import { PageLayout } from "~/modules/common/Layout";
 import { TopNavbar } from "~/modules/common/TopNavbar";
 import { InsertBoard } from "~/modules/createBoard/InsertBoard";
@@ -19,11 +20,14 @@ export default function Home() {
   const insertArgs = createAsync(() => getInsertBoardArgsLoader());
 
   return (
-    <SessionProvider value={session()}>
-      <PageLayout>
-        <TopNavbar />
-        <InsertBoard initialValues={insertArgs()} />
-      </PageLayout>
-    </SessionProvider>
+    <>
+      <Head />
+      <SessionProvider value={session()}>
+        <PageLayout>
+          <TopNavbar />
+          <InsertBoard initialValues={insertArgs()} />
+        </PageLayout>
+      </SessionProvider>
+    </>
   );
 }

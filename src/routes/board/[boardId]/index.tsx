@@ -16,6 +16,7 @@ import { SessionProvider, useSessionContext } from "~/contexts/SessionContext";
 import { AcceptInviteForm } from "~/modules/board/AcceptInviteForm";
 import { BoardPlaceholder } from "~/modules/board/BoardPlaceholder";
 import { ErrorFallback } from "~/modules/common/ErrorFallback";
+import { Head } from "~/modules/common/Head";
 import { getBoardAccessLoader } from "~/server/access/client";
 import { getSessionLoader } from "~/server/auth/client";
 import { selectBoardLoader } from "~/server/board/client";
@@ -51,12 +52,15 @@ const BoardQuery: Component<BoardQueryProps> = (props) => {
   });
 
   return (
-    <Show
-      fallback={<AcceptInviteForm board={props.data.board} />}
-      when={access()}
-    >
-      {(access) => <Board {...props.data} boardAccess={access()} />}
-    </Show>
+    <>
+      <Head title={props.data.board.name} />
+      <Show
+        fallback={<AcceptInviteForm board={props.data.board} />}
+        when={access()}
+      >
+        {(access) => <Board {...props.data} boardAccess={access()} />}
+      </Show>
+    </>
   );
 };
 

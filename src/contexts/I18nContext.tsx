@@ -34,7 +34,8 @@ const en_dict = {
     signUpSuccess: {
       description:
         "Congratulations! your account has been successfully created",
-      label: "Success"
+      label: "Success",
+      title: "Sign Up Success"
     }
   },
   board: {
@@ -114,12 +115,9 @@ const en_dict = {
     madeBy: "Made by wmalarski"
   },
   home: {
-    addBoard: "Add board",
     boards: "Boards",
-    error: "Error",
     signIn: "Sign In",
     signUp: "Sign Up",
-    solve: "Solve",
     title: "Puzzle"
   },
   info: {
@@ -145,7 +143,8 @@ const en_dict = {
     empty: "Empty",
     error: "Loading list error",
     go: "Play",
-    loading: "Loading"
+    loading: "Loading",
+    title: "Puzzle List"
   },
   notFound: {
     title: "Not Found"
@@ -157,6 +156,11 @@ const en_dict = {
     nextLabel: "Go to next page",
     previous: "Previous",
     previousLabel: "Go to previous page"
+  },
+  seo: {
+    description:
+      "Solid Jigsaw Puzzle app is a non-trivial demo application built using Solid Start.",
+    title: "Solid Jigsaw Puzzle"
   }
 };
 

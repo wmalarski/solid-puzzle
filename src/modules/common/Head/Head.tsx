@@ -13,13 +13,11 @@ export const Head: Component<HeadProps> = (props) => {
   const { t } = useI18n();
 
   const title = createMemo(() => {
-    return props.title
-      ? `${props.title} - ${t("home.title")}`
-      : t("home.title");
+    return props.title ? `${props.title} - ${t("seo.title")}` : t("seo.title");
   });
 
   const description = createMemo(() => {
-    return props.description ?? t("home.title");
+    return props.description ?? t("seo.description");
   });
 
   const url = createMemo(() => {

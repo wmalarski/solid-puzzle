@@ -16,12 +16,14 @@ import {
   transform
 } from "valibot";
 
+import { useI18n } from "~/contexts/I18nContext";
 import {
   AuthorizedSessionProvider,
   useAuthorizedSessionContext
 } from "~/contexts/SessionContext";
 import { BoardsList, BoardsListLoading } from "~/modules/boards/BoardList";
 import { ErrorFallback } from "~/modules/common/ErrorFallback";
+import { Head } from "~/modules/common/Head";
 import { PageLayout } from "~/modules/common/Layout";
 import { TopNavbar } from "~/modules/common/TopNavbar";
 import { getSessionLoader } from "~/server/auth/client";
@@ -82,19 +84,24 @@ const BoardFetching: Component = () => {
 };
 
 export default function BoardPage() {
+  const { t } = useI18n();
+
   const session = createAsync(() => getSessionLoader());
 
   return (
-    <Suspense fallback={<BoardsListLoading />}>
-      <AuthorizedSessionProvider
-        loadingFallback={<BoardsListLoading />}
-        value={session()}
-      >
-        <PageLayout>
-          <TopNavbar />
-          <BoardFetching />
-        </PageLayout>
-      </AuthorizedSessionProvider>
-    </Suspense>
+    <>
+      <Head title={t("list.title")} />
+      <Suspense fallback={<BoardsListLoading />}>
+        <AuthorizedSessionProvider
+          loadingFallback={<BoardsListLoading />}
+          value={session()}
+        >
+          <PageLayout>
+            <TopNavbar />
+            <BoardFetching />
+          </PageLayout>
+        </AuthorizedSessionProvider>
+      </Suspense>
+    </>
   );
 }

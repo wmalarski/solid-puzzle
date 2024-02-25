@@ -22,7 +22,7 @@ export default function App() {
         <ThemeProvider>
           <I18nContextProvider>
             <MetaProvider>
-              <Head description="" />
+              <Head />
               <Suspense>{props.children}</Suspense>
               <Suspense>
                 <ToastProvider />
