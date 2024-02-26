@@ -1,3 +1,5 @@
+import type { ComponentProps } from "solid-js";
+
 import { createMemo } from "solid-js";
 
 import type { BoardAccess } from "~/server/access/rpc";
@@ -84,11 +86,28 @@ function PreviewVisibilityToggle() {
     );
   });
 
+  const enterKey = "Enter";
+
+  const onKeyDown: ComponentProps<"button">["onKeyDown"] = (event) => {
+    if (event.key === enterKey) {
+      preview.setIsPreviewVisible(true);
+    }
+  };
+
+  const onKeyUp: ComponentProps<"button">["onKeyUp"] = (event) => {
+    if (event.key === enterKey) {
+      preview.setIsPreviewVisible(false);
+    }
+  };
+
   return (
     <TooltipRoot>
       <TooltipTrigger
         aria-label={label()}
         color={preview.isPreviewVisible() ? "accent" : "secondary"}
+        onFocusOut={onMouseUp}
+        onKeyPress={onKeyDown}
+        onKeyUp={onKeyUp}
         onMouseDown={onMouseDown}
         onMouseLeave={onMouseUp}
         onMouseUp={onMouseUp}
