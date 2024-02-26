@@ -1,6 +1,13 @@
 import { type RouteDefinition, createAsync, useParams } from "@solidjs/router";
 import { clientOnly } from "@solidjs/start";
-import { ErrorBoundary, Show, Suspense, createMemo } from "solid-js";
+import {
+  ErrorBoundary,
+  Show,
+  Suspense,
+  createMemo,
+  createSignal,
+  onMount
+} from "solid-js";
 
 import type { GetBoardAccessLoaderReturn } from "~/server/access/client";
 import type { BoardAccess } from "~/server/access/rpc";
@@ -21,6 +28,12 @@ type BoardQueryProps = {
 };
 
 function BoardQuery(props: BoardQueryProps) {
+  const [isMounted, setIsMounted] = createSignal(false);
+
+  onMount(() => {
+    setIsMounted(true);
+  });
+
   const session = useSessionContext();
 
   const data = createAsync(() => selectBoardLoader(props.boardId));
@@ -51,11 +64,13 @@ function BoardQuery(props: BoardQueryProps) {
         fallback={<AcceptInviteForm board={data()!.board} />}
         when={access()}
       >
-        <Board
-          board={data()!.board}
-          boardAccess={access()!}
-          fragments={data()!.fragments}
-        />
+        <Show when={isMounted()}>
+          <Board
+            board={data()!.board}
+            boardAccess={access()!}
+            fragments={data()!.fragments}
+          />
+        </Show>
       </Show>
     </Show>
   );
