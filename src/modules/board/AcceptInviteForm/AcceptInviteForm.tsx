@@ -24,12 +24,11 @@ type AcceptInviteFormProps = {
   board: BoardModel;
 };
 
-const defaultPlayerId = nanoid();
-const defaultPlayerColor = randomHexColor();
-
 export function AcceptInviteForm(props: AcceptInviteFormProps) {
   const { t } = useI18n();
 
+  const defaultPlayerId = nanoid();
+  const defaultPlayerColor = randomHexColor();
   const submission = useSubmission(setBoardAccessAction);
 
   return (
