@@ -62,8 +62,9 @@ const createPlayerPresenceState = (args: () => PlayerPresenceProviderProps) => {
     const supabase = getClientSupabase();
     const player = currentPlayer();
     const boardId = args().boardAccess.boardId;
+    const channelName = `${PRESENCE_CHANNEL_NAME}:${boardId}`;
 
-    const channel = supabase.channel(PRESENCE_CHANNEL_NAME, {
+    const channel = supabase.channel(channelName, {
       config: { presence: { key: boardId } }
     });
 
