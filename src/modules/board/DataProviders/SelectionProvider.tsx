@@ -1,5 +1,4 @@
 import {
-  type Component,
   type JSX,
   createContext,
   createMemo,

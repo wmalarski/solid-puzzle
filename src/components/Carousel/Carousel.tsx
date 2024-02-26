@@ -1,6 +1,6 @@
 import type { VariantProps } from "class-variance-authority";
 
-import { type Component, type ComponentProps, splitProps } from "solid-js";
+import { type ComponentProps, splitProps } from "solid-js";
 
 import { twCva, twCx } from "../utils/twCva";
 

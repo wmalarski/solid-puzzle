@@ -6,7 +6,6 @@ import {
   REALTIME_POSTGRES_CHANGES_LISTEN_EVENT
 } from "@supabase/supabase-js";
 import {
-  type Component,
   createContext,
   createSignal,
   onCleanup,

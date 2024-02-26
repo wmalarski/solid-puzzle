@@ -1,10 +1,4 @@
-import {
-  type Component,
-  type JSX,
-  createContext,
-  createSignal,
-  useContext
-} from "solid-js";
+import { type JSX, createContext, createSignal, useContext } from "solid-js";
 
 const createPreviewContext = () => {
   const [isPreviewVisible, setIsPreviewVisible] = createSignal(false);

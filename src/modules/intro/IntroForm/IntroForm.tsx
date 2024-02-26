@@ -14,10 +14,10 @@ import { useI18n } from "~/contexts/I18nContext";
 import { updateUserAction } from "~/server/auth/client";
 import { randomHexColor } from "~/utils/colors";
 
-const defaultPlayerColor = randomHexColor();
-
 export function IntroForm() {
   const { t } = useI18n();
+
+  const defaultPlayerColor = randomHexColor();
 
   const submission = useSubmission(updateUserAction);
 

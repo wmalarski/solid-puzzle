@@ -1,4 +1,4 @@
-import type { Component, ComponentProps } from "solid-js";
+import type { ComponentProps } from "solid-js";
 
 import { twCx } from "../utils/twCva";
 

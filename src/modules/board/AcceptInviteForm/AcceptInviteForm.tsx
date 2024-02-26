@@ -1,6 +1,6 @@
 import { useSubmission } from "@solidjs/router";
 import { nanoid } from "nanoid";
-import { type Component, Show } from "solid-js";
+import { Show } from "solid-js";
 
 import type { BoardModel } from "~/types/models";
 

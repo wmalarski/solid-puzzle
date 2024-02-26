@@ -1,6 +1,6 @@
 import { createAsync } from "@solidjs/router";
 import { Assets, type FederatedPointerEvent, type Texture } from "pixi.js";
-import { type Component, For, Show, onCleanup, onMount } from "solid-js";
+import { For, Show, onCleanup, onMount } from "solid-js";
 
 import type { BoardModel } from "~/types/models";
 

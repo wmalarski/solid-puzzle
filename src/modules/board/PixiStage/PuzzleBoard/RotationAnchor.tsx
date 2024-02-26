@@ -4,7 +4,7 @@ import {
   type FederatedPointerEvent,
   Graphics
 } from "pixi.js";
-import { type Component, createEffect, onCleanup, onMount } from "solid-js";
+import { createEffect, onCleanup, onMount } from "solid-js";
 
 import { usePlayerPresence } from "../../DataProviders/PresenceProvider";
 import { useBoardTheme } from "../BoardTheme";

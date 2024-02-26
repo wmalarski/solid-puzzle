@@ -1,12 +1,5 @@
 import { Container, Graphics, Matrix, type Texture } from "pixi.js";
-import {
-  type Component,
-  Show,
-  createEffect,
-  createMemo,
-  onCleanup,
-  onMount
-} from "solid-js";
+import { Show, createEffect, createMemo, onCleanup, onMount } from "solid-js";
 
 import type { PuzzleFragmentShape } from "~/utils/getPuzzleFragments";
 

@@ -1,7 +1,6 @@
 import type { VariantProps } from "class-variance-authority";
 
 import {
-  type Component,
   type ComponentProps,
   createContext,
   createMemo,

@@ -1,4 +1,4 @@
-import { type Component, type JSX, createContext, useContext } from "solid-js";
+import { type JSX, createContext, useContext } from "solid-js";
 
 const createBoardThemeContext = () => {
   return {

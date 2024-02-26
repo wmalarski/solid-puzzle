@@ -5,7 +5,6 @@ import {
 } from "@supabase/supabase-js";
 import { nanoid } from "nanoid";
 import {
-  type Component,
   type JSX,
   createContext,
   createMemo,

@@ -1,6 +1,5 @@
 import { Application, Container } from "pixi.js";
 import {
-  type Component,
   type JSX,
   createContext,
   createEffect,

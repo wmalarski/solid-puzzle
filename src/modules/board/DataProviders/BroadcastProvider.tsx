@@ -3,7 +3,7 @@ import {
   REALTIME_LISTEN_TYPES,
   REALTIME_SUBSCRIBE_STATES
 } from "@supabase/supabase-js";
-import { type Component, onCleanup, onMount } from "solid-js";
+import { onCleanup, onMount } from "solid-js";
 
 import { getClientSupabase } from "~/utils/supabase";
 

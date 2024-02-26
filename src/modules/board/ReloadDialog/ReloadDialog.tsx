@@ -2,7 +2,7 @@ import type { ComponentProps } from "solid-js";
 
 import { createWritableMemo } from "@solid-primitives/memo";
 import { useAction, useSubmission } from "@solidjs/router";
-import { type Component, Show } from "solid-js";
+import { Show } from "solid-js";
 
 import { Alert, AlertIcon } from "~/components/Alert";
 import {

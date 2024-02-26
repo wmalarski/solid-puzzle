@@ -1,5 +1,5 @@
 import { useSubmission } from "@solidjs/router";
-import { type Component, Show, splitProps } from "solid-js";
+import { Show, splitProps } from "solid-js";
 
 import type { DialogTriggerProps } from "~/components/Dialog";
 
