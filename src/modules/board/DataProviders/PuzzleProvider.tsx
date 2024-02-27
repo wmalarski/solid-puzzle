@@ -47,9 +47,11 @@ const isLockedInPlace = ({ fragment, shapes }: IsLockedInPlaceArgs) => {
     return false;
   }
   const distance = getDistance(fragment, shape.min);
-  const isRightAngle =
-    (fragment.rotation + 2 * Math.PI) % (2 * Math.PI) < Math.PI / 32;
-  const isLocked = distance < 20 && isRightAngle;
+
+  const absAngle = Math.abs(fragment.rotation);
+  const closeTo0 = absAngle < Math.PI / 32;
+  const closeTo2Pi = 2 * Math.PI - absAngle < Math.PI / 32;
+  const isLocked = distance < 20 && (closeTo0 || closeTo2Pi);
 
   return isLocked;
 };
