@@ -15,13 +15,13 @@ export const supabaseMiddleware = async (event: FetchEvent) => {
       auth: { flowType: "pkce" },
       cookies: {
         get: (key) => {
-          return getCookie(event, key);
+          return getCookie(event.nativeEvent, key);
         },
         remove: (key, options) => {
-          deleteCookie(event, key, options);
+          deleteCookie(event.nativeEvent, key, options);
         },
         set: (key, value, options) => {
-          setCookie(event, key, value, options);
+          setCookie(event.nativeEvent, key, value, options);
         }
       }
     }

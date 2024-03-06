@@ -16,7 +16,7 @@ export type AppTheme = Output<ReturnType<typeof appThemeSchema>>;
 
 export const getAppThemeCookie = () => {
   const event = getRequestEventOrThrow();
-  return getCookie(event, APP_THEME_COOKIE_NAME) as AppTheme;
+  return getCookie(event.nativeEvent, APP_THEME_COOKIE_NAME) as AppTheme;
 };
 
 export const getAppThemeServerLoader = () => {

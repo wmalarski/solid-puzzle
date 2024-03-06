@@ -111,7 +111,7 @@ export const insertBoardServerAction = async (form: FormData) => {
   }
 
   setCookie(
-    event,
+    event.nativeEvent,
     INSERT_BOARD_ARGS_COOKIE_NAME,
     JSON.stringify(parsed.output),
     INSERT_BOARD_ARGS_COOKIE_OPTIONS

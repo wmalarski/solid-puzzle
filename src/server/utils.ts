@@ -60,7 +60,7 @@ export const getParsedCookie = async <
   name: string,
   schema: TSchema
 ) => {
-  const cookie = getCookie(event, name);
+  const cookie = getCookie(event.nativeEvent, name);
 
   if (!cookie) {
     return null;

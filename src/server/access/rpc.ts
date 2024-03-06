@@ -48,7 +48,7 @@ export const setBoardAccessServerAction = async (form: FormData) => {
   }
 
   setCookie(
-    event,
+    event.nativeEvent,
     getBoardAccessCookieName(parsed.output.boardId),
     JSON.stringify(parsed.output),
     BOARD_ACCESS_COOKIE_OPTIONS
