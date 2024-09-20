@@ -15,13 +15,20 @@
     "supabase",
     "tailwindcss",
     "tanstack",
+    "tseslint",
     "undici",
     "valibot",
     "vinxi",
     "wmalarski"
   ],
   "tailwindCSS.experimental.classRegex": [
-    ["twCva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
-    ["twCx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
+    [
+      "twCva\\(([^)]*)\\)",
+      "[\"'`]([^\"'`]*).*?[\"'`]"
+    ],
+    [
+      "twCx\\(([^)]*)\\)",
+      "(?:'|\"|`)([^']*)(?:'|\"|`)"
+    ]
   ]
 }
