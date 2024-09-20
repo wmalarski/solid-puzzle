@@ -2,7 +2,7 @@ import pluginJs from "@eslint/js";
 import * as tsParser from "@typescript-eslint/parser";
 import jsxA11y from "eslint-plugin-jsx-a11y";
 import perfectionist from "eslint-plugin-perfectionist";
-// import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
+import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
 import pluginPromise from "eslint-plugin-promise";
 import solid from "eslint-plugin-solid/configs/recommended";
 import tailwind from "eslint-plugin-tailwindcss";
@@ -25,28 +25,12 @@ export default [
     }
   },
   perfectionist.configs["recommended-natural"],
-  ...tailwind.configs["flat/recommended"]
-  // eslintPluginPrettierRecommended
+  ...tailwind.configs["flat/recommended"],
+  { ...eslintPluginPrettierRecommended }
 ];
 
 /*
 {
-  "env": {
-    "browser": true,
-    "es2021": true,
-    "node": true
-  },
-  "extends": ["plugin:prettier/recommended"],
-  "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "ecmaFeatures": {
-      "jsx": true
-    },
-    "ecmaVersion": 12,
-    "project": ["tsconfig.json"],
-    "sourceType": "module"
-  },
-  "plugins": ["solid", "perfectionist"],
   "rules": {
     "no-await-in-loop": "error",
     "no-constant-binary-expression": "error",
