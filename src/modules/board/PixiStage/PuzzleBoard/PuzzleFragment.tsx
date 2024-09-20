@@ -1,9 +1,9 @@
 import { Container, Graphics, Matrix, type Texture } from "pixi.js";
-import { Show, createEffect, createMemo, onCleanup, onMount } from "solid-js";
+import { createEffect, createMemo, onCleanup, onMount, Show } from "solid-js";
 
 import type { PuzzleFragmentShape } from "~/utils/getPuzzleFragments";
 
-import { type Point2D, getCenterFromPoints } from "~/utils/geometry";
+import { getCenterFromPoints, type Point2D } from "~/utils/geometry";
 
 import { usePlayerPresence } from "../../DataProviders/PresenceProvider";
 import {

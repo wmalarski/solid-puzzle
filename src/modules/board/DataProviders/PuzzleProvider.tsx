@@ -1,8 +1,8 @@
 import {
-  type JSX,
   createContext,
   createMemo,
   createSignal,
+  type JSX,
   useContext
 } from "solid-js";
 import { createStore, produce } from "solid-js/store";
@@ -13,9 +13,9 @@ import type { BoardModel, FragmentModel } from "~/types/models";
 import { useUpdateFragment } from "~/server/board/client";
 import { getDistance } from "~/utils/geometry";
 import {
+  getPuzzleFragments,
   type PuzzleCurveConfig,
-  type PuzzleFragmentShape,
-  getPuzzleFragments
+  type PuzzleFragmentShape
 } from "~/utils/getPuzzleFragments";
 
 export type FragmentState = {

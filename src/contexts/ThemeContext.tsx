@@ -1,6 +1,6 @@
 import { createWritableMemo } from "@solid-primitives/memo";
 import { createAsync } from "@solidjs/router";
-import { type JSX, createContext, useContext } from "solid-js";
+import { createContext, type JSX, useContext } from "solid-js";
 
 import { getAppThemeLoader } from "~/server/theme/client";
 import { APP_THEME_COOKIE_NAME } from "~/server/theme/const";

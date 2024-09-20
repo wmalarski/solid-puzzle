@@ -23,7 +23,7 @@ export type TextFieldLabelTextProps = ComponentProps<"span">;
 
 export function TextFieldLabelText(props: TextFieldLabelTextProps) {
   return (
-    // eslint-disable-next-line jsx-a11y/label-has-associated-control
+     
     <span {...props} class={twCx("label-text", props.class)} />
   );
 }

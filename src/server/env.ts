@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/consistent-type-definitions */
+ 
 import type { FetchEvent } from "@solidjs/start/server/types";
 
 import * as v from "valibot";

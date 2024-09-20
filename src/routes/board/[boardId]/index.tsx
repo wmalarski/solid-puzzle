@@ -1,12 +1,12 @@
-import { type RouteDefinition, createAsync, useParams } from "@solidjs/router";
+import { createAsync, type RouteDefinition, useParams } from "@solidjs/router";
 import { clientOnly } from "@solidjs/start";
 import {
-  ErrorBoundary,
-  Show,
-  Suspense,
   createMemo,
   createSignal,
-  onMount
+  ErrorBoundary,
+  onMount,
+  Show,
+  Suspense
 } from "solid-js";
 
 import type { GetBoardAccessLoaderReturn } from "~/server/access/client";

@@ -8,8 +8,8 @@ import { createEffect, onCleanup, onMount } from "solid-js";
 
 import { usePlayerPresence } from "../../DataProviders/PresenceProvider";
 import { useBoardTheme } from "../BoardTheme";
-import { usePixiApp, usePixiContainer } from "../PixiApp";
 import { RIGHT_BUTTON } from "../constants";
+import { usePixiApp, usePixiContainer } from "../PixiApp";
 
 type RotationAnchorProps = {
   container: Container;

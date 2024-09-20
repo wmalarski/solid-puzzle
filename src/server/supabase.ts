@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/consistent-type-definitions */
+ 
 import type { FetchEvent } from "@solidjs/start/server";
 import type { Session, SupabaseClient } from "@supabase/supabase-js";
 
@@ -36,7 +36,7 @@ export const supabaseMiddleware = async (event: FetchEvent) => {
 declare module "@solidjs/start/server" {
   interface RequestEventLocals {
     supabase: SupabaseClient<Database>;
-    supabaseSession: Session | null;
+    supabaseSession: null | Session;
   }
 }
 

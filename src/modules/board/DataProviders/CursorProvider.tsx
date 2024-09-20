@@ -1,4 +1,4 @@
-import { type JSX, createContext, createSignal, useContext } from "solid-js";
+import { createContext, createSignal, type JSX, useContext } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 
 export type PlayerCursorState = {
@@ -6,9 +6,9 @@ export type PlayerCursorState = {
   y: number;
 };
 
-export type PlayerCursorPayload = PlayerCursorState & {
+export type PlayerCursorPayload = {
   playerId: string;
-};
+} & PlayerCursorState;
 
 type PlayersCursorState = Record<string, PlayerCursorState | undefined>;
 

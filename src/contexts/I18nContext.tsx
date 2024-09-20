@@ -1,10 +1,10 @@
 import { flatten, resolveTemplate, translator } from "@solid-primitives/i18n";
 import {
   type Accessor,
-  type ParentProps,
   createContext,
   createMemo,
   createSignal,
+  type ParentProps,
   useContext
 } from "solid-js";
 

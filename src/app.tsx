@@ -2,7 +2,7 @@
 import { MetaProvider } from "@solidjs/meta";
 import { Router } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start";
-import { Suspense, lazy } from "solid-js";
+import { lazy, Suspense } from "solid-js";
 
 import "./app.css";
 import { I18nContextProvider } from "./contexts/I18nContext";

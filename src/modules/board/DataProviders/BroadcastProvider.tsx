@@ -8,10 +8,10 @@ import { onCleanup, onMount } from "solid-js";
 import { getClientSupabase } from "~/utils/supabase";
 
 import { useBoardRevalidate } from "./BoardRevalidate";
+import { REALTIME_THROTTLE_TIME } from "./const";
 import { type PlayerCursorPayload, usePlayerCursors } from "./CursorProvider";
 import { type FragmentState, usePuzzleStore } from "./PuzzleProvider";
 import { type SelectionPayload, usePlayerSelection } from "./SelectionProvider";
-import { REALTIME_THROTTLE_TIME } from "./const";
 
 const CHANNEL_NAME = "rooms:broadcast";
 const SELECTION_EVENT_NAME = "rooms:selection";

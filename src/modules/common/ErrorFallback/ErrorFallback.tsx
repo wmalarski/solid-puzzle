@@ -11,7 +11,7 @@ export const ErrorFallback = (err: unknown, reset: VoidFunction) => {
   const { t } = useI18n();
 
   onMount(() => {
-    // eslint-disable-next-line no-console
+     
     console.error("ERROR", err);
   });
 

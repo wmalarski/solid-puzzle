@@ -6,12 +6,12 @@ import {
   TextStyle
 } from "pixi.js";
 import {
-  For,
-  Show,
   createEffect,
   createMemo,
+  For,
   onCleanup,
-  onMount
+  onMount,
+  Show
 } from "solid-js";
 
 import { getTextColor } from "~/utils/colors";

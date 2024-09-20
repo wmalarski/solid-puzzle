@@ -1,11 +1,11 @@
 import type { Session } from "@supabase/supabase-js";
 
 import { Navigate, useLocation } from "@solidjs/router";
-import { type JSX, Show, createContext, useContext } from "solid-js";
+import { createContext, type JSX, Show, useContext } from "solid-js";
 
 import { paths } from "~/utils/paths";
 
-const SessionContext = createContext<() => Session | null>(() => {
+const SessionContext = createContext<() => null | Session>(() => {
   throw new Error("SessionContext not defined");
 });
 
@@ -17,7 +17,7 @@ type SessionProviderProps = {
   children: JSX.Element;
   loadingFallback?: JSX.Element;
   unauthorizedFallback?: JSX.Element;
-  value: Session | null | undefined;
+  value: null | Session | undefined;
 };
 
 export function SessionProvider(props: SessionProviderProps) {
@@ -61,7 +61,7 @@ export const useSessionContext = () => {
 type AuthorizedSessionProviderProps = {
   children: JSX.Element;
   loadingFallback?: JSX.Element;
-  value: Session | null | undefined;
+  value: null | Session | undefined;
 };
 
 export function AuthorizedSessionProvider(

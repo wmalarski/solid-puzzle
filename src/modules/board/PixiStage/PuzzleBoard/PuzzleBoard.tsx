@@ -1,13 +1,13 @@
 import { createAsync } from "@solidjs/router";
 import { Assets, type FederatedPointerEvent, type Texture } from "pixi.js";
-import { For, Show, onCleanup, onMount } from "solid-js";
+import { For, onCleanup, onMount, Show } from "solid-js";
 
 import type { BoardModel } from "~/types/models";
 
 import { usePuzzleStore } from "../../DataProviders/PuzzleProvider";
 import { usePlayerSelection } from "../../DataProviders/SelectionProvider";
-import { usePixiContainer } from "../PixiApp";
 import { RIGHT_BUTTON } from "../constants";
+import { usePixiContainer } from "../PixiApp";
 import { usePreventMenu } from "../usePreventMenu";
 import { useStageTransform } from "../useStageTransform";
 import { PreviewGrid, PreviewSprite } from "./PreviewSprite";

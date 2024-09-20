@@ -1,4 +1,4 @@
-import { ErrorBoundary, Show, Suspense, createSignal } from "solid-js";
+import { createSignal, ErrorBoundary, Show, Suspense } from "solid-js";
 
 import type { BoardAccess } from "~/server/access/rpc";
 import type { BoardModel, FragmentModel } from "~/types/models";

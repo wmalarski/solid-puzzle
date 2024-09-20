@@ -8,8 +8,8 @@ import { createSignal, onCleanup, onMount } from "solid-js";
 
 import { type Point2D, subtractPoint } from "~/utils/geometry";
 
-import { usePixiApp } from "../PixiApp";
 import { RIGHT_BUTTON } from "../constants";
+import { usePixiApp } from "../PixiApp";
 
 type DragConstraintArgs = {
   eventPosition: Point2D;

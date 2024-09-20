@@ -1,10 +1,10 @@
 import { Application, Container } from "pixi.js";
 import {
-  type JSX,
   createContext,
   createEffect,
   createMemo,
   createResource,
+  type JSX,
   onCleanup,
   onMount,
   untrack,

@@ -16,8 +16,8 @@ import {
 } from "~/components/SimplePagination";
 import { useI18n } from "~/contexts/I18nContext";
 import {
-  type SelectBoardsLoaderReturn,
-  deleteBoardAction
+  deleteBoardAction,
+  type SelectBoardsLoaderReturn
 } from "~/server/board/client";
 import { paths } from "~/utils/paths";
 

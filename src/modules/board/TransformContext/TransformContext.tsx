@@ -1,4 +1,4 @@
-import { type JSX, createContext, createSignal, useContext } from "solid-js";
+import { createContext, createSignal, type JSX, useContext } from "solid-js";
 
 import type { Point2D } from "~/utils/geometry";
 

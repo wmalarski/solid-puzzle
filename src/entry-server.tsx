@@ -1,4 +1,4 @@
-import { StartServer, createHandler } from "@solidjs/start/server";
+import { createHandler, StartServer } from "@solidjs/start/server";
 
 import { getAppThemeCookie } from "./server/theme/rpc";
 

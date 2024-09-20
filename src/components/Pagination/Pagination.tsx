@@ -40,10 +40,10 @@ export function PaginationItem(props: ComponentProps<"li">) {
   return <li class={twCx("", props.class)} {...rest} />;
 }
 
-type PaginationLinkProps = ComponentProps<"a"> &
-  Omit<VariantProps<typeof buttonClass>, "shape" | "variant"> & {
+type PaginationLinkProps = {
     isActive?: boolean;
-  };
+  } &
+  ComponentProps<"a"> & Omit<VariantProps<typeof buttonClass>, "shape" | "variant">;
 
 export function PaginationLink(props: PaginationLinkProps) {
   const [, rest] = splitProps(props, ["class", "isActive", "size", "color"]);

@@ -1,4 +1,4 @@
-import { type RouteDefinition, createAsync } from "@solidjs/router";
+import { createAsync, type RouteDefinition } from "@solidjs/router";
 
 import { SessionProvider } from "~/contexts/SessionContext";
 import { Head } from "~/modules/common/Head";
