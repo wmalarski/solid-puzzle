@@ -7,7 +7,7 @@ import { PuzzleIcon } from "~/components/Icons/PuzzleIcon";
 import { Link } from "~/components/Link";
 import { Navbar, NavbarEnd, NavbarStart } from "~/components/Navbar";
 import { useI18n } from "~/contexts/I18nContext";
-import { useSessionContext } from "~/contexts/SessionContext";
+import { useUserContext } from "~/contexts/UserContext";
 import { signOutAction } from "~/server/auth/client";
 import { paths } from "~/utils/paths";
 
@@ -31,7 +31,7 @@ function SignOutButton() {
 export function TopNavbar() {
   const { t } = useI18n();
 
-  const session = useSessionContext();
+  const user = useUserContext();
 
   return (
     <Navbar>
@@ -54,7 +54,7 @@ export function TopNavbar() {
               </LinkButton>
             </>
           }
-          when={session()}
+          when={user()}
         >
           <LinkButton
             class="flex text-sm uppercase"

@@ -8,15 +8,15 @@ import * as v from "valibot";
 
 import { useI18n } from "~/contexts/I18nContext";
 import {
-  AuthorizedSessionProvider,
-  useAuthorizedSessionContext
-} from "~/contexts/SessionContext";
+  AuthorizedUserProvider,
+  useAuthorizedUserContext
+} from "~/contexts/UserContext";
 import { BoardsList, BoardsListLoading } from "~/modules/boards/BoardList";
 import { ErrorFallback } from "~/modules/common/ErrorFallback";
 import { Head } from "~/modules/common/Head";
 import { PageLayout } from "~/modules/common/Layout";
 import { TopNavbar } from "~/modules/common/TopNavbar";
-import { getSessionLoader } from "~/server/auth/client";
+import { getUserLoader } from "~/server/auth/client";
 import { selectBoardsLoader } from "~/server/board/client";
 
 const PAGE_LIMIT = 10;
@@ -34,8 +34,8 @@ const boardsRouteSchema = () => {
 export const route = {
   load: async ({ location }) => {
     const { page } = await v.parseAsync(boardsRouteSchema(), location.query);
-    const session = await getSessionLoader();
-    const userId = session?.user.id;
+    const session = await getUserLoader();
+    const userId = session?.id;
 
     if (userId) {
       await selectBoardsLoader({
@@ -50,7 +50,7 @@ export const route = {
 function BoardFetching() {
   const location = useLocation();
 
-  const session = useAuthorizedSessionContext();
+  const user = useAuthorizedUserContext();
 
   const page = createMemo(() => {
     return v.parse(boardsRouteSchema(), location.query).page;
@@ -60,7 +60,7 @@ function BoardFetching() {
     selectBoardsLoader({
       limit: PAGE_LIMIT,
       offset: PAGE_LIMIT * page(),
-      userId: session().user.id
+      userId: user().id
     })
   );
 
@@ -80,13 +80,13 @@ function BoardFetching() {
 export default function BoardPage() {
   const { t } = useI18n();
 
-  const session = createAsync(() => getSessionLoader());
+  const session = createAsync(() => getUserLoader());
 
   return (
     <>
       <Head title={t("list.title")} />
       <Suspense fallback={<BoardsListLoading />}>
-        <AuthorizedSessionProvider
+        <AuthorizedUserProvider
           loadingFallback={<BoardsListLoading />}
           value={session()}
         >
@@ -94,7 +94,7 @@ export default function BoardPage() {
             <TopNavbar />
             <BoardFetching />
           </PageLayout>
-        </AuthorizedSessionProvider>
+        </AuthorizedUserProvider>
       </Suspense>
     </>
   );

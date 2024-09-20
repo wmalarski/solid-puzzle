@@ -1,5 +1,5 @@
 import type { FetchEvent } from "@solidjs/start/server";
-import type { Session, SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient, User } from "@supabase/supabase-js";
 
 import { createServerClient } from "@supabase/ssr";
 import { deleteCookie, getCookie, setCookie } from "vinxi/http";
@@ -26,16 +26,16 @@ export const supabaseMiddleware = async (event: FetchEvent) => {
     }
   );
 
-  const result = await supabase.auth.getSession();
+  const user = await supabase.auth.getUser();
 
   event.locals.supabase = supabase;
-  event.locals.supabaseSession = result.data.session;
+  event.locals.supabaseUser = user.data.user;
 };
 
 declare module "@solidjs/start/server" {
   interface RequestEventLocals {
     supabase: SupabaseClient<Database>;
-    supabaseSession: null | Session;
+    supabaseUser: null | User;
   }
 }
 

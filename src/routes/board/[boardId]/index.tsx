@@ -12,12 +12,12 @@ import {
 import type { GetBoardAccessLoaderReturn } from "~/server/access/client";
 import type { BoardAccess } from "~/server/access/rpc";
 
-import { SessionProvider, useSessionContext } from "~/contexts/SessionContext";
+import { UserProvider, useUserContext } from "~/contexts/UserContext";
 import { AcceptInviteForm } from "~/modules/board/AcceptInviteForm";
 import { ErrorFallback } from "~/modules/common/ErrorFallback";
 import { Head } from "~/modules/common/Head";
 import { getBoardAccessLoader } from "~/server/access/client";
-import { getSessionLoader } from "~/server/auth/client";
+import { getUserLoader } from "~/server/auth/client";
 import { selectBoardLoader } from "~/server/board/client";
 
 const Board = clientOnly(() => import("~/modules/board/Board"));
@@ -34,7 +34,7 @@ function BoardQuery(props: BoardQueryProps) {
     setIsMounted(true);
   });
 
-  const session = useSessionContext();
+  const user = useUserContext();
 
   const data = createAsync(() => selectBoardLoader(props.boardId));
 
@@ -44,16 +44,16 @@ function BoardQuery(props: BoardQueryProps) {
       return cookieAccess;
     }
 
-    const user = session()?.user;
-    const metadata = user?.user_metadata;
-    if (!user || !metadata?.name || !metadata.color) {
+    const userUntracked = user();
+    const metadata = userUntracked?.user_metadata;
+    if (!userUntracked || !metadata?.name || !metadata.color) {
       return null;
     }
 
     return {
       boardId: props.boardId,
       playerColor: metadata.color,
-      playerId: user.id,
+      playerId: userUntracked.id,
       userName: metadata.name
     };
   });
@@ -78,30 +78,27 @@ function BoardQuery(props: BoardQueryProps) {
 
 export const route = {
   load: async ({ params }) => {
-    await Promise.all([
-      getSessionLoader(),
-      getBoardAccessLoader(params.boardId)
-    ]);
+    await Promise.all([getUserLoader(), getBoardAccessLoader(params.boardId)]);
   }
 } satisfies RouteDefinition;
 
 export default function BoardSection() {
   const params = useParams();
 
-  const session = createAsync(() => getSessionLoader());
+  const user = createAsync(() => getUserLoader());
 
   const boardAccess = createAsync(() => getBoardAccessLoader(params.boardId));
 
   return (
     <>
       <Head />
-      <SessionProvider value={session()}>
+      <UserProvider value={user()}>
         <ErrorBoundary fallback={ErrorFallback}>
           <Suspense>
             <BoardQuery boardAccess={boardAccess()} boardId={params.boardId} />
           </Suspense>
         </ErrorBoundary>
-      </SessionProvider>
+      </UserProvider>
     </>
   );
 }

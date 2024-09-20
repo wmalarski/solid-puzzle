@@ -4,7 +4,7 @@ import { Show } from "solid-js";
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
 import { useI18n } from "~/contexts/I18nContext";
-import { useSessionContext } from "~/contexts/SessionContext";
+import { useUserContext } from "~/contexts/UserContext";
 import { insertBoardAction } from "~/server/board/client";
 
 import { type BoardConfigFields, ConfigFields } from "../ConfigFields";
@@ -16,7 +16,7 @@ type CreateBoardFormProps = {
 export function CreateBoardForm(props: CreateBoardFormProps) {
   const { t } = useI18n();
 
-  const session = useSessionContext();
+  const user = useUserContext();
 
   const submission = useSubmission(insertBoardAction);
 
@@ -41,7 +41,7 @@ export function CreateBoardForm(props: CreateBoardFormProps) {
         isLoading={submission.pending}
         type="submit"
       >
-        <Show fallback={t("createBoard.link")} when={session()}>
+        <Show fallback={t("createBoard.link")} when={user()}>
           {t("createBoard.button")}
         </Show>
       </Button>

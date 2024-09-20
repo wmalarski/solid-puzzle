@@ -1,84 +1,80 @@
-import type { Session } from "@supabase/supabase-js";
+import type { User } from "@supabase/supabase-js";
 
 import { Navigate, useLocation } from "@solidjs/router";
 import { createContext, type JSX, Show, useContext } from "solid-js";
 
 import { paths } from "~/utils/paths";
 
-const SessionContext = createContext<() => null | Session>(() => {
+const UserContext = createContext<() => null | User>(() => {
   throw new Error("SessionContext not defined");
 });
 
-const AuthorizedSessionContext = createContext<() => Session>(() => {
+const AuthorizedUserContext = createContext<() => User>(() => {
   throw new Error("AuthorizedSessionContext not defined");
 });
 
-type SessionProviderProps = {
+type UserProviderProps = {
   children: JSX.Element;
   loadingFallback?: JSX.Element;
   unauthorizedFallback?: JSX.Element;
-  value: null | Session | undefined;
+  value: null | undefined | User;
 };
 
-export function SessionProvider(props: SessionProviderProps) {
+export function UserProvider(props: UserProviderProps) {
   const location = useLocation();
 
   return (
     <Show
       fallback={props.loadingFallback}
-      when={props.value !== undefined ? { session: props.value } : null}
+      when={props.value !== undefined ? { user: props.value } : null}
     >
       {(accessor) => (
-        <SessionContext.Provider value={() => accessor().session}>
+        <UserContext.Provider value={() => accessor().user}>
           <Show
             fallback={props.unauthorizedFallback || props.children}
-            when={accessor().session}
+            when={accessor().user}
           >
-            <AuthorizedSessionContext.Provider
-              value={() => accessor().session!}
-            >
+            <AuthorizedUserContext.Provider value={() => accessor().user!}>
               <Show
                 fallback={<Navigate href={paths.intro} />}
                 when={
-                  accessor().session?.user.user_metadata.name ||
+                  accessor().user?.user_metadata.name ||
                   location.pathname === paths.intro
                 }
               >
                 {props.children}
               </Show>
-            </AuthorizedSessionContext.Provider>
+            </AuthorizedUserContext.Provider>
           </Show>
-        </SessionContext.Provider>
+        </UserContext.Provider>
       )}
     </Show>
   );
 }
 
-export const useSessionContext = () => {
-  return useContext(SessionContext);
+export const useUserContext = () => {
+  return useContext(UserContext);
 };
 
-type AuthorizedSessionProviderProps = {
+type AuthorizedUserProviderProps = {
   children: JSX.Element;
   loadingFallback?: JSX.Element;
-  value: null | Session | undefined;
+  value: null | undefined | User;
 };
 
-export function AuthorizedSessionProvider(
-  props: AuthorizedSessionProviderProps
-) {
+export function AuthorizedUserProvider(props: AuthorizedUserProviderProps) {
   return (
-    <SessionProvider
+    <UserProvider
       loadingFallback={props.loadingFallback}
       unauthorizedFallback={<Navigate href={paths.signIn} />}
       // eslint-disable-next-line solid/reactivity
       value={props.value}
     >
       {props.children}
-    </SessionProvider>
+    </UserProvider>
   );
 }
 
-export const useAuthorizedSessionContext = () => {
-  return useContext(AuthorizedSessionContext);
+export const useAuthorizedUserContext = () => {
+  return useContext(AuthorizedUserContext);
 };

@@ -27,7 +27,7 @@ import { MenuIcon } from "~/components/Icons/MenuIcon";
 import { SettingsIcon } from "~/components/Icons/SettingsIcon";
 import { TrashIcon } from "~/components/Icons/TrashIcon";
 import { useI18n } from "~/contexts/I18nContext";
-import { useSessionContext } from "~/contexts/SessionContext";
+import { useUserContext } from "~/contexts/UserContext";
 import { DeleteBoardControlledDialog } from "~/modules/boards/DeleteDialog";
 import { SettingsControlledDialog } from "~/modules/boards/SettingsDialog";
 import { signOutAction } from "~/server/auth/client";
@@ -65,7 +65,7 @@ type MenuProps = {
 function Menu(props: MenuProps) {
   const { t } = useI18n();
 
-  const session = useSessionContext();
+  const user = useUserContext();
   const selection = usePlayerSelection();
   const boardRevalidate = useBoardRevalidate();
 
@@ -98,7 +98,7 @@ function Menu(props: MenuProps) {
 
   return (
     <>
-      <Show when={props.board.owner_id === session()?.user.id}>
+      <Show when={props.board.owner_id === user()?.id}>
         <DeleteBoardControlledDialog
           boardId={props.board.id}
           isOpen={isDeleteOpen()}
@@ -137,7 +137,7 @@ function Menu(props: MenuProps) {
                 {t("board.boards")}
               </DropdownMenuItemLabel>
             </DropdownMenuItem>
-            <Show when={props.board.owner_id === session()?.user.id}>
+            <Show when={props.board.owner_id === user()?.id}>
               <DropdownMenuItem onSelect={onSettingsClick}>
                 <DropdownMenuItemLabel>
                   <SettingsIcon class="size-4" />
@@ -167,7 +167,7 @@ type MenuBarProps = {
 export function MenuBar(props: MenuBarProps) {
   const { t } = useI18n();
 
-  const session = useSessionContext();
+  const user = useUserContext();
 
   return (
     <div class="absolute left-4 top-4 rounded-3xl bg-base-300 p-1 shadow-lg">
@@ -183,7 +183,7 @@ export function MenuBar(props: MenuBarProps) {
             <HomeIcon class="size-5" />
           </LinkButton>
         }
-        when={session()}
+        when={user()}
       >
         <Menu board={props.board} />
       </Show>

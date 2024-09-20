@@ -109,7 +109,7 @@ export const insertBoardServerAction = async (form: FormData) => {
     INSERT_BOARD_ARGS_COOKIE_OPTIONS
   );
 
-  if (!event.locals.supabaseSession) {
+  if (!event.locals.supabaseUser) {
     throw redirect(paths.signIn, {
       revalidate: INSERT_BOARD_ARGS_CACHE_KEY
     });

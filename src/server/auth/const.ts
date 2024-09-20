@@ -1,1 +1,1 @@
-export const SESSION_CACHE_KEY = "session";
+export const USER_CACHE_KEY = "user";

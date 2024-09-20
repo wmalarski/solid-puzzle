@@ -13,7 +13,7 @@ import {
   rpcParseIssueResult,
   rpcSuccessResult
 } from "../utils";
-import { SESSION_CACHE_KEY } from "./const";
+import { USER_CACHE_KEY } from "./const";
 
 const getRedirectUrl = (event: RequestEvent, path: string) => {
   const origin = new URL(event.request.url).origin;
@@ -70,7 +70,9 @@ export const signInServerAction = async (form: FormData) => {
     return rpcErrorResult(result.error);
   }
 
-  throw redirect(paths.home, { revalidate: SESSION_CACHE_KEY });
+  throw redirect(paths.home, {
+    revalidate: USER_CACHE_KEY
+  });
 };
 
 export const signOutServerAction = async () => {
@@ -82,7 +84,9 @@ export const signOutServerAction = async () => {
     return rpcErrorResult(result.error);
   }
 
-  throw redirect(paths.signIn, { revalidate: SESSION_CACHE_KEY });
+  throw redirect(paths.signIn, {
+    revalidate: USER_CACHE_KEY
+  });
 };
 
 export const updateUserServerAction = async (form: FormData) => {
@@ -108,10 +112,12 @@ export const updateUserServerAction = async (form: FormData) => {
     return rpcErrorResult(result.error);
   }
 
-  return redirect(paths.home, { revalidate: SESSION_CACHE_KEY });
+  return redirect(paths.home, {
+    revalidate: USER_CACHE_KEY
+  });
 };
 
-export const getSessionServerLoader = async () => {
+export const getUserServerLoader = async () => {
   const event = getRequestEventOrThrow();
-  return await Promise.resolve(event.locals.supabaseSession);
+  return await Promise.resolve(event.locals.supabaseUser);
 };
