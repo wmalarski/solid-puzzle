@@ -1,50 +1,50 @@
 .overlay {
-    animation: overlayHide 250ms ease 100ms forwards;
+  animation: overlayHide 250ms ease 100ms forwards;
+}
+.overlay[data-expanded] {
+  animation: overlayShow 250ms ease;
+}
+
+.content {
+  animation: contentHide 300ms ease-in forwards;
+}
+.content[data-expanded] {
+  animation: contentShow 300ms ease-out;
+}
+
+@keyframes overlayShow {
+  from {
+    opacity: 0;
   }
-  .overlay[data-expanded] {
-    animation: overlayShow 250ms ease;
+  to {
+    opacity: 1;
   }
-  
-  .content {
-    animation: contentHide 300ms ease-in forwards;
+}
+@keyframes overlayHide {
+  from {
+    opacity: 1;
   }
-  .content[data-expanded] {
-    animation: contentShow 300ms ease-out;
+  to {
+    opacity: 0;
   }
-  
-  @keyframes overlayShow {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
+}
+@keyframes contentShow {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
   }
-  @keyframes overlayHide {
-    from {
-      opacity: 1;
-    }
-    to {
-      opacity: 0;
-    }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
-  @keyframes contentShow {
-    from {
-      opacity: 0;
-      transform: scale(0.96);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
+}
+@keyframes contentHide {
+  from {
+    opacity: 1;
+    transform: scale(1);
   }
-  @keyframes contentHide {
-    from {
-      opacity: 1;
-      transform: scale(1);
-    }
-    to {
-      opacity: 0;
-      transform: scale(0.96);
-    }
+  to {
+    opacity: 0;
+    transform: scale(0.96);
   }
+}

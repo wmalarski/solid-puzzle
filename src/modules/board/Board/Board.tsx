@@ -61,7 +61,7 @@ export function Board(props: BoardProps) {
                 >
                   <BroadcastProvider boardId={props.boardAccess.boardId} />
                   <PreviewContextProvider>
-                    <main class="size-screen relative">
+                    <main class="relative h-screen w-screen">
                       <ClientBoard board={props.board} />
                       <TopBar
                         board={props.board}

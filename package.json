@@ -6,7 +6,7 @@
     "start": "vinxi start",
     "=== LINTERS ===": "",
     "lint": "eslint src --fix",
-    "prettier": "prettier 'src/**/*.(ts|tsx)' --write",
+    "prettier": "prettier src/**/* --write",
     "tsc": "tsc --noEmit",
     "code-check": "pnpm lint --max-warnings=0 && pnpm tsc"
   },

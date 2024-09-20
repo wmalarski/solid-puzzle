@@ -41,9 +41,9 @@ export function PaginationItem(props: ComponentProps<"li">) {
 }
 
 type PaginationLinkProps = {
-    isActive?: boolean;
-  } &
-  ComponentProps<"a"> & Omit<VariantProps<typeof buttonClass>, "shape" | "variant">;
+  isActive?: boolean;
+} & ComponentProps<"a"> &
+  Omit<VariantProps<typeof buttonClass>, "shape" | "variant">;
 
 export function PaginationLink(props: PaginationLinkProps) {
   const [, rest] = splitProps(props, ["class", "isActive", "size", "color"]);

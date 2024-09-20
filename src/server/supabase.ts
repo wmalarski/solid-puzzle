@@ -1,4 +1,3 @@
- 
 import type { FetchEvent } from "@solidjs/start/server";
 import type { Session, SupabaseClient } from "@supabase/supabase-js";
 

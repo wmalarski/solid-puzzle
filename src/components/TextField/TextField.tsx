@@ -22,10 +22,7 @@ export function TextFieldLabel(props: TextFieldLabelProps) {
 export type TextFieldLabelTextProps = ComponentProps<"span">;
 
 export function TextFieldLabelText(props: TextFieldLabelTextProps) {
-  return (
-     
-    <span {...props} class={twCx("label-text", props.class)} />
-  );
+  return <span {...props} class={twCx("label-text", props.class)} />;
 }
 
 export type TextFieldDescriptionProps = ComponentProps<"span">;

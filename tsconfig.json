@@ -9,6 +9,7 @@
     "jsxImportSource": "solid-js",
     "allowJs": true,
     "sourceMap": true,
+    "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
     "types": ["vinxi/client"],
