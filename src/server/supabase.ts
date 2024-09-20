@@ -1,8 +1,8 @@
 import type { FetchEvent } from "@solidjs/start/server";
 import type { SupabaseClient, User } from "@supabase/supabase-js";
 
-import { createServerClient } from "@supabase/ssr";
-import { deleteCookie, getCookie, setCookie } from "vinxi/http";
+import { createServerClient, parseCookieHeader } from "@supabase/ssr";
+import { getHeader, setCookie } from "vinxi/http";
 
 import type { Database } from "../types/supabase";
 
@@ -13,14 +13,15 @@ export const supabaseMiddleware = async (event: FetchEvent) => {
     {
       auth: { flowType: "pkce" },
       cookies: {
-        get: (key) => {
-          return getCookie(event.nativeEvent, key);
+        getAll: () => {
+          return parseCookieHeader(
+            getHeader(event.nativeEvent, "Cookie") ?? ""
+          );
         },
-        remove: (key, options) => {
-          deleteCookie(event.nativeEvent, key, options);
-        },
-        set: (key, value, options) => {
-          setCookie(event.nativeEvent, key, value, options);
+        setAll: (cookiesToSet) => {
+          cookiesToSet.forEach(({ name, options, value }) =>
+            setCookie(event.nativeEvent, name, value, options)
+          );
         }
       }
     }
