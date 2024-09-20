@@ -2,23 +2,8 @@ import type { VariantProps } from "class-variance-authority";
 
 import { type ComponentProps, splitProps } from "solid-js";
 
-import { twCva, twCx } from "../utils/twCva";
-
-export const carouselClass = twCva("carousel", {
-  defaultVariants: {
-    isVertical: null,
-    snap: null
-  },
-  variants: {
-    isVertical: {
-      true: "carousel-vertical"
-    },
-    snap: {
-      center: "carousel-center",
-      end: "carousel-end"
-    }
-  }
-});
+import { twCx } from "../utils/twCva";
+import { carouselClass } from "./Carousel.recipe";
 
 export type CarouselProps = ComponentProps<"div"> &
   VariantProps<typeof carouselClass>;

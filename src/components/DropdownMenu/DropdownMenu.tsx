@@ -4,8 +4,14 @@ import { DropdownMenu as KobalteDropdownMenu } from "@kobalte/core";
 import { ComponentProps, createSignal, onMount, splitProps } from "solid-js";
 
 import { buttonClass, buttonSplitProps } from "../Button";
-import { twCva, twCx } from "../utils/twCva";
+import { twCx } from "../utils/twCva";
 import styles from "./DropdownMenu.module.css";
+import {
+  dropdownMenuContentClass,
+  dropdownMenuIconClass,
+  dropdownMenuItemClass,
+  dropdownMenuSubTriggerClass
+} from "./DropdownMenu.recipe";
 
 export const DropdownMenuRoot = KobalteDropdownMenu.Root;
 
@@ -19,19 +25,6 @@ export function DropdownMenuTrigger(props: DropdownMenuTriggerProps) {
 
   return <KobalteDropdownMenu.Trigger {...rest} class={buttonClass(split)} />;
 }
-
-export const dropdownMenuIconClass = twCva("rotate-0 duration-200", {
-  defaultVariants: {
-    rotation: 0
-  },
-  variants: {
-    rotation: {
-      0: "",
-      90: "ui-expanded:rotate-90",
-      180: "ui-expanded:rotate-180"
-    }
-  }
-});
 
 export type DropdownMenuIconProps = ComponentProps<
   typeof KobalteDropdownMenu.Icon
@@ -50,11 +43,6 @@ export function DropdownMenuIcon(props: DropdownMenuIconProps) {
 }
 
 export const DropdownMenuPortal = KobalteDropdownMenu.Portal;
-
-export const dropdownMenuContentClass = twCva([
-  "min-w-[220px] p-2 bg-base-100 rounded-2xl shadow outline-none",
-  styles.content
-]);
 
 export function DropdownMenuContent(
   props: ComponentProps<typeof KobalteDropdownMenu.Content>
@@ -109,17 +97,6 @@ export function DropdownMenuGroupLabel(
 }
 
 export const DropdownMenuSub = KobalteDropdownMenu.Sub;
-
-export const dropdownMenuItemClass = twCva([
-  "relative flex select-none items-center p-2 text-base-content leading-none rounded-2xl outline-none",
-  "ui-disabled:opacity-50 ui-disabled:pointer-events-none",
-  "ui-highlighted:outline-none ui-highlighted:bg-base-200"
-]);
-
-export const dropdownMenuSubTriggerClass = twCva([
-  dropdownMenuItemClass,
-  "ui-expanded:bg-base-100 ui-expanded:text-accent-content"
-]);
 
 export function DropdownMenuSubTrigger(
   props: ComponentProps<typeof KobalteDropdownMenu.SubTrigger>

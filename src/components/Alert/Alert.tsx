@@ -7,21 +7,7 @@ import { AlertCircleIcon } from "../Icons/AlertCircleIcon";
 import { CheckCircleIcon } from "../Icons/CheckCircleIcon";
 import { InfoIcon } from "../Icons/InfoIcon";
 import { XCircleIcon } from "../Icons/XCircleIcon";
-import { twCva } from "../utils/twCva";
-
-export const alertClass = twCva("alert justify-start", {
-  defaultVariants: {
-    variant: null
-  },
-  variants: {
-    variant: {
-      error: "alert-error",
-      info: "alert-info",
-      success: "alert-success",
-      warning: "alert-warning"
-    }
-  }
-});
+import { alertClass } from "./Alert.recipe";
 
 export type AlertProps = ComponentProps<"div"> &
   VariantProps<typeof alertClass>;
