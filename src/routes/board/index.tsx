@@ -1,18 +1,10 @@
 import {
-  type RouteDefinition,
   createAsync,
+  type RouteDefinition,
   useLocation
 } from "@solidjs/router";
-import { ErrorBoundary, Show, Suspense, createMemo } from "solid-js";
-import {
-  coerce,
-  number,
-  object,
-  optional,
-  parse,
-  parseAsync,
-  transform
-} from "valibot";
+import { createMemo, ErrorBoundary, Show, Suspense } from "solid-js";
+import * as v from "valibot";
 
 import { useI18n } from "~/contexts/I18nContext";
 import {
@@ -30,14 +22,18 @@ import { selectBoardsLoader } from "~/server/board/client";
 const PAGE_LIMIT = 10;
 
 const boardsRouteSchema = () => {
-  return object({
-    page: transform(optional(coerce(number(), Number), 1), (input) => input - 1)
+  return v.object({
+    page: v.pipe(
+      v.optional(v.string(), "1"),
+      v.transform(Number),
+      v.transform((input) => input - 1)
+    )
   });
 };
 
 export const route = {
   load: async ({ location }) => {
-    const { page } = await parseAsync(boardsRouteSchema(), location.query);
+    const { page } = await v.parseAsync(boardsRouteSchema(), location.query);
     const session = await getSessionLoader();
     const userId = session?.user.id;
 
@@ -57,7 +53,7 @@ function BoardFetching() {
   const session = useAuthorizedSessionContext();
 
   const page = createMemo(() => {
-    return parse(boardsRouteSchema(), location.query).page;
+    return v.parse(boardsRouteSchema(), location.query).page;
   });
 
   const boards = createAsync(() =>

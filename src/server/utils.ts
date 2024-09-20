@@ -1,11 +1,6 @@
 import { redirect } from "@solidjs/router";
 import { type RequestEvent, getRequestEvent } from "solid-js/web";
-import {
-  type BaseSchema,
-  type BaseSchemaAsync,
-  type SchemaIssues,
-  safeParseAsync
-} from "valibot";
+import * as v from "valibot";
 import { getCookie, type setCookie } from "vinxi/http";
 
 import { paths } from "~/utils/paths";
@@ -30,7 +25,7 @@ type RpcResult<T = any> = {
   success: boolean;
 };
 
-export const rpcParseIssueResult = (issues: SchemaIssues): RpcResult => {
+export const rpcParseIssueResult = (issues: v.SchemaIssues): RpcResult => {
   return {
     errors: Object.fromEntries(
       issues.map((issue) => [
@@ -54,7 +49,7 @@ export const rpcErrorResult = <T extends { message: string }>(
 };
 
 export const getParsedCookie = async <
-  TSchema extends BaseSchema | BaseSchemaAsync
+  TSchema extends v.BaseSchema | v.BaseSchemaAsync
 >(
   event: RequestEvent,
   name: string,
@@ -68,7 +63,7 @@ export const getParsedCookie = async <
 
   try {
     const parsed = JSON.parse(cookie);
-    const result = await safeParseAsync(schema, parsed);
+    const result = await v.safeParseAsync(schema, parsed);
 
     if (!result.success) {
       return null;

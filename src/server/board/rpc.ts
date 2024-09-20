@@ -3,18 +3,7 @@ import type { RequestEvent } from "solid-js/web";
 
 import { redirect, reload } from "@solidjs/router";
 import { decode } from "decode-formdata";
-import {
-  coerce,
-  integer,
-  maxLength,
-  maxValue,
-  minLength,
-  minValue,
-  number,
-  object,
-  safeParseAsync,
-  string
-} from "valibot";
+import * as v from "valibot";
 import { setCookie } from "vinxi/http";
 
 import {
@@ -41,23 +30,26 @@ import {
 } from "./const";
 
 const boardDimension = () => {
-  return coerce(
-    number([integer(), minValue(BOARD_MIN_SIZE), maxValue(BOARD_MAX_SIZE)]),
-    Number
+  return v.pipe(
+    v.number(),
+    v.integer(),
+    v.minValue(BOARD_MIN_SIZE),
+    v.maxValue(BOARD_MAX_SIZE)
   );
 };
 
 const insertBoardSchema = () => {
-  return object({
+  return v.object({
     columns: boardDimension(),
-    height: number(),
-    image: string(),
-    name: string([
-      minLength(BOARD_MIN_NAME_LENGTH),
-      maxLength(BOARD_MAX_NAME_LENGTH)
-    ]),
+    height: v.number(),
+    image: v.string(),
+    name: v.pipe(
+      v.string(),
+      v.minLength(BOARD_MIN_NAME_LENGTH),
+      v.maxLength(BOARD_MAX_NAME_LENGTH)
+    ),
     rows: boardDimension(),
-    width: number()
+    width: v.number()
   });
 };
 
@@ -101,7 +93,7 @@ const insertPuzzleFragments = ({
 export const insertBoardServerAction = async (form: FormData) => {
   const event = getRequestEventOrThrow();
 
-  const parsed = await safeParseAsync(
+  const parsed = await v.safeParseAsync(
     insertBoardSchema(),
     decode(form, { numbers: ["rows", "columns", "height", "width"] })
   );
@@ -160,15 +152,15 @@ export const insertBoardServerAction = async (form: FormData) => {
 export const updateBoardServerAction = async (form: FormData) => {
   const event = getRequestEventOrThrow();
 
-  const parsed = await safeParseAsync(
-    object({
+  const parsed = await v.safeParseAsync(
+    v.object({
       columns: boardDimension(),
-      height: number(),
-      id: string(),
-      image: string(),
-      name: string([minLength(3)]),
+      height: v.number(),
+      id: v.string(),
+      image: v.string(),
+      name: v.pipe(v.string(), v.minLength(3)),
       rows: boardDimension(),
-      width: number()
+      width: v.number()
     }),
     decode(form, { numbers: ["rows", "columns", "height", "width"] })
   );
@@ -226,7 +218,10 @@ export const updateBoardServerAction = async (form: FormData) => {
 export const reloadBoardServerAction = async (form: FormData) => {
   const event = getRequestEventOrThrow();
 
-  const parsed = await safeParseAsync(object({ id: string() }), decode(form));
+  const parsed = await v.safeParseAsync(
+    v.object({ id: v.string() }),
+    decode(form)
+  );
 
   if (!parsed.success) {
     return rpcParseIssueResult(parsed.issues);
@@ -273,7 +268,10 @@ export const reloadBoardServerAction = async (form: FormData) => {
 export const deleteBoardServerAction = async (form: FormData) => {
   const event = getRequestEventOrThrow();
 
-  const parsed = await safeParseAsync(object({ id: string() }), decode(form));
+  const parsed = await v.safeParseAsync(
+    v.object({ id: v.string() }),
+    decode(form)
+  );
 
   if (!parsed.success) {
     return rpcParseIssueResult(parsed.issues);

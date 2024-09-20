@@ -1,18 +1,16 @@
 "use server";
 
-import type { Output } from "valibot";
-
-import { literal, union } from "valibot";
+import * as v from "valibot";
 import { getCookie } from "vinxi/http";
 
 import { getRequestEventOrThrow } from "../utils";
 import { APP_THEME_COOKIE_NAME } from "./const";
 
 const appThemeSchema = () => {
-  return union([literal("dracula"), literal("fantasy")]);
+  return v.union([v.literal("dracula"), v.literal("fantasy"), v.undefined()]);
 };
 
-export type AppTheme = Output<ReturnType<typeof appThemeSchema>>;
+export type AppTheme = v.InferOutput<ReturnType<typeof appThemeSchema>>;
 
 export const getAppThemeCookie = () => {
   const event = getRequestEventOrThrow();
@@ -20,5 +18,7 @@ export const getAppThemeCookie = () => {
 };
 
 export const getAppThemeServerLoader = () => {
-  return Promise.resolve(getAppThemeCookie() || "dracula");
+  return Promise.resolve(
+    v.parse(appThemeSchema(), getAppThemeCookie()) || "dracula"
+  );
 };

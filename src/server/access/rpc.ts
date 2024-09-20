@@ -1,10 +1,8 @@
 "use server";
 
-import type { Output } from "valibot";
-
 import { redirect } from "@solidjs/router";
 import { decode } from "decode-formdata";
-import { hexColor, minLength, object, safeParseAsync, string } from "valibot";
+import * as v from "valibot";
 import { setCookie } from "vinxi/http";
 
 import { paths } from "~/utils/paths";
@@ -18,15 +16,15 @@ import {
 import { ACCESS_USERNAME_MIN_LENGTH, BOARDS_ACCESS_CACHE_KEY } from "./const";
 
 const boardAccessSchema = () => {
-  return object({
-    boardId: string(),
-    playerColor: string([hexColor()]),
-    playerId: string(),
-    userName: string([minLength(ACCESS_USERNAME_MIN_LENGTH)])
+  return v.object({
+    boardId: v.string(),
+    playerColor: v.pipe(v.string(), v.hexColor()),
+    playerId: v.string(),
+    userName: v.pipe(v.string(), v.minLength(ACCESS_USERNAME_MIN_LENGTH))
   });
 };
 
-export type BoardAccess = Output<ReturnType<typeof boardAccessSchema>>;
+export type BoardAccess = v.InferOutput<ReturnType<typeof boardAccessSchema>>;
 
 const getBoardAccessCookieName = (boardId: string) => {
   return `BoardAccess-${boardId}`;
@@ -41,7 +39,7 @@ const BOARD_ACCESS_COOKIE_OPTIONS: CookieSerializeOptions = {
 export const setBoardAccessServerAction = async (form: FormData) => {
   const event = getRequestEventOrThrow();
 
-  const parsed = await safeParseAsync(boardAccessSchema(), decode(form));
+  const parsed = await v.safeParseAsync(boardAccessSchema(), decode(form));
 
   if (!parsed.success) {
     return rpcParseIssueResult(parsed.issues);

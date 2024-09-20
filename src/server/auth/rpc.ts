@@ -3,15 +3,7 @@ import type { RequestEvent } from "solid-js/web";
 
 import { redirect } from "@solidjs/router";
 import { decode } from "decode-formdata";
-import {
-  email,
-  hexColor,
-  maxLength,
-  minLength,
-  object,
-  safeParseAsync,
-  string
-} from "valibot";
+import * as v from "valibot";
 
 import { paths } from "~/utils/paths";
 
@@ -31,10 +23,10 @@ const getRedirectUrl = (event: RequestEvent, path: string) => {
 export const signUpServerAction = async (form: FormData) => {
   const event = getRequestEventOrThrow();
 
-  const parsed = await safeParseAsync(
-    object({
-      email: string([email()]),
-      password: string([minLength(6), maxLength(20)])
+  const parsed = await v.safeParseAsync(
+    v.object({
+      email: v.pipe(v.string(), v.email()),
+      password: v.pipe(v.string(), v.minLength(6), v.maxLength(20))
     }),
     decode(form)
   );
@@ -58,10 +50,10 @@ export const signUpServerAction = async (form: FormData) => {
 export const signInServerAction = async (form: FormData) => {
   const event = getRequestEventOrThrow();
 
-  const parsed = await safeParseAsync(
-    object({
-      email: string([email()]),
-      password: string([minLength(3)])
+  const parsed = await v.safeParseAsync(
+    v.object({
+      email: v.pipe(v.string(), v.email()),
+      password: v.pipe(v.string(), v.minLength(3))
     }),
     decode(form)
   );
@@ -96,10 +88,10 @@ export const signOutServerAction = async () => {
 export const updateUserServerAction = async (form: FormData) => {
   const event = getRequestEventOrThrow();
 
-  const parsed = await safeParseAsync(
-    object({
-      color: string([hexColor()]),
-      name: string()
+  const parsed = await v.safeParseAsync(
+    v.object({
+      color: v.pipe(v.string(), v.hexColor()),
+      name: v.string()
     }),
     decode(form)
   );
