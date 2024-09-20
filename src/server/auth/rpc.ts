@@ -119,5 +119,6 @@ export const updateUserServerAction = async (form: FormData) => {
 
 export const getUserServerLoader = async () => {
   const event = getRequestEventOrThrow();
-  return await Promise.resolve(event.locals.supabaseUser);
+  const response = await event.locals.supabase.auth.getUser();
+  return response.data.user;
 };
