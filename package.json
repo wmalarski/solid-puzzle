@@ -5,7 +5,7 @@
     "build": "vinxi build --preset cloudflare-pages",
     "start": "vinxi start",
     "=== LINTERS ===": "",
-    "lint": "eslint src --fix --ext .tsx,.ts",
+    "lint": "eslint src --fix",
     "prettier": "prettier 'src/**/*.(ts|tsx)' --write",
     "tsc": "tsc --noEmit",
     "code-check": "pnpm lint --max-warnings=0 && pnpm tsc"
@@ -13,7 +13,9 @@
   "type": "module",
   "devDependencies": {
     "@eslint/js": "^9.10.0",
+    "@types/eslint__js": "^8.42.3",
     "@types/node": "22.5.5",
+    "@typescript-eslint/parser": "^8.6.0",
     "autoprefixer": "10.4.20",
     "daisyui": "4.12.10",
     "eslint": "^9.10.0",
