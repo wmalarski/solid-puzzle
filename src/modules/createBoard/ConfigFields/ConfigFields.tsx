@@ -27,7 +27,7 @@ export type BoardConfigFields = {
 const INITIAL_BOARD_SIZE = 5;
 
 type ConfigFieldsProps = {
-  disabled: boolean;
+  disabled?: boolean;
   errors?: Record<string, string>;
   initialValues?: BoardConfigFields | null;
   scrollableImageGrid: boolean;

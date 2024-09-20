@@ -125,10 +125,10 @@ export function SettingsControlledDialog(props: SettingsControlledDialogProps) {
   );
 }
 
-type SettingsUncontrolledDialogProps = DialogTriggerProps & {
+type SettingsUncontrolledDialogProps = {
   board: BoardModelWithoutConfig;
   onSuccess?: VoidFunction;
-};
+} & DialogTriggerProps;
 
 export function SettingsUncontrolledDialog(
   props: SettingsUncontrolledDialogProps

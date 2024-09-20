@@ -9,27 +9,28 @@ import styles from "./Popover.module.css";
 
 export const PopoverRoot = KobaltePopover.Root;
 
-export type PopoverTriggerProps = KobaltePopover.PopoverTriggerProps &
+export type PopoverTriggerProps = ComponentProps<
+  typeof KobaltePopover.Trigger
+> &
   VariantProps<typeof buttonClass>;
 
 export function PopoverTrigger(props: PopoverTriggerProps) {
   const [split, rest] = splitProps(props, buttonSplitProps);
 
-  return (
-    <KobaltePopover.Trigger
-      {...rest}
-      class={buttonClass({ class: props.class, ...split })}
-    />
-  );
+  return <KobaltePopover.Trigger {...rest} class={buttonClass(split)} />;
 }
 
-export function PopoverAnchor(props: KobaltePopover.PopoverAnchorProps) {
+export function PopoverAnchor(
+  props: ComponentProps<typeof KobaltePopover.Anchor>
+) {
   return <KobaltePopover.Anchor {...props} class={twCx("", props.class)} />;
 }
 
 export const PopoverPortal = KobaltePopover.Portal;
 
-export function PopoverContent(props: KobaltePopover.PopoverContentProps) {
+export function PopoverContent(
+  props: ComponentProps<typeof KobaltePopover.Content>
+) {
   return (
     <KobaltePopover.Content
       {...props}
@@ -42,7 +43,9 @@ export function PopoverContent(props: KobaltePopover.PopoverContentProps) {
   );
 }
 
-export function PopoverArrow(props: KobaltePopover.PopoverArrowProps) {
+export function PopoverArrow(
+  props: ComponentProps<typeof KobaltePopover.Arrow>
+) {
   return <KobaltePopover.Arrow {...props} class={twCx("", props.class)} />;
 }
 
@@ -61,7 +64,7 @@ export function PopoverHeader(props: PopoverHeaderProps) {
 }
 
 export function PopoverCloseButton(
-  props: KobaltePopover.PopoverCloseButtonProps
+  props: ComponentProps<typeof KobaltePopover.CloseButton>
 ) {
   return (
     <KobaltePopover.CloseButton
@@ -71,7 +74,9 @@ export function PopoverCloseButton(
   );
 }
 
-export function PopoverTitle(props: KobaltePopover.PopoverTitleProps) {
+export function PopoverTitle(
+  props: ComponentProps<typeof KobaltePopover.Title>
+) {
   return (
     <KobaltePopover.Title
       {...props}
@@ -81,7 +86,7 @@ export function PopoverTitle(props: KobaltePopover.PopoverTitleProps) {
 }
 
 export function PopoverDescription(
-  props: KobaltePopover.PopoverDescriptionProps
+  props: ComponentProps<typeof KobaltePopover.Description>
 ) {
   return (
     <KobaltePopover.Description

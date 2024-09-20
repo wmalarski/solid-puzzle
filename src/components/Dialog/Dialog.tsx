@@ -7,29 +7,24 @@ import { buttonClass, buttonSplitProps } from "../Button";
 import { twCx } from "../utils/twCva";
 import styles from "./Dialog.module.css";
 
-export type DialogRootProps = Dialog.DialogRootProps;
+export type DialogRootProps = ComponentProps<typeof Dialog.Root>;
 
 export const DialogRoot = Dialog.Root;
 
-export type DialogTriggerProps = Dialog.DialogTriggerProps &
+export type DialogTriggerProps = ComponentProps<typeof Dialog.Trigger> &
   VariantProps<typeof buttonClass>;
 
 export function DialogTrigger(props: DialogTriggerProps) {
   const [split, rest] = splitProps(props, buttonSplitProps);
 
-  return (
-    <Dialog.Trigger
-      {...rest}
-      class={buttonClass({ class: props.class, ...split })}
-    />
-  );
+  return <Dialog.Trigger {...rest} class={buttonClass(split)} />;
 }
 
-export type DialogPortalProps = Dialog.DialogPortalProps;
+export type DialogPortalProps = ComponentProps<typeof DialogPortal>;
 
 export const DialogPortal = Dialog.Portal;
 
-export type DialogOverlayProps = Dialog.DialogOverlayProps;
+export type DialogOverlayProps = ComponentProps<typeof Dialog.Overlay>;
 
 export function DialogOverlay(props: DialogOverlayProps) {
   return (
@@ -58,7 +53,7 @@ export function DialogPositioner(props: DialogPositionerProps) {
   );
 }
 
-export type DialogContentProps = Dialog.DialogContentProps;
+export type DialogContentProps = ComponentProps<typeof Dialog.Content>;
 
 export function DialogContent(props: DialogContentProps) {
   return (
@@ -84,13 +79,13 @@ export function DialogHeader(props: DialogHeaderProps) {
   );
 }
 
-export type DialogCloseButtonProps = Dialog.DialogCloseButtonProps;
+export type DialogCloseButtonProps = ComponentProps<typeof Dialog.CloseButton>;
 
 export function DialogCloseButton(props: DialogCloseButtonProps) {
   return <Dialog.CloseButton {...props} class={twCx("w-4 h-4", props.class)} />;
 }
 
-export type DialogTitleProps = Dialog.DialogTitleProps;
+export type DialogTitleProps = ComponentProps<typeof Dialog.Title>;
 
 export function DialogTitle(props: DialogTitleProps) {
   return (
@@ -98,7 +93,7 @@ export function DialogTitle(props: DialogTitleProps) {
   );
 }
 
-export type DialogDescriptionProps = Dialog.DialogDescriptionProps;
+export type DialogDescriptionProps = ComponentProps<typeof Dialog.Description>;
 
 export function DialogDescription(props: DialogDescriptionProps) {
   return (

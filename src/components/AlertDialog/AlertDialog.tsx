@@ -1,17 +1,19 @@
 import type { VariantProps } from "class-variance-authority";
 
 import { AlertDialog } from "@kobalte/core";
-import { type JSX, splitProps } from "solid-js";
+import { ComponentProps, splitProps } from "solid-js";
 
 import { buttonClass } from "../Button";
 import { twCx } from "../utils/twCva";
 import styles from "./AlertDialog.module.css";
 
-export type AlertDialogRootProps = AlertDialog.AlertDialogRootProps;
+export type AlertDialogRootProps = ComponentProps<typeof AlertDialog.Root>;
 
 export const AlertDialogRoot = AlertDialog.Root;
 
-export type AlertDialogTriggerProps = AlertDialog.AlertDialogTriggerProps &
+export type AlertDialogTriggerProps = ComponentProps<
+  typeof AlertDialog.Trigger
+> &
   VariantProps<typeof buttonClass>;
 
 export function AlertDialogTrigger(props: AlertDialogTriggerProps) {
@@ -22,6 +24,7 @@ export function AlertDialogTrigger(props: AlertDialogTriggerProps) {
     "size",
     "variant"
   ]);
+
   return (
     <AlertDialog.Trigger
       {...rest}
@@ -30,11 +33,13 @@ export function AlertDialogTrigger(props: AlertDialogTriggerProps) {
   );
 }
 
-export type AlertDialogPortalProps = AlertDialog.AlertDialogPortalProps;
+export type AlertDialogPortalProps = ComponentProps<typeof AlertDialog.Portal>;
 
 export const AlertDialogPortal = AlertDialog.Portal;
 
-export type AlertDialogOverlayProps = AlertDialog.AlertDialogOverlayProps;
+export type AlertDialogOverlayProps = ComponentProps<
+  typeof AlertDialog.Overlay
+>;
 
 export function AlertDialogOverlay(props: AlertDialogOverlayProps) {
   return (
@@ -49,7 +54,7 @@ export function AlertDialogOverlay(props: AlertDialogOverlayProps) {
   );
 }
 
-export type AlertDialogPositionerProps = JSX.IntrinsicElements["div"];
+export type AlertDialogPositionerProps = ComponentProps<"div">;
 
 export function AlertDialogPositioner(props: AlertDialogPositionerProps) {
   return (
@@ -63,7 +68,9 @@ export function AlertDialogPositioner(props: AlertDialogPositionerProps) {
   );
 }
 
-export type AlertDialogContentProps = AlertDialog.AlertDialogContentProps;
+export type AlertDialogContentProps = ComponentProps<
+  typeof AlertDialog.Content
+>;
 
 export function AlertDialogContent(props: AlertDialogContentProps) {
   return (
@@ -78,7 +85,7 @@ export function AlertDialogContent(props: AlertDialogContentProps) {
   );
 }
 
-export type AlertDialogHeaderProps = JSX.IntrinsicElements["header"];
+export type AlertDialogHeaderProps = ComponentProps<"header">;
 
 export function AlertDialogHeader(props: AlertDialogHeaderProps) {
   return (
@@ -89,8 +96,10 @@ export function AlertDialogHeader(props: AlertDialogHeaderProps) {
   );
 }
 
-export type AlertDialogCloseButtonProps =
-  AlertDialog.AlertDialogCloseButtonProps & VariantProps<typeof buttonClass>;
+export type AlertDialogCloseButtonProps = ComponentProps<
+  typeof AlertDialog.CloseButton
+> &
+  VariantProps<typeof buttonClass>;
 
 export function AlertDialogCloseButton(props: AlertDialogCloseButtonProps) {
   const [split, rest] = splitProps(props, [
@@ -109,7 +118,7 @@ export function AlertDialogCloseButton(props: AlertDialogCloseButtonProps) {
   );
 }
 
-export type AlertDialogTitleProps = AlertDialog.AlertDialogTitleProps;
+export type AlertDialogTitleProps = ComponentProps<typeof AlertDialog.Title>;
 
 export function AlertDialogTitle(props: AlertDialogTitleProps) {
   return (
@@ -120,8 +129,9 @@ export function AlertDialogTitle(props: AlertDialogTitleProps) {
   );
 }
 
-export type AlertDialogDescriptionProps =
-  AlertDialog.AlertDialogDescriptionProps;
+export type AlertDialogDescriptionProps = ComponentProps<
+  typeof AlertDialog.Description
+>;
 
 export function AlertDialogDescription(props: AlertDialogDescriptionProps) {
   return (

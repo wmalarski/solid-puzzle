@@ -4,7 +4,7 @@ import {
   useNavigate,
   useSubmission
 } from "@solidjs/router";
-import { Show, createSignal } from "solid-js";
+import { createSignal, Show } from "solid-js";
 
 import type { BoardModel } from "~/types/models";
 

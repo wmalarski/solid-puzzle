@@ -3,12 +3,12 @@ import type { VariantProps } from "class-variance-authority";
 import { Toast, toaster } from "@kobalte/core";
 import { type ComponentProps, splitProps } from "solid-js";
 
-import { AlertIcon, type AlertIconProps, alertClass } from "../Alert";
+import { alertClass, AlertIcon, type AlertIconProps } from "../Alert";
 import { twCx } from "../utils/twCva";
 
 const ToastRegion = Toast.Region;
 
-function ToastList(props: Toast.ToastListProps) {
+function ToastList(props: ComponentProps<typeof Toast.List>) {
   return (
     <Toast.List
       {...props}
@@ -20,7 +20,7 @@ function ToastList(props: Toast.ToastListProps) {
   );
 }
 
-export type ToastRootProps = Toast.ToastRootProps &
+export type ToastRootProps = ComponentProps<typeof Toast.Root> &
   VariantProps<typeof alertClass>;
 
 export function ToastRoot(props: ToastRootProps) {
@@ -54,7 +54,9 @@ export function ToastContent(props: ComponentProps<"div">) {
   );
 }
 
-export function ToastCloseButton(props: Toast.ToastCloseButtonProps) {
+export function ToastCloseButton(
+  props: ComponentProps<typeof Toast.CloseButton>
+) {
   return (
     <Toast.CloseButton
       {...props}
@@ -63,7 +65,7 @@ export function ToastCloseButton(props: Toast.ToastCloseButtonProps) {
   );
 }
 
-export function ToastTitle(props: Toast.ToastTitleProps) {
+export function ToastTitle(props: ComponentProps<typeof Toast.Title>) {
   return (
     <Toast.Title
       {...props}
@@ -72,11 +74,15 @@ export function ToastTitle(props: Toast.ToastTitleProps) {
   );
 }
 
-export function ToastDescription(props: Toast.ToastDescriptionProps) {
+export function ToastDescription(
+  props: ComponentProps<typeof Toast.Description>
+) {
   return <Toast.Description {...props} class={twCx("text-sm", props.class)} />;
 }
 
-export function ToastProgressTrack(props: Toast.ToastProgressTrackProps) {
+export function ToastProgressTrack(
+  props: ComponentProps<typeof Toast.ProgressTrack>
+) {
   return (
     <Toast.ProgressTrack
       {...props}
@@ -85,7 +91,9 @@ export function ToastProgressTrack(props: Toast.ToastProgressTrackProps) {
   );
 }
 
-export function ToastProgressFill(props: Toast.ToastProgressFillProps) {
+export function ToastProgressFill(
+  props: ComponentProps<typeof Toast.ProgressFill>
+) {
   return (
     <Toast.ProgressFill
       {...props}

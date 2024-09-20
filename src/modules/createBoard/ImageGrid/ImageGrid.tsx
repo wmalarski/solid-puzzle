@@ -1,4 +1,4 @@
-import { For, createSignal } from "solid-js";
+import { createSignal, For } from "solid-js";
 
 import { twCx } from "~/components/utils/twCva";
 import { useI18n } from "~/contexts/I18nContext";
@@ -8,7 +8,7 @@ import type { ImageEntry } from "./const";
 import { IMAGES } from "./const";
 
 type ImageGridProps = {
-  disabled: boolean;
+  disabled?: boolean;
   initialValue?: string;
   scrollable: boolean;
 };

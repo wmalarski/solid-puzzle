@@ -1,7 +1,7 @@
 import type { VariantProps } from "class-variance-authority";
 
 import { DropdownMenu as KobalteDropdownMenu } from "@kobalte/core";
-import { createSignal, onMount, splitProps } from "solid-js";
+import { ComponentProps, createSignal, onMount, splitProps } from "solid-js";
 
 import { buttonClass, buttonSplitProps } from "../Button";
 import { twCva, twCx } from "../utils/twCva";
@@ -9,19 +9,15 @@ import styles from "./DropdownMenu.module.css";
 
 export const DropdownMenuRoot = KobalteDropdownMenu.Root;
 
-export type DropdownMenuTriggerProps =
-  KobalteDropdownMenu.DropdownMenuTriggerProps &
-    VariantProps<typeof buttonClass>;
+export type DropdownMenuTriggerProps = ComponentProps<
+  typeof KobalteDropdownMenu.Trigger
+> &
+  VariantProps<typeof buttonClass>;
 
 export function DropdownMenuTrigger(props: DropdownMenuTriggerProps) {
   const [split, rest] = splitProps(props, buttonSplitProps);
 
-  return (
-    <KobalteDropdownMenu.Trigger
-      {...rest}
-      class={buttonClass({ class: props.class, ...split })}
-    />
-  );
+  return <KobalteDropdownMenu.Trigger {...rest} class={buttonClass(split)} />;
 }
 
 export const dropdownMenuIconClass = twCva("rotate-0 duration-200", {
@@ -37,7 +33,9 @@ export const dropdownMenuIconClass = twCva("rotate-0 duration-200", {
   }
 });
 
-export type DropdownMenuIconProps = KobalteDropdownMenu.DropdownMenuIconProps &
+export type DropdownMenuIconProps = ComponentProps<
+  typeof KobalteDropdownMenu.Icon
+> &
   VariantProps<typeof dropdownMenuIconClass>;
 
 export function DropdownMenuIcon(props: DropdownMenuIconProps) {
@@ -59,7 +57,7 @@ export const dropdownMenuContentClass = twCva([
 ]);
 
 export function DropdownMenuContent(
-  props: KobalteDropdownMenu.DropdownMenuContentProps
+  props: ComponentProps<typeof KobalteDropdownMenu.Content>
 ) {
   const [ref, setRef] = createSignal<HTMLDivElement>();
 
@@ -77,13 +75,13 @@ export function DropdownMenuContent(
 }
 
 export function DropdownMenuArrow(
-  props: KobalteDropdownMenu.DropdownMenuArrowProps
+  props: ComponentProps<typeof KobalteDropdownMenu.Arrow>
 ) {
   return <KobalteDropdownMenu.Arrow {...props} class={twCx("", props.class)} />;
 }
 
 export function DropdownMenuSeparator(
-  props: KobalteDropdownMenu.DropdownMenuSeparatorProps
+  props: ComponentProps<typeof KobalteDropdownMenu.Separator>
 ) {
   return (
     <KobalteDropdownMenu.Separator
@@ -94,13 +92,13 @@ export function DropdownMenuSeparator(
 }
 
 export function DropdownMenuGroup(
-  props: KobalteDropdownMenu.DropdownMenuGroupProps
+  props: ComponentProps<typeof KobalteDropdownMenu.Group>
 ) {
   return <KobalteDropdownMenu.Group {...props} class={twCx("", props.class)} />;
 }
 
 export function DropdownMenuGroupLabel(
-  props: KobalteDropdownMenu.DropdownMenuGroupLabelProps
+  props: ComponentProps<typeof KobalteDropdownMenu.GroupLabel>
 ) {
   return (
     <KobalteDropdownMenu.GroupLabel
@@ -124,7 +122,7 @@ export const dropdownMenuSubTriggerClass = twCva([
 ]);
 
 export function DropdownMenuSubTrigger(
-  props: KobalteDropdownMenu.DropdownMenuSubTriggerProps
+  props: ComponentProps<typeof KobalteDropdownMenu.SubTrigger>
 ) {
   return (
     <KobalteDropdownMenu.SubTrigger
@@ -135,7 +133,7 @@ export function DropdownMenuSubTrigger(
 }
 
 export function DropdownMenuSubContent(
-  props: KobalteDropdownMenu.DropdownMenuSubContentProps
+  props: ComponentProps<typeof KobalteDropdownMenu.SubContent>
 ) {
   return (
     <KobalteDropdownMenu.SubContent
@@ -146,7 +144,7 @@ export function DropdownMenuSubContent(
 }
 
 export function DropdownMenuItem(
-  props: KobalteDropdownMenu.DropdownMenuItemProps
+  props: ComponentProps<typeof KobalteDropdownMenu.Item>
 ) {
   return (
     <KobalteDropdownMenu.Item
@@ -157,7 +155,7 @@ export function DropdownMenuItem(
 }
 
 export function DropdownMenuItemLabel(
-  props: KobalteDropdownMenu.DropdownMenuItemLabelProps
+  props: ComponentProps<typeof KobalteDropdownMenu.ItemLabel>
 ) {
   return (
     <KobalteDropdownMenu.ItemLabel
@@ -171,7 +169,7 @@ export function DropdownMenuItemLabel(
 }
 
 export function DropdownMenuItemDescription(
-  props: KobalteDropdownMenu.DropdownMenuItemDescriptionProps
+  props: ComponentProps<typeof KobalteDropdownMenu.ItemDescription>
 ) {
   return (
     <KobalteDropdownMenu.ItemDescription
@@ -182,7 +180,7 @@ export function DropdownMenuItemDescription(
 }
 
 export function DropdownMenuItemIndicator(
-  props: KobalteDropdownMenu.DropdownMenuItemIndicatorProps
+  props: ComponentProps<typeof KobalteDropdownMenu.ItemIndicator>
 ) {
   return (
     <KobalteDropdownMenu.ItemIndicator
@@ -198,7 +196,7 @@ export function DropdownMenuItemIndicator(
 export const DropdownMenuRadioGroup = KobalteDropdownMenu.RadioGroup;
 
 export function DropdownMenuRadioItem(
-  props: KobalteDropdownMenu.DropdownMenuRadioItemProps
+  props: ComponentProps<typeof KobalteDropdownMenu.RadioItem>
 ) {
   return (
     <KobalteDropdownMenu.RadioItem
@@ -209,7 +207,7 @@ export function DropdownMenuRadioItem(
 }
 
 export function DropdownMenuCheckboxItem(
-  props: KobalteDropdownMenu.DropdownMenuCheckboxItemProps
+  props: ComponentProps<typeof KobalteDropdownMenu.CheckboxItem>
 ) {
   return (
     <KobalteDropdownMenu.CheckboxItem

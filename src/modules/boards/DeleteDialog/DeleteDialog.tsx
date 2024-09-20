@@ -99,9 +99,9 @@ export function DeleteBoardControlledDialog(
   );
 }
 
-type DeleteBoardUncontrolledDialogProps = DialogTriggerProps & {
+type DeleteBoardUncontrolledDialogProps = {
   boardId: string;
-};
+} & DialogTriggerProps;
 
 export function DeleteBoardUncontrolledDialog(
   props: DeleteBoardUncontrolledDialogProps
