@@ -25,7 +25,9 @@ type RpcResult<T = any> = {
   success: boolean;
 };
 
-export const rpcParseIssueResult = (issues: v.SchemaIssues): RpcResult => {
+export const rpcParseIssueResult = (
+  issues: v.BaseIssue<unknown>[]
+): RpcResult => {
   return {
     errors: Object.fromEntries(
       issues.map((issue) => [
@@ -49,7 +51,7 @@ export const rpcErrorResult = <T extends { message: string }>(
 };
 
 export const getParsedCookie = async <
-  TSchema extends v.BaseSchema | v.BaseSchemaAsync
+  TSchema extends v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>
 >(
   event: RequestEvent,
   name: string,

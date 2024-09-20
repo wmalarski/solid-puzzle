@@ -1,11 +1,5 @@
- 
-import type { FetchEvent } from "@solidjs/start/server/types";
-
+import { FetchEvent } from "@solidjs/start/server";
 import * as v from "valibot";
-
-if (typeof window !== "undefined") {
-  throw new Error("SERVER ON CLIENT!");
-}
 
 const getEnvSchema = () => {
   return v.object({
