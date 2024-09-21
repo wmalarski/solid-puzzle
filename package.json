@@ -12,13 +12,13 @@
   },
   "type": "module",
   "devDependencies": {
-    "@eslint/js": "^9.10.0",
+    "@eslint/js": "^9.11.0",
     "@types/eslint__js": "^8.42.3",
     "@types/node": "22.5.5",
     "@typescript-eslint/parser": "^8.6.0",
     "autoprefixer": "10.4.20",
     "daisyui": "4.12.10",
-    "eslint": "^9.10.0",
+    "eslint": "^9.11.0",
     "eslint-plugin-import-x": "4.2.1",
     "eslint-plugin-jsx-a11y": "6.10.0",
     "eslint-plugin-perfectionist": "3.6.0",
@@ -50,7 +50,7 @@
     "pixi.js": "8.4.1",
     "solid-js": "1.8.22",
     "tailwind-merge": "2.5.2",
-    "valibot": "0.42.0",
+    "valibot": "0.42.1",
     "vinxi": "0.4.3"
   },
   "engines": {
