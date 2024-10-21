@@ -45,7 +45,7 @@ export const TextFieldErrorMessage: Component<TextFieldErrorMessageProps> = (
   );
 };
 
-export const textFieldInputClass = twCva("input", {
+export const textFieldInputRecipe = twCva("input", {
   defaultVariants: {
     color: null,
     size: "md",
@@ -81,7 +81,7 @@ export const textFieldInputClass = twCva("input", {
 const variantPropsList = ["color", "size", "variant", "width"] as const;
 
 export type TextFieldInputProps = ComponentProps<"input"> &
-  VariantProps<typeof textFieldInputClass>;
+  VariantProps<typeof textFieldInputRecipe>;
 
 export const TextFieldInput: Component<TextFieldInputProps> = (props) => {
   const [split, rest] = splitProps(props, variantPropsList);
@@ -89,13 +89,13 @@ export const TextFieldInput: Component<TextFieldInputProps> = (props) => {
   return (
     <input
       {...rest}
-      class={textFieldInputClass({ class: props.class, ...split })}
+      class={textFieldInputRecipe({ class: props.class, ...split })}
     />
   );
 };
 
 export type TextFieldTextAreaProps = ComponentProps<"textarea"> &
-  VariantProps<typeof textFieldInputClass>;
+  VariantProps<typeof textFieldInputRecipe>;
 
 export const TextFieldTextArea: Component<TextFieldTextAreaProps> = (props) => {
   const [split, rest] = splitProps(props, variantPropsList);
@@ -103,7 +103,7 @@ export const TextFieldTextArea: Component<TextFieldTextAreaProps> = (props) => {
   return (
     <textarea
       {...rest}
-      class={textFieldInputClass({ class: props.class, ...split })}
+      class={textFieldInputRecipe({ class: props.class, ...split })}
     />
   );
 };

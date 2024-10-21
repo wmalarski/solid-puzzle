@@ -1,6 +1,6 @@
 import { twCva } from "../utils/twCva";
 
-export const rangeClass = twCva("range", {
+export const rangeRecipe = twCva("range", {
   defaultVariants: {
     color: null,
     size: null

@@ -1,6 +1,6 @@
 import { twCva } from "../utils/twCva";
 
-export const carouselClass = twCva("carousel", {
+export const carouselRecipe = twCva("carousel", {
   defaultVariants: {
     isVertical: null,
     snap: null

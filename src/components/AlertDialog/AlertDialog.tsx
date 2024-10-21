@@ -3,7 +3,7 @@ import type { VariantProps } from "class-variance-authority";
 import { AlertDialog } from "@kobalte/core";
 import { Component, ComponentProps, splitProps } from "solid-js";
 
-import { buttonClass } from "../Button/Button.recipe";
+import { buttonRecipe } from "../Button/Button.recipe";
 import { twCx } from "../utils/twCva";
 import styles from "./AlertDialog.module.css";
 
@@ -14,7 +14,7 @@ export const AlertDialogRoot = AlertDialog.Root;
 export type AlertDialogTriggerProps = ComponentProps<
   typeof AlertDialog.Trigger
 > &
-  VariantProps<typeof buttonClass>;
+  VariantProps<typeof buttonRecipe>;
 
 export const AlertDialogTrigger: Component<AlertDialogTriggerProps> = (
   props
@@ -30,7 +30,7 @@ export const AlertDialogTrigger: Component<AlertDialogTriggerProps> = (
   return (
     <AlertDialog.Trigger
       {...rest}
-      class={buttonClass({ class: props.class, ...split })}
+      class={buttonRecipe({ class: props.class, ...split })}
     />
   );
 };
@@ -107,7 +107,7 @@ export const AlertDialogHeader: Component<AlertDialogHeaderProps> = (props) => {
 export type AlertDialogCloseButtonProps = ComponentProps<
   typeof AlertDialog.CloseButton
 > &
-  VariantProps<typeof buttonClass>;
+  VariantProps<typeof buttonRecipe>;
 
 export const AlertDialogCloseButton: Component<AlertDialogCloseButtonProps> = (
   props
@@ -123,7 +123,7 @@ export const AlertDialogCloseButton: Component<AlertDialogCloseButtonProps> = (
   return (
     <AlertDialog.CloseButton
       {...rest}
-      class={buttonClass({ class: props.class, ...split })}
+      class={buttonRecipe({ class: props.class, ...split })}
     />
   );
 };

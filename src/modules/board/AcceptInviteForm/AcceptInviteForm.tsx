@@ -6,7 +6,7 @@ import type { BoardModel } from "~/types/models";
 
 import { Button } from "~/components/Button/Button";
 import { Card, CardBody } from "~/components/Card/Card";
-import { cardTitleClass } from "~/components/Card/Card.recipe";
+import { cardTitleRecipe } from "~/components/Card/Card.recipe";
 import {
   TextFieldErrorMessage,
   TextFieldInput,
@@ -42,7 +42,7 @@ export const AcceptInviteForm: Component<AcceptInviteFormProps> = (props) => {
       <Card bg="base-200" class="w-full max-w-md" variant="bordered">
         <CardBody>
           <header class="flex items-center justify-between gap-2">
-            <h2 class={cardTitleClass()}>
+            <h2 class={cardTitleRecipe()}>
               {t("invite.title", { name: props.board.name })}
             </h2>
             <ThemeToggle />

@@ -3,7 +3,7 @@ import type { VariantProps } from "class-variance-authority";
 import { Component, type ComponentProps, splitProps } from "solid-js";
 
 import { twCx } from "../utils/twCva";
-import { avatarClass, avatarContentClass } from "./Avatar.recipe";
+import { avatarContentRecipe, avatarRecipe } from "./Avatar.recipe";
 
 export type AvatarGroupProps = ComponentProps<"div">;
 
@@ -14,18 +14,18 @@ export const AvatarGroup: Component<AvatarGroupProps> = (props) => {
 };
 
 export type AvatarProps = ComponentProps<"div"> &
-  VariantProps<typeof avatarClass>;
+  VariantProps<typeof avatarRecipe>;
 
 export const Avatar: Component<AvatarProps> = (props) => {
   const [split, rest] = splitProps(props, ["placeholder", "presence"]);
 
   return (
-    <div {...rest} class={avatarClass({ class: props.class, ...split })} />
+    <div {...rest} class={avatarRecipe({ class: props.class, ...split })} />
   );
 };
 
 export type AvatarContentProps = ComponentProps<"div"> &
-  VariantProps<typeof avatarContentClass>;
+  VariantProps<typeof avatarContentRecipe>;
 
 export const AvatarContent: Component<AvatarContentProps> = (props) => {
   const [split, rest] = splitProps(props, [
@@ -38,7 +38,7 @@ export const AvatarContent: Component<AvatarContentProps> = (props) => {
   return (
     <div
       {...rest}
-      class={avatarContentClass({ class: props.class, ...split })}
+      class={avatarContentRecipe({ class: props.class, ...split })}
     />
   );
 };

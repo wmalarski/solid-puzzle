@@ -1,6 +1,6 @@
 import { twCva } from "../utils/twCva";
 
-export const linkClass = twCva("link", {
+export const linkRecipe = twCva("link", {
   defaultVariants: {
     color: null,
     hover: null,

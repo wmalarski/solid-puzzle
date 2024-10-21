@@ -4,7 +4,7 @@ import { Dialog } from "@kobalte/core";
 import { Component, type ComponentProps, splitProps } from "solid-js";
 
 import { buttonSplitProps } from "../Button/Button";
-import { buttonClass } from "../Button/Button.recipe";
+import { buttonRecipe } from "../Button/Button.recipe";
 import { twCx } from "../utils/twCva";
 import styles from "./Dialog.module.css";
 
@@ -13,12 +13,12 @@ export type DialogRootProps = ComponentProps<typeof Dialog.Root>;
 export const DialogRoot = Dialog.Root;
 
 export type DialogTriggerProps = ComponentProps<typeof Dialog.Trigger> &
-  VariantProps<typeof buttonClass>;
+  VariantProps<typeof buttonRecipe>;
 
 export const DialogTrigger: Component<DialogTriggerProps> = (props) => {
   const [split, rest] = splitProps(props, buttonSplitProps);
 
-  return <Dialog.Trigger {...rest} class={buttonClass(split)} />;
+  return <Dialog.Trigger {...rest} class={buttonRecipe(split)} />;
 };
 
 export type DialogPortalProps = ComponentProps<typeof DialogPortal>;

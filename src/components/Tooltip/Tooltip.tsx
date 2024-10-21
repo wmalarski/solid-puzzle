@@ -4,7 +4,7 @@ import { Tooltip } from "@kobalte/core";
 import { Component, ComponentProps, splitProps } from "solid-js";
 
 import { buttonSplitProps } from "../Button/Button";
-import { buttonClass } from "../Button/Button.recipe";
+import { buttonRecipe } from "../Button/Button.recipe";
 import { twCx } from "../utils/twCva";
 import styles from "./Tooltip.module.css";
 
@@ -13,12 +13,12 @@ export type TooltipRootProps = ComponentProps<typeof Tooltip.Root>;
 export const TooltipRoot = Tooltip.Root;
 
 export type TooltipTriggerProps = ComponentProps<typeof Tooltip.Trigger> &
-  VariantProps<typeof buttonClass>;
+  VariantProps<typeof buttonRecipe>;
 
 export const TooltipTrigger: Component<TooltipTriggerProps> = (props) => {
   const [split, rest] = splitProps(props, buttonSplitProps);
 
-  return <Tooltip.Trigger {...rest} class={buttonClass(split)} />;
+  return <Tooltip.Trigger {...rest} class={buttonRecipe(split)} />;
 };
 
 export type TooltipPortalProps = ComponentProps<typeof Tooltip.Portal>;

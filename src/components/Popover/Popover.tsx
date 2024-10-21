@@ -4,7 +4,7 @@ import { Popover as KobaltePopover } from "@kobalte/core";
 import { Component, type ComponentProps, splitProps } from "solid-js";
 
 import { buttonSplitProps } from "../Button/Button";
-import { buttonClass } from "../Button/Button.recipe";
+import { buttonRecipe } from "../Button/Button.recipe";
 import { twCx } from "../utils/twCva";
 import styles from "./Popover.module.css";
 
@@ -13,12 +13,12 @@ export const PopoverRoot = KobaltePopover.Root;
 export type PopoverTriggerProps = ComponentProps<
   typeof KobaltePopover.Trigger
 > &
-  VariantProps<typeof buttonClass>;
+  VariantProps<typeof buttonRecipe>;
 
 export const PopoverTrigger: Component<PopoverTriggerProps> = (props) => {
   const [split, rest] = splitProps(props, buttonSplitProps);
 
-  return <KobaltePopover.Trigger {...rest} class={buttonClass(split)} />;
+  return <KobaltePopover.Trigger {...rest} class={buttonRecipe(split)} />;
 };
 
 export const PopoverAnchor: Component<

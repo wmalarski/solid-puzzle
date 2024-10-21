@@ -4,7 +4,7 @@ import { Component, Show } from "solid-js";
 import { Alert, AlertIcon } from "~/components/Alert/Alert";
 import { Button } from "~/components/Button/Button";
 import { Card, CardBody } from "~/components/Card/Card";
-import { cardTitleClass } from "~/components/Card/Card.recipe";
+import { cardTitleRecipe } from "~/components/Card/Card.recipe";
 import { Link } from "~/components/Link/Link";
 import {
   TextFieldErrorMessage,
@@ -27,7 +27,7 @@ export const SignUp: Component = () => {
     <Card bg="base-200" class="w-full max-w-md" variant="bordered">
       <CardBody>
         <header class="flex items-center justify-between gap-2">
-          <h2 class={cardTitleClass()}>{t("auth.signUp.title")}</h2>
+          <h2 class={cardTitleRecipe()}>{t("auth.signUp.title")}</h2>
           <ThemeToggle />
         </header>
         <form action={signUpAction} class="flex flex-col gap-4" method="post">

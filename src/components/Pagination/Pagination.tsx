@@ -4,7 +4,7 @@ import { Component, type ComponentProps, splitProps } from "solid-js";
 
 import { useI18n } from "~/contexts/I18nContext";
 
-import { buttonClass } from "../Button/Button.recipe";
+import { buttonRecipe } from "../Button/Button.recipe";
 import { ArrowLeftIcon } from "../Icons/ArrowLeftIcon";
 import { ArrowRightIcon } from "../Icons/ArrowRightIcon";
 import { DotsHorizontalIcon } from "../Icons/DotsHorizontalIcon";
@@ -43,7 +43,7 @@ export const PaginationItem: Component<ComponentProps<"li">> = (props) => {
 type PaginationLinkProps = {
   isActive?: boolean;
 } & ComponentProps<"a"> &
-  Omit<VariantProps<typeof buttonClass>, "shape" | "variant">;
+  Omit<VariantProps<typeof buttonRecipe>, "shape" | "variant">;
 
 export const PaginationLink: Component<PaginationLinkProps> = (props) => {
   const [, rest] = splitProps(props, ["class", "isActive", "size", "color"]);
@@ -54,7 +54,7 @@ export const PaginationLink: Component<PaginationLinkProps> = (props) => {
       <a
         aria-current={props.isActive ? "page" : undefined}
         class={twCx(
-          buttonClass({
+          buttonRecipe({
             shape: "square",
             size: props.size,
             variant: props.isActive ? "outline" : "ghost"

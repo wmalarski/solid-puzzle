@@ -1,6 +1,6 @@
 import { twCva } from "../utils/twCva";
 
-export const buttonClass = twCva("btn no-animation flex items-center gap-1", {
+export const buttonRecipe = twCva("btn no-animation flex items-center gap-1", {
   defaultVariants: {
     color: null,
     isLoading: false,
@@ -46,7 +46,7 @@ export const buttonClass = twCva("btn no-animation flex items-center gap-1", {
   }
 });
 
-export const buttonGroupClass = twCva("btn-group", {
+export const buttonGroupRecipe = twCva("btn-group", {
   defaultVariants: {
     direction: null
   },

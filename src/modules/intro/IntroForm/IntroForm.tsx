@@ -4,7 +4,7 @@ import { Component, Show } from "solid-js";
 import { Alert, AlertIcon } from "~/components/Alert/Alert";
 import { Button } from "~/components/Button/Button";
 import { Card, CardBody } from "~/components/Card/Card";
-import { cardTitleClass } from "~/components/Card/Card.recipe";
+import { cardTitleRecipe } from "~/components/Card/Card.recipe";
 import {
   TextFieldInput,
   TextFieldLabel,
@@ -26,7 +26,7 @@ export const IntroForm: Component = () => {
     <Card bg="base-200" class="w-full max-w-md" variant="bordered">
       <CardBody>
         <header class="flex items-center justify-between gap-2">
-          <h2 class={cardTitleClass()}>{t("intro.title")}</h2>
+          <h2 class={cardTitleRecipe()}>{t("intro.title")}</h2>
         </header>
         <form
           action={updateUserAction}

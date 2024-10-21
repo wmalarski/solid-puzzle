@@ -1,6 +1,6 @@
 import { twCva } from "../utils/twCva";
 
-export const cardClass = twCva("card", {
+export const cardRecipe = twCva("card", {
   defaultVariants: {
     bg: null,
     color: null,
@@ -35,9 +35,9 @@ export const cardClass = twCva("card", {
   }
 });
 
-export const cardTitleClass = twCva("card-title");
+export const cardTitleRecipe = twCva("card-title");
 
-export const cardActionsClass = twCva("card-actions", {
+export const cardActionsRecipe = twCva("card-actions", {
   defaultVariants: {
     justify: null
   },

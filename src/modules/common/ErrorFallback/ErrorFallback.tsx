@@ -2,7 +2,7 @@ import { onMount } from "solid-js";
 
 import { Button } from "~/components/Button/Button";
 import { Card, CardBody } from "~/components/Card/Card";
-import { cardTitleClass } from "~/components/Card/Card.recipe";
+import { cardTitleRecipe } from "~/components/Card/Card.recipe";
 import { XCircleIcon } from "~/components/Icons/XCircleIcon";
 import { Link } from "~/components/Link/Link";
 import { useI18n } from "~/contexts/I18nContext";
@@ -21,7 +21,7 @@ export const ErrorFallback = (err: unknown, reset: VoidFunction) => {
         <CardBody class="items-center">
           <XCircleIcon class="size-10 text-error" />
           <header class="flex items-center justify-between gap-2 text-error">
-            <h2 class={cardTitleClass()}>{t("error.title")}</h2>
+            <h2 class={cardTitleRecipe()}>{t("error.title")}</h2>
           </header>
           <span class="text-center">
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}

@@ -4,7 +4,7 @@ import { Toast, toaster } from "@kobalte/core";
 import { Component, type ComponentProps, splitProps } from "solid-js";
 
 import { AlertIcon, type AlertIconProps } from "../Alert/Alert";
-import { alertClass } from "../Alert/Alert.recipe";
+import { alertRecipe } from "../Alert/Alert.recipe";
 import { twCx } from "../utils/twCva";
 
 const ToastRegion = Toast.Region;
@@ -22,7 +22,7 @@ function ToastList(props: ComponentProps<typeof Toast.List>) {
 }
 
 export type ToastRootProps = ComponentProps<typeof Toast.Root> &
-  VariantProps<typeof alertClass>;
+  VariantProps<typeof alertRecipe>;
 
 export const ToastRoot: Component<ToastRootProps> = (props) => {
   const [split, rest] = splitProps(props, ["variant"]);
@@ -30,7 +30,7 @@ export const ToastRoot: Component<ToastRootProps> = (props) => {
   return (
     <Toast.Root
       {...rest}
-      class={alertClass({
+      class={alertRecipe({
         class: twCx(
           "flex items-start justify-between gap-2 p-3",
           "ui-opened:animate-slideIn ui-opened:duration-150 ui-opened:ease-out",

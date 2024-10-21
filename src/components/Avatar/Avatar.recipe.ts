@@ -1,6 +1,6 @@
 import { twCva } from "../utils/twCva";
 
-export const avatarClass = twCva("avatar", {
+export const avatarRecipe = twCva("avatar", {
   defaultVariants: {
     placeholder: null,
     presence: null
@@ -16,7 +16,7 @@ export const avatarClass = twCva("avatar", {
   }
 });
 
-export const avatarContentClass = twCva("", {
+export const avatarContentRecipe = twCva("", {
   defaultVariants: {
     placeholder: null,
     ring: null,

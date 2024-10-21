@@ -10,14 +10,14 @@ import {
 } from "solid-js";
 
 import { buttonSplitProps } from "../Button/Button";
-import { buttonClass } from "../Button/Button.recipe";
+import { buttonRecipe } from "../Button/Button.recipe";
 import { twCx } from "../utils/twCva";
 import styles from "./DropdownMenu.module.css";
 import {
-  dropdownMenuContentClass,
-  dropdownMenuIconClass,
-  dropdownMenuItemClass,
-  dropdownMenuSubTriggerClass
+  dropdownMenuContentRecipe,
+  dropdownMenuIconRecipe,
+  dropdownMenuItemRecipe,
+  dropdownMenuSubTriggerRecipe
 } from "./DropdownMenu.recipe";
 
 export const DropdownMenuRoot = KobalteDropdownMenu.Root;
@@ -25,20 +25,20 @@ export const DropdownMenuRoot = KobalteDropdownMenu.Root;
 export type DropdownMenuTriggerProps = ComponentProps<
   typeof KobalteDropdownMenu.Trigger
 > &
-  VariantProps<typeof buttonClass>;
+  VariantProps<typeof buttonRecipe>;
 
 export const DropdownMenuTrigger: Component<DropdownMenuTriggerProps> = (
   props
 ) => {
   const [split, rest] = splitProps(props, buttonSplitProps);
 
-  return <KobalteDropdownMenu.Trigger {...rest} class={buttonClass(split)} />;
+  return <KobalteDropdownMenu.Trigger {...rest} class={buttonRecipe(split)} />;
 };
 
 export type DropdownMenuIconProps = ComponentProps<
   typeof KobalteDropdownMenu.Icon
 > &
-  VariantProps<typeof dropdownMenuIconClass>;
+  VariantProps<typeof dropdownMenuIconRecipe>;
 
 export const DropdownMenuIcon: Component<DropdownMenuIconProps> = (props) => {
   const [split, rest] = splitProps(props, ["rotation"]);
@@ -46,7 +46,7 @@ export const DropdownMenuIcon: Component<DropdownMenuIconProps> = (props) => {
   return (
     <KobalteDropdownMenu.Icon
       {...rest}
-      class={dropdownMenuIconClass({ class: props.class, ...split })}
+      class={dropdownMenuIconRecipe({ class: props.class, ...split })}
     />
   );
 };
@@ -65,7 +65,7 @@ export const DropdownMenuContent: Component<
   return (
     <KobalteDropdownMenu.Content
       {...props}
-      class={dropdownMenuContentClass({ class: props.class })}
+      class={dropdownMenuContentRecipe({ class: props.class })}
       ref={setRef}
     />
   );
@@ -113,7 +113,7 @@ export const DropdownMenuSubTrigger: Component<
   return (
     <KobalteDropdownMenu.SubTrigger
       {...props}
-      class={dropdownMenuSubTriggerClass({ class: props.class })}
+      class={dropdownMenuSubTriggerRecipe({ class: props.class })}
     />
   );
 };
@@ -124,7 +124,7 @@ export const DropdownMenuSubContent: Component<
   return (
     <KobalteDropdownMenu.SubContent
       {...props}
-      class={dropdownMenuContentClass({ class: props.class })}
+      class={dropdownMenuContentRecipe({ class: props.class })}
     />
   );
 };
@@ -135,7 +135,7 @@ export const DropdownMenuItem: Component<
   return (
     <KobalteDropdownMenu.Item
       {...props}
-      class={dropdownMenuItemClass({ class: props.class })}
+      class={dropdownMenuItemRecipe({ class: props.class })}
     />
   );
 };
@@ -187,7 +187,7 @@ export const DropdownMenuRadioItem: Component<
   return (
     <KobalteDropdownMenu.RadioItem
       {...props}
-      class={dropdownMenuItemClass({ class: props.class })}
+      class={dropdownMenuItemRecipe({ class: props.class })}
     />
   );
 };
@@ -198,7 +198,7 @@ export const DropdownMenuCheckboxItem: Component<
   return (
     <KobalteDropdownMenu.CheckboxItem
       {...props}
-      class={dropdownMenuItemClass({ class: props.class })}
+      class={dropdownMenuItemRecipe({ class: props.class })}
     />
   );
 };

@@ -3,16 +3,16 @@ import type { VariantProps } from "class-variance-authority";
 import { Component, type ComponentProps, splitProps } from "solid-js";
 
 import { twCx } from "../utils/twCva";
-import { carouselClass } from "./Carousel.recipe";
+import { carouselRecipe } from "./Carousel.recipe";
 
 export type CarouselProps = ComponentProps<"div"> &
-  VariantProps<typeof carouselClass>;
+  VariantProps<typeof carouselRecipe>;
 
 export const Carousel: Component<CarouselProps> = (props) => {
   const [split, rest] = splitProps(props, ["isVertical", "snap"]);
 
   return (
-    <div {...rest} class={carouselClass({ class: props.class, ...split })} />
+    <div {...rest} class={carouselRecipe({ class: props.class, ...split })} />
   );
 };
 

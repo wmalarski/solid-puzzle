@@ -13,7 +13,7 @@ import {
 import { useI18n } from "~/contexts/I18nContext";
 
 import { buttonSplitProps } from "../Button/Button";
-import { buttonClass } from "../Button/Button.recipe";
+import { buttonRecipe } from "../Button/Button.recipe";
 import { ArrowLeftIcon } from "../Icons/ArrowLeftIcon";
 import { ArrowRightIcon } from "../Icons/ArrowRightIcon";
 import { twCx } from "../utils/twCva";
@@ -59,7 +59,7 @@ export const SimplePaginationRoot: Component<SimplePaginationRootProps> = (
 };
 
 type PaginationLinkProps = ComponentProps<"a"> &
-  VariantProps<typeof buttonClass>;
+  VariantProps<typeof buttonRecipe>;
 
 export const SimplePaginationPrevious: Component<PaginationLinkProps> = (
   props
@@ -78,7 +78,7 @@ export const SimplePaginationPrevious: Component<PaginationLinkProps> = (
     <a
       aria-disabled={hasPrevious()}
       aria-label={t("pagination.previousLabel")}
-      class={buttonClass({
+      class={buttonRecipe({
         ...split,
         class: props.class,
         variant: hasPrevious() ? split.variant : "disabled"
@@ -109,7 +109,7 @@ export const SimplePaginationNext: Component<PaginationLinkProps> = (props) => {
     <a
       aria-disabled={hasNext()}
       aria-label={t("pagination.nextLabel")}
-      class={buttonClass({
+      class={buttonRecipe({
         ...split,
         class: props.class,
         variant: hasNext() ? split.variant : "disabled"

@@ -7,15 +7,17 @@ import { AlertCircleIcon } from "../Icons/AlertCircleIcon";
 import { CheckCircleIcon } from "../Icons/CheckCircleIcon";
 import { InfoIcon } from "../Icons/InfoIcon";
 import { XCircleIcon } from "../Icons/XCircleIcon";
-import { alertClass } from "./Alert.recipe";
+import { alertRecipe } from "./Alert.recipe";
 
 export type AlertProps = ComponentProps<"div"> &
-  VariantProps<typeof alertClass>;
+  VariantProps<typeof alertRecipe>;
 
 export const Alert: Component<AlertProps> = (props) => {
   const [split, rest] = splitProps(props, ["variant", "class"]);
 
-  return <div class={alertClass({ class: split.class, ...split })} {...rest} />;
+  return (
+    <div class={alertRecipe({ class: split.class, ...split })} {...rest} />
+  );
 };
 
 const alertIconMap: Record<
