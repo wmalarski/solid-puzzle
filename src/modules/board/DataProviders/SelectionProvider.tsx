@@ -2,7 +2,6 @@ import { throttle } from "@solid-primitives/scheduled";
 import { REALTIME_LISTEN_TYPES } from "@supabase/supabase-js";
 import {
   createContext,
-  createEffect,
   createMemo,
   createSignal,
   ParentProps,
@@ -76,13 +75,11 @@ const createPlayerSelectionState = (playerId: string) => {
     setSelectedId(null);
   };
 
-  createEffect(() => {
-    broadcastChannel().on<SelectionPayload>(
-      REALTIME_LISTEN_TYPES.BROADCAST,
-      { event: SELECTION_EVENT_NAME },
-      ({ payload }) => setRemoteSelection(payload)
-    );
-  });
+  broadcastChannel().on<SelectionPayload>(
+    REALTIME_LISTEN_TYPES.BROADCAST,
+    { event: SELECTION_EVENT_NAME },
+    ({ payload }) => setRemoteSelection(payload)
+  );
 
   return {
     clear,

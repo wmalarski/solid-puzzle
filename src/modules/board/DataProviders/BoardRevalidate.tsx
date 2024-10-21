@@ -1,4 +1,4 @@
-import type { JSX } from "solid-js";
+import type { ParentProps } from "solid-js";
 
 import { revalidate, useNavigate } from "@solidjs/router";
 import {
@@ -7,9 +7,9 @@ import {
 } from "@supabase/supabase-js";
 import {
   createContext,
-  createSignal,
+  createEffect,
+  createMemo,
   onCleanup,
-  onMount,
   useContext
 } from "solid-js";
 
@@ -22,21 +22,15 @@ import {
 import { paths } from "~/utils/paths";
 import { getClientSupabase } from "~/utils/supabase";
 
-const BOARD_UPDATE_CHANNEL_NAME = "rooms:update_board";
+import { useBroadcastChannel } from "./BroadcastProvider";
 
-type BoardRevalidateProviderProps = {
-  boardId: string;
-  children: JSX.Element;
-};
+const BOARD_UPDATE_CHANNEL_NAME = "rooms:update_board";
+const REVALIDATE_EVENT_NAME = "rooms:revalidate";
 
 const createBoardRevalidate = () => {
   const { t } = useI18n();
 
-  const [sender, setSender] = createSignal<() => void>(() => void 0);
-
-  const setRemoteSender = (sender: () => void) => {
-    setSender(() => sender);
-  };
+  const broadcastChannel = useBroadcastChannel();
 
   const setRemoteRevalidate = async () => {
     showToast({
@@ -48,28 +42,43 @@ const createBoardRevalidate = () => {
   };
 
   const sendRevalidate = () => {
-    sender()();
+    broadcastChannel().send({
+      event: REVALIDATE_EVENT_NAME,
+      type: REALTIME_LISTEN_TYPES.BROADCAST
+    });
   };
 
-  return { sendRevalidate, setRemoteRevalidate, setRemoteSender };
+  broadcastChannel().on(
+    REALTIME_LISTEN_TYPES.BROADCAST,
+    { event: REVALIDATE_EVENT_NAME },
+    () => setRemoteRevalidate()
+  );
+
+  return { sendRevalidate };
 };
 
-type BoardRevalidateContextState = ReturnType<typeof createBoardRevalidate>;
+type BoardRevalidateContextState = () => ReturnType<
+  typeof createBoardRevalidate
+>;
 
-const BoardRevalidateContext = createContext<BoardRevalidateContextState>({
-  sendRevalidate: () => void 0,
-  setRemoteRevalidate: () => Promise.resolve(),
-  setRemoteSender: () => void 0
-});
+const BoardRevalidateContext = createContext<BoardRevalidateContextState>(
+  () => {
+    throw new Error("BoardRevalidateContext not defined");
+  }
+);
+
+type BoardRevalidateProviderProps = ParentProps<{
+  boardId: string;
+}>;
 
 export function BoardRevalidateProvider(props: BoardRevalidateProviderProps) {
   const { t } = useI18n();
 
   const navigate = useNavigate();
 
-  const boardRevalidate = createBoardRevalidate();
+  const boardRevalidate = createMemo(() => createBoardRevalidate());
 
-  onMount(() => {
+  createEffect(() => {
     const supabase = getClientSupabase();
 
     const channel = supabase

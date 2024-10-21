@@ -2,7 +2,6 @@ import { throttle } from "@solid-primitives/scheduled";
 import { REALTIME_LISTEN_TYPES } from "@supabase/supabase-js";
 import {
   createContext,
-  createEffect,
   createMemo,
   type JSX,
   ParentProps,
@@ -184,13 +183,11 @@ const createPuzzleContext = (args: CreatePuzzleContextArgs) => {
     );
   };
 
-  createEffect(() => {
-    broadcastChannel().on<FragmentState>(
-      REALTIME_LISTEN_TYPES.BROADCAST,
-      { event: PUZZLE_EVENT_NAME },
-      ({ payload }) => setRemoteFragment(payload)
-    );
-  });
+  broadcastChannel().on<FragmentState>(
+    REALTIME_LISTEN_TYPES.BROADCAST,
+    { event: PUZZLE_EVENT_NAME },
+    ({ payload }) => setRemoteFragment(payload)
+  );
 
   return {
     config,

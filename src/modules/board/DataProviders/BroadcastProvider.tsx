@@ -16,13 +16,11 @@ import {
 
 import { getClientSupabase } from "~/utils/supabase";
 
-import { useBoardRevalidate } from "./BoardRevalidate";
 import { REALTIME_THROTTLE_TIME } from "./const";
 import { type PlayerCursorPayload, usePlayerCursors } from "./CursorProvider";
 
 const CHANNEL_NAME = "rooms:broadcast";
 const CURSOR_EVENT_NAME = "rooms:cursor";
-const REVALIDATE_EVENT_NAME = "rooms:revalidate";
 
 type BroadcastProviderProps = ParentProps<{
   boardId: string;
@@ -38,7 +36,6 @@ const BroadcastProviderContext = createContext<BroadcastProviderContextState>(
 
 export function BroadcastProvider(props: BroadcastProviderProps) {
   const cursors = usePlayerCursors();
-  const revalidate = useBoardRevalidate();
 
   const broadcastChannel = createMemo(() => {
     const supabase = getClientSupabase();
@@ -61,11 +58,6 @@ export function BroadcastProvider(props: BroadcastProviderProps) {
         { event: CURSOR_EVENT_NAME },
         ({ payload }) => cursors.setRemoteCursor(payload)
       )
-      .on(
-        REALTIME_LISTEN_TYPES.BROADCAST,
-        { event: REVALIDATE_EVENT_NAME },
-        () => revalidate.setRemoteRevalidate()
-      )
       .subscribe((status) => {
         if (status !== REALTIME_SUBSCRIBE_STATES.SUBSCRIBED) {
           return;
@@ -76,14 +68,6 @@ export function BroadcastProvider(props: BroadcastProviderProps) {
             channel.send({
               event: CURSOR_EVENT_NAME,
               payload,
-              type: REALTIME_LISTEN_TYPES.BROADCAST
-            });
-          }, REALTIME_THROTTLE_TIME)
-        );
-        revalidate.setRemoteSender(
-          throttle(() => {
-            channel.send({
-              event: REVALIDATE_EVENT_NAME,
               type: REALTIME_LISTEN_TYPES.BROADCAST
             });
           }, REALTIME_THROTTLE_TIME)
