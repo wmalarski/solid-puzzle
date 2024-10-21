@@ -1,4 +1,4 @@
-import { createContext, createSignal, type JSX, useContext } from "solid-js";
+import { createContext, createSignal, ParentProps, useContext } from "solid-js";
 
 const createPreviewContext = () => {
   const [isPreviewVisible, setIsPreviewVisible] = createSignal(false);
@@ -17,11 +17,7 @@ export const usePreviewContext = () => {
   return useContext(PreviewContext);
 };
 
-type PreviewProviderProps = {
-  children: JSX.Element;
-};
-
-export function PreviewContextProvider(props: PreviewProviderProps) {
+export function PreviewContextProvider(props: ParentProps) {
   const value = createPreviewContext();
 
   return (

@@ -1,4 +1,4 @@
-import { createContext, createSignal, type JSX, useContext } from "solid-js";
+import { createContext, createSignal, ParentProps, useContext } from "solid-js";
 
 import type { Point2D } from "~/utils/geometry";
 
@@ -81,11 +81,7 @@ export const useTransformContext = () => {
   return useContext(TransformContext);
 };
 
-type TransformContextProviderProps = {
-  children: JSX.Element;
-};
-
-export function TransformContextProvider(props: TransformContextProviderProps) {
+export function TransformContextProvider(props: ParentProps) {
   const value = createTransform();
 
   return (

@@ -4,9 +4,9 @@ import {
   createEffect,
   createMemo,
   createResource,
-  type JSX,
   onCleanup,
   onMount,
+  ParentProps,
   untrack,
   useContext
 } from "solid-js";
@@ -27,10 +27,9 @@ export const usePixiContainer = () => {
   return useContext(ContainerContext);
 };
 
-type PixiAppProviderProps = {
+type PixiAppProviderProps = ParentProps<{
   canvas: HTMLCanvasElement;
-  children: JSX.Element;
-};
+}>;
 
 export function PixiAppProvider(props: PixiAppProviderProps) {
   const theme = useThemeContext();

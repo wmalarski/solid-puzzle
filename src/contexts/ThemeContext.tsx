@@ -1,6 +1,6 @@
 import { createWritableMemo } from "@solid-primitives/memo";
 import { createAsync } from "@solidjs/router";
-import { createContext, type JSX, useContext } from "solid-js";
+import { createContext, ParentProps, useContext } from "solid-js";
 
 import { getAppThemeLoader } from "~/server/theme/client";
 import { APP_THEME_COOKIE_NAME } from "~/server/theme/const";
@@ -29,11 +29,7 @@ const ThemeContext = createContext<ThemeContextValue>({
   updateTheme: () => void 0
 });
 
-type ThemeProviderProps = {
-  children: JSX.Element;
-};
-
-export function ThemeProvider(props: ThemeProviderProps) {
+export function ThemeProvider(props: ParentProps) {
   const value = createThemeValue();
 
   return (

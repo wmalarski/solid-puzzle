@@ -1,4 +1,4 @@
-import type { JSX } from "solid-js";
+import type { ParentProps } from "solid-js";
 
 import { PuzzleIcon } from "~/components/Icons/PuzzleIcon";
 import { Link } from "~/components/Link";
@@ -30,21 +30,13 @@ export function PageFooter() {
   );
 }
 
-type FormLayoutProps = {
-  children: JSX.Element;
-};
-
-export function FormLayout(props: FormLayoutProps) {
+export function FormLayout(props: ParentProps) {
   return (
     <main class="mx-auto flex flex-col items-center p-4">{props.children}</main>
   );
 }
 
-type PageLayoutProps = {
-  children: JSX.Element;
-};
-
-export function PageLayout(props: PageLayoutProps) {
+export function PageLayout(props: ParentProps) {
   return (
     <main class="mx-auto flex flex-col items-center">{props.children}</main>
   );

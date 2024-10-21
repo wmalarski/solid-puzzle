@@ -1,12 +1,6 @@
 import { throttle } from "@solid-primitives/scheduled";
 import { REALTIME_LISTEN_TYPES } from "@supabase/supabase-js";
-import {
-  createContext,
-  createMemo,
-  type JSX,
-  ParentProps,
-  useContext
-} from "solid-js";
+import { createContext, createMemo, ParentProps, useContext } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 
 import type { BoardAccess } from "~/server/access/rpc";
@@ -212,7 +206,6 @@ const PuzzleStateContext = createContext<PuzzleContextState>(() => {
 type PuzzleStateProviderProps = ParentProps<{
   board: BoardModel;
   boardAccess: BoardAccess;
-  children: JSX.Element;
   fragments: FragmentModel[];
 }>;
 

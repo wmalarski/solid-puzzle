@@ -1,7 +1,13 @@
 import type { User } from "@supabase/supabase-js";
 
 import { Navigate, useLocation } from "@solidjs/router";
-import { createContext, type JSX, Show, useContext } from "solid-js";
+import {
+  createContext,
+  type JSX,
+  ParentProps,
+  Show,
+  useContext
+} from "solid-js";
 
 import { paths } from "~/utils/paths";
 
@@ -13,12 +19,11 @@ const AuthorizedUserContext = createContext<() => User>(() => {
   throw new Error("AuthorizedSessionContext not defined");
 });
 
-type UserProviderProps = {
-  children: JSX.Element;
+type UserProviderProps = ParentProps<{
   loadingFallback?: JSX.Element;
   unauthorizedFallback?: JSX.Element;
   value: null | undefined | User;
-};
+}>;
 
 export function UserProvider(props: UserProviderProps) {
   const location = useLocation();
@@ -56,11 +61,10 @@ export const useUserContext = () => {
   return useContext(UserContext);
 };
 
-type AuthorizedUserProviderProps = {
-  children: JSX.Element;
+type AuthorizedUserProviderProps = ParentProps<{
   loadingFallback?: JSX.Element;
   value: null | undefined | User;
-};
+}>;
 
 export function AuthorizedUserProvider(props: AuthorizedUserProviderProps) {
   return (
