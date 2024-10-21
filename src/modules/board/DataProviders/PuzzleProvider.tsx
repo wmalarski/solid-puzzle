@@ -1,8 +1,11 @@
+import { throttle } from "@solid-primitives/scheduled";
+import { REALTIME_LISTEN_TYPES } from "@supabase/supabase-js";
 import {
   createContext,
+  createEffect,
   createMemo,
-  createSignal,
   type JSX,
+  ParentProps,
   useContext
 } from "solid-js";
 import { createStore, produce } from "solid-js/store";
@@ -17,6 +20,10 @@ import {
   type PuzzleCurveConfig,
   type PuzzleFragmentShape
 } from "~/utils/getPuzzleFragments";
+
+import { useBroadcastChannel } from "./BroadcastProvider";
+
+const PUZZLE_EVENT_NAME = "rooms:puzzle";
 
 export type FragmentState = {
   fragmentId: string;
@@ -56,65 +63,49 @@ const isLockedInPlace = ({ fragment, shapes }: IsLockedInPlaceArgs) => {
   return isLocked;
 };
 
-type PuzzleStateProviderProps = {
+type CreatePuzzleContextArgs = {
   board: BoardModel;
   boardAccess: BoardAccess;
-  children: JSX.Element;
   fragments: FragmentModel[];
 };
 
-const createPuzzleContext = (args: () => PuzzleStateProviderProps) => {
+const createPuzzleContext = (args: CreatePuzzleContextArgs) => {
+  const broadcastChannel = useBroadcastChannel();
   const updateFragment = useUpdateFragment();
 
-  const config = createMemo(() => {
-    const value = args();
-    return getPuzzleFragments({
-      config: value.board.config as PuzzleCurveConfig,
-      height: value.board.height,
-      width: value.board.width
-    });
+  const config = getPuzzleFragments({
+    config: args.board.config as PuzzleCurveConfig,
+    height: args.board.height,
+    width: args.board.width
   });
 
-  const shapes = createMemo(() => {
-    const shapesMap = new Map<string, PuzzleFragmentShape>();
+  const shapes = new Map<string, PuzzleFragmentShape>();
 
-    const fragmentsConfig = config().fragments;
+  const fragmentsConfig = config.fragments;
 
-    args().fragments.forEach((fragment) => {
-      const shape = fragmentsConfig[fragment.index];
-      shapesMap.set(fragment.id, shape);
-    });
-
-    return shapesMap;
+  args.fragments.forEach((fragment) => {
+    const shape = fragmentsConfig[fragment.index];
+    shapes.set(fragment.id, shape);
   });
 
-  const fragmentsIds = createMemo(() => {
-    return args().fragments.map((fragment) => fragment.id);
+  const fragmentsIds = args.fragments.map((fragment) => fragment.id);
+
+  const init: PuzzleState = {};
+
+  args.fragments.forEach((fragment) => {
+    init[fragment.id] = {
+      fragmentId: fragment.id,
+      isLocked: fragment.is_locked,
+      rotation: fragment.rotation,
+      x: fragment.x,
+      y: fragment.y
+    };
   });
 
-  const store = createMemo(() => {
-    const init: PuzzleState = {};
-
-    args().fragments.forEach((fragment) => {
-      init[fragment.id] = {
-        fragmentId: fragment.id,
-        isLocked: fragment.is_locked,
-        rotation: fragment.rotation,
-        x: fragment.x,
-        y: fragment.y
-      };
-    });
-
-    const [value, set] = createStore<PuzzleState>(init);
-    return { set, value };
-  });
-
-  const [sender, setSender] = createSignal<(args: FragmentState) => void>(
-    () => void 0
-  );
+  const [fragments, setFragments] = createStore<PuzzleState>(init);
 
   const setFragmentState = (update: SetFragmentStateArgs) => {
-    store().set(
+    setFragments(
       produce((state) => {
         const fragment = state[update.fragmentId];
         if (fragment) {
@@ -126,8 +117,16 @@ const createPuzzleContext = (args: () => PuzzleStateProviderProps) => {
     );
   };
 
+  const sendPayload = throttle((payload: FragmentState) => {
+    broadcastChannel().send({
+      event: PUZZLE_EVENT_NAME,
+      payload,
+      type: REALTIME_LISTEN_TYPES.BROADCAST
+    });
+  });
+
   const sendFragmentState = (update: SetFragmentStateArgs) => {
-    sender()({ ...update, isLocked: false });
+    sendPayload({ ...update, isLocked: false });
   };
 
   const setFragmentStateWithLockCheck = async (
@@ -135,10 +134,10 @@ const createPuzzleContext = (args: () => PuzzleStateProviderProps) => {
   ) => {
     const isLocked = isLockedInPlace({
       fragment: update,
-      shapes: shapes()
+      shapes: shapes
     });
 
-    sender()({ ...update, isLocked });
+    sendPayload({ ...update, isLocked });
 
     await updateFragment({
       fragmentId: update.fragmentId,
@@ -148,7 +147,7 @@ const createPuzzleContext = (args: () => PuzzleStateProviderProps) => {
       y: update.y
     });
 
-    store().set(
+    setFragments(
       produce((state) => {
         const fragment = state[update.fragmentId];
         if (fragment) {
@@ -161,12 +160,8 @@ const createPuzzleContext = (args: () => PuzzleStateProviderProps) => {
     );
   };
 
-  const fragments = createMemo(() => {
-    return store().value;
-  });
-
   const unfinishedCount = createMemo(() => {
-    const values = Object.values(store().value);
+    const values = Object.values(fragments);
     const unfinished = values.filter((state) => !state?.isLocked);
     return unfinished.length;
   });
@@ -175,12 +170,8 @@ const createPuzzleContext = (args: () => PuzzleStateProviderProps) => {
     return unfinishedCount() === 0;
   });
 
-  const setRemoteSender = (sender: (payload: FragmentState) => void) => {
-    setSender(() => sender);
-  };
-
   const setRemoteFragment = (payload: FragmentState) => {
-    store().set(
+    setFragments(
       produce((state) => {
         const fragment = state[payload.fragmentId];
         if (fragment) {
@@ -193,6 +184,14 @@ const createPuzzleContext = (args: () => PuzzleStateProviderProps) => {
     );
   };
 
+  createEffect(() => {
+    broadcastChannel().on<FragmentState>(
+      REALTIME_LISTEN_TYPES.BROADCAST,
+      { event: PUZZLE_EVENT_NAME },
+      ({ payload }) => setRemoteFragment(payload)
+    );
+  });
+
   return {
     config,
     fragments,
@@ -201,31 +200,32 @@ const createPuzzleContext = (args: () => PuzzleStateProviderProps) => {
     sendFragmentState,
     setFragmentState,
     setFragmentStateWithLockCheck,
-    setRemoteFragment,
-    setRemoteSender,
     shapes,
     unfinishedCount
   };
 };
 
-type PuzzleContextState = ReturnType<typeof createPuzzleContext>;
+type PuzzleContextState = () => ReturnType<typeof createPuzzleContext>;
 
-const PuzzleStateContext = createContext<PuzzleContextState>({
-  config: () => ({ fragments: [], lines: [] }),
-  fragments: () => ({}),
-  fragmentsIds: () => [],
-  isFinished: () => false,
-  sendFragmentState: () => void 0,
-  setFragmentState: () => void 0,
-  setFragmentStateWithLockCheck: () => Promise.resolve(),
-  setRemoteFragment: () => void 0,
-  setRemoteSender: () => void 0,
-  shapes: () => new Map(),
-  unfinishedCount: () => 0
+const PuzzleStateContext = createContext<PuzzleContextState>(() => {
+  throw new Error("PuzzleStateContext is not defined");
 });
 
+type PuzzleStateProviderProps = ParentProps<{
+  board: BoardModel;
+  boardAccess: BoardAccess;
+  children: JSX.Element;
+  fragments: FragmentModel[];
+}>;
+
 export function PuzzleStateProvider(props: PuzzleStateProviderProps) {
-  const value = createPuzzleContext(() => props);
+  const value = createMemo(() =>
+    createPuzzleContext({
+      board: props.board,
+      boardAccess: props.boardAccess,
+      fragments: props.fragments
+    })
+  );
 
   return (
     <PuzzleStateContext.Provider value={value}>

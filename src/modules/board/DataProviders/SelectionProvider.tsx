@@ -5,7 +5,7 @@ import {
   createEffect,
   createMemo,
   createSignal,
-  type JSX,
+  ParentProps,
   useContext
 } from "solid-js";
 import { createStore, produce } from "solid-js/store";
@@ -19,11 +19,6 @@ type PlayerSelectionState = Record<string, null | string | undefined>;
 type SelectionPayload = {
   playerId: string;
   selectionId: null | string;
-};
-
-type PlayerSelectionProviderProps = {
-  children: JSX.Element;
-  playerId: string;
 };
 
 const createPlayerSelectionState = (playerId: string) => {
@@ -109,6 +104,10 @@ const PlayerSelectionContext = createContext<PlayerSelectionContextState>(
     throw new Error("PlayerSelectionContext is not defined");
   }
 );
+
+type PlayerSelectionProviderProps = ParentProps<{
+  playerId: string;
+}>;
 
 export function PlayerSelectionProvider(props: PlayerSelectionProviderProps) {
   const value = createMemo(() => createPlayerSelectionState(props.playerId));
