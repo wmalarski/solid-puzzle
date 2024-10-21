@@ -43,11 +43,11 @@ function Board(props: BoardProps) {
   useStageDeselect();
 
   return (
-    <For each={store.fragmentsIds()}>
+    <For each={store().fragmentsIds}>
       {(fragmentId) => (
-        <Show when={store.shapes().get(fragmentId)}>
+        <Show when={store().shapes.get(fragmentId)}>
           {(shape) => (
-            <Show when={store.fragments()[fragmentId]}>
+            <Show when={store().fragments[fragmentId]}>
               {(state) => (
                 <PuzzleFragment
                   shape={shape()}
@@ -84,7 +84,7 @@ export function PuzzleBoard(props: PuzzleBoardProps) {
       {(texture) => (
         <>
           <PreviewSprite texture={texture()} />
-          <PreviewGrid lines={store.config().lines} />
+          <PreviewGrid lines={store().config.lines} />
           <Board texture={texture()} />
           <RemoteCursors />
         </>

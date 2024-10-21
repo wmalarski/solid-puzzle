@@ -19,10 +19,8 @@ import { getClientSupabase } from "~/utils/supabase";
 import { useBoardRevalidate } from "./BoardRevalidate";
 import { REALTIME_THROTTLE_TIME } from "./const";
 import { type PlayerCursorPayload, usePlayerCursors } from "./CursorProvider";
-import { type FragmentState, usePuzzleStore } from "./PuzzleProvider";
 
 const CHANNEL_NAME = "rooms:broadcast";
-const PUZZLE_EVENT_NAME = "rooms:puzzle";
 const CURSOR_EVENT_NAME = "rooms:cursor";
 const REVALIDATE_EVENT_NAME = "rooms:revalidate";
 
@@ -39,7 +37,6 @@ const BroadcastProviderContext = createContext<BroadcastProviderContextState>(
 );
 
 export function BroadcastProvider(props: BroadcastProviderProps) {
-  const puzzle = usePuzzleStore();
   const cursors = usePlayerCursors();
   const revalidate = useBoardRevalidate();
 
@@ -59,11 +56,6 @@ export function BroadcastProvider(props: BroadcastProviderProps) {
     const channel = broadcastChannel();
 
     channel
-      .on<FragmentState>(
-        REALTIME_LISTEN_TYPES.BROADCAST,
-        { event: PUZZLE_EVENT_NAME },
-        ({ payload }) => puzzle.setRemoteFragment(payload)
-      )
       .on<PlayerCursorPayload>(
         REALTIME_LISTEN_TYPES.BROADCAST,
         { event: CURSOR_EVENT_NAME },
@@ -79,15 +71,6 @@ export function BroadcastProvider(props: BroadcastProviderProps) {
           return;
         }
 
-        puzzle.setRemoteSender(
-          throttle((payload) => {
-            channel.send({
-              event: PUZZLE_EVENT_NAME,
-              payload,
-              type: REALTIME_LISTEN_TYPES.BROADCAST
-            });
-          }, REALTIME_THROTTLE_TIME)
-        );
         cursors.setRemoteSender(
           throttle((payload) => {
             channel.send({

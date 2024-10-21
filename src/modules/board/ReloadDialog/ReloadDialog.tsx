@@ -86,7 +86,7 @@ export function ReloadDialog(props: ReloadDialogProps) {
 
   const store = usePuzzleStore();
 
-  const [isOpen, setIsOpen] = createWritableMemo(() => store.isFinished());
+  const [isOpen, setIsOpen] = createWritableMemo(() => store().isFinished());
 
   const onSuccess = () => {
     setIsOpen(false);

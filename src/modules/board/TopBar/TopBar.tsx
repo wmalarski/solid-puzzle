@@ -144,7 +144,7 @@ export function TopBar(props: TopBarProps) {
 
   const finishedPercent = () => {
     const all = props.board.columns * props.board.rows;
-    const finished = all - store.unfinishedCount();
+    const finished = all - store().unfinishedCount();
     return `${Math.round((finished / all) * 10000) / 100}%`;
   };
 

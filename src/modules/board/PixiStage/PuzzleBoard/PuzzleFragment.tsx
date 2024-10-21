@@ -189,7 +189,7 @@ export function PuzzleFragment(props: PuzzleFragmentProps) {
   useDragObject({
     displayObject: fragment,
     onDragEnd: () => {
-      store.setFragmentStateWithLockCheck({
+      store().setFragmentStateWithLockCheck({
         fragmentId: props.state.fragmentId,
         rotation: props.state.rotation,
         x: fragment.x,
@@ -197,7 +197,7 @@ export function PuzzleFragment(props: PuzzleFragmentProps) {
       });
     },
     onDragMove: () => {
-      store.sendFragmentState({
+      store().sendFragmentState({
         fragmentId: props.state.fragmentId,
         rotation: props.state.rotation,
         x: fragment.x,
@@ -213,13 +213,13 @@ export function PuzzleFragment(props: PuzzleFragmentProps) {
 
   const onRotationEnd = (rotation: number) => {
     const change = { ...props.state, rotation };
-    store.setFragmentStateWithLockCheck(change);
+    store().setFragmentStateWithLockCheck(change);
   };
 
   const onRotationMove = (rotation: number) => {
     const change = { ...props.state, rotation };
-    store.sendFragmentState(change);
-    store.setFragmentState(change);
+    store().sendFragmentState(change);
+    store().setFragmentState(change);
   };
 
   return (
