@@ -50,33 +50,34 @@ export function Board(props: BoardProps) {
   return (
     <ErrorBoundary fallback={ErrorFallback}>
       <Suspense fallback={<BoardPlaceholder />}>
-        <PlayerSelectionProvider playerId={props.boardAccess.playerId}>
-          <PlayerCursorProvider playerId={props.boardAccess.playerId}>
-            <PlayerPresenceProvider boardAccess={props.boardAccess}>
-              <BoardRevalidateProvider boardId={props.boardAccess.boardId}>
-                <PuzzleStateProvider
-                  board={props.board}
-                  boardAccess={props.boardAccess}
-                  fragments={props.fragments}
-                >
-                  <BroadcastProvider boardId={props.boardAccess.boardId} />
-                  <PreviewContextProvider>
-                    <main class="relative h-screen w-screen">
-                      <ClientBoard board={props.board} />
-                      <TopBar
-                        board={props.board}
-                        boardAccess={props.boardAccess}
-                      />
-                      <InfoBar />
-                      <MenuBar board={props.board} />
-                      <ReloadDialog boardId={props.board.id} />
-                    </main>
-                  </PreviewContextProvider>
-                </PuzzleStateProvider>
-              </BoardRevalidateProvider>
-            </PlayerPresenceProvider>
-          </PlayerCursorProvider>
-        </PlayerSelectionProvider>
+        <BroadcastProvider boardId={props.boardAccess.boardId}>
+          <PlayerSelectionProvider playerId={props.boardAccess.playerId}>
+            <PlayerCursorProvider playerId={props.boardAccess.playerId}>
+              <PlayerPresenceProvider boardAccess={props.boardAccess}>
+                <BoardRevalidateProvider boardId={props.boardAccess.boardId}>
+                  <PuzzleStateProvider
+                    board={props.board}
+                    boardAccess={props.boardAccess}
+                    fragments={props.fragments}
+                  >
+                    <PreviewContextProvider>
+                      <main class="relative h-screen w-screen">
+                        <ClientBoard board={props.board} />
+                        <TopBar
+                          board={props.board}
+                          boardAccess={props.boardAccess}
+                        />
+                        <InfoBar />
+                        <MenuBar board={props.board} />
+                        <ReloadDialog boardId={props.board.id} />
+                      </main>
+                    </PreviewContextProvider>
+                  </PuzzleStateProvider>
+                </BoardRevalidateProvider>
+              </PlayerPresenceProvider>
+            </PlayerCursorProvider>
+          </PlayerSelectionProvider>
+        </BroadcastProvider>
       </Suspense>
     </ErrorBoundary>
   );

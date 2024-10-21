@@ -1,9 +1,18 @@
 import { throttle } from "@solid-primitives/scheduled";
 import {
   REALTIME_LISTEN_TYPES,
-  REALTIME_SUBSCRIBE_STATES
+  REALTIME_SUBSCRIBE_STATES,
+  RealtimeChannel
 } from "@supabase/supabase-js";
-import { onCleanup, onMount } from "solid-js";
+import {
+  Accessor,
+  createContext,
+  createEffect,
+  createMemo,
+  onCleanup,
+  ParentProps,
+  useContext
+} from "solid-js";
 
 import { getClientSupabase } from "~/utils/supabase";
 
@@ -19,9 +28,17 @@ const PUZZLE_EVENT_NAME = "rooms:puzzle";
 const CURSOR_EVENT_NAME = "rooms:cursor";
 const REVALIDATE_EVENT_NAME = "rooms:revalidate";
 
-type BroadcastProviderProps = {
+type BroadcastProviderProps = ParentProps<{
   boardId: string;
-};
+}>;
+
+type BroadcastProviderContextState = Accessor<RealtimeChannel>;
+
+const BroadcastProviderContext = createContext<BroadcastProviderContextState>(
+  () => {
+    throw new Error("BroadcastProviderContext not defined");
+  }
+);
 
 export function BroadcastProvider(props: BroadcastProviderProps) {
   const selection = usePlayerSelection();
@@ -29,10 +46,20 @@ export function BroadcastProvider(props: BroadcastProviderProps) {
   const cursors = usePlayerCursors();
   const revalidate = useBoardRevalidate();
 
-  onMount(() => {
+  const broadcastChannel = createMemo(() => {
     const supabase = getClientSupabase();
     const channelName = `${CHANNEL_NAME}:${props.boardId}`;
     const channel = supabase.channel(channelName);
+
+    onCleanup(() => {
+      supabase.removeChannel(channel);
+    });
+
+    return channel;
+  });
+
+  createEffect(() => {
+    const channel = broadcastChannel();
 
     channel
       .on<SelectionPayload>(
@@ -96,11 +123,15 @@ export function BroadcastProvider(props: BroadcastProviderProps) {
           }, REALTIME_THROTTLE_TIME)
         );
       });
-
-    onCleanup(() => {
-      supabase.removeChannel(channel);
-    });
   });
 
-  return null;
+  return (
+    <BroadcastProviderContext.Provider value={broadcastChannel}>
+      {props.children}
+    </BroadcastProviderContext.Provider>
+  );
+}
+
+export function useBroadcastChannel() {
+  return useContext(BroadcastProviderContext);
 }
