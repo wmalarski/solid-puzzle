@@ -1,6 +1,6 @@
-import type { ComponentProps } from "solid-js";
+import type { Component, ComponentProps } from "solid-js";
 
-export function CheckCircleIcon(props: ComponentProps<"svg">) {
+export const CheckCircleIcon: Component<ComponentProps<"svg">> = (props) => {
   return (
     <svg
       fill="none"
@@ -18,4 +18,4 @@ export function CheckCircleIcon(props: ComponentProps<"svg">) {
       <path d="m9 12 2 2 4-4" />
     </svg>
   );
-}
+};

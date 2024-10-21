@@ -3,7 +3,7 @@ import {
   type RouteDefinition,
   useLocation
 } from "@solidjs/router";
-import { createMemo, ErrorBoundary, Show, Suspense } from "solid-js";
+import { Component, createMemo, ErrorBoundary, Show, Suspense } from "solid-js";
 import * as v from "valibot";
 
 import { useI18n } from "~/contexts/I18nContext";
@@ -47,7 +47,7 @@ export const route = {
   }
 } satisfies RouteDefinition;
 
-function BoardFetching() {
+const BoardFetching: Component = () => {
   const location = useLocation();
 
   const user = useAuthorizedUserContext();
@@ -75,7 +75,7 @@ function BoardFetching() {
       </Suspense>
     </ErrorBoundary>
   );
-}
+};
 
 export default function BoardPage() {
   const { t } = useI18n();

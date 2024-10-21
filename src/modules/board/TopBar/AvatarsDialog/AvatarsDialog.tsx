@@ -1,4 +1,4 @@
-import { createMemo, For, Show } from "solid-js";
+import { Component, createMemo, For, Show } from "solid-js";
 
 import { Avatar, AvatarContent, AvatarGroup } from "~/components/Avatar";
 import {
@@ -24,7 +24,7 @@ type PlayerAvatarProps = {
   state: PlayerState;
 };
 
-function PlayerAvatar(props: PlayerAvatarProps) {
+const PlayerAvatar: Component<PlayerAvatarProps> = (props) => {
   return (
     <Avatar>
       <AvatarContent
@@ -43,9 +43,9 @@ function PlayerAvatar(props: PlayerAvatarProps) {
       </AvatarContent>
     </Avatar>
   );
-}
+};
 
-function PlayersList() {
+const PlayersList: Component = () => {
   const presence = usePlayerPresence();
 
   const playerIds = createMemo(() => {
@@ -68,11 +68,11 @@ function PlayersList() {
       </For>
     </div>
   );
-}
+};
 
 const MAX_AVATARS = 5;
 
-function Avatars() {
+const Avatars: Component = () => {
   const presence = usePlayerPresence();
 
   const playerIds = createMemo(() => {
@@ -99,9 +99,9 @@ function Avatars() {
       </Show>
     </AvatarGroup>
   );
-}
+};
 
-export function AvatarsDialog() {
+export const AvatarsDialog: Component = () => {
   const { t } = useI18n();
 
   return (
@@ -125,4 +125,4 @@ export function AvatarsDialog() {
       </DialogPortal>
     </DialogRoot>
   );
-}
+};

@@ -1,3 +1,5 @@
+import { Component } from "solid-js";
+
 import type { BoardModel } from "~/types/models";
 
 import { TransformContextProvider } from "../TransformContext";
@@ -11,7 +13,7 @@ type PixiStageProps = {
   canvas: HTMLCanvasElement;
 };
 
-export function PixiStage(props: PixiStageProps) {
+export const PixiStage: Component<PixiStageProps> = (props) => {
   return (
     <BoardThemeProvider>
       <PixiAppProvider canvas={props.canvas}>
@@ -22,4 +24,4 @@ export function PixiStage(props: PixiStageProps) {
       </PixiAppProvider>
     </BoardThemeProvider>
   );
-}
+};

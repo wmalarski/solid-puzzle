@@ -1,4 +1,4 @@
-import type { Accessor, ParentProps } from "solid-js";
+import type { Accessor, Component, ParentProps } from "solid-js";
 
 import { revalidate, useNavigate } from "@solidjs/router";
 import {
@@ -67,7 +67,9 @@ type BoardRevalidateProviderProps = ParentProps<{
   boardId: string;
 }>;
 
-export function BoardRevalidateProvider(props: BoardRevalidateProviderProps) {
+export const BoardRevalidateProvider: Component<
+  BoardRevalidateProviderProps
+> = (props) => {
   const { t } = useI18n();
 
   const navigate = useNavigate();
@@ -109,7 +111,7 @@ export function BoardRevalidateProvider(props: BoardRevalidateProviderProps) {
       {props.children}
     </BoardRevalidateContext.Provider>
   );
-}
+};
 
 export const useBoardRevalidate = () => {
   return useContext(BoardRevalidateContext);

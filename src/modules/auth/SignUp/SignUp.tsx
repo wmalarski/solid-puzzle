@@ -1,5 +1,5 @@
 import { useSubmission } from "@solidjs/router";
-import { Show } from "solid-js";
+import { Component, Show } from "solid-js";
 
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
@@ -17,7 +17,7 @@ import { ThemeToggle } from "~/modules/common/ThemeToggle";
 import { signUpAction } from "~/server/auth/client";
 import { paths } from "~/utils/paths";
 
-export function SignUp() {
+export const SignUp: Component = () => {
   const { t } = useI18n();
 
   const submission = useSubmission(signUpAction);
@@ -97,4 +97,4 @@ export function SignUp() {
       </CardBody>
     </Card>
   );
-}
+};

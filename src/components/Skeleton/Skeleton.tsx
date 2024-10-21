@@ -1,10 +1,10 @@
-import type { ComponentProps } from "solid-js";
+import type { Component, ComponentProps } from "solid-js";
 
 import { splitProps } from "solid-js";
 
 import { twCx } from "../utils/twCva";
 
-export function Skeleton(props: ComponentProps<"div">) {
+export const Skeleton: Component<ComponentProps<"div">> = (props) => {
   const [, rest] = splitProps(props, ["class"]);
 
   return (
@@ -13,4 +13,4 @@ export function Skeleton(props: ComponentProps<"div">) {
       {...rest}
     />
   );
-}
+};

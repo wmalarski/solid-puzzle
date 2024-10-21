@@ -3,6 +3,7 @@ import type { User } from "@supabase/supabase-js";
 import { Navigate, useLocation } from "@solidjs/router";
 import {
   Accessor,
+  Component,
   createContext,
   type JSX,
   ParentProps,
@@ -26,7 +27,7 @@ type UserProviderProps = ParentProps<{
   value: null | undefined | User;
 }>;
 
-export function UserProvider(props: UserProviderProps) {
+export const UserProvider: Component<UserProviderProps> = (props) => {
   const location = useLocation();
 
   return (
@@ -56,7 +57,7 @@ export function UserProvider(props: UserProviderProps) {
       )}
     </Show>
   );
-}
+};
 
 export const useUserContext = () => {
   return useContext(UserContext);
@@ -67,7 +68,9 @@ type AuthorizedUserProviderProps = ParentProps<{
   value: null | undefined | User;
 }>;
 
-export function AuthorizedUserProvider(props: AuthorizedUserProviderProps) {
+export const AuthorizedUserProvider: Component<AuthorizedUserProviderProps> = (
+  props
+) => {
   return (
     <UserProvider
       loadingFallback={props.loadingFallback}
@@ -78,7 +81,7 @@ export function AuthorizedUserProvider(props: AuthorizedUserProviderProps) {
       {props.children}
     </UserProvider>
   );
-}
+};
 
 export const useAuthorizedUserContext = () => {
   return useContext(AuthorizedUserContext);

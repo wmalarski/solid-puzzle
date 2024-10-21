@@ -1,6 +1,6 @@
-import type { ComponentProps } from "solid-js";
+import type { Component, ComponentProps } from "solid-js";
 
-export function XIcon(props: ComponentProps<"svg">) {
+export const XIcon: Component<ComponentProps<"svg">> = (props) => {
   return (
     <svg
       fill="none"
@@ -18,4 +18,4 @@ export function XIcon(props: ComponentProps<"svg">) {
       <path d="m6 6 12 12" />
     </svg>
   );
-}
+};

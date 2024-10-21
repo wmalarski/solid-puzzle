@@ -1,5 +1,5 @@
 import { useSubmission } from "@solidjs/router";
-import { For, Show } from "solid-js";
+import { Component, For, Show } from "solid-js";
 
 import type { BoardModelWithoutConfig } from "~/types/models";
 
@@ -28,7 +28,7 @@ type BoardItemProps = {
   board: BoardModelWithoutConfig;
 };
 
-function BoardItem(props: BoardItemProps) {
+const BoardItem: Component<BoardItemProps> = (props) => {
   const { t } = useI18n();
 
   const deleteSubmission = useSubmission(
@@ -76,24 +76,24 @@ function BoardItem(props: BoardItemProps) {
       </Card>
     </Show>
   );
-}
+};
 
-export function BoardsListLoading() {
+export const BoardsListLoading: Component = () => {
   return <div />;
-}
+};
 
-function BoardsListEmpty() {
+const BoardsListEmpty: Component = () => {
   const { t } = useI18n();
 
   return <pre>{t("list.empty")}</pre>;
-}
+};
 
 type ListPaginationProps = {
   count: number;
   page: number;
 };
 
-function ListPagination(props: ListPaginationProps) {
+const ListPagination: Component<ListPaginationProps> = (props) => {
   return (
     <SimplePaginationRoot count={props.count} page={props.page}>
       <SimplePaginationPrevious href={paths.boards(props.page)} />
@@ -101,7 +101,7 @@ function ListPagination(props: ListPaginationProps) {
       <SimplePaginationNext href={paths.boards(props.page + 2)} />
     </SimplePaginationRoot>
   );
-}
+};
 
 type BoardsListProps = {
   boards: SelectBoardsLoaderReturn;
@@ -109,7 +109,7 @@ type BoardsListProps = {
   page: number;
 };
 
-export function BoardsList(props: BoardsListProps) {
+export const BoardsList: Component<BoardsListProps> = (props) => {
   return (
     <section class="mx-auto flex max-w-screen-xl flex-col gap-4 p-6">
       <Show fallback={<BoardsListEmpty />} when={props.boards.data.length > 0}>
@@ -125,4 +125,4 @@ export function BoardsList(props: BoardsListProps) {
       />
     </section>
   );
-}
+};

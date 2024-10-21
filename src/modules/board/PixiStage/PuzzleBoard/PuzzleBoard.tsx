@@ -1,6 +1,6 @@
 import { createAsync } from "@solidjs/router";
 import { Assets, type FederatedPointerEvent, type Texture } from "pixi.js";
-import { For, onCleanup, onMount, Show } from "solid-js";
+import { Component, For, onCleanup, onMount, Show } from "solid-js";
 
 import type { BoardModel } from "~/types/models";
 
@@ -37,7 +37,7 @@ type BoardProps = {
   texture: Texture;
 };
 
-function Board(props: BoardProps) {
+const Board: Component<BoardProps> = (props) => {
   const store = usePuzzleStore();
 
   useStageDeselect();
@@ -61,14 +61,14 @@ function Board(props: BoardProps) {
       )}
     </For>
   );
-}
+};
 
 type PuzzleBoardProps = {
   board: BoardModel;
   path: string;
 };
 
-export function PuzzleBoard(props: PuzzleBoardProps) {
+export const PuzzleBoard: Component<PuzzleBoardProps> = (props) => {
   const store = usePuzzleStore();
 
   useStageTransform();
@@ -91,4 +91,4 @@ export function PuzzleBoard(props: PuzzleBoardProps) {
       )}
     </Show>
   );
-}
+};

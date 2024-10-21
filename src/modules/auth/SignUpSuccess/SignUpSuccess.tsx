@@ -1,3 +1,5 @@
+import { Component } from "solid-js";
+
 import { Card, CardBody, cardTitleClass } from "~/components/Card";
 import { CheckCircleIcon } from "~/components/Icons/CheckCircleIcon";
 import { Link } from "~/components/Link";
@@ -5,7 +7,7 @@ import { useI18n } from "~/contexts/I18nContext";
 import { ThemeToggle } from "~/modules/common/ThemeToggle";
 import { paths } from "~/utils/paths";
 
-export function SignUpSuccess() {
+export const SignUpSuccess: Component = () => {
   const { t } = useI18n();
 
   return (
@@ -21,4 +23,4 @@ export function SignUpSuccess() {
       </CardBody>
     </Card>
   );
-}
+};

@@ -1,3 +1,5 @@
+import { Component } from "solid-js";
+
 import type { BoardConfigFields } from "~/modules/createBoard/ConfigFields";
 
 import { Card, CardBody, cardTitleClass } from "~/components/Card";
@@ -8,7 +10,7 @@ type InsertBoardProps = {
   initialValues?: BoardConfigFields | null;
 };
 
-export function InsertBoard(props: InsertBoardProps) {
+export const InsertBoard: Component<InsertBoardProps> = (props) => {
   const { t } = useI18n();
 
   return (
@@ -21,4 +23,4 @@ export function InsertBoard(props: InsertBoardProps) {
       </CardBody>
     </Card>
   );
-}
+};

@@ -1,6 +1,6 @@
-import type { ComponentProps } from "solid-js";
+import type { Component, ComponentProps } from "solid-js";
 
-export function ExitIcon(props: ComponentProps<"svg">) {
+export const ExitIcon: Component<ComponentProps<"svg">> = (props) => {
   return (
     <svg
       fill="none"
@@ -19,4 +19,4 @@ export function ExitIcon(props: ComponentProps<"svg">) {
       <line x1="21" x2="9" y1="12" y2="12" />
     </svg>
   );
-}
+};

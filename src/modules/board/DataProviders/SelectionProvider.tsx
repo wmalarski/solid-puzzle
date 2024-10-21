@@ -2,6 +2,7 @@ import { throttle } from "@solid-primitives/scheduled";
 import { REALTIME_LISTEN_TYPES } from "@supabase/supabase-js";
 import {
   Accessor,
+  Component,
   createContext,
   createMemo,
   createSignal,
@@ -104,7 +105,9 @@ type PlayerSelectionProviderProps = ParentProps<{
   playerId: string;
 }>;
 
-export function PlayerSelectionProvider(props: PlayerSelectionProviderProps) {
+export const PlayerSelectionProvider: Component<
+  PlayerSelectionProviderProps
+> = (props) => {
   const value = createMemo(() => createPlayerSelectionState(props.playerId));
 
   return (
@@ -112,7 +115,7 @@ export function PlayerSelectionProvider(props: PlayerSelectionProviderProps) {
       {props.children}
     </PlayerSelectionContext.Provider>
   );
-}
+};
 
 export const usePlayerSelection = () => {
   return useContext(PlayerSelectionContext);

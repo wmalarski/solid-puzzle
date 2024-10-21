@@ -1,5 +1,5 @@
 import { useSubmission } from "@solidjs/router";
-import { Show } from "solid-js";
+import { Component, Show } from "solid-js";
 
 import { Alert, AlertIcon } from "~/components/Alert";
 import { Button } from "~/components/Button";
@@ -13,7 +13,7 @@ type CreateBoardFormProps = {
   initialValues?: BoardConfigFields | null;
 };
 
-export function CreateBoardForm(props: CreateBoardFormProps) {
+export const CreateBoardForm: Component<CreateBoardFormProps> = (props) => {
   const { t } = useI18n();
 
   const user = useUserContext();
@@ -47,4 +47,4 @@ export function CreateBoardForm(props: CreateBoardFormProps) {
       </Button>
     </form>
   );
-}
+};

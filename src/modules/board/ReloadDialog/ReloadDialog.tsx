@@ -1,4 +1,4 @@
-import type { ComponentProps } from "solid-js";
+import type { Component, ComponentProps } from "solid-js";
 
 import { createWritableMemo } from "@solid-primitives/memo";
 import { useAction, useSubmission } from "@solidjs/router";
@@ -29,7 +29,7 @@ type ReloadFormProps = {
   onSuccess: VoidFunction;
 };
 
-export function ReloadForm(props: ReloadFormProps) {
+export const ReloadForm: Component<ReloadFormProps> = (props) => {
   const { t } = useI18n();
 
   const revalidate = useBoardRevalidate();
@@ -75,13 +75,13 @@ export function ReloadForm(props: ReloadFormProps) {
       </div>
     </form>
   );
-}
+};
 
 type ReloadDialogProps = {
   boardId: string;
 };
 
-export function ReloadDialog(props: ReloadDialogProps) {
+export const ReloadDialog: Component<ReloadDialogProps> = (props) => {
   const { t } = useI18n();
 
   const store = usePuzzleStore();
@@ -114,4 +114,4 @@ export function ReloadDialog(props: ReloadDialogProps) {
       </AlertDialogPortal>
     </AlertDialogRoot>
   );
-}
+};

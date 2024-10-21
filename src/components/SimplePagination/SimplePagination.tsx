@@ -2,6 +2,7 @@ import type { VariantProps } from "class-variance-authority";
 
 import {
   Accessor,
+  Component,
   type ComponentProps,
   createContext,
   createMemo,
@@ -30,7 +31,9 @@ const SimplePaginationContext = createContext<
 export type SimplePaginationRootProps = ComponentProps<"nav"> &
   SimplePaginationContextValues;
 
-export function SimplePaginationRoot(props: SimplePaginationRootProps) {
+export const SimplePaginationRoot: Component<SimplePaginationRootProps> = (
+  props
+) => {
   const { t } = useI18n();
 
   const [, rest] = splitProps(props, ["class", "count", "page"]);
@@ -52,12 +55,14 @@ export function SimplePaginationRoot(props: SimplePaginationRootProps) {
       />
     </SimplePaginationContext.Provider>
   );
-}
+};
 
 type PaginationLinkProps = ComponentProps<"a"> &
   VariantProps<typeof buttonClass>;
 
-export function SimplePaginationPrevious(props: PaginationLinkProps) {
+export const SimplePaginationPrevious: Component<PaginationLinkProps> = (
+  props
+) => {
   const { t } = useI18n();
 
   const [split, rest] = splitProps(props, buttonSplitProps);
@@ -85,9 +90,9 @@ export function SimplePaginationPrevious(props: PaginationLinkProps) {
       <span>{t("pagination.previous")}</span>
     </a>
   );
-}
+};
 
-export function SimplePaginationNext(props: PaginationLinkProps) {
+export const SimplePaginationNext: Component<PaginationLinkProps> = (props) => {
   const { t } = useI18n();
 
   const [split, rest] = splitProps(props, buttonSplitProps);
@@ -116,12 +121,14 @@ export function SimplePaginationNext(props: PaginationLinkProps) {
       <ArrowRightIcon class="size-4" />
     </a>
   );
-}
+};
 
 type SimplePaginationValueProps = ComponentProps<"span">;
 
-export function SimplePaginationValue(props: SimplePaginationValueProps) {
+export const SimplePaginationValue: Component<SimplePaginationValueProps> = (
+  props
+) => {
   const [, rest] = splitProps(props, ["class"]);
 
   return <span class={twCx("px-2", props.class)} {...rest} />;
-}
+};

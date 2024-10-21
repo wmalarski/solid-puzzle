@@ -2,6 +2,7 @@ import { throttle } from "@solid-primitives/scheduled";
 import { REALTIME_LISTEN_TYPES } from "@supabase/supabase-js";
 import {
   Accessor,
+  Component,
   createContext,
   createMemo,
   ParentProps,
@@ -82,7 +83,9 @@ type PlayerCursorProviderProps = ParentProps<{
   playerId: string;
 }>;
 
-export function PlayerCursorProvider(props: PlayerCursorProviderProps) {
+export const PlayerCursorProvider: Component<PlayerCursorProviderProps> = (
+  props
+) => {
   const value = createMemo(() => createPlayerCursorState(props.playerId));
 
   return (
@@ -90,7 +93,7 @@ export function PlayerCursorProvider(props: PlayerCursorProviderProps) {
       {props.children}
     </PlayerCursorContext.Provider>
   );
-}
+};
 
 export const usePlayerCursors = () => {
   return useContext(PlayerCursorContext);

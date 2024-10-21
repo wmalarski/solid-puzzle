@@ -1,5 +1,6 @@
 import { Application, Container } from "pixi.js";
 import {
+  Component,
   createContext,
   createEffect,
   createMemo,
@@ -31,7 +32,7 @@ type PixiAppProviderProps = ParentProps<{
   canvas: HTMLCanvasElement;
 }>;
 
-export function PixiAppProvider(props: PixiAppProviderProps) {
+export const PixiAppProvider: Component<PixiAppProviderProps> = (props) => {
   const theme = useThemeContext();
   const boardTheme = useBoardTheme();
 
@@ -99,4 +100,4 @@ export function PixiAppProvider(props: PixiAppProviderProps) {
       </ContainerContext.Provider>
     </PixiAppContext.Provider>
   );
-}
+};

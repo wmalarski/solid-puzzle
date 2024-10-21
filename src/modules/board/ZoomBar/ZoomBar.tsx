@@ -1,3 +1,5 @@
+import { Component } from "solid-js";
+
 import { MinusIcon } from "~/components/Icons/MinusIcon";
 import { PlusIcon } from "~/components/Icons/PlusIcon";
 import {
@@ -11,7 +13,7 @@ import { useI18n } from "~/contexts/I18nContext";
 
 import { useTransformContext } from "../TransformContext";
 
-export function ZoomBar() {
+export const ZoomBar: Component = () => {
   const { t } = useI18n();
 
   const transform = useTransformContext();
@@ -88,4 +90,4 @@ export function ZoomBar() {
       </TooltipRoot>
     </div>
   );
-}
+};

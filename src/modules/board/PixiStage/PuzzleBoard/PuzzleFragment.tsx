@@ -1,5 +1,12 @@
 import { Container, Graphics, Matrix, type Texture } from "pixi.js";
-import { createEffect, createMemo, onCleanup, onMount, Show } from "solid-js";
+import {
+  Component,
+  createEffect,
+  createMemo,
+  onCleanup,
+  onMount,
+  Show
+} from "solid-js";
 
 import type { PuzzleFragmentShape } from "~/utils/getPuzzleFragments";
 
@@ -39,7 +46,7 @@ type PuzzleBorderGraphicsProps = {
   state: FragmentState;
 };
 
-function PuzzleBorderGraphics(props: PuzzleBorderGraphicsProps) {
+const PuzzleBorderGraphics: Component<PuzzleBorderGraphicsProps> = (props) => {
   const theme = useBoardTheme();
 
   const graphics = new Graphics();
@@ -70,7 +77,7 @@ function PuzzleBorderGraphics(props: PuzzleBorderGraphicsProps) {
   });
 
   return null;
-}
+};
 
 type PuzzleFragmentGraphicsProps = {
   center: Point2D;
@@ -80,7 +87,9 @@ type PuzzleFragmentGraphicsProps = {
   texture: Texture;
 };
 
-function PuzzleFragmentGraphics(props: PuzzleFragmentGraphicsProps) {
+const PuzzleFragmentGraphics: Component<PuzzleFragmentGraphicsProps> = (
+  props
+) => {
   const graphics = new Graphics();
 
   createEffect(() => {
@@ -107,7 +116,7 @@ function PuzzleFragmentGraphics(props: PuzzleFragmentGraphicsProps) {
   });
 
   return null;
-}
+};
 
 type PuzzleFragmentProps = {
   shape: PuzzleFragmentShape;
@@ -115,7 +124,7 @@ type PuzzleFragmentProps = {
   texture: Texture;
 };
 
-export function PuzzleFragment(props: PuzzleFragmentProps) {
+export const PuzzleFragment: Component<PuzzleFragmentProps> = (props) => {
   const store = usePuzzleStore();
   const selection = usePlayerSelection();
   const presence = usePlayerPresence();
@@ -262,4 +271,4 @@ export function PuzzleFragment(props: PuzzleFragmentProps) {
       </Show>
     </>
   );
-}
+};

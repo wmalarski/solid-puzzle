@@ -4,6 +4,7 @@ import {
 } from "@supabase/supabase-js";
 import {
   Accessor,
+  Component,
   createContext,
   createEffect,
   createMemo,
@@ -26,7 +27,7 @@ const BroadcastProviderContext = createContext<Accessor<RealtimeChannel>>(
   }
 );
 
-export function BroadcastProvider(props: BroadcastProviderProps) {
+export const BroadcastProvider: Component<BroadcastProviderProps> = (props) => {
   const broadcastChannel = createMemo(() => {
     const supabase = getClientSupabase();
     const channelName = `${CHANNEL_NAME}:${props.boardId}`;
@@ -54,8 +55,8 @@ export function BroadcastProvider(props: BroadcastProviderProps) {
       {props.children}
     </BroadcastProviderContext.Provider>
   );
-}
+};
 
-export function useBroadcastChannel() {
+export const useBroadcastChannel = () => {
   return useContext(BroadcastProviderContext);
-}
+};

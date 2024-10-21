@@ -1,5 +1,6 @@
 import {
   Accessor,
+  Component,
   createContext,
   createMemo,
   createSignal,
@@ -23,7 +24,7 @@ export const usePreviewContext = () => {
   return useContext(PreviewContext);
 };
 
-export function PreviewContextProvider(props: ParentProps) {
+export const PreviewContextProvider: Component<ParentProps> = (props) => {
   const value = createMemo(() => createPreviewContext());
 
   return (
@@ -31,4 +32,4 @@ export function PreviewContextProvider(props: ParentProps) {
       {props.children}
     </PreviewContext.Provider>
   );
-}
+};

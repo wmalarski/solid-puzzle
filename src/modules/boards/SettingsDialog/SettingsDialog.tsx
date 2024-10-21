@@ -1,4 +1,4 @@
-import type { ComponentProps } from "solid-js";
+import type { Component, ComponentProps } from "solid-js";
 
 import { useAction, useSubmission } from "@solidjs/router";
 import { Show, splitProps } from "solid-js";
@@ -29,7 +29,7 @@ type UpdateFormProps = {
   onSuccess?: VoidFunction;
 };
 
-export function UpdateForm(props: UpdateFormProps) {
+export const UpdateForm: Component<UpdateFormProps> = (props) => {
   const { t } = useI18n();
 
   const submission = useSubmission(updateBoardAction);
@@ -77,14 +77,14 @@ export function UpdateForm(props: UpdateFormProps) {
       </Button>
     </form>
   );
-}
+};
 
 type SettingsDialogProps = {
   board: BoardModelWithoutConfig;
   onSuccess?: VoidFunction;
 };
 
-function SettingsDialog(props: SettingsDialogProps) {
+const SettingsDialog: Component<SettingsDialogProps> = (props) => {
   const { t } = useI18n();
 
   return (
@@ -103,7 +103,7 @@ function SettingsDialog(props: SettingsDialogProps) {
       </DialogPositioner>
     </DialogPortal>
   );
-}
+};
 
 type SettingsControlledDialogProps = {
   board: BoardModelWithoutConfig;
@@ -112,7 +112,9 @@ type SettingsControlledDialogProps = {
   onSuccess: VoidFunction;
 };
 
-export function SettingsControlledDialog(props: SettingsControlledDialogProps) {
+export const SettingsControlledDialog: Component<
+  SettingsControlledDialogProps
+> = (props) => {
   const onSuccess = () => {
     props.onIsOpenChange(false);
     props.onSuccess();
@@ -123,16 +125,16 @@ export function SettingsControlledDialog(props: SettingsControlledDialogProps) {
       <SettingsDialog board={props.board} onSuccess={onSuccess} />
     </DialogRoot>
   );
-}
+};
 
 type SettingsUncontrolledDialogProps = {
   board: BoardModelWithoutConfig;
   onSuccess?: VoidFunction;
 } & DialogTriggerProps;
 
-export function SettingsUncontrolledDialog(
-  props: SettingsUncontrolledDialogProps
-) {
+export const SettingsUncontrolledDialog: Component<
+  SettingsUncontrolledDialogProps
+> = (props) => {
   const [split, rest] = splitProps(props, ["board"]);
 
   return (
@@ -141,4 +143,4 @@ export function SettingsUncontrolledDialog(
       <SettingsDialog board={split.board} onSuccess={props.onSuccess} />
     </DialogRoot>
   );
-}
+};

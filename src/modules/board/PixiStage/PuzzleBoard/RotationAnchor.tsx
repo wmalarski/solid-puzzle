@@ -4,7 +4,7 @@ import {
   type FederatedPointerEvent,
   Graphics
 } from "pixi.js";
-import { createEffect, onCleanup, onMount } from "solid-js";
+import { Component, createEffect, onCleanup, onMount } from "solid-js";
 
 import { usePlayerPresence } from "../../DataProviders/PresenceProvider";
 import { useBoardTheme } from "../BoardTheme";
@@ -19,7 +19,7 @@ type RotationAnchorProps = {
   rotationOffset: number;
 };
 
-export function RotationAnchor(props: RotationAnchorProps) {
+export const RotationAnchor: Component<RotationAnchorProps> = (props) => {
   const app = usePixiApp();
   const theme = useBoardTheme();
   const container = usePixiContainer();
@@ -92,4 +92,4 @@ export function RotationAnchor(props: RotationAnchorProps) {
   });
 
   return null;
-}
+};

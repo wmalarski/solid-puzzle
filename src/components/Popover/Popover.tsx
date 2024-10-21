@@ -1,7 +1,7 @@
 import type { VariantProps } from "class-variance-authority";
 
 import { Popover as KobaltePopover } from "@kobalte/core";
-import { type ComponentProps, splitProps } from "solid-js";
+import { Component, type ComponentProps, splitProps } from "solid-js";
 
 import { buttonClass, buttonSplitProps } from "../Button";
 import { twCx } from "../utils/twCva";
@@ -14,23 +14,23 @@ export type PopoverTriggerProps = ComponentProps<
 > &
   VariantProps<typeof buttonClass>;
 
-export function PopoverTrigger(props: PopoverTriggerProps) {
+export const PopoverTrigger: Component<PopoverTriggerProps> = (props) => {
   const [split, rest] = splitProps(props, buttonSplitProps);
 
   return <KobaltePopover.Trigger {...rest} class={buttonClass(split)} />;
-}
+};
 
-export function PopoverAnchor(
-  props: ComponentProps<typeof KobaltePopover.Anchor>
-) {
+export const PopoverAnchor: Component<
+  ComponentProps<typeof KobaltePopover.Anchor>
+> = (props) => {
   return <KobaltePopover.Anchor {...props} class={twCx("", props.class)} />;
-}
+};
 
 export const PopoverPortal = KobaltePopover.Portal;
 
-export function PopoverContent(
-  props: ComponentProps<typeof KobaltePopover.Content>
-) {
+export const PopoverContent: Component<
+  ComponentProps<typeof KobaltePopover.Content>
+> = (props) => {
   return (
     <KobaltePopover.Content
       {...props}
@@ -41,17 +41,17 @@ export function PopoverContent(
       )}
     />
   );
-}
+};
 
-export function PopoverArrow(
-  props: ComponentProps<typeof KobaltePopover.Arrow>
-) {
+export const PopoverArrow: Component<
+  ComponentProps<typeof KobaltePopover.Arrow>
+> = (props) => {
   return <KobaltePopover.Arrow {...props} class={twCx("", props.class)} />;
-}
+};
 
 export type PopoverHeaderProps = ComponentProps<"div">;
 
-export function PopoverHeader(props: PopoverHeaderProps) {
+export const PopoverHeader: Component<PopoverHeaderProps> = (props) => {
   return (
     <div
       {...props}
@@ -61,37 +61,37 @@ export function PopoverHeader(props: PopoverHeaderProps) {
       )}
     />
   );
-}
+};
 
-export function PopoverCloseButton(
-  props: ComponentProps<typeof KobaltePopover.CloseButton>
-) {
+export const PopoverCloseButton: Component<
+  ComponentProps<typeof KobaltePopover.CloseButton>
+> = (props) => {
   return (
     <KobaltePopover.CloseButton
       {...props}
       class={twCx("h-4 w-4", props.class)}
     />
   );
-}
+};
 
-export function PopoverTitle(
-  props: ComponentProps<typeof KobaltePopover.Title>
-) {
+export const PopoverTitle: Component<
+  ComponentProps<typeof KobaltePopover.Title>
+> = (props) => {
   return (
     <KobaltePopover.Title
       {...props}
       class={twCx("text-base uppercase font-semibold", props.class)}
     />
   );
-}
+};
 
-export function PopoverDescription(
-  props: ComponentProps<typeof KobaltePopover.Description>
-) {
+export const PopoverDescription: Component<
+  ComponentProps<typeof KobaltePopover.Description>
+> = (props) => {
   return (
     <KobaltePopover.Description
       {...props}
       class={twCx("text-sm py-1", props.class)}
     />
   );
-}
+};

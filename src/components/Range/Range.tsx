@@ -1,13 +1,13 @@
 import type { VariantProps } from "class-variance-authority";
 
-import { type ComponentProps, splitProps } from "solid-js";
+import { Component, type ComponentProps, splitProps } from "solid-js";
 
 import { rangeClass } from "./Range.recipe";
 
 export type RangeProps = ComponentProps<"input"> &
   VariantProps<typeof rangeClass>;
 
-export function Range(props: RangeProps) {
+export const Range: Component<RangeProps> = (props) => {
   const [split, rest] = splitProps(props, ["color", "size"]);
 
   return (
@@ -17,4 +17,4 @@ export function Range(props: RangeProps) {
       class={rangeClass({ class: props.class, ...split })}
     />
   );
-}
+};

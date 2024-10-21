@@ -1,7 +1,7 @@
 import type { VariantProps } from "class-variance-authority";
 
 import { Toast, toaster } from "@kobalte/core";
-import { type ComponentProps, splitProps } from "solid-js";
+import { Component, type ComponentProps, splitProps } from "solid-js";
 
 import { alertClass, AlertIcon, type AlertIconProps } from "../Alert";
 import { twCx } from "../utils/twCva";
@@ -23,7 +23,7 @@ function ToastList(props: ComponentProps<typeof Toast.List>) {
 export type ToastRootProps = ComponentProps<typeof Toast.Root> &
   VariantProps<typeof alertClass>;
 
-export function ToastRoot(props: ToastRootProps) {
+export const ToastRoot: Component<ToastRootProps> = (props) => {
   const [split, rest] = splitProps(props, ["variant"]);
 
   return (
@@ -43,57 +43,59 @@ export function ToastRoot(props: ToastRootProps) {
       })}
     />
   );
-}
+};
 
-export function ToastContent(props: ComponentProps<"div">) {
+export const ToastContent: Component<ComponentProps<"div">> = (props) => {
   return (
     <div
       {...props}
       class={twCx("flex flex-col items-start w-full", props.class)}
     />
   );
-}
+};
 
-export function ToastCloseButton(
-  props: ComponentProps<typeof Toast.CloseButton>
-) {
+export const ToastCloseButton: Component<
+  ComponentProps<typeof Toast.CloseButton>
+> = (props) => {
   return (
     <Toast.CloseButton
       {...props}
       class={twCx("shrink-0 h-4 w-4 ml-auto", props.class)}
     />
   );
-}
+};
 
-export function ToastTitle(props: ComponentProps<typeof Toast.Title>) {
+export const ToastTitle: Component<ComponentProps<typeof Toast.Title>> = (
+  props
+) => {
   return (
     <Toast.Title
       {...props}
       class={twCx("text-base font-medium", props.class)}
     />
   );
-}
+};
 
-export function ToastDescription(
-  props: ComponentProps<typeof Toast.Description>
-) {
+export const ToastDescription: Component<
+  ComponentProps<typeof Toast.Description>
+> = (props) => {
   return <Toast.Description {...props} class={twCx("text-sm", props.class)} />;
-}
+};
 
-export function ToastProgressTrack(
-  props: ComponentProps<typeof Toast.ProgressTrack>
-) {
+export const ToastProgressTrack: Component<
+  ComponentProps<typeof Toast.ProgressTrack>
+> = (props) => {
   return (
     <Toast.ProgressTrack
       {...props}
       class={twCx("h-2 w-full bg-accent", props.class)}
     />
   );
-}
+};
 
-export function ToastProgressFill(
-  props: ComponentProps<typeof Toast.ProgressFill>
-) {
+export const ToastProgressFill: Component<
+  ComponentProps<typeof Toast.ProgressFill>
+> = (props) => {
   return (
     <Toast.ProgressFill
       {...props}
@@ -104,15 +106,15 @@ export function ToastProgressFill(
       )}
     />
   );
-}
+};
 
-export function ToastProvider() {
+export const ToastProvider: Component = () => {
   return (
     <ToastRegion aria-label="Notifications">
       <ToastList />
     </ToastRegion>
   );
-}
+};
 
 type ShowToastArgs = {
   description: string;

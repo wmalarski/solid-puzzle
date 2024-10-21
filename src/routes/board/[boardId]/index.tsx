@@ -1,6 +1,7 @@
 import { createAsync, type RouteDefinition, useParams } from "@solidjs/router";
 import { clientOnly } from "@solidjs/start";
 import {
+  Component,
   createMemo,
   createSignal,
   ErrorBoundary,
@@ -27,7 +28,7 @@ type BoardQueryProps = {
   boardId: string;
 };
 
-function BoardQuery(props: BoardQueryProps) {
+const BoardQuery: Component<BoardQueryProps> = (props) => {
   const [isMounted, setIsMounted] = createSignal(false);
 
   onMount(() => {
@@ -74,7 +75,7 @@ function BoardQuery(props: BoardQueryProps) {
       </Show>
     </Show>
   );
-}
+};
 
 export const route = {
   load: async ({ params }) => {

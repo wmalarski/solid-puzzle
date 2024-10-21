@@ -4,7 +4,7 @@ import {
   Sprite,
   type Texture
 } from "pixi.js";
-import { createEffect, onCleanup, onMount } from "solid-js";
+import { Component, createEffect, onCleanup, onMount } from "solid-js";
 
 import type { PuzzleShapeLine } from "~/utils/getPuzzleFragments";
 
@@ -17,7 +17,7 @@ type PreviewGridProps = {
   lines: PuzzleShapeLine[];
 };
 
-export function PreviewGrid(props: PreviewGridProps) {
+export const PreviewGrid: Component<PreviewGridProps> = (props) => {
   const container = usePixiContainer();
   const theme = useBoardTheme();
 
@@ -45,13 +45,13 @@ export function PreviewGrid(props: PreviewGridProps) {
   });
 
   return null;
-}
+};
 
 type PreviewSpriteProps = {
   texture: Texture;
 };
 
-export function PreviewSprite(props: PreviewSpriteProps) {
+export const PreviewSprite: Component<PreviewSpriteProps> = (props) => {
   const container = usePixiContainer();
   const theme = useBoardTheme();
   const selection = usePlayerSelection();
@@ -92,4 +92,4 @@ export function PreviewSprite(props: PreviewSpriteProps) {
   });
 
   return null;
-}
+};

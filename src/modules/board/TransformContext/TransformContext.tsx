@@ -1,5 +1,6 @@
 import {
   Accessor,
+  Component,
   createContext,
   createMemo,
   createSignal,
@@ -79,7 +80,7 @@ export const useTransformContext = () => {
   return useContext(TransformContext);
 };
 
-export function TransformContextProvider(props: ParentProps) {
+export const TransformContextProvider: Component<ParentProps> = (props) => {
   const value = createMemo(() => createTransform());
 
   return (
@@ -87,4 +88,4 @@ export function TransformContextProvider(props: ParentProps) {
       {props.children}
     </TransformContext.Provider>
   );
-}
+};

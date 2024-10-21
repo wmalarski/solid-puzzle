@@ -1,12 +1,14 @@
 import type { ComponentProps } from "solid-js";
 
+import { Component } from "solid-js";
+
 import { twCx } from "../utils/twCva";
 
 export type NavbarProps = ComponentProps<"nav">;
 
-export function Navbar(props: NavbarProps) {
+export const Navbar: Component<NavbarProps> = (props) => {
   return <nav {...props} class={twCx("navbar", props.class)} />;
-}
+};
 
 export type NavbarStartProps = ComponentProps<"div">;
 

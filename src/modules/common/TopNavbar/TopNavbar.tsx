@@ -1,5 +1,5 @@
 import { useSubmission } from "@solidjs/router";
-import { Show } from "solid-js";
+import { Component, Show } from "solid-js";
 
 import { Button, LinkButton } from "~/components/Button";
 import { ExitIcon } from "~/components/Icons/ExitIcon";
@@ -13,7 +13,7 @@ import { paths } from "~/utils/paths";
 
 import { ThemeToggle } from "../ThemeToggle";
 
-function SignOutButton() {
+const SignOutButton: Component = () => {
   const { t } = useI18n();
 
   const submission = useSubmission(signOutAction);
@@ -26,9 +26,9 @@ function SignOutButton() {
       </Button>
     </form>
   );
-}
+};
 
-export function TopNavbar() {
+export const TopNavbar: Component = () => {
   const { t } = useI18n();
 
   const user = useUserContext();
@@ -68,4 +68,4 @@ export function TopNavbar() {
       </NavbarEnd>
     </Navbar>
   );
-}
+};

@@ -2,6 +2,7 @@ import { throttle } from "@solid-primitives/scheduled";
 import { REALTIME_LISTEN_TYPES } from "@supabase/supabase-js";
 import {
   Accessor,
+  Component,
   createContext,
   createMemo,
   ParentProps,
@@ -215,7 +216,9 @@ type PuzzleStateProviderProps = ParentProps<{
   fragments: FragmentModel[];
 }>;
 
-export function PuzzleStateProvider(props: PuzzleStateProviderProps) {
+export const PuzzleStateProvider: Component<PuzzleStateProviderProps> = (
+  props
+) => {
   const value = createMemo(() =>
     createPuzzleContext({
       board: props.board,
@@ -229,7 +232,7 @@ export function PuzzleStateProvider(props: PuzzleStateProviderProps) {
       {props.children}
     </PuzzleStateContext.Provider>
   );
-}
+};
 
 export const usePuzzleStore = () => {
   return useContext(PuzzleStateContext);

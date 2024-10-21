@@ -1,7 +1,7 @@
 import type { VariantProps } from "class-variance-authority";
 
 import { Dialog } from "@kobalte/core";
-import { type ComponentProps, splitProps } from "solid-js";
+import { Component, type ComponentProps, splitProps } from "solid-js";
 
 import { buttonClass, buttonSplitProps } from "../Button";
 import { twCx } from "../utils/twCva";
@@ -14,11 +14,11 @@ export const DialogRoot = Dialog.Root;
 export type DialogTriggerProps = ComponentProps<typeof Dialog.Trigger> &
   VariantProps<typeof buttonClass>;
 
-export function DialogTrigger(props: DialogTriggerProps) {
+export const DialogTrigger: Component<DialogTriggerProps> = (props) => {
   const [split, rest] = splitProps(props, buttonSplitProps);
 
   return <Dialog.Trigger {...rest} class={buttonClass(split)} />;
-}
+};
 
 export type DialogPortalProps = ComponentProps<typeof DialogPortal>;
 
@@ -26,7 +26,7 @@ export const DialogPortal = Dialog.Portal;
 
 export type DialogOverlayProps = ComponentProps<typeof Dialog.Overlay>;
 
-export function DialogOverlay(props: DialogOverlayProps) {
+export const DialogOverlay: Component<DialogOverlayProps> = (props) => {
   return (
     <Dialog.Overlay
       {...props}
@@ -37,11 +37,11 @@ export function DialogOverlay(props: DialogOverlayProps) {
       )}
     />
   );
-}
+};
 
 export type DialogPositionerProps = ComponentProps<"div">;
 
-export function DialogPositioner(props: DialogPositionerProps) {
+export const DialogPositioner: Component<DialogPositionerProps> = (props) => {
   return (
     <div
       {...props}
@@ -51,11 +51,11 @@ export function DialogPositioner(props: DialogPositionerProps) {
       )}
     />
   );
-}
+};
 
 export type DialogContentProps = ComponentProps<typeof Dialog.Content>;
 
-export function DialogContent(props: DialogContentProps) {
+export const DialogContent: Component<DialogContentProps> = (props) => {
   return (
     <Dialog.Content
       {...props}
@@ -66,37 +66,37 @@ export function DialogContent(props: DialogContentProps) {
       )}
     />
   );
-}
+};
 
 export type DialogHeaderProps = ComponentProps<"header">;
 
-export function DialogHeader(props: DialogHeaderProps) {
+export const DialogHeader: Component<DialogHeaderProps> = (props) => {
   return (
     <header
       {...props}
       class={twCx("flex items-baseline justify-between mb-3", props.class)}
     />
   );
-}
+};
 
 export type DialogCloseButtonProps = ComponentProps<typeof Dialog.CloseButton>;
 
-export function DialogCloseButton(props: DialogCloseButtonProps) {
+export const DialogCloseButton: Component<DialogCloseButtonProps> = (props) => {
   return <Dialog.CloseButton {...props} class={twCx("w-4 h-4", props.class)} />;
-}
+};
 
 export type DialogTitleProps = ComponentProps<typeof Dialog.Title>;
 
-export function DialogTitle(props: DialogTitleProps) {
+export const DialogTitle: Component<DialogTitleProps> = (props) => {
   return (
     <Dialog.Title {...props} class={twCx("text-xl font-medium", props.class)} />
   );
-}
+};
 
 export type DialogDescriptionProps = ComponentProps<typeof Dialog.Description>;
 
-export function DialogDescription(props: DialogDescriptionProps) {
+export const DialogDescription: Component<DialogDescriptionProps> = (props) => {
   return (
     <Dialog.Description {...props} class={twCx("text-base", props.class)} />
   );
-}
+};

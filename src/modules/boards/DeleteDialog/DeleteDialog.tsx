@@ -1,5 +1,5 @@
 import { useSubmission } from "@solidjs/router";
-import { Show, splitProps } from "solid-js";
+import { Component, Show, splitProps } from "solid-js";
 
 import type { DialogTriggerProps } from "~/components/Dialog";
 
@@ -25,7 +25,7 @@ type DeleteBoardFormProps = {
   boardId: string;
 };
 
-function DeleteBoardForm(props: DeleteBoardFormProps) {
+const DeleteBoardForm: Component<DeleteBoardFormProps> = (props) => {
   const { t } = useI18n();
 
   const submission = useSubmission(deleteBoardAction);
@@ -56,13 +56,13 @@ function DeleteBoardForm(props: DeleteBoardFormProps) {
       </footer>
     </form>
   );
-}
+};
 
 type DeleteBoardProps = {
   boardId: string;
 };
 
-function DeleteBoard(props: DeleteBoardProps) {
+const DeleteBoard: Component<DeleteBoardProps> = (props) => {
   const { t } = useI18n();
 
   return (
@@ -81,7 +81,7 @@ function DeleteBoard(props: DeleteBoardProps) {
       </AlertDialogPositioner>
     </AlertDialogPortal>
   );
-}
+};
 
 type DeleteBoardControlledDialogProps = {
   boardId: string;
@@ -89,23 +89,23 @@ type DeleteBoardControlledDialogProps = {
   onIsOpenChange: (isOpen: boolean) => void;
 };
 
-export function DeleteBoardControlledDialog(
-  props: DeleteBoardControlledDialogProps
-) {
+export const DeleteBoardControlledDialog: Component<
+  DeleteBoardControlledDialogProps
+> = (props) => {
   return (
     <AlertDialogRoot onOpenChange={props.onIsOpenChange} open={props.isOpen}>
       <DeleteBoard boardId={props.boardId} />
     </AlertDialogRoot>
   );
-}
+};
 
 type DeleteBoardUncontrolledDialogProps = {
   boardId: string;
 } & DialogTriggerProps;
 
-export function DeleteBoardUncontrolledDialog(
-  props: DeleteBoardUncontrolledDialogProps
-) {
+export const DeleteBoardUncontrolledDialog: Component<
+  DeleteBoardUncontrolledDialogProps
+> = (props) => {
   const [split, rest] = splitProps(props, ["boardId"]);
 
   return (
@@ -114,4 +114,4 @@ export function DeleteBoardUncontrolledDialog(
       <DeleteBoard boardId={split.boardId} />
     </AlertDialogRoot>
   );
-}
+};

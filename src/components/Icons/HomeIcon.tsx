@@ -1,6 +1,6 @@
-import type { ComponentProps } from "solid-js";
+import type { Component, ComponentProps } from "solid-js";
 
-export function HomeIcon(props: ComponentProps<"svg">) {
+export const HomeIcon: Component<ComponentProps<"svg">> = (props) => {
   return (
     <svg
       fill="none"
@@ -18,4 +18,4 @@ export function HomeIcon(props: ComponentProps<"svg">) {
       <polyline points="9 22 9 12 15 12 15 22" />
     </svg>
   );
-}
+};

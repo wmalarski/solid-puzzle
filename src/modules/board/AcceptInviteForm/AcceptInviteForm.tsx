@@ -1,6 +1,6 @@
 import { useSubmission } from "@solidjs/router";
 import { nanoid } from "nanoid";
-import { Show } from "solid-js";
+import { Component, Show } from "solid-js";
 
 import type { BoardModel } from "~/types/models";
 
@@ -24,7 +24,7 @@ type AcceptInviteFormProps = {
   board: BoardModel;
 };
 
-export function AcceptInviteForm(props: AcceptInviteFormProps) {
+export const AcceptInviteForm: Component<AcceptInviteFormProps> = (props) => {
   const { t } = useI18n();
 
   const defaultPlayerId = nanoid();
@@ -104,4 +104,4 @@ export function AcceptInviteForm(props: AcceptInviteFormProps) {
       <PageFooter />
     </FormLayout>
   );
-}
+};

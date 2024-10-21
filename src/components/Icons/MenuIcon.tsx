@@ -1,6 +1,6 @@
-import type { ComponentProps } from "solid-js";
+import type { Component, ComponentProps } from "solid-js";
 
-export function MenuIcon(props: ComponentProps<"svg">) {
+export const MenuIcon: Component<ComponentProps<"svg">> = (props) => {
   return (
     <svg
       fill="none"
@@ -19,4 +19,4 @@ export function MenuIcon(props: ComponentProps<"svg">) {
       <line x1="4" x2="20" y1="18" y2="18" />
     </svg>
   );
-}
+};

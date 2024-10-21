@@ -5,6 +5,7 @@ import {
 } from "@supabase/supabase-js";
 import {
   Accessor,
+  Component,
   createContext,
   createMemo,
   onCleanup,
@@ -133,7 +134,9 @@ type PlayerPresenceProviderProps = ParentProps<{
   boardAccess: BoardAccess;
 }>;
 
-export function PlayerPresenceProvider(props: PlayerPresenceProviderProps) {
+export const PlayerPresenceProvider: Component<PlayerPresenceProviderProps> = (
+  props
+) => {
   const value = createMemo(() => createPlayerPresenceState(props.boardAccess));
 
   return (
@@ -141,7 +144,7 @@ export function PlayerPresenceProvider(props: PlayerPresenceProviderProps) {
       {props.children}
     </PlayerPresenceContext.Provider>
   );
-}
+};
 
 export const usePlayerPresence = () => {
   return useContext(PlayerPresenceContext);

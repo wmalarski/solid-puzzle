@@ -1,7 +1,7 @@
 import type { VariantProps } from "class-variance-authority";
 
 import { AlertDialog } from "@kobalte/core";
-import { ComponentProps, splitProps } from "solid-js";
+import { Component, ComponentProps, splitProps } from "solid-js";
 
 import { buttonClass } from "../Button";
 import { twCx } from "../utils/twCva";
@@ -16,7 +16,9 @@ export type AlertDialogTriggerProps = ComponentProps<
 > &
   VariantProps<typeof buttonClass>;
 
-export function AlertDialogTrigger(props: AlertDialogTriggerProps) {
+export const AlertDialogTrigger: Component<AlertDialogTriggerProps> = (
+  props
+) => {
   const [split, rest] = splitProps(props, [
     "color",
     "isLoading",
@@ -31,7 +33,7 @@ export function AlertDialogTrigger(props: AlertDialogTriggerProps) {
       class={buttonClass({ class: props.class, ...split })}
     />
   );
-}
+};
 
 export type AlertDialogPortalProps = ComponentProps<typeof AlertDialog.Portal>;
 
@@ -41,7 +43,9 @@ export type AlertDialogOverlayProps = ComponentProps<
   typeof AlertDialog.Overlay
 >;
 
-export function AlertDialogOverlay(props: AlertDialogOverlayProps) {
+export const AlertDialogOverlay: Component<AlertDialogOverlayProps> = (
+  props
+) => {
   return (
     <AlertDialog.Overlay
       {...props}
@@ -52,11 +56,13 @@ export function AlertDialogOverlay(props: AlertDialogOverlayProps) {
       )}
     />
   );
-}
+};
 
 export type AlertDialogPositionerProps = ComponentProps<"div">;
 
-export function AlertDialogPositioner(props: AlertDialogPositionerProps) {
+export const AlertDialogPositioner: Component<AlertDialogPositionerProps> = (
+  props
+) => {
   return (
     <div
       {...props}
@@ -66,13 +72,15 @@ export function AlertDialogPositioner(props: AlertDialogPositionerProps) {
       )}
     />
   );
-}
+};
 
 export type AlertDialogContentProps = ComponentProps<
   typeof AlertDialog.Content
 >;
 
-export function AlertDialogContent(props: AlertDialogContentProps) {
+export const AlertDialogContent: Component<AlertDialogContentProps> = (
+  props
+) => {
   return (
     <AlertDialog.Content
       {...props}
@@ -83,25 +91,27 @@ export function AlertDialogContent(props: AlertDialogContentProps) {
       )}
     />
   );
-}
+};
 
 export type AlertDialogHeaderProps = ComponentProps<"header">;
 
-export function AlertDialogHeader(props: AlertDialogHeaderProps) {
+export const AlertDialogHeader: Component<AlertDialogHeaderProps> = (props) => {
   return (
     <header
       {...props}
       class={twCx("flex items-center justify-between mb-3", props.class)}
     />
   );
-}
+};
 
 export type AlertDialogCloseButtonProps = ComponentProps<
   typeof AlertDialog.CloseButton
 > &
   VariantProps<typeof buttonClass>;
 
-export function AlertDialogCloseButton(props: AlertDialogCloseButtonProps) {
+export const AlertDialogCloseButton: Component<AlertDialogCloseButtonProps> = (
+  props
+) => {
   const [split, rest] = splitProps(props, [
     "color",
     "isLoading",
@@ -116,28 +126,30 @@ export function AlertDialogCloseButton(props: AlertDialogCloseButtonProps) {
       class={buttonClass({ class: props.class, ...split })}
     />
   );
-}
+};
 
 export type AlertDialogTitleProps = ComponentProps<typeof AlertDialog.Title>;
 
-export function AlertDialogTitle(props: AlertDialogTitleProps) {
+export const AlertDialogTitle: Component<AlertDialogTitleProps> = (props) => {
   return (
     <AlertDialog.Title
       {...props}
       class={twCx("text-xl font-medium", props.class)}
     />
   );
-}
+};
 
 export type AlertDialogDescriptionProps = ComponentProps<
   typeof AlertDialog.Description
 >;
 
-export function AlertDialogDescription(props: AlertDialogDescriptionProps) {
+export const AlertDialogDescription: Component<AlertDialogDescriptionProps> = (
+  props
+) => {
   return (
     <AlertDialog.Description
       {...props}
       class={twCx("text-base", props.class)}
     />
   );
-}
+};

@@ -1,4 +1,4 @@
-import { createContext, ParentProps, useContext } from "solid-js";
+import { Component, createContext, ParentProps, useContext } from "solid-js";
 
 const createBoardThemeContext = () => {
   return {
@@ -30,7 +30,7 @@ export const useBoardTheme = () => {
   return useContext(BoardThemeContext);
 };
 
-export function BoardThemeProvider(props: ParentProps) {
+export const BoardThemeProvider: Component<ParentProps> = (props) => {
   const value = createBoardThemeContext();
 
   return (
@@ -38,4 +38,4 @@ export function BoardThemeProvider(props: ParentProps) {
       {props.children}
     </BoardThemeContext.Provider>
   );
-}
+};

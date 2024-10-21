@@ -1,7 +1,13 @@
 import type { VariantProps } from "class-variance-authority";
 
 import { DropdownMenu as KobalteDropdownMenu } from "@kobalte/core";
-import { ComponentProps, createSignal, onMount, splitProps } from "solid-js";
+import {
+  Component,
+  ComponentProps,
+  createSignal,
+  onMount,
+  splitProps
+} from "solid-js";
 
 import { buttonClass, buttonSplitProps } from "../Button";
 import { twCx } from "../utils/twCva";
@@ -20,18 +26,20 @@ export type DropdownMenuTriggerProps = ComponentProps<
 > &
   VariantProps<typeof buttonClass>;
 
-export function DropdownMenuTrigger(props: DropdownMenuTriggerProps) {
+export const DropdownMenuTrigger: Component<DropdownMenuTriggerProps> = (
+  props
+) => {
   const [split, rest] = splitProps(props, buttonSplitProps);
 
   return <KobalteDropdownMenu.Trigger {...rest} class={buttonClass(split)} />;
-}
+};
 
 export type DropdownMenuIconProps = ComponentProps<
   typeof KobalteDropdownMenu.Icon
 > &
   VariantProps<typeof dropdownMenuIconClass>;
 
-export function DropdownMenuIcon(props: DropdownMenuIconProps) {
+export const DropdownMenuIcon: Component<DropdownMenuIconProps> = (props) => {
   const [split, rest] = splitProps(props, ["rotation"]);
 
   return (
@@ -40,13 +48,13 @@ export function DropdownMenuIcon(props: DropdownMenuIconProps) {
       class={dropdownMenuIconClass({ class: props.class, ...split })}
     />
   );
-}
+};
 
 export const DropdownMenuPortal = KobalteDropdownMenu.Portal;
 
-export function DropdownMenuContent(
-  props: ComponentProps<typeof KobalteDropdownMenu.Content>
-) {
+export const DropdownMenuContent: Component<
+  ComponentProps<typeof KobalteDropdownMenu.Content>
+> = (props) => {
   const [ref, setRef] = createSignal<HTMLDivElement>();
 
   onMount(() => {
@@ -60,80 +68,80 @@ export function DropdownMenuContent(
       ref={setRef}
     />
   );
-}
+};
 
-export function DropdownMenuArrow(
-  props: ComponentProps<typeof KobalteDropdownMenu.Arrow>
-) {
+export const DropdownMenuArrow: Component<
+  ComponentProps<typeof KobalteDropdownMenu.Arrow>
+> = (props) => {
   return <KobalteDropdownMenu.Arrow {...props} class={twCx("", props.class)} />;
-}
+};
 
-export function DropdownMenuSeparator(
-  props: ComponentProps<typeof KobalteDropdownMenu.Separator>
-) {
+export const DropdownMenuSeparator: Component<
+  ComponentProps<typeof KobalteDropdownMenu.Separator>
+> = (props) => {
   return (
     <KobalteDropdownMenu.Separator
       {...props}
       class={twCx("h-px m-1.5 border-[1px] border-base-content", props.class)}
     />
   );
-}
+};
 
-export function DropdownMenuGroup(
-  props: ComponentProps<typeof KobalteDropdownMenu.Group>
-) {
+export const DropdownMenuGroup: Component<
+  ComponentProps<typeof KobalteDropdownMenu.Group>
+> = (props) => {
   return <KobalteDropdownMenu.Group {...props} class={twCx("", props.class)} />;
-}
+};
 
-export function DropdownMenuGroupLabel(
-  props: ComponentProps<typeof KobalteDropdownMenu.GroupLabel>
-) {
+export const DropdownMenuGroupLabel: Component<
+  ComponentProps<typeof KobalteDropdownMenu.GroupLabel>
+> = (props) => {
   return (
     <KobalteDropdownMenu.GroupLabel
       {...props}
       class={twCx("px-6 text-sm leading-[32px] text-base-200", props.class)}
     />
   );
-}
+};
 
 export const DropdownMenuSub = KobalteDropdownMenu.Sub;
 
-export function DropdownMenuSubTrigger(
-  props: ComponentProps<typeof KobalteDropdownMenu.SubTrigger>
-) {
+export const DropdownMenuSubTrigger: Component<
+  ComponentProps<typeof KobalteDropdownMenu.SubTrigger>
+> = (props) => {
   return (
     <KobalteDropdownMenu.SubTrigger
       {...props}
       class={dropdownMenuSubTriggerClass({ class: props.class })}
     />
   );
-}
+};
 
-export function DropdownMenuSubContent(
-  props: ComponentProps<typeof KobalteDropdownMenu.SubContent>
-) {
+export const DropdownMenuSubContent: Component<
+  ComponentProps<typeof KobalteDropdownMenu.SubContent>
+> = (props) => {
   return (
     <KobalteDropdownMenu.SubContent
       {...props}
       class={dropdownMenuContentClass({ class: props.class })}
     />
   );
-}
+};
 
-export function DropdownMenuItem(
-  props: ComponentProps<typeof KobalteDropdownMenu.Item>
-) {
+export const DropdownMenuItem: Component<
+  ComponentProps<typeof KobalteDropdownMenu.Item>
+> = (props) => {
   return (
     <KobalteDropdownMenu.Item
       {...props}
       class={dropdownMenuItemClass({ class: props.class })}
     />
   );
-}
+};
 
-export function DropdownMenuItemLabel(
-  props: ComponentProps<typeof KobalteDropdownMenu.ItemLabel>
-) {
+export const DropdownMenuItemLabel: Component<
+  ComponentProps<typeof KobalteDropdownMenu.ItemLabel>
+> = (props) => {
   return (
     <KobalteDropdownMenu.ItemLabel
       {...props}
@@ -143,22 +151,22 @@ export function DropdownMenuItemLabel(
       )}
     />
   );
-}
+};
 
-export function DropdownMenuItemDescription(
-  props: ComponentProps<typeof KobalteDropdownMenu.ItemDescription>
-) {
+export const DropdownMenuItemDescription: Component<
+  ComponentProps<typeof KobalteDropdownMenu.ItemDescription>
+> = (props) => {
   return (
     <KobalteDropdownMenu.ItemDescription
       {...props}
       class={twCx("text-xs font-semibold uppercase", props.class)}
     />
   );
-}
+};
 
-export function DropdownMenuItemIndicator(
-  props: ComponentProps<typeof KobalteDropdownMenu.ItemIndicator>
-) {
+export const DropdownMenuItemIndicator: Component<
+  ComponentProps<typeof KobalteDropdownMenu.ItemIndicator>
+> = (props) => {
   return (
     <KobalteDropdownMenu.ItemIndicator
       {...props}
@@ -168,28 +176,28 @@ export function DropdownMenuItemIndicator(
       )}
     />
   );
-}
+};
 
 export const DropdownMenuRadioGroup = KobalteDropdownMenu.RadioGroup;
 
-export function DropdownMenuRadioItem(
-  props: ComponentProps<typeof KobalteDropdownMenu.RadioItem>
-) {
+export const DropdownMenuRadioItem: Component<
+  ComponentProps<typeof KobalteDropdownMenu.RadioItem>
+> = (props) => {
   return (
     <KobalteDropdownMenu.RadioItem
       {...props}
       class={dropdownMenuItemClass({ class: props.class })}
     />
   );
-}
+};
 
-export function DropdownMenuCheckboxItem(
-  props: ComponentProps<typeof KobalteDropdownMenu.CheckboxItem>
-) {
+export const DropdownMenuCheckboxItem: Component<
+  ComponentProps<typeof KobalteDropdownMenu.CheckboxItem>
+> = (props) => {
   return (
     <KobalteDropdownMenu.CheckboxItem
       {...props}
       class={dropdownMenuItemClass({ class: props.class })}
     />
   );
-}
+};
