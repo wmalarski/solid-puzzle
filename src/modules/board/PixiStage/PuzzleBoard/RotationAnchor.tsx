@@ -33,7 +33,7 @@ export function RotationAnchor(props: RotationAnchorProps) {
     const radius = Math.max(props.container.width, props.container.height) / 2;
     const x = 0;
     const y = -radius;
-    const color = presence.currentPlayer().color;
+    const color = presence().currentPlayer.color;
 
     graphics.circle(0, 0, radius).stroke({ color });
     graphics.circle(x, y, theme.rotationAnchorRadius).fill({ color }).stroke({

@@ -99,7 +99,7 @@ const usePlayerCursor = () => {
     const transform = container.worldTransform;
     const inverted = transform.applyInverse(event.global);
 
-    cursors.send({ x: inverted.x, y: inverted.y });
+    cursors().send({ x: inverted.x, y: inverted.y });
   };
 
   onMount(() => {
@@ -134,15 +134,15 @@ export function RemoteCursors() {
   usePlayerCursor();
 
   const playerIds = createMemo(() => {
-    return Object.keys(cursors.cursors);
+    return Object.keys(cursors().cursors);
   });
 
   return (
     <For each={playerIds()}>
       {(playerId) => (
-        <Show when={cursors.cursors[playerId]}>
+        <Show when={cursors().cursors[playerId]}>
           {(state) => (
-            <Show when={presence.players[playerId]}>
+            <Show when={presence().players[playerId]}>
               {(player) => (
                 <CursorGraphics
                   color={player().color}

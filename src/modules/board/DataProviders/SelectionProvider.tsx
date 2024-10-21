@@ -10,6 +10,7 @@ import {
 import { createStore, produce } from "solid-js/store";
 
 import { useBroadcastChannel } from "./BroadcastProvider";
+import { REALTIME_THROTTLE_TIME } from "./const";
 
 const SELECTION_EVENT_NAME = "rooms:selection";
 
@@ -45,7 +46,7 @@ const createPlayerSelectionState = (playerId: string) => {
       payload: { playerId, selectionId },
       type: REALTIME_LISTEN_TYPES.BROADCAST
     });
-  });
+  }, REALTIME_THROTTLE_TIME);
 
   const select = (selectionId: null | string) => {
     sendBroadcast(selectionId);

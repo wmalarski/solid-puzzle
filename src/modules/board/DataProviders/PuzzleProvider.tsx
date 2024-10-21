@@ -21,6 +21,7 @@ import {
 } from "~/utils/getPuzzleFragments";
 
 import { useBroadcastChannel } from "./BroadcastProvider";
+import { REALTIME_THROTTLE_TIME } from "./const";
 
 const PUZZLE_EVENT_NAME = "rooms:puzzle";
 
@@ -122,7 +123,7 @@ const createPuzzleContext = (args: CreatePuzzleContextArgs) => {
       payload,
       type: REALTIME_LISTEN_TYPES.BROADCAST
     });
-  });
+  }, REALTIME_THROTTLE_TIME);
 
   const sendFragmentState = (update: SetFragmentStateArgs) => {
     sendPayload({ ...update, isLocked: false });

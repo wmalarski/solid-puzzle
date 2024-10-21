@@ -49,14 +49,14 @@ function PlayersList() {
   const presence = usePlayerPresence();
 
   const playerIds = createMemo(() => {
-    return Object.keys(presence.players);
+    return Object.keys(presence().players);
   });
 
   return (
     <div class="flex max-h-[60vh] min-w-80 flex-col gap-4 overflow-y-auto">
       <For each={playerIds()}>
         {(playerId) => (
-          <Show when={presence.players[playerId]}>
+          <Show when={presence().players[playerId]}>
             {(state) => (
               <div class="flex gap-4 p-2">
                 <PlayerAvatar state={state()} />
@@ -76,14 +76,14 @@ function Avatars() {
   const presence = usePlayerPresence();
 
   const playerIds = createMemo(() => {
-    return Object.keys(presence.players);
+    return Object.keys(presence().players);
   });
 
   return (
     <AvatarGroup>
       <For each={playerIds().slice(0, MAX_AVATARS)}>
         {(playerId) => (
-          <Show when={presence.players[playerId]}>
+          <Show when={presence().players[playerId]}>
             {(state) => <PlayerAvatar state={state()} />}
           </Show>
         )}

@@ -1,31 +1,39 @@
-import { createContext, createSignal, type JSX, useContext } from "solid-js";
+import { throttle } from "@solid-primitives/scheduled";
+import { REALTIME_LISTEN_TYPES } from "@supabase/supabase-js";
+import { createContext, createMemo, ParentProps, useContext } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 
-export type PlayerCursorState = {
+import { useBroadcastChannel } from "./BroadcastProvider";
+import { REALTIME_THROTTLE_TIME } from "./const";
+
+const CURSOR_EVENT_NAME = "rooms:cursor";
+
+type PlayerCursorState = {
   x: number;
   y: number;
 };
 
-export type PlayerCursorPayload = {
+type PlayerCursorPayload = {
   playerId: string;
 } & PlayerCursorState;
 
 type PlayersCursorState = Record<string, PlayerCursorState | undefined>;
 
-type PlayerCursorProviderProps = {
-  children: JSX.Element;
-  playerId: string;
-};
-
 const createPlayerCursorState = (args: () => PlayerCursorProviderProps) => {
+  const broadcastChannel = useBroadcastChannel();
+
   const [cursors, setCursors] = createStore<PlayersCursorState>({});
 
-  const [sender, setSender] = createSignal<(args: PlayerCursorPayload) => void>(
-    () => void 0
-  );
+  const throttledSend = throttle((payload: PlayerCursorPayload) => {
+    broadcastChannel().send({
+      event: CURSOR_EVENT_NAME,
+      payload,
+      type: REALTIME_LISTEN_TYPES.BROADCAST
+    });
+  }, REALTIME_THROTTLE_TIME);
 
   const send = (state: PlayerCursorState) => {
-    sender()({ ...state, playerId: args().playerId });
+    throttledSend({ ...state, playerId: args().playerId });
   };
 
   const leave = (playerIds: string[]) => {
@@ -36,10 +44,6 @@ const createPlayerCursorState = (args: () => PlayerCursorProviderProps) => {
         });
       })
     );
-  };
-
-  const setRemoteSender = (sender: (payload: PlayerCursorPayload) => void) => {
-    setSender(() => sender);
   };
 
   const setRemoteCursor = (payload: PlayerCursorPayload) => {
@@ -59,21 +63,23 @@ const createPlayerCursorState = (args: () => PlayerCursorProviderProps) => {
     );
   };
 
-  return { cursors, leave, send, setRemoteCursor, setRemoteSender };
+  return { cursors, leave, send, setRemoteCursor };
 };
 
-type PlayerCursorContextState = ReturnType<typeof createPlayerCursorState>;
+type PlayerCursorContextState = () => ReturnType<
+  typeof createPlayerCursorState
+>;
 
-const PlayerCursorContext = createContext<PlayerCursorContextState>({
-  cursors: {},
-  leave: () => void 0,
-  send: () => void 0,
-  setRemoteCursor: () => void 0,
-  setRemoteSender: () => void 0
+const PlayerCursorContext = createContext<PlayerCursorContextState>(() => {
+  throw new Error("PlayerCursorContext not defined");
 });
 
+type PlayerCursorProviderProps = ParentProps<{
+  playerId: string;
+}>;
+
 export function PlayerCursorProvider(props: PlayerCursorProviderProps) {
-  const value = createPlayerCursorState(() => props);
+  const value = createMemo(() => createPlayerCursorState(() => props));
 
   return (
     <PlayerCursorContext.Provider value={value}>

@@ -1,6 +1,4 @@
-import { throttle } from "@solid-primitives/scheduled";
 import {
-  REALTIME_LISTEN_TYPES,
   REALTIME_SUBSCRIBE_STATES,
   RealtimeChannel
 } from "@supabase/supabase-js";
@@ -16,11 +14,7 @@ import {
 
 import { getClientSupabase } from "~/utils/supabase";
 
-import { REALTIME_THROTTLE_TIME } from "./const";
-import { type PlayerCursorPayload, usePlayerCursors } from "./CursorProvider";
-
 const CHANNEL_NAME = "rooms:broadcast";
-const CURSOR_EVENT_NAME = "rooms:cursor";
 
 type BroadcastProviderProps = ParentProps<{
   boardId: string;
@@ -35,8 +29,6 @@ const BroadcastProviderContext = createContext<BroadcastProviderContextState>(
 );
 
 export function BroadcastProvider(props: BroadcastProviderProps) {
-  const cursors = usePlayerCursors();
-
   const broadcastChannel = createMemo(() => {
     const supabase = getClientSupabase();
     const channelName = `${CHANNEL_NAME}:${props.boardId}`;
@@ -52,27 +44,11 @@ export function BroadcastProvider(props: BroadcastProviderProps) {
   createEffect(() => {
     const channel = broadcastChannel();
 
-    channel
-      .on<PlayerCursorPayload>(
-        REALTIME_LISTEN_TYPES.BROADCAST,
-        { event: CURSOR_EVENT_NAME },
-        ({ payload }) => cursors.setRemoteCursor(payload)
-      )
-      .subscribe((status) => {
-        if (status !== REALTIME_SUBSCRIBE_STATES.SUBSCRIBED) {
-          return;
-        }
-
-        cursors.setRemoteSender(
-          throttle((payload) => {
-            channel.send({
-              event: CURSOR_EVENT_NAME,
-              payload,
-              type: REALTIME_LISTEN_TYPES.BROADCAST
-            });
-          }, REALTIME_THROTTLE_TIME)
-        );
-      });
+    channel.subscribe((status) => {
+      if (status !== REALTIME_SUBSCRIBE_STATES.SUBSCRIBED) {
+        return;
+      }
+    });
   });
 
   return (

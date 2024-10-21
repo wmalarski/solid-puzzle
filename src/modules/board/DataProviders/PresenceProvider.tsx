@@ -3,20 +3,17 @@ import {
   REALTIME_PRESENCE_LISTEN_EVENTS,
   REALTIME_SUBSCRIBE_STATES
 } from "@supabase/supabase-js";
-import { nanoid } from "nanoid";
 import {
   createContext,
   createMemo,
-  type JSX,
   onCleanup,
-  onMount,
+  ParentProps,
   useContext
 } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 
 import type { BoardAccess } from "~/server/access/rpc";
 
-import { randomHexColor } from "~/utils/colors";
 import { getClientSupabase } from "~/utils/supabase";
 
 import { usePlayerCursors } from "./CursorProvider";
@@ -32,126 +29,111 @@ type PlayersState = Record<string, PlayerState | undefined>;
 
 const PRESENCE_CHANNEL_NAME = "rooms";
 
-const defaultPlayerId = nanoid();
-const placeholderCurrentPlayer: PlayerState = {
-  color: randomHexColor(),
-  name: defaultPlayerId,
-  playerId: defaultPlayerId
-};
-
-type PlayerPresenceProviderProps = {
-  boardAccess: BoardAccess;
-  children: JSX.Element;
-};
-
-const createPlayerPresenceState = (args: () => PlayerPresenceProviderProps) => {
+const createPlayerPresenceState = (boardAccess: BoardAccess) => {
   const [players, setPlayers] = createStore<PlayersState>({});
   const selection = usePlayerSelection();
   const cursors = usePlayerCursors();
 
-  const currentPlayer = createMemo(() => {
-    const access = args().boardAccess;
-    return {
-      color: access.playerColor,
-      name: access.userName,
-      playerId: access.playerId
-    };
+  const currentPlayer = {
+    color: boardAccess.playerColor,
+    name: boardAccess.userName,
+    playerId: boardAccess.playerId
+  };
+
+  const supabase = getClientSupabase();
+  const boardId = boardAccess.boardId;
+  const channelName = `${PRESENCE_CHANNEL_NAME}:${boardId}`;
+
+  const channel = supabase.channel(channelName, {
+    config: { presence: { key: boardId } }
   });
 
-  onMount(() => {
-    const supabase = getClientSupabase();
-    const player = currentPlayer();
-    const boardId = args().boardAccess.boardId;
-    const channelName = `${PRESENCE_CHANNEL_NAME}:${boardId}`;
+  const subscription = channel
+    .on(
+      REALTIME_LISTEN_TYPES.PRESENCE,
+      { event: REALTIME_PRESENCE_LISTEN_EVENTS.SYNC },
+      () => {
+        const newState = channel.presenceState<PlayerState>();
 
-    const channel = supabase.channel(channelName, {
-      config: { presence: { key: boardId } }
+        setPlayers(
+          produce((state) => {
+            newState[boardId]?.forEach((presence) => {
+              state[presence.playerId] = {
+                color: presence.color,
+                name: presence.name,
+                playerId: presence.playerId
+              };
+            });
+          })
+        );
+      }
+    )
+    .on(
+      REALTIME_LISTEN_TYPES.PRESENCE,
+      { event: REALTIME_PRESENCE_LISTEN_EVENTS.JOIN },
+      ({ newPresences }) => {
+        setPlayers(
+          produce((state) => {
+            newPresences.forEach((presence) => {
+              state[presence.playerId] = {
+                color: presence.color,
+                name: presence.name,
+                playerId: presence.playerId
+              };
+            });
+          })
+        );
+      }
+    )
+    .on(
+      REALTIME_LISTEN_TYPES.PRESENCE,
+      { event: REALTIME_PRESENCE_LISTEN_EVENTS.LEAVE },
+      ({ leftPresences }) => {
+        const leftIds = leftPresences.map((presence) => presence.playerId);
+
+        selection().leave(leftIds);
+        cursors().leave(leftIds);
+
+        setPlayers(
+          produce((state) => {
+            leftIds.forEach((playerId) => {
+              state[playerId] = undefined;
+            });
+          })
+        );
+      }
+    )
+    .subscribe(async (status) => {
+      if (status === REALTIME_SUBSCRIBE_STATES.SUBSCRIBED) {
+        await channel.track(currentPlayer);
+      }
     });
 
-    const subscription = channel
-      .on(
-        REALTIME_LISTEN_TYPES.PRESENCE,
-        { event: REALTIME_PRESENCE_LISTEN_EVENTS.SYNC },
-        () => {
-          const newState = channel.presenceState<PlayerState>();
+  onCleanup(() => {
+    const untrackPresence = async () => {
+      await subscription.unsubscribe();
+      await channel.untrack();
+      await supabase.removeChannel(channel);
+    };
 
-          setPlayers(
-            produce((state) => {
-              newState[boardId]?.forEach((presence) => {
-                state[presence.playerId] = {
-                  color: presence.color,
-                  name: presence.name,
-                  playerId: presence.playerId
-                };
-              });
-            })
-          );
-        }
-      )
-      .on(
-        REALTIME_LISTEN_TYPES.PRESENCE,
-        { event: REALTIME_PRESENCE_LISTEN_EVENTS.JOIN },
-        ({ newPresences }) => {
-          setPlayers(
-            produce((state) => {
-              newPresences.forEach((presence) => {
-                state[presence.playerId] = {
-                  color: presence.color,
-                  name: presence.name,
-                  playerId: presence.playerId
-                };
-              });
-            })
-          );
-        }
-      )
-      .on(
-        REALTIME_LISTEN_TYPES.PRESENCE,
-        { event: REALTIME_PRESENCE_LISTEN_EVENTS.LEAVE },
-        ({ leftPresences }) => {
-          const leftIds = leftPresences.map((presence) => presence.playerId);
-
-          selection().leave(leftIds);
-          cursors.leave(leftIds);
-
-          setPlayers(
-            produce((state) => {
-              leftIds.forEach((playerId) => {
-                state[playerId] = undefined;
-              });
-            })
-          );
-        }
-      )
-      .subscribe(async (status) => {
-        if (status === REALTIME_SUBSCRIBE_STATES.SUBSCRIBED) {
-          await channel.track(player);
-        }
-      });
-
-    onCleanup(() => {
-      const untrackPresence = async () => {
-        await subscription.unsubscribe();
-        await channel.untrack();
-        await supabase.removeChannel(channel);
-      };
-
-      untrackPresence();
-    });
+    untrackPresence();
   });
 
   return { currentPlayer, players };
 };
 
-type PlayerPresenceState = ReturnType<typeof createPlayerPresenceState>;
+type PlayerPresenceState = () => ReturnType<typeof createPlayerPresenceState>;
 
-const PlayerPresenceContext = createContext<PlayerPresenceState>({
-  currentPlayer: () => placeholderCurrentPlayer,
-  players: {}
+const PlayerPresenceContext = createContext<PlayerPresenceState>(() => {
+  throw new Error("PlayerPresenceContext not defined");
 });
 
+type PlayerPresenceProviderProps = ParentProps<{
+  boardAccess: BoardAccess;
+}>;
+
 export function PlayerPresenceProvider(props: PlayerPresenceProviderProps) {
-  const value = createPlayerPresenceState(() => props);
+  const value = createMemo(() => createPlayerPresenceState(props.boardAccess));
 
   return (
     <PlayerPresenceContext.Provider value={value}>

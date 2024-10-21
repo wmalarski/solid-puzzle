@@ -159,7 +159,7 @@ export function PuzzleFragment(props: PuzzleFragmentProps) {
       return null;
     }
 
-    const remotePlayer = presence.players[remotePlayerId];
+    const remotePlayer = presence().players[remotePlayerId];
     if (!remotePlayer) {
       return null;
     }
@@ -246,7 +246,7 @@ export function PuzzleFragment(props: PuzzleFragmentProps) {
         <>
           <PuzzleBorderGraphics
             center={center()}
-            color={presence.currentPlayer().color}
+            color={presence().currentPlayer.color}
             container={fragment}
             shape={props.shape}
             state={props.state}
