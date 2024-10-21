@@ -148,8 +148,8 @@ export function RemoteCursors() {
                   color={player().color}
                   cursorsContainer={cursorsContainer}
                   name={player().name}
-                  x={transform.x() + state().x * transform.scale()}
-                  y={transform.y() + state().y * transform.scale()}
+                  x={transform().x() + state().x * transform().scale()}
+                  y={transform().y() + state().y * transform().scale()}
                 />
               )}
             </Show>

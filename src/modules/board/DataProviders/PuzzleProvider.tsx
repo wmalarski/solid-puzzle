@@ -1,6 +1,12 @@
 import { throttle } from "@solid-primitives/scheduled";
 import { REALTIME_LISTEN_TYPES } from "@supabase/supabase-js";
-import { createContext, createMemo, ParentProps, useContext } from "solid-js";
+import {
+  Accessor,
+  createContext,
+  createMemo,
+  ParentProps,
+  useContext
+} from "solid-js";
 import { createStore, produce } from "solid-js/store";
 
 import type { BoardAccess } from "~/server/access/rpc";
@@ -197,9 +203,9 @@ const createPuzzleContext = (args: CreatePuzzleContextArgs) => {
   };
 };
 
-type PuzzleContextState = () => ReturnType<typeof createPuzzleContext>;
-
-const PuzzleStateContext = createContext<PuzzleContextState>(() => {
+const PuzzleStateContext = createContext<
+  Accessor<ReturnType<typeof createPuzzleContext>>
+>(() => {
   throw new Error("PuzzleStateContext is not defined");
 });
 

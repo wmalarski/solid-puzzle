@@ -22,9 +22,7 @@ const createThemeValue = () => {
   return { theme, updateTheme };
 };
 
-type ThemeContextValue = ReturnType<typeof createThemeValue>;
-
-const ThemeContext = createContext<ThemeContextValue>({
+const ThemeContext = createContext<ReturnType<typeof createThemeValue>>({
   theme: () => "dracula" as const,
   updateTheme: () => void 0
 });

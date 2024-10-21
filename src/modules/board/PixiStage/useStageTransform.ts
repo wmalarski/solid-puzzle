@@ -10,8 +10,8 @@ const useZoom = () => {
   const transform = useTransformContext();
 
   createEffect(() => {
-    container.scale.set(transform.scale(), transform.scale());
-    container.position.set(transform.x(), transform.y());
+    container.scale.set(transform().scale(), transform().scale());
+    container.position.set(transform().x(), transform().y());
   });
 };
 
@@ -26,8 +26,8 @@ const usePane = () => {
   const [originY, setOriginY] = createSignal<number>();
 
   const onPointerDown = (event: FederatedPointerEvent) => {
-    setStartX(transform.x());
-    setStartY(transform.y());
+    setStartX(transform().x());
+    setStartY(transform().y());
     setOriginX(event.x);
     setOriginY(event.y);
   };
@@ -48,8 +48,8 @@ const usePane = () => {
     }
 
     const onPointerMove = (event: FederatedPointerEvent) => {
-      transform.setX(startX() - originXPosition + event.x);
-      transform.setY(startY() - originYPosition + event.y);
+      transform().setX(startX() - originXPosition + event.x);
+      transform().setY(startY() - originYPosition + event.y);
     };
 
     const onDragEnd = () => {
@@ -80,10 +80,10 @@ const useWheel = () => {
     const point = { x: event.globalX, y: event.globalY };
 
     if (event.deltaY < 0) {
-      transform.zoomIn(point);
+      transform().zoomIn(point);
       return;
     }
-    transform.zoomOut(point);
+    transform().zoomOut(point);
   };
 
   onMount(() => {

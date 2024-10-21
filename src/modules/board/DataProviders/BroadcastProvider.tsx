@@ -20,9 +20,7 @@ type BroadcastProviderProps = ParentProps<{
   boardId: string;
 }>;
 
-type BroadcastProviderContextState = Accessor<RealtimeChannel>;
-
-const BroadcastProviderContext = createContext<BroadcastProviderContextState>(
+const BroadcastProviderContext = createContext<Accessor<RealtimeChannel>>(
   () => {
     throw new Error("BroadcastProviderContext not defined");
   }

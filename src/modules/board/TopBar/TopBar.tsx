@@ -71,16 +71,16 @@ function PreviewVisibilityToggle() {
   const preview = usePreviewContext();
 
   const onMouseDown = () => {
-    preview.setIsPreviewVisible(true);
+    preview().setIsPreviewVisible(true);
   };
 
   const onMouseUp = () => {
-    preview.setIsPreviewVisible(false);
+    preview().setIsPreviewVisible(false);
   };
 
   const label = createMemo(() => {
     return t(
-      preview.isPreviewVisible()
+      preview().isPreviewVisible()
         ? "board.previewVisibility.hide"
         : "board.previewVisibility.show"
     );
@@ -90,13 +90,13 @@ function PreviewVisibilityToggle() {
 
   const onKeyDown: ComponentProps<"button">["onKeyDown"] = (event) => {
     if (event.key === enterKey) {
-      preview.setIsPreviewVisible(true);
+      preview().setIsPreviewVisible(true);
     }
   };
 
   const onKeyUp: ComponentProps<"button">["onKeyUp"] = (event) => {
     if (event.key === enterKey) {
-      preview.setIsPreviewVisible(false);
+      preview().setIsPreviewVisible(false);
     }
   };
 
@@ -104,7 +104,7 @@ function PreviewVisibilityToggle() {
     <TooltipRoot>
       <TooltipTrigger
         aria-label={label()}
-        color={preview.isPreviewVisible() ? "accent" : "secondary"}
+        color={preview().isPreviewVisible() ? "accent" : "secondary"}
         onFocusOut={onMouseUp}
         onKeyPress={onKeyDown}
         onKeyUp={onKeyUp}
@@ -118,7 +118,7 @@ function PreviewVisibilityToggle() {
         size="sm"
         type="button"
       >
-        {preview.isPreviewVisible() ? (
+        {preview().isPreviewVisible() ? (
           <EyeOffIcon class="size-5" />
         ) : (
           <EyeIcon class="size-5" />

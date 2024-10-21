@@ -1,4 +1,11 @@
-import { createContext, createSignal, ParentProps, useContext } from "solid-js";
+import {
+  Accessor,
+  createContext,
+  createMemo,
+  createSignal,
+  ParentProps,
+  useContext
+} from "solid-js";
 
 import type { Point2D } from "~/utils/geometry";
 
@@ -62,19 +69,10 @@ const createTransform = () => {
   return { reset, scale, setScale, setX, setY, setZoom, x, y, zoomIn, zoomOut };
 };
 
-export type TransformContextValue = ReturnType<typeof createTransform>;
-
-const TransformContext = createContext<TransformContextValue>({
-  reset: () => void 0,
-  scale: () => 1,
-  setScale: () => void 0,
-  setX: () => void 0,
-  setY: () => void 0,
-  setZoom: () => void 0,
-  x: () => 0,
-  y: () => 0,
-  zoomIn: () => void 0,
-  zoomOut: () => void 0
+const TransformContext = createContext<
+  Accessor<ReturnType<typeof createTransform>>
+>(() => {
+  throw new Error("TransformContext not defined");
 });
 
 export const useTransformContext = () => {
@@ -82,7 +80,7 @@ export const useTransformContext = () => {
 };
 
 export function TransformContextProvider(props: ParentProps) {
-  const value = createTransform();
+  const value = createMemo(() => createTransform());
 
   return (
     <TransformContext.Provider value={value}>

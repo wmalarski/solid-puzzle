@@ -21,15 +21,15 @@ export function ZoomBar() {
   };
 
   const onZoomInClick = () => {
-    transform.zoomIn(center());
+    transform().zoomIn(center());
   };
 
   const onZoomOutClick = () => {
-    transform.zoomOut(center());
+    transform().zoomOut(center());
   };
 
   const onZoomResetClick = () => {
-    transform.reset();
+    transform().reset();
   };
 
   return (
@@ -60,7 +60,7 @@ export function ZoomBar() {
           size="sm"
           variant="ghost"
         >
-          {Math.round(transform.scale() * 100)}%
+          {Math.round(transform().scale() * 100)}%
         </TooltipTrigger>
         <TooltipPortal>
           <TooltipContent>

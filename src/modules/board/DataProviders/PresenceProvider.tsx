@@ -4,6 +4,7 @@ import {
   REALTIME_SUBSCRIBE_STATES
 } from "@supabase/supabase-js";
 import {
+  Accessor,
   createContext,
   createMemo,
   onCleanup,
@@ -122,9 +123,9 @@ const createPlayerPresenceState = (boardAccess: BoardAccess) => {
   return { currentPlayer, players };
 };
 
-type PlayerPresenceState = () => ReturnType<typeof createPlayerPresenceState>;
-
-const PlayerPresenceContext = createContext<PlayerPresenceState>(() => {
+const PlayerPresenceContext = createContext<
+  Accessor<ReturnType<typeof createPlayerPresenceState>>
+>(() => {
   throw new Error("PlayerPresenceContext not defined");
 });
 

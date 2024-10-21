@@ -1,4 +1,11 @@
-import { createContext, createSignal, ParentProps, useContext } from "solid-js";
+import {
+  Accessor,
+  createContext,
+  createMemo,
+  createSignal,
+  ParentProps,
+  useContext
+} from "solid-js";
 
 const createPreviewContext = () => {
   const [isPreviewVisible, setIsPreviewVisible] = createSignal(false);
@@ -6,11 +13,10 @@ const createPreviewContext = () => {
   return { isPreviewVisible, setIsPreviewVisible };
 };
 
-type PreviewContextValue = ReturnType<typeof createPreviewContext>;
-
-const PreviewContext = createContext<PreviewContextValue>({
-  isPreviewVisible: () => false,
-  setIsPreviewVisible: () => void 0
+const PreviewContext = createContext<
+  Accessor<ReturnType<typeof createPreviewContext>>
+>(() => {
+  throw new Error("PreviewContext not defined");
 });
 
 export const usePreviewContext = () => {
@@ -18,7 +24,7 @@ export const usePreviewContext = () => {
 };
 
 export function PreviewContextProvider(props: ParentProps) {
-  const value = createPreviewContext();
+  const value = createMemo(() => createPreviewContext());
 
   return (
     <PreviewContext.Provider value={value}>

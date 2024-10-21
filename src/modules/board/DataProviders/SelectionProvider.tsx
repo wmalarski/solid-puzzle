@@ -1,6 +1,7 @@
 import { throttle } from "@solid-primitives/scheduled";
 import { REALTIME_LISTEN_TYPES } from "@supabase/supabase-js";
 import {
+  Accessor,
   createContext,
   createMemo,
   createSignal,
@@ -93,15 +94,11 @@ const createPlayerSelectionState = (playerId: string) => {
   };
 };
 
-type PlayerSelectionContextState = () => ReturnType<
-  typeof createPlayerSelectionState
->;
-
-const PlayerSelectionContext = createContext<PlayerSelectionContextState>(
-  () => {
-    throw new Error("PlayerSelectionContext is not defined");
-  }
-);
+const PlayerSelectionContext = createContext<
+  Accessor<ReturnType<typeof createPlayerSelectionState>>
+>(() => {
+  throw new Error("PlayerSelectionContext is not defined");
+});
 
 type PlayerSelectionProviderProps = ParentProps<{
   playerId: string;

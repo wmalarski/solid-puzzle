@@ -1,6 +1,12 @@
 import { throttle } from "@solid-primitives/scheduled";
 import { REALTIME_LISTEN_TYPES } from "@supabase/supabase-js";
-import { createContext, createMemo, ParentProps, useContext } from "solid-js";
+import {
+  Accessor,
+  createContext,
+  createMemo,
+  ParentProps,
+  useContext
+} from "solid-js";
 import { createStore, produce } from "solid-js/store";
 
 import { useBroadcastChannel } from "./BroadcastProvider";
@@ -19,7 +25,7 @@ type PlayerCursorPayload = {
 
 type PlayersCursorState = Record<string, PlayerCursorState | undefined>;
 
-const createPlayerCursorState = (args: () => PlayerCursorProviderProps) => {
+const createPlayerCursorState = (playerId: string) => {
   const broadcastChannel = useBroadcastChannel();
 
   const [cursors, setCursors] = createStore<PlayersCursorState>({});
@@ -33,7 +39,7 @@ const createPlayerCursorState = (args: () => PlayerCursorProviderProps) => {
   }, REALTIME_THROTTLE_TIME);
 
   const send = (state: PlayerCursorState) => {
-    throttledSend({ ...state, playerId: args().playerId });
+    throttledSend({ ...state, playerId });
   };
 
   const leave = (playerIds: string[]) => {
@@ -66,11 +72,9 @@ const createPlayerCursorState = (args: () => PlayerCursorProviderProps) => {
   return { cursors, leave, send, setRemoteCursor };
 };
 
-type PlayerCursorContextState = () => ReturnType<
-  typeof createPlayerCursorState
->;
-
-const PlayerCursorContext = createContext<PlayerCursorContextState>(() => {
+const PlayerCursorContext = createContext<
+  Accessor<ReturnType<typeof createPlayerCursorState>>
+>(() => {
   throw new Error("PlayerCursorContext not defined");
 });
 
@@ -79,7 +83,7 @@ type PlayerCursorProviderProps = ParentProps<{
 }>;
 
 export function PlayerCursorProvider(props: PlayerCursorProviderProps) {
-  const value = createMemo(() => createPlayerCursorState(() => props));
+  const value = createMemo(() => createPlayerCursorState(props.playerId));
 
   return (
     <PlayerCursorContext.Provider value={value}>

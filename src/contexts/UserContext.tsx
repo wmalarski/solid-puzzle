@@ -2,6 +2,7 @@ import type { User } from "@supabase/supabase-js";
 
 import { Navigate, useLocation } from "@solidjs/router";
 import {
+  Accessor,
   createContext,
   type JSX,
   ParentProps,
@@ -11,11 +12,11 @@ import {
 
 import { paths } from "~/utils/paths";
 
-const UserContext = createContext<() => null | User>(() => {
+const UserContext = createContext<Accessor<null | User>>(() => {
   throw new Error("SessionContext not defined");
 });
 
-const AuthorizedUserContext = createContext<() => User>(() => {
+const AuthorizedUserContext = createContext<Accessor<User>>(() => {
   throw new Error("AuthorizedSessionContext not defined");
 });
 

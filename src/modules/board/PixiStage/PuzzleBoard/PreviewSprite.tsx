@@ -88,7 +88,7 @@ export function PreviewSprite(props: PreviewSpriteProps) {
   });
 
   createEffect(() => {
-    sprite.alpha = preview.isPreviewVisible() ? theme.previewSpriteAlpha : 0;
+    sprite.alpha = preview().isPreviewVisible() ? theme.previewSpriteAlpha : 0;
   });
 
   return null;

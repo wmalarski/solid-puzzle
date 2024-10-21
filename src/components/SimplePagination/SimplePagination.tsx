@@ -1,6 +1,7 @@
 import type { VariantProps } from "class-variance-authority";
 
 import {
+  Accessor,
   type ComponentProps,
   createContext,
   createMemo,
@@ -21,8 +22,10 @@ type SimplePaginationContextValues = {
 };
 
 const SimplePaginationContext = createContext<
-  () => SimplePaginationContextValues
->(() => ({ count: 0, page: 0 }));
+  Accessor<SimplePaginationContextValues>
+>(() => {
+  throw new Error("SimplePaginationContext not defined");
+});
 
 export type SimplePaginationRootProps = ComponentProps<"nav"> &
   SimplePaginationContextValues;

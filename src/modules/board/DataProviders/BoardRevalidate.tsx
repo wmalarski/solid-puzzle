@@ -1,4 +1,4 @@
-import type { ParentProps } from "solid-js";
+import type { Accessor, ParentProps } from "solid-js";
 
 import { revalidate, useNavigate } from "@solidjs/router";
 import {
@@ -57,15 +57,11 @@ const createBoardRevalidate = () => {
   return { sendRevalidate };
 };
 
-type BoardRevalidateContextState = () => ReturnType<
-  typeof createBoardRevalidate
->;
-
-const BoardRevalidateContext = createContext<BoardRevalidateContextState>(
-  () => {
-    throw new Error("BoardRevalidateContext not defined");
-  }
-);
+const BoardRevalidateContext = createContext<
+  Accessor<ReturnType<typeof createBoardRevalidate>>
+>(() => {
+  throw new Error("BoardRevalidateContext not defined");
+});
 
 type BoardRevalidateProviderProps = ParentProps<{
   boardId: string;
