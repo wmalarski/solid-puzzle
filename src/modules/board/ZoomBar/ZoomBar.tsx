@@ -8,10 +8,10 @@ import {
   TooltipPortal,
   TooltipRoot,
   TooltipTrigger
-} from "~/components/Tooltip";
+} from "~/components/Tooltip/Tooltip";
 import { useI18n } from "~/contexts/I18nContext";
 
-import { useTransformContext } from "../TransformContext";
+import { useTransformContext } from "../TransformContext/TransformContext";
 
 export const ZoomBar: Component = () => {
   const { t } = useI18n();

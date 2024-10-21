@@ -1,9 +1,9 @@
 import { useSubmission } from "@solidjs/router";
 import { Component, Show, splitProps } from "solid-js";
 
-import type { DialogTriggerProps } from "~/components/Dialog";
+import type { DialogTriggerProps } from "~/components/Dialog/Dialog";
 
-import { Alert, AlertIcon } from "~/components/Alert";
+import { Alert, AlertIcon } from "~/components/Alert/Alert";
 import {
   AlertDialogCloseButton,
   AlertDialogContent,
@@ -14,8 +14,8 @@ import {
   AlertDialogRoot,
   AlertDialogTitle,
   AlertDialogTrigger
-} from "~/components/AlertDialog";
-import { Button } from "~/components/Button";
+} from "~/components/AlertDialog/AlertDialog";
+import { Button } from "~/components/Button/Button";
 import { TrashIcon } from "~/components/Icons/TrashIcon";
 import { XIcon } from "~/components/Icons/XIcon";
 import { useI18n } from "~/contexts/I18nContext";

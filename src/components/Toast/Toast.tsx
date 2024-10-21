@@ -3,7 +3,8 @@ import type { VariantProps } from "class-variance-authority";
 import { Toast, toaster } from "@kobalte/core";
 import { Component, type ComponentProps, splitProps } from "solid-js";
 
-import { alertClass, AlertIcon, type AlertIconProps } from "../Alert";
+import { AlertIcon, type AlertIconProps } from "../Alert/Alert";
+import { alertClass } from "../Alert/Alert.recipe";
 import { twCx } from "../utils/twCva";
 
 const ToastRegion = Toast.Region;

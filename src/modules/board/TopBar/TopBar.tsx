@@ -8,20 +8,20 @@ import type { BoardModel } from "~/types/models";
 import { EyeIcon } from "~/components/Icons/EyeIcon";
 import { EyeOffIcon } from "~/components/Icons/EyeOffIcon";
 import { ShareIcon } from "~/components/Icons/ShareIcon";
-import { showToast } from "~/components/Toast";
+import { showToast } from "~/components/Toast/Toast";
 import {
   TooltipArrow,
   TooltipContent,
   TooltipPortal,
   TooltipRoot,
   TooltipTrigger
-} from "~/components/Tooltip";
+} from "~/components/Tooltip/Tooltip";
 import { useI18n } from "~/contexts/I18nContext";
-import { ThemeToggle } from "~/modules/common/ThemeToggle";
+import { ThemeToggle } from "~/modules/common/ThemeToggle/ThemeToggle";
 
 import { usePuzzleStore } from "../DataProviders/PuzzleProvider";
-import { usePreviewContext } from "../PreviewContext";
-import { AvatarsDialog } from "./AvatarsDialog";
+import { usePreviewContext } from "../PreviewContext/PreviewContext";
+import { AvatarsDialog } from "./AvatarsDialog/AvatarsDialog";
 
 const ShareButton: Component = () => {
   const { t } = useI18n();

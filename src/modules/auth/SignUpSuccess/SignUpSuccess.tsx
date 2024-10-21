@@ -1,10 +1,11 @@
 import { Component } from "solid-js";
 
-import { Card, CardBody, cardTitleClass } from "~/components/Card";
+import { Card, CardBody } from "~/components/Card/Card";
+import { cardTitleClass } from "~/components/Card/Card.recipe";
 import { CheckCircleIcon } from "~/components/Icons/CheckCircleIcon";
-import { Link } from "~/components/Link";
+import { Link } from "~/components/Link/Link";
 import { useI18n } from "~/contexts/I18nContext";
-import { ThemeToggle } from "~/modules/common/ThemeToggle";
+import { ThemeToggle } from "~/modules/common/ThemeToggle/ThemeToggle";
 import { paths } from "~/utils/paths";
 
 export const SignUpSuccess: Component = () => {

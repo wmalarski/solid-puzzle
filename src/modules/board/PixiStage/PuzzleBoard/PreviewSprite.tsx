@@ -9,7 +9,7 @@ import { Component, createEffect, onCleanup, onMount } from "solid-js";
 import type { PuzzleShapeLine } from "~/utils/getPuzzleFragments";
 
 import { usePlayerSelection } from "../../DataProviders/SelectionProvider";
-import { usePreviewContext } from "../../PreviewContext";
+import { usePreviewContext } from "../../PreviewContext/PreviewContext";
 import { useBoardTheme } from "../BoardTheme";
 import { usePixiContainer } from "../PixiApp";
 

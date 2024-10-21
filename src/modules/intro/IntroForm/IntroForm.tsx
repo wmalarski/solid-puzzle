@@ -1,15 +1,16 @@
 import { useSubmission } from "@solidjs/router";
 import { Component, Show } from "solid-js";
 
-import { Alert, AlertIcon } from "~/components/Alert";
-import { Button } from "~/components/Button";
-import { Card, CardBody, cardTitleClass } from "~/components/Card";
+import { Alert, AlertIcon } from "~/components/Alert/Alert";
+import { Button } from "~/components/Button/Button";
+import { Card, CardBody } from "~/components/Card/Card";
+import { cardTitleClass } from "~/components/Card/Card.recipe";
 import {
   TextFieldInput,
   TextFieldLabel,
   TextFieldLabelText,
   TextFieldRoot
-} from "~/components/TextField";
+} from "~/components/TextField/TextField";
 import { useI18n } from "~/contexts/I18nContext";
 import { updateUserAction } from "~/server/auth/client";
 import { randomHexColor } from "~/utils/colors";

@@ -4,7 +4,7 @@ import { createWritableMemo } from "@solid-primitives/memo";
 import { useAction, useSubmission } from "@solidjs/router";
 import { Show } from "solid-js";
 
-import { Alert, AlertIcon } from "~/components/Alert";
+import { Alert, AlertIcon } from "~/components/Alert/Alert";
 import {
   AlertDialogContent,
   AlertDialogDescription,
@@ -14,8 +14,8 @@ import {
   AlertDialogPositioner,
   AlertDialogRoot,
   AlertDialogTitle
-} from "~/components/AlertDialog";
-import { Button, LinkButton } from "~/components/Button";
+} from "~/components/AlertDialog/AlertDialog";
+import { Button, LinkButton } from "~/components/Button/Button";
 import { useI18n } from "~/contexts/I18nContext";
 import { reloadBoardAction } from "~/server/board/client";
 import { paths } from "~/utils/paths";

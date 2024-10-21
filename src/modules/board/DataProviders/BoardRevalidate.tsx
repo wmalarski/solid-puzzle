@@ -13,7 +13,7 @@ import {
   useContext
 } from "solid-js";
 
-import { showToast } from "~/components/Toast";
+import { showToast } from "~/components/Toast/Toast";
 import { useI18n } from "~/contexts/I18nContext";
 import {
   SELECT_BOARD_LOADER_CACHE_KEY,

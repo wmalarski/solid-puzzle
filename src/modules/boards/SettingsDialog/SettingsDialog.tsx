@@ -3,11 +3,11 @@ import type { Component, ComponentProps } from "solid-js";
 import { useAction, useSubmission } from "@solidjs/router";
 import { Show, splitProps } from "solid-js";
 
-import type { DialogTriggerProps } from "~/components/Dialog";
+import type { DialogTriggerProps } from "~/components/Dialog/Dialog";
 import type { BoardModelWithoutConfig } from "~/types/models";
 
-import { Alert, AlertIcon } from "~/components/Alert";
-import { Button } from "~/components/Button";
+import { Alert, AlertIcon } from "~/components/Alert/Alert";
+import { Button } from "~/components/Button/Button";
 import {
   DialogCloseButton,
   DialogContent,
@@ -18,10 +18,10 @@ import {
   DialogRoot,
   DialogTitle,
   DialogTrigger
-} from "~/components/Dialog";
+} from "~/components/Dialog/Dialog";
 import { XIcon } from "~/components/Icons/XIcon";
 import { useI18n } from "~/contexts/I18nContext";
-import { ConfigFields } from "~/modules/createBoard/ConfigFields";
+import { ConfigFields } from "~/modules/createBoard/ConfigFields/ConfigFields";
 import { updateBoardAction } from "~/server/board/client";
 
 type UpdateFormProps = {

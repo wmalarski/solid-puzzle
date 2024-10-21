@@ -1,6 +1,6 @@
 import { Component, createMemo, For, Show } from "solid-js";
 
-import { Avatar, AvatarContent, AvatarGroup } from "~/components/Avatar";
+import { Avatar, AvatarContent, AvatarGroup } from "~/components/Avatar/Avatar";
 import {
   DialogCloseButton,
   DialogContent,
@@ -11,7 +11,7 @@ import {
   DialogRoot,
   DialogTitle,
   DialogTrigger
-} from "~/components/Dialog";
+} from "~/components/Dialog/Dialog";
 import { XIcon } from "~/components/Icons/XIcon";
 import { useI18n } from "~/contexts/I18nContext";
 import { getTextColor } from "~/utils/colors";

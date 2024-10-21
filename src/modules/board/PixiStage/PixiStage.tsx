@@ -2,8 +2,8 @@ import { Component } from "solid-js";
 
 import type { BoardModel } from "~/types/models";
 
-import { TransformContextProvider } from "../TransformContext";
-import { ZoomBar } from "../ZoomBar";
+import { TransformContextProvider } from "../TransformContext/TransformContext";
+import { ZoomBar } from "../ZoomBar/ZoomBar";
 import { BoardThemeProvider } from "./BoardTheme";
 import { PixiAppProvider } from "./PixiApp";
 import { PuzzleBoard } from "./PuzzleBoard/PuzzleBoard";

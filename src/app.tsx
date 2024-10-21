@@ -7,10 +7,10 @@ import { lazy, Suspense } from "solid-js";
 import "./app.css";
 import { I18nContextProvider } from "./contexts/I18nContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import { Head } from "./modules/common/Head";
+import { Head } from "./modules/common/Head/Head";
 
 const ToastProvider = lazy(() =>
-  import("~/components/Toast").then((module) => ({
+  import("~/components/Toast/Toast").then((module) => ({
     default: module.ToastProvider
   }))
 );

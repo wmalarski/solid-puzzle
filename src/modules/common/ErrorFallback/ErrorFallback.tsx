@@ -1,9 +1,10 @@
 import { onMount } from "solid-js";
 
-import { Button } from "~/components/Button";
-import { Card, CardBody, cardTitleClass } from "~/components/Card";
+import { Button } from "~/components/Button/Button";
+import { Card, CardBody } from "~/components/Card/Card";
+import { cardTitleClass } from "~/components/Card/Card.recipe";
 import { XCircleIcon } from "~/components/Icons/XCircleIcon";
-import { Link } from "~/components/Link";
+import { Link } from "~/components/Link/Link";
 import { useI18n } from "~/contexts/I18nContext";
 import { paths } from "~/utils/paths";
 

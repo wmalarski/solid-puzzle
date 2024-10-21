@@ -9,21 +9,21 @@ import {
 import type { BoardAccess } from "~/server/access/rpc";
 import type { BoardModel, FragmentModel } from "~/types/models";
 
-import { InfoBar } from "~/modules/board/InfoBar";
-import { ErrorFallback } from "~/modules/common/ErrorFallback";
+import { InfoBar } from "~/modules/board/InfoBar/InfoBar";
+import { ErrorFallback } from "~/modules/common/ErrorFallback/ErrorFallback";
 
-import { BoardPlaceholder } from "../BoardPlaceholder";
+import { BoardPlaceholder } from "../BoardPlaceholder/BoardPlaceholder";
 import { BoardRevalidateProvider } from "../DataProviders/BoardRevalidate";
 import { BroadcastProvider } from "../DataProviders/BroadcastProvider";
 import { PlayerCursorProvider } from "../DataProviders/CursorProvider";
 import { PlayerPresenceProvider } from "../DataProviders/PresenceProvider";
 import { PuzzleStateProvider } from "../DataProviders/PuzzleProvider";
 import { PlayerSelectionProvider } from "../DataProviders/SelectionProvider";
-import { MenuBar } from "../MenuBar";
+import { MenuBar } from "../MenuBar/MenuBar";
 import { PixiStage } from "../PixiStage";
-import { PreviewContextProvider } from "../PreviewContext";
-import { ReloadDialog } from "../ReloadDialog";
-import { TopBar } from "../TopBar";
+import { PreviewContextProvider } from "../PreviewContext/PreviewContext";
+import { ReloadDialog } from "../ReloadDialog/ReloadDialog";
+import { TopBar } from "../TopBar/TopBar";
 
 type ClientBoardProps = {
   board: BoardModel;
@@ -52,7 +52,7 @@ type BoardProps = {
   fragments: FragmentModel[];
 };
 
-export const Board: Component<BoardProps> = (props) => {
+export default function Board(props: BoardProps) {
   return (
     <ErrorBoundary fallback={ErrorFallback}>
       <Suspense fallback={<BoardPlaceholder />}>
@@ -87,4 +87,4 @@ export const Board: Component<BoardProps> = (props) => {
       </Suspense>
     </ErrorBoundary>
   );
-};
+}

@@ -11,11 +11,14 @@ import {
   AuthorizedUserProvider,
   useAuthorizedUserContext
 } from "~/contexts/UserContext";
-import { BoardsList, BoardsListLoading } from "~/modules/boards/BoardList";
-import { ErrorFallback } from "~/modules/common/ErrorFallback";
-import { Head } from "~/modules/common/Head";
-import { PageLayout } from "~/modules/common/Layout";
-import { TopNavbar } from "~/modules/common/TopNavbar";
+import {
+  BoardsList,
+  BoardsListLoading
+} from "~/modules/boards/BoardList/BoardList";
+import { ErrorFallback } from "~/modules/common/ErrorFallback/ErrorFallback";
+import { Head } from "~/modules/common/Head/Head";
+import { PageLayout } from "~/modules/common/Layout/Layout";
+import { TopNavbar } from "~/modules/common/TopNavbar/TopNavbar";
 import { getUserLoader } from "~/server/auth/client";
 import { selectBoardsLoader } from "~/server/board/client";
 

@@ -1,10 +1,10 @@
 import { createAsync, type RouteDefinition } from "@solidjs/router";
 
 import { UserProvider } from "~/contexts/UserContext";
-import { Head } from "~/modules/common/Head";
-import { PageLayout } from "~/modules/common/Layout";
-import { TopNavbar } from "~/modules/common/TopNavbar";
-import { InsertBoard } from "~/modules/createBoard/InsertBoard";
+import { Head } from "~/modules/common/Head/Head";
+import { PageLayout } from "~/modules/common/Layout/Layout";
+import { TopNavbar } from "~/modules/common/TopNavbar/TopNavbar";
+import { InsertBoard } from "~/modules/createBoard/InsertBoard/InsertBoard";
 import { getUserLoader } from "~/server/auth/client";
 import { getInsertBoardArgsLoader } from "~/server/board/client";
 

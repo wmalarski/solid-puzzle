@@ -1,13 +1,16 @@
 import { useSubmission } from "@solidjs/router";
 import { Component, Show } from "solid-js";
 
-import { Alert, AlertIcon } from "~/components/Alert";
-import { Button } from "~/components/Button";
+import { Alert, AlertIcon } from "~/components/Alert/Alert";
+import { Button } from "~/components/Button/Button";
 import { useI18n } from "~/contexts/I18nContext";
 import { useUserContext } from "~/contexts/UserContext";
 import { insertBoardAction } from "~/server/board/client";
 
-import { type BoardConfigFields, ConfigFields } from "../ConfigFields";
+import {
+  type BoardConfigFields,
+  ConfigFields
+} from "../ConfigFields/ConfigFields";
 
 type CreateBoardFormProps = {
   initialValues?: BoardConfigFields | null;

@@ -1,17 +1,17 @@
 import { useSubmission } from "@solidjs/router";
 import { Component, Show } from "solid-js";
 
-import { Button, LinkButton } from "~/components/Button";
+import { Button, LinkButton } from "~/components/Button/Button";
 import { ExitIcon } from "~/components/Icons/ExitIcon";
 import { PuzzleIcon } from "~/components/Icons/PuzzleIcon";
-import { Link } from "~/components/Link";
-import { Navbar, NavbarEnd, NavbarStart } from "~/components/Navbar";
+import { Link } from "~/components/Link/Link";
+import { Navbar, NavbarEnd, NavbarStart } from "~/components/Navbar/Navbar";
 import { useI18n } from "~/contexts/I18nContext";
 import { useUserContext } from "~/contexts/UserContext";
 import { signOutAction } from "~/server/auth/client";
 import { paths } from "~/utils/paths";
 
-import { ThemeToggle } from "../ThemeToggle";
+import { ThemeToggle } from "../ThemeToggle/ThemeToggle";
 
 const SignOutButton: Component = () => {
   const { t } = useI18n();

@@ -1,5 +1,5 @@
 import { useI18n } from "~/contexts/I18nContext";
-import { Head } from "~/modules/common/Head";
+import { Head } from "~/modules/common/Head/Head";
 
 export default function NotFound() {
   const { t } = useI18n();

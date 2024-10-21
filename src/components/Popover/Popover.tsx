@@ -3,7 +3,8 @@ import type { VariantProps } from "class-variance-authority";
 import { Popover as KobaltePopover } from "@kobalte/core";
 import { Component, type ComponentProps, splitProps } from "solid-js";
 
-import { buttonClass, buttonSplitProps } from "../Button";
+import { buttonSplitProps } from "../Button/Button";
+import { buttonClass } from "../Button/Button.recipe";
 import { twCx } from "../utils/twCva";
 import styles from "./Popover.module.css";
 

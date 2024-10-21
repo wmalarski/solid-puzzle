@@ -8,7 +8,7 @@ import { Component, createSignal, Show } from "solid-js";
 
 import type { BoardModel } from "~/types/models";
 
-import { LinkButton } from "~/components/Button";
+import { LinkButton } from "~/components/Button/Button";
 import {
   DropdownMenuArrow,
   DropdownMenuContent,
@@ -19,7 +19,7 @@ import {
   DropdownMenuRoot,
   DropdownMenuSeparator,
   DropdownMenuTrigger
-} from "~/components/DropdownMenu";
+} from "~/components/DropdownMenu/DropdownMenu";
 import { ExitIcon } from "~/components/Icons/ExitIcon";
 import { HomeIcon } from "~/components/Icons/HomeIcon";
 import { ListIcon } from "~/components/Icons/ListIcon";
@@ -28,8 +28,8 @@ import { SettingsIcon } from "~/components/Icons/SettingsIcon";
 import { TrashIcon } from "~/components/Icons/TrashIcon";
 import { useI18n } from "~/contexts/I18nContext";
 import { useUserContext } from "~/contexts/UserContext";
-import { DeleteBoardControlledDialog } from "~/modules/boards/DeleteDialog";
-import { SettingsControlledDialog } from "~/modules/boards/SettingsDialog";
+import { DeleteBoardControlledDialog } from "~/modules/boards/DeleteDialog/DeleteDialog";
+import { SettingsControlledDialog } from "~/modules/boards/SettingsDialog/SettingsDialog";
 import { signOutAction } from "~/server/auth/client";
 import { SELECT_BOARD_LOADER_CACHE_KEY } from "~/server/board/const";
 import { paths } from "~/utils/paths";

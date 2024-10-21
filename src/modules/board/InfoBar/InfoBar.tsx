@@ -2,7 +2,7 @@ import { Component } from "solid-js";
 
 import { InfoIcon } from "~/components/Icons/InfoIcon";
 import { XIcon } from "~/components/Icons/XIcon";
-import { Link } from "~/components/Link";
+import { Link } from "~/components/Link/Link";
 import {
   PopoverArrow,
   PopoverCloseButton,
@@ -13,7 +13,7 @@ import {
   PopoverRoot,
   PopoverTitle,
   PopoverTrigger
-} from "~/components/Popover";
+} from "~/components/Popover/Popover";
 import { useI18n } from "~/contexts/I18nContext";
 import { paths } from "~/utils/paths";
 

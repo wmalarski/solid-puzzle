@@ -1,7 +1,7 @@
 import type { Component, ParentProps } from "solid-js";
 
 import { PuzzleIcon } from "~/components/Icons/PuzzleIcon";
-import { Link } from "~/components/Link";
+import { Link } from "~/components/Link/Link";
 import { useI18n } from "~/contexts/I18nContext";
 import { paths } from "~/utils/paths";
 

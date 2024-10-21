@@ -3,7 +3,7 @@ import type { VariantProps } from "class-variance-authority";
 import { AlertDialog } from "@kobalte/core";
 import { Component, ComponentProps, splitProps } from "solid-js";
 
-import { buttonClass } from "../Button";
+import { buttonClass } from "../Button/Button.recipe";
 import { twCx } from "../utils/twCva";
 import styles from "./AlertDialog.module.css";
 

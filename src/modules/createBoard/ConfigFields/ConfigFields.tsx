@@ -6,7 +6,7 @@ import {
   TextFieldLabel,
   TextFieldLabelText,
   TextFieldRoot
-} from "~/components/TextField";
+} from "~/components/TextField/TextField";
 import { useI18n } from "~/contexts/I18nContext";
 import {
   BOARD_MAX_NAME_LENGTH,
@@ -15,7 +15,7 @@ import {
   BOARD_MIN_SIZE
 } from "~/server/board/const";
 
-import { ImageGrid } from "../ImageGrid";
+import { ImageGrid } from "../ImageGrid/ImageGrid";
 
 export type BoardConfigFields = {
   columns: number;

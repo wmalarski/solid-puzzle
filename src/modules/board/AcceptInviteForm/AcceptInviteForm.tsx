@@ -4,18 +4,23 @@ import { Component, Show } from "solid-js";
 
 import type { BoardModel } from "~/types/models";
 
-import { Button } from "~/components/Button";
-import { Card, CardBody, cardTitleClass } from "~/components/Card";
+import { Button } from "~/components/Button/Button";
+import { Card, CardBody } from "~/components/Card/Card";
+import { cardTitleClass } from "~/components/Card/Card.recipe";
 import {
   TextFieldErrorMessage,
   TextFieldInput,
   TextFieldLabel,
   TextFieldLabelText,
   TextFieldRoot
-} from "~/components/TextField";
+} from "~/components/TextField/TextField";
 import { useI18n } from "~/contexts/I18nContext";
-import { FormLayout, PageFooter, PageTitle } from "~/modules/common/Layout";
-import { ThemeToggle } from "~/modules/common/ThemeToggle";
+import {
+  FormLayout,
+  PageFooter,
+  PageTitle
+} from "~/modules/common/Layout/Layout";
+import { ThemeToggle } from "~/modules/common/ThemeToggle/ThemeToggle";
 import { setBoardAccessAction } from "~/server/access/client";
 import { ACCESS_USERNAME_MIN_LENGTH } from "~/server/access/const";
 import { randomHexColor } from "~/utils/colors";

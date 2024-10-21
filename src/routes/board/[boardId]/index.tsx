@@ -14,14 +14,14 @@ import type { GetBoardAccessLoaderReturn } from "~/server/access/client";
 import type { BoardAccess } from "~/server/access/rpc";
 
 import { UserProvider, useUserContext } from "~/contexts/UserContext";
-import { AcceptInviteForm } from "~/modules/board/AcceptInviteForm";
-import { ErrorFallback } from "~/modules/common/ErrorFallback";
-import { Head } from "~/modules/common/Head";
+import { AcceptInviteForm } from "~/modules/board/AcceptInviteForm/AcceptInviteForm";
+import { ErrorFallback } from "~/modules/common/ErrorFallback/ErrorFallback";
+import { Head } from "~/modules/common/Head/Head";
 import { getBoardAccessLoader } from "~/server/access/client";
 import { getUserLoader } from "~/server/auth/client";
 import { selectBoardLoader } from "~/server/board/client";
 
-const Board = clientOnly(() => import("~/modules/board/Board"));
+const Board = clientOnly(() => import("~/modules/board/Board/Board"));
 
 type BoardQueryProps = {
   boardAccess?: GetBoardAccessLoaderReturn;

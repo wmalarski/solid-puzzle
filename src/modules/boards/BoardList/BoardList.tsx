@@ -3,8 +3,8 @@ import { Component, For, Show } from "solid-js";
 
 import type { BoardModelWithoutConfig } from "~/types/models";
 
-import { LinkButton } from "~/components/Button";
-import { Card, CardActions, CardBody, CardTitle } from "~/components/Card";
+import { LinkButton } from "~/components/Button/Button";
+import { Card, CardActions, CardBody, CardTitle } from "~/components/Card/Card";
 import { ArrowRightIcon } from "~/components/Icons/ArrowRightIcon";
 import { SettingsIcon } from "~/components/Icons/SettingsIcon";
 import { TrashIcon } from "~/components/Icons/TrashIcon";
@@ -13,7 +13,7 @@ import {
   SimplePaginationPrevious,
   SimplePaginationRoot,
   SimplePaginationValue
-} from "~/components/SimplePagination";
+} from "~/components/SimplePagination/SimplePagination";
 import { useI18n } from "~/contexts/I18nContext";
 import {
   deleteBoardAction,
@@ -21,8 +21,8 @@ import {
 } from "~/server/board/client";
 import { paths } from "~/utils/paths";
 
-import { DeleteBoardUncontrolledDialog } from "../DeleteDialog";
-import { SettingsUncontrolledDialog } from "../SettingsDialog";
+import { DeleteBoardUncontrolledDialog } from "../DeleteDialog/DeleteDialog";
+import { SettingsUncontrolledDialog } from "../SettingsDialog/SettingsDialog";
 
 type BoardItemProps = {
   board: BoardModelWithoutConfig;

@@ -1,10 +1,11 @@
 import { Component } from "solid-js";
 
-import type { BoardConfigFields } from "~/modules/createBoard/ConfigFields";
+import type { BoardConfigFields } from "~/modules/createBoard/ConfigFields/ConfigFields";
 
-import { Card, CardBody, cardTitleClass } from "~/components/Card";
+import { Card, CardBody } from "~/components/Card/Card";
+import { cardTitleClass } from "~/components/Card/Card.recipe";
 import { useI18n } from "~/contexts/I18nContext";
-import { CreateBoardForm } from "~/modules/createBoard/CreateBoardForm";
+import { CreateBoardForm } from "~/modules/createBoard/CreateBoardForm/CreateBoardForm";
 
 type InsertBoardProps = {
   initialValues?: BoardConfigFields | null;

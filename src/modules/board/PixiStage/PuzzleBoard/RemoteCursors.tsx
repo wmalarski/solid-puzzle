@@ -19,7 +19,7 @@ import { getTextColor } from "~/utils/colors";
 
 import { usePlayerCursors } from "../../DataProviders/CursorProvider";
 import { usePlayerPresence } from "../../DataProviders/PresenceProvider";
-import { useTransformContext } from "../../TransformContext";
+import { useTransformContext } from "../../TransformContext/TransformContext";
 import { useBoardTheme } from "../BoardTheme";
 import { usePixiApp, usePixiContainer } from "../PixiApp";
 

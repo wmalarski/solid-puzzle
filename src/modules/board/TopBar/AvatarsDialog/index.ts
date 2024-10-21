@@ -1,1 +1,0 @@
-export { AvatarsDialog } from "./AvatarsDialog";

@@ -4,7 +4,7 @@ import { Component, type ComponentProps, splitProps } from "solid-js";
 
 import { useI18n } from "~/contexts/I18nContext";
 
-import { buttonClass } from "../Button";
+import { buttonClass } from "../Button/Button.recipe";
 import { ArrowLeftIcon } from "../Icons/ArrowLeftIcon";
 import { ArrowRightIcon } from "../Icons/ArrowRightIcon";
 import { DotsHorizontalIcon } from "../Icons/DotsHorizontalIcon";

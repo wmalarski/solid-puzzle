@@ -5,8 +5,8 @@ import { Suspense } from "solid-js";
 
 import { useI18n } from "~/contexts/I18nContext";
 import { AuthorizedUserProvider } from "~/contexts/UserContext";
-import { Head } from "~/modules/common/Head";
-import { IntroForm } from "~/modules/intro/IntroForm";
+import { Head } from "~/modules/common/Head/Head";
+import { IntroForm } from "~/modules/intro/IntroForm/IntroForm";
 import { getUserLoader } from "~/server/auth/client";
 
 export const route = {

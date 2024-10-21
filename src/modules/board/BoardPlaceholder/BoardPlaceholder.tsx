@@ -1,6 +1,6 @@
 import { Component } from "solid-js";
 
-import { Skeleton } from "~/components/Skeleton";
+import { Skeleton } from "~/components/Skeleton/Skeleton";
 
 export const BoardPlaceholder: Component = () => {
   return (

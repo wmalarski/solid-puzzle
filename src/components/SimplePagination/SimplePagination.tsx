@@ -12,7 +12,8 @@ import {
 
 import { useI18n } from "~/contexts/I18nContext";
 
-import { buttonClass, buttonSplitProps } from "../Button";
+import { buttonSplitProps } from "../Button/Button";
+import { buttonClass } from "../Button/Button.recipe";
 import { ArrowLeftIcon } from "../Icons/ArrowLeftIcon";
 import { ArrowRightIcon } from "../Icons/ArrowRightIcon";
 import { twCx } from "../utils/twCva";
