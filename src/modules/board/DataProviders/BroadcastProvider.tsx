@@ -20,10 +20,8 @@ import { useBoardRevalidate } from "./BoardRevalidate";
 import { REALTIME_THROTTLE_TIME } from "./const";
 import { type PlayerCursorPayload, usePlayerCursors } from "./CursorProvider";
 import { type FragmentState, usePuzzleStore } from "./PuzzleProvider";
-import { type SelectionPayload, usePlayerSelection } from "./SelectionProvider";
 
 const CHANNEL_NAME = "rooms:broadcast";
-const SELECTION_EVENT_NAME = "rooms:selection";
 const PUZZLE_EVENT_NAME = "rooms:puzzle";
 const CURSOR_EVENT_NAME = "rooms:cursor";
 const REVALIDATE_EVENT_NAME = "rooms:revalidate";
@@ -41,7 +39,6 @@ const BroadcastProviderContext = createContext<BroadcastProviderContextState>(
 );
 
 export function BroadcastProvider(props: BroadcastProviderProps) {
-  const selection = usePlayerSelection();
   const puzzle = usePuzzleStore();
   const cursors = usePlayerCursors();
   const revalidate = useBoardRevalidate();
@@ -62,11 +59,6 @@ export function BroadcastProvider(props: BroadcastProviderProps) {
     const channel = broadcastChannel();
 
     channel
-      .on<SelectionPayload>(
-        REALTIME_LISTEN_TYPES.BROADCAST,
-        { event: SELECTION_EVENT_NAME },
-        ({ payload }) => selection.setRemoteSelection(payload)
-      )
       .on<FragmentState>(
         REALTIME_LISTEN_TYPES.BROADCAST,
         { event: PUZZLE_EVENT_NAME },
@@ -87,15 +79,6 @@ export function BroadcastProvider(props: BroadcastProviderProps) {
           return;
         }
 
-        selection.setRemoteSender(
-          throttle((payload) => {
-            channel.send({
-              event: SELECTION_EVENT_NAME,
-              payload,
-              type: REALTIME_LISTEN_TYPES.BROADCAST
-            });
-          }, REALTIME_THROTTLE_TIME)
-        );
         puzzle.setRemoteSender(
           throttle((payload) => {
             channel.send({

@@ -44,7 +44,7 @@ export function ReloadForm(props: ReloadFormProps) {
     try {
       await action(new FormData(event.currentTarget));
 
-      selection.clear();
+      selection().clear();
       revalidate.sendRevalidate();
 
       props.onSuccess();

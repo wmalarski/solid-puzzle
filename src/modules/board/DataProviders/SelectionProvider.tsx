@@ -1,5 +1,8 @@
+import { throttle } from "@solid-primitives/scheduled";
+import { REALTIME_LISTEN_TYPES } from "@supabase/supabase-js";
 import {
   createContext,
+  createEffect,
   createMemo,
   createSignal,
   type JSX,
@@ -7,9 +10,13 @@ import {
 } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 
+import { useBroadcastChannel } from "./BroadcastProvider";
+
+const SELECTION_EVENT_NAME = "rooms:selection";
+
 type PlayerSelectionState = Record<string, null | string | undefined>;
 
-export type SelectionPayload = {
+type SelectionPayload = {
   playerId: string;
   selectionId: null | string;
 };
@@ -19,9 +26,9 @@ type PlayerSelectionProviderProps = {
   playerId: string;
 };
 
-const createPlayerSelectionState = (
-  args: () => PlayerSelectionProviderProps
-) => {
+const createPlayerSelectionState = (playerId: string) => {
+  const broadcastChannel = useBroadcastChannel();
+
   const [selectedId, setSelectedId] = createSignal<null | string>(null);
 
   const [selection, setSelection] = createStore<PlayerSelectionState>({});
@@ -38,12 +45,16 @@ const createPlayerSelectionState = (
     );
   });
 
-  const [sender, setSender] = createSignal<(arg: SelectionPayload) => void>(
-    () => void 0
-  );
+  const sendBroadcast = throttle((selectionId: null | string) => {
+    broadcastChannel().send({
+      event: SELECTION_EVENT_NAME,
+      payload: { playerId, selectionId },
+      type: REALTIME_LISTEN_TYPES.BROADCAST
+    });
+  });
 
   const select = (selectionId: null | string) => {
-    sender()({ playerId: args().playerId, selectionId });
+    sendBroadcast(selectionId);
     setSelectedId(selectionId);
   };
 
@@ -65,14 +76,18 @@ const createPlayerSelectionState = (
     );
   };
 
-  const setRemoteSender = (sender: (payload: SelectionPayload) => void) => {
-    setSender(() => sender);
-  };
-
   const clear = () => {
     setSelection({});
     setSelectedId(null);
   };
+
+  createEffect(() => {
+    broadcastChannel().on<SelectionPayload>(
+      REALTIME_LISTEN_TYPES.BROADCAST,
+      { event: SELECTION_EVENT_NAME },
+      ({ payload }) => setRemoteSelection(payload)
+    );
+  });
 
   return {
     clear,
@@ -81,28 +96,22 @@ const createPlayerSelectionState = (
     select,
     selectedId,
     selection,
-    setRemoteSelection,
-    setRemoteSender
+    setRemoteSelection
   };
 };
 
-type PlayerSelectionContextState = ReturnType<
+type PlayerSelectionContextState = () => ReturnType<
   typeof createPlayerSelectionState
 >;
 
-const PlayerSelectionContext = createContext<PlayerSelectionContextState>({
-  clear: () => void 0,
-  fragmentSelection: () => ({}),
-  leave: () => void 0,
-  select: () => void 0,
-  selectedId: () => null,
-  selection: {},
-  setRemoteSelection: () => void 0,
-  setRemoteSender: () => void 0
-});
+const PlayerSelectionContext = createContext<PlayerSelectionContextState>(
+  () => {
+    throw new Error("PlayerSelectionContext is not defined");
+  }
+);
 
 export function PlayerSelectionProvider(props: PlayerSelectionProviderProps) {
-  const value = createPlayerSelectionState(() => props);
+  const value = createMemo(() => createPlayerSelectionState(props.playerId));
 
   return (
     <PlayerSelectionContext.Provider value={value}>

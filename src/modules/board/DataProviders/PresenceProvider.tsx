@@ -111,7 +111,7 @@ const createPlayerPresenceState = (args: () => PlayerPresenceProviderProps) => {
         ({ leftPresences }) => {
           const leftIds = leftPresences.map((presence) => presence.playerId);
 
-          selection.leave(leftIds);
+          selection().leave(leftIds);
           cursors.leave(leftIds);
 
           setPlayers(

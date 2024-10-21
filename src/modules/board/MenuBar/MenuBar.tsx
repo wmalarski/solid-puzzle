@@ -91,7 +91,7 @@ function Menu(props: MenuProps) {
   };
 
   const onUpdateSuccess = async () => {
-    selection.clear();
+    selection().clear();
     boardRevalidate.sendRevalidate();
     await revalidate(SELECT_BOARD_LOADER_CACHE_KEY);
   };

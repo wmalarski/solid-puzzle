@@ -20,7 +20,7 @@ const useStageDeselect = () => {
 
   const onPointerDown = (event: FederatedPointerEvent) => {
     if (event.target === container && event.button !== RIGHT_BUTTON) {
-      selection.select(null);
+      selection().select(null);
     }
   };
 

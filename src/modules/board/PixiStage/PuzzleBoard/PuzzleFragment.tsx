@@ -154,7 +154,7 @@ export function PuzzleFragment(props: PuzzleFragmentProps) {
 
   const remotePlayerSelection = createMemo(() => {
     const remotePlayerId =
-      selection.fragmentSelection()[props.state.fragmentId];
+      selection().fragmentSelection()[props.state.fragmentId];
     if (!remotePlayerId) {
       return null;
     }
@@ -173,7 +173,7 @@ export function PuzzleFragment(props: PuzzleFragmentProps) {
   });
 
   const isCurrentPlayerSelected = createMemo(() => {
-    return props.state.fragmentId === selection.selectedId();
+    return props.state.fragmentId === selection().selectedId();
   });
 
   createEffect(() => {
@@ -205,7 +205,7 @@ export function PuzzleFragment(props: PuzzleFragmentProps) {
       });
     },
     onDragStart: () => {
-      selection.select(props.state.fragmentId);
+      selection().select(props.state.fragmentId);
     }
   });
 

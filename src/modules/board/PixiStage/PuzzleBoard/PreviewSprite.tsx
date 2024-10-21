@@ -74,9 +74,9 @@ export function PreviewSprite(props: PreviewSpriteProps) {
 
   const onPointerDown = (event: FederatedPointerEvent) => {
     if (event.target === sprite) {
-      selection.select(null);
+      selection().select(null);
     }
-    selection.select(null);
+    selection().select(null);
   };
 
   onMount(() => {
