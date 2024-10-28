@@ -1,12 +1,8 @@
-import {
-  REALTIME_SUBSCRIBE_STATES,
-  RealtimeChannel
-} from "@supabase/supabase-js";
+import { RealtimeChannel } from "@supabase/supabase-js";
 import {
   Accessor,
   Component,
   createContext,
-  createEffect,
   createMemo,
   onCleanup,
   ParentProps,
@@ -27,28 +23,24 @@ const BroadcastProviderContext = createContext<Accessor<RealtimeChannel>>(
   }
 );
 
+export const createBroadcastChannel = (boardId: string) => {
+  const supabase = getClientSupabase();
+  const channelName = `${CHANNEL_NAME}:${boardId}`;
+  const channel = supabase.channel(channelName);
+
+  channel.subscribe();
+
+  onCleanup(() => {
+    supabase.removeChannel(channel);
+  });
+
+  return channel;
+};
+
 export const BroadcastProvider: Component<BroadcastProviderProps> = (props) => {
-  const broadcastChannel = createMemo(() => {
-    const supabase = getClientSupabase();
-    const channelName = `${CHANNEL_NAME}:${props.boardId}`;
-    const channel = supabase.channel(channelName);
-
-    onCleanup(() => {
-      supabase.removeChannel(channel);
-    });
-
-    return channel;
-  });
-
-  createEffect(() => {
-    const channel = broadcastChannel();
-
-    channel.subscribe((status) => {
-      if (status !== REALTIME_SUBSCRIBE_STATES.SUBSCRIBED) {
-        return;
-      }
-    });
-  });
+  const broadcastChannel = createMemo(() =>
+    createBroadcastChannel(props.boardId)
+  );
 
   return (
     <BroadcastProviderContext.Provider value={broadcastChannel}>
